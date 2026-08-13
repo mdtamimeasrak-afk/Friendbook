@@ -3001,10 +3001,72 @@ async function loadPostsWithUserNames() {
                 posts
             );
 
+        // ------------------------------------------
+        // SHARES (shared posts appear in the feed)
+        // ------------------------------------------
+
+        let shareItems = [];
+
+        if (
+            typeof socialhubFetchShareWindow ===
+            "function"
+        ) {
+
+            const shares =
+                await socialhubFetchShareWindow(
+                    0,
+                    PAGE_SIZE
+                );
+
+            const visibleOriginals =
+                await socialhubFilterVisiblePosts(
+                    (shares || [])
+                        .map(share => share.posts)
+                        .filter(Boolean)
+                );
+
+            const visibleOriginalIds =
+                new Set(
+                    (visibleOriginals || [])
+                        .map(post => post.id)
+                );
+
+            shareItems =
+                (shares || [])
+                    .filter(
+                        share =>
+                            share.posts &&
+                            visibleOriginalIds.has(
+                                share.posts.id
+                            )
+                    )
+                    .map(share => ({
+                        type: "share",
+                        created_at:
+                            share.created_at,
+                        share: share,
+                        post: share.posts
+                    }));
+        }
+
+        // Merge posts + shares, newest first
+        const feedItems = [
+            ...(visiblePosts || []).map(post => ({
+                type: "post",
+                created_at: post.created_at,
+                post: post
+            })),
+            ...shareItems
+        ].sort(
+            (a, b) =>
+                new Date(b.created_at) -
+                new Date(a.created_at)
+        );
+
         // Clear current posts
         postsContainer.innerHTML = "";
 
-        if (!visiblePosts || visiblePosts.length === 0) {
+        if (feedItems.length === 0) {
             return;
         }
 
@@ -3015,11 +3077,22 @@ async function loadPostsWithUserNames() {
 
         const userIds = [
             ...new Set(
-                visiblePosts
-                    .map(post => post.user_id)
+                feedItems
+                    .map(item => item.post.user_id)
                     .filter(Boolean)
             )
         ];
+
+        if (
+            typeof socialhubFetchShareWindow ===
+            "function"
+        ) {
+
+            shareItems.forEach(item => {
+
+                userIds.push(item.share.user_id);
+            });
+        }
 
 
         // ------------------------------------------
@@ -3072,22 +3145,54 @@ async function loadPostsWithUserNames() {
 
 
         // ------------------------------------------
-        // CREATE EACH POST
+        // CREATE EACH POST / SHARE
         // ------------------------------------------
 
-        (visiblePosts || []).forEach(post => {
+        feedItems.forEach(item => {
 
-            postsContainer.appendChild(
-                socialhubBuildPostArticle(post, profileMap)
-            );
+            if (
+                item.type === "share" &&
+                typeof socialhubBuildShareCard ===
+                    "function"
+            ) {
+
+                postsContainer.appendChild(
+                    socialhubBuildShareCard(
+                        item.share,
+                        item.post,
+                        profileMap.get(item.post.user_id),
+                        profileMap.get(item.share.user_id)
+                    )
+                );
+
+            } else {
+
+                postsContainer.appendChild(
+                    socialhubBuildPostArticle(
+                        item.post,
+                        profileMap
+                    )
+                );
+            }
         });
+
+        // Share counts on visible posts
+        if (
+            typeof socialhubApplyShareCounts ===
+            "function"
+        ) {
+
+            socialhubApplyShareCounts(
+                postsContainer
+            );
+        }
 
         // Load More button when there are more posts
         socialhubMaybeShowLoadMore();
 
         console.log(
             "✅ FINAL POSTS LOADED:",
-            (visiblePosts || []).length
+            feedItems.length
         );
 
 
@@ -3263,7 +3368,9 @@ function socialhubBuildPostArticle(post, profileMap) {
         💬 Comment
     </button>
 
-    <button>
+    <button
+        onclick="socialhubShareDialog('${post.id}')"
+    >
         <i class="fa-solid fa-share"></i>
         Share
     </button>
@@ -3404,12 +3511,107 @@ function socialhubMaybeShowLoadMore() {
                 posts
             );
 
-        (visiblePosts || []).forEach(post => {
+        // Shares in this window too
+        let shareItems = [];
 
-            container.appendChild(
-                socialhubBuildPostArticle(post, profileMap)
+        if (
+            typeof socialhubFetchShareWindow ===
+            "function"
+        ) {
+
+            const shares =
+                await socialhubFetchShareWindow(
+                    start,
+                    start + 10
+                );
+
+            const visibleOriginals =
+                await socialhubFilterVisiblePosts(
+                    (shares || [])
+                        .map(share => share.posts)
+                        .filter(Boolean)
+                );
+
+            const visibleOriginalIds =
+                new Set(
+                    (visibleOriginals || [])
+                        .map(post => post.id)
+                );
+
+            shareItems =
+                (shares || [])
+                    .filter(
+                        share =>
+                            share.posts &&
+                            visibleOriginalIds.has(
+                                share.posts.id
+                            )
+                    )
+                    .map(share => ({
+                        type: "share",
+                        created_at:
+                            share.created_at,
+                        share: share,
+                        post: share.posts
+                    }));
+        }
+
+        const feedItems = [
+            ...(visiblePosts || []).map(post => ({
+                type: "post",
+                created_at: post.created_at,
+                post: post
+            })),
+            ...shareItems
+        ].sort(
+            (a, b) =>
+                new Date(b.created_at) -
+                new Date(a.created_at)
+        );
+
+        const moreProfiles =
+            await socialhubFetchProfilesFor(
+                shareItems
+                    .map(item => item.post)
+                    .filter(Boolean)
             );
+
+        (feedItems || []).forEach(item => {
+
+            if (
+                item.type === "share" &&
+                typeof socialhubBuildShareCard ===
+                    "function"
+            ) {
+
+                container.appendChild(
+                    socialhubBuildShareCard(
+                        item.share,
+                        item.post,
+                        moreProfiles.get(item.post.user_id) ||
+                            profileMap.get(item.post.user_id),
+                        moreProfiles.get(item.share.user_id)
+                    )
+                );
+
+            } else {
+
+                container.appendChild(
+                    socialhubBuildPostArticle(
+                        item.post,
+                        profileMap
+                    )
+                );
+            }
         });
+
+        if (
+            typeof socialhubApplyShareCounts ===
+            "function"
+        ) {
+
+            socialhubApplyShareCounts(container);
+        }
 
         socialhubMaybeShowLoadMore();
     });

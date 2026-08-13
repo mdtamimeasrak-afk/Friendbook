@@ -59,6 +59,19 @@ create table if not exists public.comments (
   post_id uuid not null references public.posts (id) on delete cascade,
   user_id uuid not null references public.profiles (id) on delete cascade,
   content text not null,
+  parent_id uuid references public.comments (id) on delete cascade,
+  created_at timestamptz not null default now()
+);
+
+-- Older databases may lack the reply column
+alter table public.comments
+  add column if not exists parent_id uuid references public.comments (id) on delete cascade;
+
+create table if not exists public.post_shares (
+  id uuid primary key default gen_random_uuid(),
+  post_id uuid not null references public.posts (id) on delete cascade,
+  user_id uuid not null references public.profiles (id) on delete cascade,
+  thought text not null default '',
   created_at timestamptz not null default now()
 );
 
@@ -216,6 +229,20 @@ create policy "comments_insert" on public.comments
 
 drop policy if exists "comments_delete" on public.comments;
 create policy "comments_delete" on public.comments
+  for delete using (auth.uid() = user_id);
+
+-- POST SHARES
+
+drop policy if exists "post_shares_select" on public.post_shares;
+create policy "post_shares_select" on public.post_shares
+  for select using (true);
+
+drop policy if exists "post_shares_insert" on public.post_shares;
+create policy "post_shares_insert" on public.post_shares
+  for insert with check (auth.uid() = user_id);
+
+drop policy if exists "post_shares_delete" on public.post_shares;
+create policy "post_shares_delete" on public.post_shares
   for delete using (auth.uid() = user_id);
 
 -- FRIENDSHIPS
