@@ -23,11 +23,11 @@
 - Dark mode / glass theme
 
 ## 🔲 Phase 1 — Posts & Comments Power
-- [ ] Share post (share to timeline + copy link, shared card in feed, share count)
-- [ ] Comment replies (threaded) + delete own comment
-- [ ] Cover photo upload + cover on profiles
-- [ ] Profile stats: friend count, mutual friends, posts count
-- [ ] Edit / delete comment (own)
+- [x] Share post (share to timeline + copy link, shared card in feed, share count)
+- [x] Comment replies (threaded) + delete own comment
+- [x] Cover photo upload + cover on profiles (already existed)
+- [x] Profile stats: friend count, mutual friends, posts count
+- [ ] Edit / delete comment (own) — done (delete done; edit later)
 
 ## 🔲 Phase 2 — Privacy & Account
 - [ ] Privacy settings: default post audience, profile visibility, block list

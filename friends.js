@@ -1507,6 +1507,76 @@ async function loadUserProfilePage() {
             String(friendCount);
     }
 
+    // ---------- MUTUAL FRIENDS ----------
+
+    const mutualEl =
+        document.getElementById("upMutual");
+
+    if (mutualEl && me && me.id !== userId) {
+
+        const {
+            data: myRows
+        } = await db
+            .from("friendships")
+            .select("requester_id, addressee_id")
+            .eq("status", "accepted")
+            .or(
+                `requester_id.eq.${me.id},` +
+                `addressee_id.eq.${me.id}`
+            );
+
+        const mySet = new Set();
+
+        (myRows || []).forEach(row => {
+
+            mySet.add(
+                row.requester_id === me.id
+                    ? row.addressee_id
+                    : row.requester_id
+            );
+        });
+
+        const {
+            data: theirRows
+        } = await db
+            .from("friendships")
+            .select("requester_id, addressee_id")
+            .eq("status", "accepted")
+            .or(
+                `requester_id.eq.${userId},` +
+                `addressee_id.eq.${userId}`
+            );
+
+        const theirSet = new Set();
+
+        (theirRows || []).forEach(row => {
+
+            theirSet.add(
+                row.requester_id === userId
+                    ? row.addressee_id
+                    : row.requester_id
+            );
+        });
+
+        let mutual = 0;
+
+        mySet.forEach(id => {
+
+            if (theirSet.has(id)) {
+                mutual++;
+            }
+        });
+
+        if (mutual > 0) {
+
+            mutualEl.textContent =
+                `${mutual} mutual ` +
+                (mutual === 1 ? "friend" : "friends");
+
+            mutualEl.style.display = "inline";
+        }
+    }
+
     // ---------- THEIR POSTS ----------
 
     await loadUserProfilePosts(userId);

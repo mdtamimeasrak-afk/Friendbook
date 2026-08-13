@@ -643,13 +643,51 @@ async function socialhubLoadInteractions() {
 
             commentsDiv.innerHTML = "";
 
-            (commentMap[id] || []).forEach(comment => {
+            const allComments =
+                commentMap[id] || [];
+
+            const byParent = {};
+
+            const topLevel = [];
+
+            allComments.forEach(comment => {
+
+                if (comment.parent_id) {
+
+                    (
+                        byParent[comment.parent_id] =
+                            byParent[comment.parent_id] || []
+                    ).push(comment);
+
+                } else {
+
+                    topLevel.push(comment);
+                }
+            });
+
+            topLevel.forEach(comment => {
 
                 socialhubRenderComment(
                     commentsDiv,
                     comment,
                     profileMap
                 );
+
+                const repliesDiv =
+                    commentsDiv.querySelector(
+                        `.comment[data-comment-id="${comment.id}"] .comment-replies`
+                    );
+
+                (byParent[comment.id] || [])
+                    .forEach(reply => {
+
+                        socialhubRenderComment(
+                            repliesDiv,
+                            reply,
+                            profileMap,
+                            true
+                        );
+                    });
             });
         }
     });
@@ -660,7 +698,97 @@ async function socialhubLoadInteractions() {
 // 6. RENDER A SINGLE COMMENT
 // ======================================================
 
-function socialhubRenderComment(container, comment, profileMap) {
+let socialhubCommentsCSSAdded = false;
+
+function socialhubCommentsInjectStyles() {
+
+    if (socialhubCommentsCSSAdded) {
+        return;
+    }
+
+    socialhubCommentsCSSAdded = true;
+
+    const style = document.createElement("style");
+
+    style.textContent = `
+
+.comment.reply {
+    margin-left: 44px;
+    margin-top: 6px;
+}
+
+.comment.reply .avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+}
+
+.comment-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.comment-actions button {
+    background: none;
+    border: none;
+    color: var(--muted, #65676b);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 0;
+}
+
+.comment-actions button:hover {
+    text-decoration: underline;
+}
+
+.comment-reply-row {
+    display: none;
+    gap: 6px;
+    margin-top: 6px;
+    align-items: center;
+}
+
+.comment-reply-row.show {
+    display: flex;
+}
+
+.comment-reply-row input {
+    flex: 1;
+    background: var(--hover, #f2f3f5);
+    border: none;
+    border-radius: 16px;
+    padding: 7px 12px;
+    font-size: 13px;
+    outline: none;
+    color: var(--text, #1c1e21);
+    min-width: 0;
+}
+
+.comment-reply-row button {
+    background: var(--primary, #1877f2);
+    border: none;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 7px 12px;
+    border-radius: 16px;
+    cursor: pointer;
+}
+
+.comment-replies {
+    margin-top: 4px;
+}
+
+`;
+
+    document.head.appendChild(style);
+}
+
+function socialhubRenderComment(container, comment, profileMap, isReply) {
+
+    socialhubCommentsInjectStyles();
 
     const profile =
         profileMap.get(comment.user_id);
@@ -671,7 +799,13 @@ function socialhubRenderComment(container, comment, profileMap) {
     const commentDiv =
         document.createElement("div");
 
-    commentDiv.className = "comment";
+    commentDiv.className =
+        isReply
+            ? "comment reply"
+            : "comment";
+
+    commentDiv.dataset.commentId =
+        comment.id;
 
     commentDiv.innerHTML = `
 
@@ -689,19 +823,172 @@ function socialhubRenderComment(container, comment, profileMap) {
                 ${socialhubEscape(comment.content)}
             </p>
 
-            <small style="
-                display:block;
-                color:var(--muted,#65676b);
-                font-size:11px;
-                margin-top:4px;
-            ">
-                ${new Date(comment.created_at).toLocaleString()}
-            </small>
+            <div class="comment-actions">
+
+                ${isReply ? "" : `
+                    <button type="button" class="comment-reply-btn">
+                        Reply
+                    </button>
+                `}
+
+                <button
+                    type="button"
+                    class="comment-delete-btn"
+                    style="display:none;"
+                >
+                    Delete
+                </button>
+
+            </div>
+
+            <div class="comment-reply-row">
+
+                <input
+                    type="text"
+                    placeholder="Write a reply..."
+                >
+
+                <button
+                    type="button"
+                    class="comment-reply-send"
+                >
+                    Send
+                </button>
+
+            </div>
+
+            <div class="comment-replies"></div>
 
         </div>
     `;
 
+    // Reply toggle
+    const replyBtn =
+        commentDiv.querySelector(".comment-reply-btn");
+
+    if (replyBtn) {
+
+        replyBtn.addEventListener("click", () => {
+
+            const row =
+                commentDiv.querySelector(".comment-reply-row");
+
+            if (row) {
+                row.classList.toggle("show");
+
+                if (row.classList.contains("show")) {
+
+                    row.querySelector("input").focus();
+                }
+            }
+        });
+    }
+
+    // Send reply
+    const sendBtn =
+        commentDiv.querySelector(".comment-reply-send");
+
+    if (sendBtn) {
+
+        sendBtn.addEventListener("click", () => {
+
+            addComment(sendBtn, comment.id);
+        });
+    }
+
+    // Delete own comment
+    const deleteBtn =
+        commentDiv.querySelector(".comment-delete-btn");
+
+    socialhubGetMe().then(me => {
+
+        if (
+            deleteBtn &&
+            me &&
+            comment.user_id === me.id
+        ) {
+            deleteBtn.style.display = "";
+        }
+    });
+
+    deleteBtn.addEventListener("click", () => {
+
+        socialhubDeleteComment(deleteBtn);
+    });
+
     container.appendChild(commentDiv);
+}
+
+
+async function socialhubDeleteComment(button) {
+
+    const commentDiv =
+        button.closest(".comment");
+
+    if (!commentDiv) {
+        return;
+    }
+
+    const commentId =
+        commentDiv.dataset.commentId;
+
+    if (!commentId) {
+        return;
+    }
+
+    if (!confirm("Delete this comment?")) {
+        return;
+    }
+
+    const {
+        error
+    } = await db
+        .from("comments")
+        .delete()
+        .eq("id", commentId);
+
+    if (error) {
+
+        console.error(
+            "❌ Comment delete error:",
+            error
+        );
+
+        alert(
+            "Could not delete the comment.\n\n" +
+            error.message
+        );
+
+        return;
+    }
+
+    commentDiv.remove();
+
+    // Update comment counter
+    const post =
+        commentDiv.closest(".post");
+
+    if (post) {
+
+        const counter =
+            post.querySelector(
+                ".post-stats span:nth-child(2)"
+            );
+
+        if (counter) {
+
+            const match =
+                counter.innerText.match(/\d+/);
+
+            const count =
+                match ? parseInt(match[0]) : 0;
+
+            counter.innerHTML = `
+                <i class="fa-solid fa-comment"></i>
+                ${Math.max(0, count - 1)} Comments
+            `;
+        }
+    }
 }
 
 
@@ -959,7 +1246,7 @@ async function socialhubReact(post, button, reactionLabel) {
 // 8. COMMENT FUNCTION
 // ======================================================
 
-async function addComment(button) {
+async function addComment(button, parentId) {
 
     const post =
         button.closest(".post");
@@ -984,8 +1271,21 @@ async function addComment(button) {
         return;
     }
 
+    const isReply =
+        typeof parentId === "string" &&
+        parentId.length > 0;
+
+    const commentDiv =
+        isReply
+            ? button.closest(".comment")
+            : null;
+
     const input =
-        post.querySelector(".comment-input");
+        isReply
+            ? commentDiv.querySelector(
+                ".comment-reply-row input"
+            )
+            : post.querySelector(".comment-input");
 
     const comments =
         post.querySelector(".comments");
@@ -1016,7 +1316,9 @@ async function addComment(button) {
         .insert({
             post_id: postId,
             user_id: me.id,
-            content: text
+            content: text,
+            parent_id:
+                isReply ? parentId : null
         })
         .select()
         .single();
@@ -1053,11 +1355,37 @@ async function addComment(button) {
         profileMap.set(me.id, profile);
     }
 
-    socialhubRenderComment(
-        comments,
-        newComment,
-        profileMap
-    );
+    if (isReply) {
+
+        const repliesDiv =
+            commentDiv.querySelector(
+                ".comment-replies"
+            );
+
+        socialhubRenderComment(
+            repliesDiv,
+            newComment,
+            profileMap,
+            true
+        );
+
+        const row =
+            commentDiv.querySelector(
+                ".comment-reply-row"
+            );
+
+        if (row) {
+            row.classList.remove("show");
+        }
+
+    } else {
+
+        socialhubRenderComment(
+            comments,
+            newComment,
+            profileMap
+        );
+    }
 
     // Notify the post owner
     socialhubNotifyOwner(
