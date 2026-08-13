@@ -2458,7 +2458,10 @@ async function createPostInSupabase(event) {
             .from("posts")
             .insert({
                 user_id: userId,
-                content: content
+                content: content,
+                audience:
+                    window.socialhubAudience ||
+                    "public"
             })
             .select()
             .single();
@@ -2754,7 +2757,10 @@ async function createPremiumPostInSupabase(event) {
                 background:
                     background === "none"
                         ? null
-                        : background
+                        : background,
+                audience:
+                    window.socialhubAudience ||
+                    "public"
             })
             .select()
             .single();
@@ -2990,10 +2996,15 @@ async function loadPostsWithUserNames() {
             return;
         }
 
+        const visiblePosts =
+            await socialhubFilterVisiblePosts(
+                posts
+            );
+
         // Clear current posts
         postsContainer.innerHTML = "";
 
-        if (!posts || posts.length === 0) {
+        if (!visiblePosts || visiblePosts.length === 0) {
             return;
         }
 
@@ -3004,7 +3015,7 @@ async function loadPostsWithUserNames() {
 
         const userIds = [
             ...new Set(
-                posts
+                visiblePosts
                     .map(post => post.user_id)
                     .filter(Boolean)
             )
@@ -3064,7 +3075,7 @@ async function loadPostsWithUserNames() {
         // CREATE EACH POST
         // ------------------------------------------
 
-        (posts || []).forEach(post => {
+        (visiblePosts || []).forEach(post => {
 
             postsContainer.appendChild(
                 socialhubBuildPostArticle(post, profileMap)
@@ -3076,7 +3087,7 @@ async function loadPostsWithUserNames() {
 
         console.log(
             "✅ FINAL POSTS LOADED:",
-            (posts || []).length
+            (visiblePosts || []).length
         );
 
 
@@ -3211,7 +3222,7 @@ function socialhubBuildPostArticle(post, profileMap) {
             @${escapeHTML(username)}
             ·
             ${new Date(post.created_at).toLocaleString()}
-            · 🌎
+            · ${socialhubAudienceIcon(post.audience)}
         </small>
 
     </div>
@@ -3388,7 +3399,12 @@ function socialhubMaybeShowLoadMore() {
         const profileMap =
             await socialhubFetchProfilesFor(posts);
 
-        (posts || []).forEach(post => {
+        const visiblePosts =
+            await socialhubFilterVisiblePosts(
+                posts
+            );
+
+        (visiblePosts || []).forEach(post => {
 
             container.appendChild(
                 socialhubBuildPostArticle(post, profileMap)
@@ -3465,3 +3481,312 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
 
 });
+
+// ======================================================
+// SocialHub - POST AUDIENCE
+// Public / Friends / Friends of Friends / Only Me
+// ======================================================
+
+const SOCIALHUB_AUDIENCE_LABELS = {
+    public: "🌎 Public",
+    friends: "👥 Friends",
+    friends_of_friends: "🤝 Friends of Friends",
+    only_me: "🔒 Only Me"
+};
+
+window.socialhubAudience =
+    localStorage.getItem("socialhubAudience") ||
+    "public";
+
+function socialhubGetAudience() {
+
+    const saved =
+        localStorage.getItem(
+            "socialhubAudience"
+        );
+
+    return SOCIALHUB_AUDIENCE_LABELS[saved]
+        ? saved
+        : "public";
+}
+
+function socialhubToggleAudienceMenu(event) {
+
+    if (event) {
+        event.stopPropagation();
+    }
+
+    const menu =
+        document.getElementById(
+            "audienceMenu"
+        );
+
+    if (!menu) {
+        return;
+    }
+
+    menu.style.display =
+        menu.style.display === "none"
+            ? "flex"
+            : "none";
+}
+
+function socialhubSetAudience(value) {
+
+    if (!SOCIALHUB_AUDIENCE_LABELS[value]) {
+        return;
+    }
+
+    window.socialhubAudience = value;
+
+    localStorage.setItem(
+        "socialhubAudience",
+        value
+    );
+
+    const label =
+        document.getElementById(
+            "audienceLabel"
+        );
+
+    if (label) {
+        label.textContent =
+            SOCIALHUB_AUDIENCE_LABELS[value];
+    }
+
+    const menu =
+        document.getElementById(
+            "audienceMenu"
+        );
+
+    if (menu) {
+        menu.style.display = "none";
+    }
+
+    document
+        .querySelectorAll(
+            ".audience-option"
+        )
+        .forEach(option => {
+
+            option.classList.toggle(
+                "selected",
+                option.dataset.audience ===
+                    value
+            );
+        });
+}
+
+function socialhubAudienceIcon(value) {
+
+    switch (value || "public") {
+
+        case "friends":
+            return "👥";
+
+        case "friends_of_friends":
+            return "🤝";
+
+        case "only_me":
+            return "🔒";
+
+        default:
+            return "🌎";
+    }
+}
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        const saved =
+            socialhubGetAudience();
+
+        window.socialhubAudience = saved;
+
+        const label =
+            document.getElementById(
+                "audienceLabel"
+            );
+
+        if (label) {
+            label.textContent =
+                SOCIALHUB_AUDIENCE_LABELS[saved];
+        }
+
+        document
+            .querySelectorAll(
+                ".audience-option"
+            )
+            .forEach(option => {
+
+                option.classList.toggle(
+                    "selected",
+                    option.dataset.audience ===
+                        saved
+                );
+            });
+
+        // Close menu on outside click
+        document.addEventListener(
+            "click",
+            event => {
+
+                const menu =
+                    document.getElementById(
+                        "audienceMenu"
+                    );
+
+                if (
+                    menu &&
+                    menu.style.display !==
+                        "none" &&
+                    !event.target.closest(
+                        ".create-post-audience"
+                    )
+                ) {
+                    menu.style.display =
+                        "none";
+                }
+            }
+        );
+    }
+);
+
+async function socialhubFilterVisiblePosts(posts) {
+
+    if (!posts || posts.length === 0) {
+        return posts || [];
+    }
+
+    const {
+        data: userData
+    } = await db.auth.getUser();
+
+    const me =
+        userData && userData.user
+            ? userData.user.id
+            : null;
+
+    if (!me) {
+
+        // Not logged in: public posts only
+        return posts.filter(
+            post =>
+                !post.audience ||
+                post.audience === "public"
+        );
+    }
+
+    try {
+
+        const {
+            data: fr1
+        } = await db
+            .from("friendships")
+            .select(
+                "requester_id, addressee_id"
+            )
+            .eq("requester_id", me)
+            .eq("status", "accepted");
+
+        const {
+            data: fr2
+        } = await db
+            .from("friendships")
+            .select(
+                "requester_id, addressee_id"
+            )
+            .eq("addressee_id", me)
+            .eq("status", "accepted");
+
+        const friends = new Set();
+
+        (fr1 || []).forEach(f => {
+            friends.add(f.addressee_id);
+        });
+
+        (fr2 || []).forEach(f => {
+            friends.add(f.requester_id);
+        });
+
+        const allowed = new Set(friends);
+
+        // Friends of friends (2-hop)
+        const edgePool = [...friends];
+
+        if (edgePool.length > 0) {
+
+            const {
+                data: foaf1
+            } = await db
+                .from("friendships")
+                .select(
+                    "requester_id, addressee_id"
+                )
+                .eq("status", "accepted")
+                .in("requester_id", edgePool);
+
+            const {
+                data: foaf2
+            } = await db
+                .from("friendships")
+                .select(
+                    "requester_id, addressee_id"
+                )
+                .eq("status", "accepted")
+                .in("addressee_id", edgePool);
+
+            (foaf1 || []).forEach(f => {
+
+                if (friends.has(f.requester_id)) {
+                    allowed.add(f.addressee_id);
+                }
+            });
+
+            (foaf2 || []).forEach(f => {
+
+                if (friends.has(f.addressee_id)) {
+                    allowed.add(f.requester_id);
+                }
+            });
+        }
+
+        return posts.filter(post => {
+
+            const audience =
+                post.audience || "public";
+
+            if (post.user_id === me) {
+                return true;
+            }
+
+            if (audience === "public") {
+                return true;
+            }
+
+            if (audience === "only_me") {
+                return false;
+            }
+
+            if (audience === "friends") {
+                return friends.has(post.user_id);
+            }
+
+            if (audience === "friends_of_friends") {
+                return allowed.has(post.user_id);
+            }
+
+            return true;
+        });
+
+    } catch (error) {
+
+        console.error(
+            "❌ Audience filter error:",
+            error
+        );
+
+        return posts;
+    }
+}

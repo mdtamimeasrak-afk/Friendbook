@@ -1256,7 +1256,10 @@ async function socialhubHandleVideoPost(event) {
                 user_id: me.id,
                 content: content,
                 background: background,
-                video_url: urlData.publicUrl
+                video_url: urlData.publicUrl,
+                audience:
+                    window.socialhubAudience ||
+                    "public"
             })
             .select()
             .single();
@@ -1458,7 +1461,10 @@ async function socialhubHandlePost(event) {
                 user_id: me.id,
                 content: content,
                 background: background,
-                image_url: urlData.publicUrl
+                image_url: urlData.publicUrl,
+                audience:
+                    window.socialhubAudience ||
+                    "public"
             })
             .select()
             .single();

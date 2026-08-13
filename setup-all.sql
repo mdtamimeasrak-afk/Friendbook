@@ -38,8 +38,14 @@ create table if not exists public.posts (
   content text not null default '',
   image_url text,
   background text,
+  video_url text,
+  audience text not null default 'public',
   created_at timestamptz not null default now()
 );
+
+-- Older databases may lack the audience column
+alter table public.posts
+  add column if not exists audience text not null default 'public';
 
 create table if not exists public.likes (
   id uuid primary key default gen_random_uuid(),
