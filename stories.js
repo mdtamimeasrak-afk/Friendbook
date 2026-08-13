@@ -630,7 +630,376 @@ async function socialhubLoadStories() {
 // 2. STORY CREATOR MODAL
 // ======================================================
 
+
+// ======================================================
+// 2. STORY CREATOR MODAL (Instagram-style: photo/video/
+//    text, drawing, emoji stickers, caption, share)
+// ======================================================
+
+let socialhubStoryCSSAdded = false;
+
+function socialhubAddStoryCSS() {
+
+    if (socialhubStoryCSSAdded) {
+        return;
+    }
+
+    socialhubStoryCSSAdded = true;
+
+    const style = document.createElement("style");
+
+    style.textContent = `
+
+.socialhub-story-creator {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.88);
+    z-index: 20000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.socialhub-sc-box {
+    width: min(100vw, 420px);
+    height: 100vh;
+    max-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #000;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+}
+
+.socialhub-sc-start {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 24px;
+}
+
+.socialhub-sc-start h2 {
+    font-size: 22px;
+    margin: 0 0 8px;
+    color: #fff;
+}
+
+.socialhub-sc-start p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+    margin: 0;
+}
+
+.socialhub-sc-startbtn {
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 16px;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.socialhub-sc-startbtn:hover {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.socialhub-sc-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: #fff;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 5;
+}
+
+.socialhub-sc-back {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: #fff;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    font-size: 16px;
+    cursor: pointer;
+    z-index: 5;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.socialhub-sc-editor {
+    flex: 1;
+    display: none;
+    flex-direction: column;
+    min-height: 0;
+    position: relative;
+}
+
+.socialhub-sc-canvaswrap {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: #000;
+    padding: 0;
+}
+
+.socialhub-sc-canvas {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: 100%;
+    object-fit: contain;
+    touch-action: none;
+    cursor: crosshair;
+    border-radius: 2px;
+}
+
+.socialhub-sc-tools {
+    position: absolute;
+    right: 10px;
+    top: 55px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 4;
+}
+
+.socialhub-sc-toolbtn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(30, 30, 30, 0.75);
+    color: #fff;
+    font-size: 19px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.15s, background 0.15s;
+}
+
+.socialhub-sc-toolbtn.active {
+    background: #3897f0;
+    transform: scale(1.08);
+}
+
+.socialhub-sc-toolbtn:hover {
+    background: rgba(60, 60, 60, 0.9);
+}
+
+.socialhub-sc-toolbtn.active:hover {
+    background: #3897f0;
+}
+
+.socialhub-sc-panel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(20, 20, 20, 0.97);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 14px 16px;
+    z-index: 6;
+    display: none;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.socialhub-sc-panel.show {
+    display: flex;
+}
+
+.socialhub-sc-colorrow {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.socialhub-sc-swatch {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    flex: 0 0 auto;
+}
+
+.socialhub-sc-swatch.active {
+    border-color: #fff;
+}
+
+.socialhub-sc-panel input[type="text"] {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+}
+
+.socialhub-sc-panel select {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #fff;
+    padding: 9px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.socialhub-sc-panel input[type="range"] {
+    flex: 1;
+    accent-color: #3897f0;
+}
+
+.socialhub-sc-panel .socialhub-sc-done {
+    background: #3897f0;
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    padding: 10px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.socialhub-sc-emojirow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.socialhub-sc-emojirow button {
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.socialhub-sc-emojirow button:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.socialhub-sc-bottom {
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 14px 16px;
+    background: #000;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.socialhub-sc-caption {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.socialhub-sc-share {
+    background: linear-gradient(135deg, #405de6, #833ab4, #fd1d1d);
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 800;
+    padding: 13px;
+    border-radius: 12px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.socialhub-sc-share:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.socialhub-sc-selected-box {
+    position: absolute;
+    border: 2px dashed rgba(255, 255, 255, 0.9);
+    pointer-events: none;
+    display: none;
+    z-index: 3;
+}
+
+`;
+
+    document.head.appendChild(style);
+}
+
+const SOCIALHUB_STORY_BGS = [
+    "linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045)",
+    "linear-gradient(135deg, #405de6, #5851db, #833ab4)",
+    "linear-gradient(135deg, #00c6ff, #0072ff)",
+    "linear-gradient(135deg, #f7971e, #ffd200)",
+    "linear-gradient(135deg, #11998e, #38ef7d)",
+    "linear-gradient(135deg, #fc466b, #3f5efb)",
+    "linear-gradient(135deg, #000000, #434343)",
+    "linear-gradient(135deg, #ffffff, #e6e6e6)"
+];
+
+const SOCIALHUB_STORY_COLORS = [
+    "#ffffff", "#000000", "#ff3040", "#3b82f6",
+    "#22c55e", "#facc15", "#f97316", "#e879f9"
+];
+
+const SOCIALHUB_STORY_FONTS = [
+    ["Arial", "Arial, Helvetica, sans-serif"],
+    ["Georgia", "Georgia, serif"],
+    ["Courier", "'Courier New', monospace"],
+    ["Impact", "Impact, sans-serif"],
+    ["Comic", "'Comic Sans MS', cursive"],
+    ["Brush", "'Brush Script MT', cursive"]
+];
+
+const SOCIALHUB_STORY_EMOJIS = [
+    "😀", "😂", "😍", "😎", "🥳", "😢",
+    "😡", "🤩", "😴", "🤔", "👍", "👏",
+    "🙏", "💪", "🔥", "❤️", "💯", "🎉",
+    "✨", "⭐", "🎵", "🌹", "🐱", "🌈"
+];
+
 async function socialhubOpenStoryCreator() {
+
+    socialhubAddStoryCSS();
 
     const existing =
         document.querySelector(".socialhub-story-creator");
@@ -643,9 +1012,7 @@ async function socialhubOpenStoryCreator() {
         await socialhubGetMe();
 
     if (!me) {
-
         alert("Please login first.");
-
         return;
     }
 
@@ -655,55 +1022,100 @@ async function socialhubOpenStoryCreator() {
     modal.className = "socialhub-story-creator";
 
     modal.innerHTML = `
+        <div class="socialhub-sc-box">
 
-        <div class="socialhub-story-creator-box">
+            <button type="button" class="socialhub-sc-close">✕</button>
 
-            <div class="socialhub-story-creator-head">
+            <div class="socialhub-sc-start">
 
-                <h3>Create a Story</h3>
+                <h2>Create a Story</h2>
 
-                <button
-                    type="button"
-                    class="socialhub-story-creator-close"
-                >
-                    ✕
+                <p>Choose a photo or video, or create a text story</p>
+
+                <button type="button" class="socialhub-sc-startbtn socialhub-sc-pick-photo">
+                    📷 Photo
+                </button>
+
+                <button type="button" class="socialhub-sc-startbtn socialhub-sc-pick-video">
+                    🎥 Video
+                </button>
+
+                <button type="button" class="socialhub-sc-startbtn socialhub-sc-pick-text">
+                    🎨 Create text story
                 </button>
 
             </div>
 
-            <div class="socialhub-story-creator-body">
+            <div class="socialhub-sc-editor">
 
-                <div class="socialhub-story-creator-actions">
+                <button type="button" class="socialhub-sc-back">←</button>
 
-                    <button
-                        type="button"
-                        class="socialhub-story-pick-photo"
-                    >
-                        📷 Photo
-                    </button>
+                <div class="socialhub-sc-canvaswrap">
 
-                    <button
-                        type="button"
-                        class="socialhub-story-pick-video"
-                    >
-                        🎥 Video
-                    </button>
+                    <canvas
+                        class="socialhub-sc-canvas"
+                        width="1080"
+                        height="1920"
+                    ></canvas>
+
+                    <div class="socialhub-sc-selected-box"></div>
 
                 </div>
 
-                <div class="socialhub-story-creator-preview"></div>
+                <div class="socialhub-sc-tools">
+
+                    <button type="button" class="socialhub-sc-toolbtn socialhub-sc-tool-text" title="Add text">T</button>
+                    <button type="button" class="socialhub-sc-toolbtn socialhub-sc-tool-draw" title="Draw">✏️</button>
+                    <button type="button" class="socialhub-sc-toolbtn socialhub-sc-tool-sticker" title="Emoji sticker">😊</button>
+                    <button type="button" class="socialhub-sc-toolbtn socialhub-sc-tool-bg" title="Background color">🎨</button>
+                    <button type="button" class="socialhub-sc-toolbtn socialhub-sc-tool-undo" title="Undo">↩️</button>
+                    <button type="button" class="socialhub-sc-toolbtn socialhub-sc-tool-delete" title="Delete selected">🗑️</button>
+
+                </div>
+
+                <div class="socialhub-sc-panel socialhub-sc-panel-text">
+                    <div class="socialhub-sc-colorrow">
+                        <input type="text" class="socialhub-sc-text-input" placeholder="Type text..." maxlength="80">
+                        <select class="socialhub-sc-font-select"></select>
+                        <input type="range" class="socialhub-sc-size-range" min="30" max="160" value="72">
+                    </div>
+                    <div class="socialhub-sc-colorrow socialhub-sc-text-colors"></div>
+                    <div class="socialhub-sc-colorrow">
+                        <button type="button" class="socialhub-sc-done">Add text</button>
+                    </div>
+                </div>
+
+                <div class="socialhub-sc-panel socialhub-sc-panel-draw">
+                    <div class="socialhub-sc-colorrow socialhub-sc-draw-colors"></div>
+                    <div class="socialhub-sc-colorrow">
+                        <span>Size</span>
+                        <input type="range" class="socialhub-sc-draw-size" min="4" max="80" value="18">
+                        <button type="button" class="socialhub-sc-done">Done</button>
+                    </div>
+                </div>
+
+                <div class="socialhub-sc-panel socialhub-sc-panel-sticker">
+                    <div class="socialhub-sc-emojirow"></div>
+                    <button type="button" class="socialhub-sc-done">Done</button>
+                </div>
+
+                <div class="socialhub-sc-panel socialhub-sc-panel-bg">
+                    <div class="socialhub-sc-colorrow socialhub-sc-bg-swatches"></div>
+                    <button type="button" class="socialhub-sc-done">Done</button>
+                </div>
+
+            </div>
+
+            <div class="socialhub-sc-bottom">
 
                 <input
                     type="text"
-                    class="socialhub-story-caption"
-                    placeholder="Add a caption... (optional)"
+                    class="socialhub-sc-caption"
+                    placeholder="Add caption..."
                     maxlength="120"
                 >
 
-                <button
-                    type="button"
-                    class="primary-btn socialhub-story-share"
-                >
+                <button type="button" class="socialhub-sc-share">
                     Share Story
                 </button>
 
@@ -714,16 +1126,499 @@ async function socialhubOpenStoryCreator() {
 
     document.body.appendChild(modal);
 
-    let pendingFile = null;
+    // ---------------- STATE ----------------
 
-    const preview =
-        modal.querySelector(".socialhub-story-creator-preview");
+    const W = 1080;
+    const H = 1920;
 
-    const shareButton =
-        modal.querySelector(".socialhub-story-share");
+    const canvas =
+        modal.querySelector(".socialhub-sc-canvas");
 
-    const captionInput =
-        modal.querySelector(".socialhub-story-caption");
+    const ctx = canvas.getContext("2d");
+
+    const state = {
+        image: null,
+        isVideo: false,
+        videoFile: null,
+        bg: SOCIALHUB_STORY_BGS[0],
+        elements: [],
+        tool: null,
+        textColor: "#ffffff",
+        textSize: 72,
+        font: SOCIALHUB_STORY_FONTS[0][1],
+        drawColor: "#ff3040",
+        drawSize: 18,
+        selected: null,
+        dragTarget: null,
+        dragOffset: { x: 0, y: 0 },
+        strokePoints: null
+    };
+
+    // ---------------- HELPERS ----------------
+
+    function canvasPos(clientX, clientY) {
+
+        const rect =
+            canvas.getBoundingClientRect();
+
+        const x =
+            (clientX - rect.left) * (W / rect.width);
+
+        const y =
+            (clientY - rect.top) * (H / rect.height);
+
+        return {
+            x: Math.round(x),
+            y: Math.round(y)
+        };
+    }
+
+    function drawImageCover() {
+
+        if (!state.image) {
+            return;
+        }
+
+        const iw = state.image.width;
+        const ih = state.image.height;
+
+        const scale =
+            Math.max(W / iw, H / ih);
+
+        const dw = iw * scale;
+        const dh = ih * scale;
+
+        ctx.drawImage(
+            state.image,
+            (W - dw) / 2,
+            (H - dh) / 2,
+            dw,
+            dh
+        );
+    }
+
+    function elementBounds(el) {
+
+        if (el.type === "stroke") {
+
+            let minX = Infinity;
+            let minY = Infinity;
+            let maxX = -Infinity;
+            let maxY = -Infinity;
+
+            el.points.forEach(p => {
+
+                minX = Math.min(minX, p.x);
+                minY = Math.min(minY, p.y);
+                maxX = Math.max(maxX, p.x);
+                maxY = Math.max(maxY, p.y);
+            });
+
+            const pad = el.width / 2 + 10;
+
+            return {
+                x: minX - pad,
+                y: minY - pad,
+                w: maxX - minX + pad * 2,
+                h: maxY - minY + pad * 2
+            };
+        }
+
+        const size =
+            el.type === "text"
+                ? el.size
+                : el.size;
+
+        const w =
+            el.type === "text"
+                ? (() => {
+                    ctx.font = `${el.size}px ${el.font}`;
+                    return ctx.measureText(el.text).width + 40;
+                })()
+                : size * 1.4;
+
+        return {
+            x: el.x - 20,
+            y: el.y - size - 10,
+            w: Math.max(w, size * 1.4),
+            h: size + 40
+        };
+    }
+
+    function hitTest(clientX, clientY) {
+
+        const pos =
+            canvasPos(clientX, clientY);
+
+        for (let i = state.elements.length - 1; i >= 0; i--) {
+
+            const el =
+                state.elements[i];
+
+            const b =
+                elementBounds(el);
+
+            if (
+                pos.x >= b.x &&
+                pos.x <= b.x + b.w &&
+                pos.y >= b.y &&
+                pos.y <= b.y + b.h
+            ) {
+                return el;
+            }
+        }
+
+        return null;
+    }
+
+    function redraw() {
+
+        ctx.clearRect(0, 0, W, H);
+
+        if (state.image) {
+
+            drawImageCover();
+
+        } else {
+
+            ctx.fillStyle = state.bg;
+            ctx.fillRect(0, 0, W, H);
+        }
+
+        state.elements.forEach(el => {
+
+            if (el.type === "stroke") {
+
+                ctx.strokeStyle = el.color;
+                ctx.lineWidth = el.width;
+                ctx.lineCap = "round";
+                ctx.lineJoin = "round";
+
+                ctx.beginPath();
+
+                el.points.forEach((p, i) => {
+
+                    if (i === 0) {
+                        ctx.moveTo(p.x, p.y);
+                    } else {
+                        ctx.lineTo(p.x, p.y);
+                    }
+                });
+
+                ctx.stroke();
+
+            } else if (el.type === "sticker") {
+
+                ctx.font = `${el.size}px Arial`;
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(el.emoji, el.x, el.y);
+
+            } else if (el.type === "text") {
+
+                ctx.font = `${el.size}px ${el.font}`;
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.strokeStyle = "rgba(0,0,0,0.55)";
+                ctx.lineWidth = 6;
+                ctx.strokeText(el.text, el.x, el.y);
+                ctx.fillStyle = el.color;
+                ctx.fillText(el.text, el.x, el.y);
+            }
+        });
+
+        showSelectionBox();
+    }
+
+    function showSelectionBox() {
+
+        const box =
+            modal.querySelector(".socialhub-sc-selected-box");
+
+        const canvasRect =
+            canvas.getBoundingClientRect();
+
+        if (
+            !state.selected ||
+            state.selected.type === "stroke"
+        ) {
+
+            box.style.display = "none";
+            return;
+        }
+
+        const el = state.selected;
+        const b = elementBounds(el);
+
+        const scaleX = canvasRect.width / W;
+        const scaleY = canvasRect.height / H;
+
+        box.style.display = "block";
+        box.style.left = (canvasRect.left + b.x * scaleX) + "px";
+        box.style.top = (canvasRect.top + b.y * scaleY) + "px";
+        box.style.width = (b.w * scaleX) + "px";
+        box.style.height = (b.h * scaleY) + "px";
+    }
+
+    // ---------------- PANELS ----------------
+
+    function hidePanels() {
+
+        modal
+            .querySelectorAll(".socialhub-sc-panel")
+            .forEach(panel => panel.classList.remove("show"));
+    }
+
+    function showPanel(className) {
+
+        hidePanels();
+
+        const panel =
+            modal.querySelector(className);
+
+        if (panel) {
+            panel.classList.add("show");
+        }
+    }
+
+    function setTool(tool) {
+
+        state.tool = tool;
+
+        modal
+            .querySelectorAll(".socialhub-sc-toolbtn")
+            .forEach(btn => btn.classList.remove("active"));
+
+        if (tool) {
+
+            const btn =
+                modal.querySelector(
+                    `.socialhub-sc-tool-${tool}`
+                );
+
+            if (btn) {
+                btn.classList.add("active");
+            }
+        }
+
+        hidePanels();
+
+        if (tool === "text") {
+
+            showPanel(".socialhub-sc-panel-text");
+            modal.querySelector(".socialhub-sc-text-input").focus();
+
+        } else if (tool === "draw") {
+
+            showPanel(".socialhub-sc-panel-draw");
+
+        } else if (tool === "sticker") {
+
+            showPanel(".socialhub-sc-panel-sticker");
+
+        } else if (tool === "bg") {
+
+            showPanel(".socialhub-sc-panel-bg");
+        }
+    }
+
+    function openEditor() {
+
+        modal
+            .querySelector(".socialhub-sc-start")
+            .style.display = "none";
+
+        modal
+            .querySelector(".socialhub-sc-editor")
+            .style.display = "flex";
+
+        modal
+            .querySelector(".socialhub-sc-bottom")
+            .style.display = "flex";
+
+        modal
+            .querySelector(".socialhub-sc-back")
+            .style.display = "flex";
+
+        redraw();
+    }
+
+    function backToStart() {
+
+        modal.querySelector(".socialhub-sc-start").style.display = "flex";
+
+        modal.querySelector(".socialhub-sc-editor").style.display = "none";
+
+        modal.querySelector(".socialhub-sc-bottom").style.display = "none";
+
+        modal.querySelector(".socialhub-sc-back").style.display = "none";
+
+        state.image = null;
+        state.isVideo = false;
+        state.videoFile = null;
+        state.elements = [];
+        state.selected = null;
+        state.tool = null;
+
+        hidePanels();
+
+        modal
+            .querySelectorAll(".socialhub-sc-toolbtn")
+            .forEach(btn => btn.classList.remove("active"));
+
+        const previewHint =
+            modal.querySelector(".socialhub-sc-video-hint");
+
+        if (previewHint) {
+            previewHint.remove();
+        }
+    }
+
+    // ---------------- UI SETUP ----------------
+
+    const fontSelect =
+        modal.querySelector(".socialhub-sc-font-select");
+
+    SOCIALHUB_STORY_FONTS.forEach(([label, value]) => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = value;
+        option.textContent = label;
+
+        fontSelect.appendChild(option);
+    });
+
+    const textColors =
+        modal.querySelector(".socialhub-sc-text-colors");
+
+    const drawColors =
+        modal.querySelector(".socialhub-sc-draw-colors");
+
+    SOCIALHUB_STORY_COLORS.forEach(color => {
+
+        const textSwatch =
+            document.createElement("button");
+
+        textSwatch.type = "button";
+        textSwatch.className = "socialhub-sc-swatch";
+        textSwatch.style.background = color;
+        textSwatch.dataset.color = color;
+
+        textSwatch.addEventListener("click", () => {
+
+            state.textColor = color;
+
+            textColors
+                .querySelectorAll(".socialhub-sc-swatch")
+                .forEach(s => s.classList.remove("active"));
+
+            textSwatch.classList.add("active");
+        });
+
+        if (color === state.textColor) {
+            textSwatch.classList.add("active");
+        }
+
+        textColors.appendChild(textSwatch);
+
+        const drawSwatch =
+            document.createElement("button");
+
+        drawSwatch.type = "button";
+        drawSwatch.className = "socialhub-sc-swatch";
+        drawSwatch.style.background = color;
+        drawSwatch.dataset.color = color;
+
+        drawSwatch.addEventListener("click", () => {
+
+            state.drawColor = color;
+
+            drawColors
+                .querySelectorAll(".socialhub-sc-swatch")
+                .forEach(s => s.classList.remove("active"));
+
+            drawSwatch.classList.add("active");
+        });
+
+        if (color === state.drawColor) {
+            drawSwatch.classList.add("active");
+        }
+
+        drawColors.appendChild(drawSwatch);
+    });
+
+    const bgSwatches =
+        modal.querySelector(".socialhub-sc-bg-swatches");
+
+    SOCIALHUB_STORY_BGS.forEach((bg, index) => {
+
+        const swatch =
+            document.createElement("button");
+
+        swatch.type = "button";
+        swatch.className = "socialhub-sc-swatch";
+        swatch.style.background = bg;
+        swatch.dataset.bg = bg;
+
+        swatch.addEventListener("click", () => {
+
+            state.bg = bg;
+            state.image = null;
+            state.isVideo = false;
+            state.videoFile = null;
+
+            modal
+                .querySelectorAll(".socialhub-sc-video-hint")
+                .forEach(h => h.remove());
+
+            bgSwatches
+                .querySelectorAll(".socialhub-sc-swatch")
+                .forEach(s => s.classList.remove("active"));
+
+            swatch.classList.add("active");
+
+            redraw();
+        });
+
+        if (index === 0) {
+            swatch.classList.add("active");
+        }
+
+        bgSwatches.appendChild(swatch);
+    });
+
+    const emojiRow =
+        modal.querySelector(".socialhub-sc-emojirow");
+
+    SOCIALHUB_STORY_EMOJIS.forEach(emoji => {
+
+        const btn =
+            document.createElement("button");
+
+        btn.type = "button";
+        btn.textContent = emoji;
+
+        btn.addEventListener("click", () => {
+
+            state.elements.push({
+                type: "sticker",
+                emoji: emoji,
+                x: W / 2,
+                y: H / 2,
+                size: 130,
+                selected: false
+            });
+
+            state.selected = null;
+            redraw();
+        });
+
+        emojiRow.appendChild(btn);
+    });
+
+    // ---------------- FILE PICKING ----------------
 
     const fileInput =
         document.createElement("input");
@@ -734,49 +1629,14 @@ async function socialhubOpenStoryCreator() {
 
     document.body.appendChild(fileInput);
 
-    modal
-        .querySelector(".socialhub-story-creator-close")
-        .addEventListener("click", () => {
-            modal.remove();
-        });
-
-    modal.addEventListener("click", event => {
-
-        if (event.target === modal) {
-            modal.remove();
-        }
-    });
-
-    modal
-        .querySelector(".socialhub-story-pick-photo")
-        .addEventListener("click", () => {
-            fileInput.accept = "image/*";
-            fileInput.click();
-        });
-
-    modal
-        .querySelector(".socialhub-story-pick-video")
-        .addEventListener("click", () => {
-            fileInput.accept = "video/*";
-            fileInput.click();
-        });
-
     fileInput.addEventListener("change", async () => {
 
-        let file =
+        const file =
             fileInput.files[0];
 
+        fileInput.value = "";
+
         if (!file) {
-            return;
-        }
-
-        if (
-            !file.type.startsWith("image/") &&
-            !file.type.startsWith("video/")
-        ) {
-
-            alert("Please choose a photo or video.");
-
             return;
         }
 
@@ -789,9 +1649,20 @@ async function socialhubOpenStoryCreator() {
             return;
         }
 
-        // Convert iPhone HEIC photos so they display everywhere
-        if (file.type.startsWith("image/")) {
+        const isVideo =
+            file.type.startsWith("video/");
 
+        if (
+            !file.type.startsWith("image/") &&
+            !isVideo
+        ) {
+            alert("Please choose a photo or video.");
+            return;
+        }
+
+        if (!isVideo) {
+
+            // Convert iPhone HEIC photos
             const converted =
                 await socialhubHeicToJpeg(file);
 
@@ -799,132 +1670,454 @@ async function socialhubOpenStoryCreator() {
                 return;
             }
 
-            file = converted;
-        }
+            const img =
+                new Image();
 
-        pendingFile = file;
+            img.onload = () => {
 
-        const isVideo =
-            file.type.startsWith("video/");
+                state.image = img;
+                state.isVideo = false;
+                state.videoFile = null;
+                state.elements = [];
+                state.selected = null;
+                openEditor();
+            };
 
-        preview.innerHTML = "";
+            img.onerror = () => {
 
-        preview.style.display = "block";
+                alert(
+                    "Could not read this image.\n\n" +
+                    "Please choose another photo."
+                );
+            };
 
-        if (isVideo) {
-
-            const video =
-                document.createElement("video");
-
-            video.src =
-                URL.createObjectURL(file);
-
-            video.muted = true;
-
-            video.controls = true;
-
-            preview.appendChild(video);
+            img.src =
+                URL.createObjectURL(converted);
+            state.imageFile = converted;
 
         } else {
 
-            const img =
-                document.createElement("img");
+            state.isVideo = true;
+            state.videoFile = file;
+            state.image = null;
+            state.elements = [];
 
-            img.src =
-                URL.createObjectURL(file);
+            const canvasWrap =
+                modal.querySelector(".socialhub-sc-canvaswrap");
 
-            preview.appendChild(img);
+            canvasWrap
+                .querySelectorAll(".socialhub-sc-video-hint")
+                .forEach(h => h.remove());
+
+            const hint =
+                document.createElement("video");
+
+            hint.className = "socialhub-sc-video-hint";
+            hint.src = URL.createObjectURL(file);
+            hint.muted = true;
+            hint.playsInline = true;
+            hint.loop = true;
+            hint.controls = true;
+
+            hint.style.cssText = `
+                position: absolute;
+                max-width: 100%;
+                max-height: 100%;
+                width: auto;
+                height: 100%;
+            `;
+
+            canvasWrap.appendChild(hint);
+
+            canvas.style.display = "none";
+
+            openEditor();
         }
     });
 
-    shareButton.addEventListener("click", async () => {
+    modal
+        .querySelector(".socialhub-sc-pick-photo")
+        .addEventListener("click", () => {
+            fileInput.accept = "image/*";
+            fileInput.click();
+        });
 
-        if (!pendingFile) {
+    modal
+        .querySelector(".socialhub-sc-pick-video")
+        .addEventListener("click", () => {
+            fileInput.accept = "video/*";
+            fileInput.click();
+        });
 
-            alert("Please pick a photo or video first.");
+    modal
+        .querySelector(".socialhub-sc-pick-text")
+        .addEventListener("click", () => {
+
+            state.image = null;
+            state.isVideo = false;
+            state.videoFile = null;
+            state.elements = [];
+            state.selected = null;
+
+            openEditor();
+        });
+
+    // ---------------- TOOL BUTTONS ----------------
+
+    modal
+        .querySelector(".socialhub-sc-tool-text")
+        .addEventListener("click", () => setTool("text"));
+
+    modal
+        .querySelector(".socialhub-sc-tool-draw")
+        .addEventListener("click", () => setTool("draw"));
+
+    modal
+        .querySelector(".socialhub-sc-tool-sticker")
+        .addEventListener("click", () => setTool("sticker"));
+
+    modal
+        .querySelector(".socialhub-sc-tool-bg")
+        .addEventListener("click", () => setTool("bg"));
+
+    modal
+        .querySelector(".socialhub-sc-tool-undo")
+        .addEventListener("click", () => {
+
+            if (state.elements.length > 0) {
+
+                state.elements.pop();
+                state.selected = null;
+                redraw();
+            }
+        });
+
+    modal
+        .querySelector(".socialhub-sc-tool-delete")
+        .addEventListener("click", () => {
+
+            if (!state.selected) {
+                return;
+            }
+
+            state.elements =
+                state.elements.filter(
+                    el => el !== state.selected
+                );
+
+            state.selected = null;
+            redraw();
+        });
+
+    // ---------------- TEXT PANEL ----------------
+
+    const textInput =
+        modal.querySelector(".socialhub-sc-text-input");
+
+    const sizeRange =
+        modal.querySelector(".socialhub-sc-size-range");
+
+    sizeRange.addEventListener("input", () => {
+
+        state.textSize =
+            parseInt(sizeRange.value, 10);
+    });
+
+    fontSelect.addEventListener("change", () => {
+
+        state.font =
+            fontSelect.value;
+    });
+
+    function addText() {
+
+        const value =
+            textInput.value.trim();
+
+        if (!value) {
+            return;
+        }
+
+        state.elements.push({
+            type: "text",
+            text: value,
+            x: W / 2,
+            y: H / 2 - 100,
+            color: state.textColor,
+            size: state.textSize,
+            font: state.font,
+            selected: false
+        });
+
+        textInput.value = "";
+
+        state.selected = null;
+
+        redraw();
+    }
+
+    modal
+        .querySelector(".socialhub-sc-panel-text .socialhub-sc-done")
+        .addEventListener("click", addText);
+
+    textInput.addEventListener("keydown", event => {
+
+        if (event.key === "Enter") {
+            addText();
+        }
+    });
+
+    // ---------------- CANVAS POINTERS ----------------
+
+    canvas.addEventListener("pointerdown", event => {
+
+        event.preventDefault();
+
+        canvas.setPointerCapture(event.pointerId);
+
+        const hit =
+            hitTest(event.clientX, event.clientY);
+
+        if (hit && hit.type !== "stroke") {
+
+            state.selected = hit;
+            state.dragTarget = hit;
+
+            const pos =
+                canvasPos(event.clientX, event.clientY);
+
+            state.dragOffset = {
+                x: pos.x - hit.x,
+                y: pos.y - hit.y
+            };
+
+            showSelectionBox();
 
             return;
         }
 
-        const isVideo =
-            pendingFile.type.startsWith("video/");
+        if (state.selected) {
 
-        const ext =
-            pendingFile.name
-                .split(".")
-                .pop()
-                ?.toLowerCase() || (isVideo ? "mp4" : "jpg");
+            state.selected = null;
+            showSelectionBox();
+        }
 
-        const path =
-            `${me.id}-${Date.now()}.${ext}`;
+        if (state.tool === "draw") {
 
-        shareButton.disabled = true;
+            const pos =
+                canvasPos(event.clientX, event.clientY);
 
-        shareButton.innerText = "Uploading...";
-
-        try {
-
-            const {
-                error: uploadError
-            } = await db
-                .storage
-                .from("stories")
-                .upload(path, pendingFile, {
-                    upsert: true,
-                    contentType: pendingFile.type
-                });
-
-            if (uploadError) {
-                throw uploadError;
-            }
-
-            const {
-                data: urlData
-            } = db
-                .storage
-                .from("stories")
-                .getPublicUrl(path);
-
-            const {
-                error: insertError
-            } = await db
-                .from("stories")
-                .insert({
-                    user_id: me.id,
-                    media_url: urlData.publicUrl,
-                    media_type: isVideo ? "video" : "image",
-                    caption: captionInput.value.trim() || null
-                });
-
-            if (insertError) {
-                throw insertError;
-            }
-
-            modal.remove();
-
-            alert("Story shared! 🎉");
-
-            socialhubLoadStories();
-
-        } catch (error) {
-
-            console.error(
-                "❌ Story create error:",
-                error
-            );
-
-            alert(
-                "Could not create story.\n\n" +
-                error.message
-            );
-
-            shareButton.disabled = false;
-
-            shareButton.innerText = "Share Story";
+            state.strokePoints = {
+                color: state.drawColor,
+                width: state.drawSize,
+                points: [pos]
+            };
         }
     });
-}
 
+    canvas.addEventListener("pointermove", event => {
+
+        if (
+            state.dragTarget &&
+            state.dragTarget.type !== "stroke"
+        ) {
+
+            const pos =
+                canvasPos(event.clientX, event.clientY);
+
+            state.dragTarget.x =
+                Math.max(0, Math.min(W, pos.x - state.dragOffset.x));
+
+            state.dragTarget.y =
+                Math.max(0, Math.min(H, pos.y - state.dragOffset.y));
+
+            redraw();
+
+        } else if (
+            state.strokePoints &&
+            state.tool === "draw"
+        ) {
+
+            const pos =
+                canvasPos(event.clientX, event.clientY);
+
+            state.strokePoints.points.push(pos);
+
+            redraw();
+        }
+    });
+
+    function endPointer(event) {
+
+        if (state.strokePoints) {
+
+            if (state.strokePoints.points.length > 1) {
+
+                state.elements.push(state.strokePoints);
+            }
+
+            state.strokePoints = null;
+            state.selected = null;
+            redraw();
+        }
+
+        state.dragTarget = null;
+    }
+
+    canvas.addEventListener("pointerup", endPointer);
+    canvas.addEventListener("pointercancel", endPointer);
+
+    // ---------------- CLOSE ----------------
+
+    modal
+        .querySelector(".socialhub-sc-close")
+        .addEventListener("click", () => {
+            modal.remove();
+        });
+
+    modal
+        .querySelector(".socialhub-sc-back")
+        .addEventListener("click", backToStart);
+
+    modal.addEventListener("click", event => {
+
+        if (event.target === modal) {
+            modal.remove();
+        }
+    });
+
+    // ---------------- SHARE ----------------
+
+    modal
+        .querySelector(".socialhub-sc-share")
+        .addEventListener("click", async () => {
+
+            const shareButton =
+                modal.querySelector(".socialhub-sc-share");
+
+            if (
+                !state.isVideo &&
+                !state.image
+            ) {
+                alert("Add a photo first.");
+                return;
+            }
+
+            const caption =
+                modal.querySelector(".socialhub-sc-caption").value.trim() || null;
+
+            shareButton.disabled = true;
+
+            shareButton.innerText = "Uploading...";
+
+            try {
+
+                let uploadFile = null;
+
+                if (state.isVideo) {
+
+                    uploadFile =
+                        state.videoFile;
+
+                } else {
+
+                    // Compose the full design into one image
+                    const blob =
+                        await new Promise(resolve => {
+
+                            canvas.toBlob(
+                                resolve,
+                                "image/jpeg",
+                                0.92
+                            );
+                        });
+
+                    const name =
+                        `story-${Date.now()}.jpg`;
+
+                    uploadFile =
+                        new File(
+                            [blob],
+                            name,
+                            { type: "image/jpeg" }
+                        );
+                }
+
+                const ext =
+                    uploadFile.name
+                        .split(".")
+                        .pop()
+                        .toLowerCase() ||
+                    (state.isVideo ? "mp4" : "jpg");
+
+                const path =
+                    `${me.id}-${Date.now()}.${ext}`;
+
+                const {
+                    error: uploadError
+                } = await db
+                    .storage
+                    .from("stories")
+                    .upload(path, uploadFile, {
+                        upsert: true,
+                        contentType: uploadFile.type
+                    });
+
+                if (uploadError) {
+                    throw uploadError;
+                }
+
+                shareButton.innerText = "Sharing...";
+
+                const {
+                    data: urlData
+                } = db
+                    .storage
+                    .from("stories")
+                    .getPublicUrl(path);
+
+                const {
+                    error: insertError
+                } = await db
+                    .from("stories")
+                    .insert({
+                        user_id: me.id,
+                        media_url: urlData.publicUrl,
+                        media_type:
+                            state.isVideo
+                                ? "video"
+                                : "image",
+                        caption: caption
+                    });
+
+                if (insertError) {
+                    throw insertError;
+                }
+
+                modal.remove();
+
+                alert("Story shared! 🎉");
+
+                socialhubLoadStories();
+
+            } catch (error) {
+
+                console.error(
+                    "❌ Story create error:",
+                    error
+                );
+
+                alert(
+                    "Could not create story.\n\n" +
+                    error.message
+                );
+
+                shareButton.disabled = false;
+
+                shareButton.innerText = "Share Story";
+            }
+        });
+}
 
 // ======================================================
 // 3. STORY VIEWER (full-screen, real media)
