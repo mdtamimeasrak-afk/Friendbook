@@ -770,10 +770,10 @@ function socialhubAddStoryCSS() {
 }
 
 .socialhub-sc-canvas {
-    max-width: 100%;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 9 / 16;
     max-height: 100%;
-    width: auto;
-    height: 100%;
     object-fit: contain;
     touch-action: none;
     cursor: crosshair;
@@ -1721,10 +1721,14 @@ async function socialhubOpenStoryCreator() {
 
             hint.style.cssText = `
                 position: absolute;
-                max-width: 100%;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 100%;
+                height: auto;
+                aspect-ratio: 9 / 16;
                 max-height: 100%;
-                width: auto;
-                height: 100%;
+                object-fit: contain;
             `;
 
             canvasWrap.appendChild(hint);
