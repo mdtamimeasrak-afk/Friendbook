@@ -1603,6 +1603,33 @@ async function signupUser(event) {
             );
 
 
+    // Email confirmation ON -> no session yet,
+    // so save the profile for the first login
+    // (RLS blocks profile writes before confirm)
+
+    if (!data.session) {
+
+        localStorage.setItem(
+            "socialhubPendingProfile",
+            JSON.stringify({
+                id: data.user.id,
+                username: username,
+                full_name: name
+            })
+        );
+
+        alert(
+            "Account created! 🎉\n\n" +
+            "Check your email to confirm,\n" +
+            "then log in."
+        );
+
+        window.location.href =
+            "login.html";
+
+        return;
+    }
+
 
     // Create profile
 
@@ -1719,6 +1746,37 @@ async function loginUser(event) {
         );
 
         return;
+    }
+
+
+    // First login after email confirm:
+    // save the pending profile (name/username)
+
+    const pendingProfile =
+        localStorage.getItem(
+            "socialhubPendingProfile"
+        );
+
+    if (pendingProfile) {
+
+        try {
+
+            const pending =
+                JSON.parse(pendingProfile);
+
+            await supabaseClient
+                .from("profiles")
+                .upsert({
+                    id: pending.id,
+                    username: pending.username,
+                    full_name: pending.full_name
+                });
+
+            localStorage.removeItem(
+                "socialhubPendingProfile"
+            );
+
+        } catch (ignore) {}
     }
 
 
@@ -2093,6 +2151,34 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             console.log("✅ Auth user created:", data.user.id);
+
+            // -----------------------------
+            // EMAIL CONFIRMATION ON -> SAVE
+            // PROFILE FOR FIRST LOGIN
+            // -----------------------------
+
+            if (!data.session) {
+
+                localStorage.setItem(
+                    "socialhubPendingProfile",
+                    JSON.stringify({
+                        id: data.user.id,
+                        username: username,
+                        full_name: name
+                    })
+                );
+
+                alert(
+                    "Account created! 🎉\n\n" +
+                    "Check your email to confirm,\n" +
+                    "then log in."
+                );
+
+                window.location.href =
+                    "login.html";
+
+                return;
+            }
 
             // -----------------------------
             // CREATE PROFILE
