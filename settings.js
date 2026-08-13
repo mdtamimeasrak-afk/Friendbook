@@ -1176,7 +1176,7 @@ async function socialhubSettingsRenderBlocked(container) {
             <div class="socialhub-blocked-info">
                 <p class="socialhub-blocked-name"
                    title="View profile"
-                   onclick="location.href='user-profile.html?id=${id}'"
+                   onclick="location.href='user-profile.html?user=${id}'"
                 >${name}</p>
                 <p class="socialhub-settings-row-desc">@${username}</p>
             </div>

@@ -444,7 +444,7 @@ async function socialhubShareDialog(postId) {
         .addEventListener("click", async () => {
 
             const url =
-                `${location.origin}/user-profile.html?u=${post.user_id}#post-${post.id}`;
+                `${location.origin}/user-profile.html?user=${post.user_id}#post-${post.id}`;
 
             try {
 

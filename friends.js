@@ -1705,8 +1705,14 @@ async function loadUserProfilePage() {
     const friendCount =
         (friendshipRows || []).length;
 
-    document.getElementById("upFriendsCount").innerText =
-        friendCount;
+    const upFriendsCount =
+        document.getElementById("upFriendsCount");
+
+    if (upFriendsCount) {
+
+        upFriendsCount.innerText =
+            friendCount;
+    }
 
     const statFriends =
         document.getElementById("upStatFriends");
