@@ -770,11 +770,10 @@ function socialhubAddStoryCSS() {
 }
 
 .socialhub-sc-canvas {
-    width: 100%;
+    width: auto;
     height: auto;
-    aspect-ratio: 9 / 16;
+    max-width: 100%;
     max-height: 100%;
-    object-fit: contain;
     touch-action: none;
     cursor: crosshair;
     border-radius: 2px;
@@ -1156,6 +1155,40 @@ async function socialhubOpenStoryCreator() {
 
     // ---------------- HELPERS ----------------
 
+    function fitCanvas(target) {
+
+        const wrap =
+            modal.querySelector(".socialhub-sc-canvaswrap");
+
+        const wrapRect =
+            wrap.getBoundingClientRect();
+
+        const maxW =
+            wrapRect.width - 2;
+
+        const maxH =
+            wrapRect.height - 2;
+
+        let w = maxW;
+        let h = w * (16 / 9);
+
+        if (h > maxH) {
+
+            h = maxH;
+            w = h * (9 / 16);
+        }
+
+        target.style.width = Math.round(w) + "px";
+        target.style.height = Math.round(h) + "px";
+    }
+
+    window.addEventListener("resize", () => {
+
+        if (modal.isConnected) {
+            fitCanvas(canvas);
+        }
+    });
+
     function canvasPos(clientX, clientY) {
 
         const rect =
@@ -1440,6 +1473,8 @@ async function socialhubOpenStoryCreator() {
             .querySelector(".socialhub-sc-back")
             .style.display = "flex";
 
+        fitCanvas(canvas);
+
         redraw();
     }
 
@@ -1721,15 +1756,15 @@ async function socialhubOpenStoryCreator() {
 
             hint.style.cssText = `
                 position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                width: 100%;
-                height: auto;
-                aspect-ratio: 9 / 16;
+                max-width: 100%;
                 max-height: 100%;
+                width: auto;
+                height: auto;
                 object-fit: contain;
+                background: #000;
             `;
+
+            fitCanvas(hint);
 
             canvasWrap.appendChild(hint);
 
