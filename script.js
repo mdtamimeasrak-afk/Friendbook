@@ -116,6 +116,17 @@ async function getCurrentProfile() {
 
 async function showCurrentUserData() {
 
+    // Never write MY data onto another user's profile page
+    // (upName/upUsername/upBio/upPhoto/cover all match the
+    //  generic selectors below and would overwrite them)
+    if (
+        window.location.pathname
+            .split("/")
+            .pop() === "user-profile.html"
+    ) {
+        return;
+    }
+
     const result =
         await getCurrentProfile();
 
