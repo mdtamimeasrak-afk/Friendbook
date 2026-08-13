@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Create Account - TRIYA</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%231877f2'/%3E%3Ctext x='20' y='27' font-family='Arial' font-size='21' font-weight='800' fill='white' text-anchor='middle'%3ETR%3C/text%3E%3C/svg%3E">
+
+
+    <link rel="stylesheet" href="auth.css?v=6">
+
+    <link rel="stylesheet" href="premium.css?v=6">
+
+    <link rel="stylesheet" href="glass-theme.css?v=4">
+
+</head>
+
+
+<body>
+
+
+    <div class="auth-container">
+
+
+        <div class="brand-section">
+
+            <div class="logo"></div>
+
+            <h1>
+                TRIYA
+            </h1>
+
+            <p>
+                Create your account and
+                start connecting.
+            </p>
+
+        </div>
+
+
+        <div class="auth-card">
+
+
+            <h2>
+                Create a new account
+            </h2>
+
+
+            <p class="subtitle">
+                It's quick and easy.
+            </p>
+
+
+            <form onsubmit="signupUser(event)">
+
+
+                <input
+                    type="text"
+                    id="signupName"
+                    placeholder="Full name"
+                    required
+                >
+
+
+                <input
+                    type="email"
+                    id="signupEmail"
+                    placeholder="Email address"
+                    required
+                >
+
+
+                <input
+                    type="password"
+                    id="signupPassword"
+                    placeholder="New password"
+                    required
+                >
+
+
+                <input
+                    type="password"
+                    id="signupConfirm"
+                    placeholder="Confirm password"
+                    required
+                >
+
+
+                <button
+                    type="submit"
+                    class="login-btn"
+                >
+                    Sign Up
+                </button>
+
+
+            </form>
+
+
+            <div class="divider"></div>
+
+
+            <button
+                class="back-login"
+                onclick="location.href='login.html'"
+            >
+                Already have an account?
+                Log in
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js?v=4"></script>
+    <script src="premium-ui.js?v=4"></script>
+    <script src="script.js?v=13"></script>
+
+</body>
+
+</html>

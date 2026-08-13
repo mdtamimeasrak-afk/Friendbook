@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>TRIYA Profile</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%231877f2'/%3E%3Ctext x='20' y='27' font-family='Arial' font-size='21' font-weight='800' fill='white' text-anchor='middle'%3ETR%3C/text%3E%3C/svg%3E">
+
+
+    <link rel="stylesheet" href="style.css?v=4">
+
+    <link rel="stylesheet" href="dashboard.css?v=12">
+
+    <link rel="stylesheet" href="premium.css?v=6">
+
+    <link rel="stylesheet" href="profile.css?v=7">
+
+    <link rel="stylesheet" href="glass-theme.css?v=4">
+
+</head>
+
+
+<body>
+
+
+    <!-- ========================= -->
+    <!-- TOP NAVIGATION (home page style) -->
+    <!-- ========================= -->
+
+    <header class="topbar">
+
+
+        <!-- LOGO (Facebook-style "f") -->
+
+        <div
+            class="logo"
+            onclick="location.href='index.html'"
+            title="TRIYA"
+        ></div>
+
+
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+            <span>
+                🔍
+            </span>
+
+            <input
+                type="text"
+                placeholder="Search TRIYA"
+            >
+
+        </div>
+
+
+
+        <!-- CENTER NAV (Facebook tabs) -->
+
+        <nav class="fb-center-nav">
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='index.html'"
+                title="Home"
+            >
+                <i class="fa-solid fa-house"></i>
+            </button>
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='reels.html'"
+                title="Reels"
+            >
+                <i class="fa-solid fa-clapperboard"></i>
+            </button>
+
+
+            <button
+                class="fb-nav-btn"
+                onclick="socialhubOpenFriendsModal()"
+                title="Friends"
+            >
+                <i class="fa-solid fa-user-group"></i>
+            </button>
+
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='messages.html'"
+                title="Messages"
+            >
+                <i class="fa-solid fa-comment-dots"></i>
+            </button>
+
+
+            <button
+                class="fb-nav-btn"
+                onclick="document.querySelector('.top-icons button[title=&quot;Notifications&quot;]')?.click()"
+                title="Notifications"
+            >
+                <i class="fa-solid fa-bell"></i>
+            </button>
+
+        </nav>
+
+
+
+        <!-- TOP ICONS (Facebook gray circles) -->
+
+        <div class="top-icons">
+
+
+            <button
+                title="Messages"
+            >
+                💬
+            </button>
+
+
+            <button
+                title="Notifications"
+            >
+                🔔
+            </button>
+
+
+            <button
+                onclick="toggleDarkMode()"
+                title="Dark Mode"
+            >
+                🌙
+            </button>
+
+
+            <button
+                onclick="location.href='settings.html'"
+                title="Settings"
+            >
+                ⚙️
+            </button>
+
+
+            <button
+                onclick="location.href='profile.html'"
+                class="profile-mini side-avatar"
+                title="Profile"
+            >
+                👤
+            </button>
+
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ========================= -->
+    <!-- PROFILE CONTAINER -->
+    <!-- ========================= -->
+
+    <main class="profile-container">
+
+
+        <!-- ========================= -->
+        <!-- PROFILE HEADER (Instagram style) -->
+        <!-- ========================= -->
+
+        <section class="profile-header">
+
+
+            <!-- COVER PHOTO (hidden in Instagram mode) -->
+
+            <div class="cover-photo">
+
+                <div class="cover-text">
+                    Welcome to my profile
+                </div>
+
+            </div>
+
+
+
+            <!-- PROFILE TOP -->
+
+            <div class="profile-top">
+
+
+                <!-- PROFILE PHOTO (Instagram ring) -->
+
+                <div
+                    class="profile-photo"
+                    id="upPhoto"
+                >
+                    👤
+                </div>
+
+
+
+                <!-- TOP RIGHT -->
+
+                <div class="profile-top-right">
+
+
+                    <!-- USERNAME + FRIEND BUTTONS -->
+
+                    <div class="profile-identity">
+
+                        <h1
+                            class="profile-username"
+                            id="upUsername"
+                        >
+                            @username
+                        </h1>
+
+
+                        <div
+                            class="profile-buttons"
+                            id="upFriendButton"
+                        ></div>
+
+                    </div>
+
+
+
+                    <!-- STATS -->
+
+                    <div class="profile-stats">
+
+
+                        <div class="profile-stat">
+                            <span id="upStatPosts">0</span>
+                            <label>Posts</label>
+                        </div>
+
+
+                        <div class="profile-stat">
+                            <span id="upStatFriends">0</span>
+                            <label>Friends</label>
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- BIO (name + bio) -->
+
+                    <div class="profile-bio-block">
+
+                        <strong
+                            class="profile-name"
+                            id="upName"
+                        >
+                            User
+                        </strong>
+
+
+                        <p
+                            class="profile-bio"
+                            id="upBio"
+                        >
+                            No bio added yet.
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ========================= -->
+        <!-- PROFILE CONTENT -->
+        <!-- ========================= -->
+
+        <div class="profile-content">
+
+
+            <!-- ========================= -->
+            <!-- POSTS (Instagram grid) -->
+            <!-- ========================= -->
+
+            <section class="profile-card" id="profilePostsSection">
+
+
+                <div
+                    id="upPosts"
+                    class="profile-posts-grid"
+                >
+
+                    <p class="empty-message">
+                        Loading posts...
+                    </p>
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- ========================= -->
+            <!-- INTRO -->
+            <!-- ========================= -->
+
+            <section class="profile-card">
+
+
+                <div class="card-title">
+
+                    <h2>
+                        Intro
+                    </h2>
+
+                </div>
+
+
+                <div class="profile-details-list">
+
+
+                    <p>
+                        📍
+                        <span id="upLocation">
+                            Not added
+                        </span>
+                    </p>
+
+
+                    <p>
+                        💼
+                        <span id="upWork">
+                            Not added
+                        </span>
+                    </p>
+
+
+                    <p>
+                        🎓
+                        <span id="upEducation">
+                            Not added
+                        </span>
+                    </p>
+
+
+                    <p>
+                        🌐
+                        <span id="upWebsite">
+                            Not added
+                        </span>
+                    </p>
+
+
+                </div>
+
+
+            </section>
+
+
+        </div>
+
+    </main>
+
+
+
+    <!-- ================================= -->
+    <!-- POST LIGHTBOX (Instagram-style viewer) -->
+    <!-- ================================= -->
+
+    <div
+        id="upPostLightbox"
+        class="post-lightbox"
+        onclick="socialhubCloseUpPostLightbox(event)"
+    >
+
+
+        <div class="post-lightbox-box" id="upPostLightboxBox">
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ========================= -->
+    <!-- SCRIPTS -->
+    <!-- ========================= -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="supabase.js?v=4"></script>
+
+    <script src="premium-ui.js?v=4"></script>
+
+    <script src="script.js?v=13"></script>
+
+    <script src="settings.js?v=5"></script>
+
+    <script src="friends.js?v=5"></script>
+
+    <script src="likes-comments.js?v=7"></script>
+
+    <script src="user-search.js?v=4"></script>
+
+    <script src="post-manage.js?v=4"></script>
+
+    <script src="notifications.js?v=5"></script>
+
+    <script src="messages.js?v=10"></script>
+
+
+</body>
+
+</html>

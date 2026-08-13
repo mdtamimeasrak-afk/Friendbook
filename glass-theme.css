@@ -1,0 +1,519 @@
+/* ======================================================
+   TRIYA - iOS 26 LIQUID GLASS THEME
+   ======================================================
+   Apple iOS 26 "Liquid Glass" look: translucent layered
+   surfaces, strong blur + saturation, glossy specular
+   sheen, light edge highlights, squircle corners and a
+   vibrant animated wallpaper behind everything.
+   Applied on top of every page. Loaded LAST.
+   ====================================================== */
+
+
+/* ---------- LIQUID GLASS COLORS ---------- */
+
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.42);
+    --glass-bg-strong: rgba(255, 255, 255, 0.66);
+    --glass-bg-soft: rgba(255, 255, 255, 0.22);
+    --glass-border: rgba(255, 255, 255, 0.45);
+    --glass-border-soft: rgba(255, 255, 255, 0.28);
+    --glass-edge: rgba(255, 255, 255, 0.55);
+    --glass-sheen:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.5) 0%,
+            rgba(255, 255, 255, 0.08) 32%,
+            rgba(255, 255, 255, 0) 62%
+        );
+    --glass-shadow: 0 12px 40px rgba(31, 38, 135, 0.16);
+    --glass-shadow-soft: 0 6px 20px rgba(31, 38, 135, 0.11);
+    --glass-blur: 24px;
+    --glass-radius: 18px;
+    --glass-radius-sm: 14px;
+}
+
+
+body.dark-mode {
+    --glass-bg: rgba(22, 24, 34, 0.58);
+    --glass-bg-strong: rgba(22, 24, 34, 0.74);
+    --glass-bg-soft: rgba(22, 24, 34, 0.3);
+    --glass-border: rgba(255, 255, 255, 0.14);
+    --glass-border-soft: rgba(255, 255, 255, 0.09);
+    --glass-edge: rgba(255, 255, 255, 0.12);
+    --glass-sheen:
+        linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.14) 0%,
+            rgba(255, 255, 255, 0.04) 32%,
+            rgba(255, 255, 255, 0) 62%
+        );
+    --glass-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+    --glass-shadow-soft: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+
+/* ---------- IOS 26 WALLPAPER BACKGROUND ---------- */
+
+html {
+    background: #eef1ff;
+}
+
+
+body {
+    background: transparent;
+}
+
+
+body::before {
+    content: "";
+
+    position: fixed;
+
+    inset: 0;
+
+    z-index: -1;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            115deg,
+            #c7d2fe 0%,
+            #fbcfe8 22%,
+            #bae6fd 45%,
+            #ddd6fe 68%,
+            #fecdd3 88%,
+            #c7d2fe 100%
+        );
+
+    background-size: 400% 400%;
+
+    animation: socialhubGlassBgShift 26s ease-in-out infinite;
+}
+
+
+body::after {
+    content: "";
+
+    position: fixed;
+
+    z-index: -1;
+
+    pointer-events: none;
+
+    width: 72vmax;
+
+    height: 72vmax;
+
+    top: -30vmax;
+
+    right: -24vmax;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle at 30% 30%,
+            rgba(129, 140, 248, 0.5),
+            rgba(217, 70, 239, 0.25) 45%,
+            transparent 70%
+        );
+
+    box-shadow:
+        -34vmax 24vmax 60vmax -12vmax rgba(34, 211, 238, 0.5),
+        -10vmax 40vmax 70vmax -16vmax rgba(244, 114, 182, 0.35);
+
+    filter: blur(26px);
+
+    animation: socialhubGlassBlob 30s ease-in-out infinite alternate;
+}
+
+
+@keyframes socialhubGlassBgShift {
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+
+@keyframes socialhubGlassBlob {
+    0% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+    }
+
+    50% {
+        transform: translate(-16vmax, 10vmax) scale(1.2) rotate(12deg);
+    }
+
+    100% {
+        transform: translate(-8vmax, 18vmax) scale(0.9) rotate(-8deg);
+    }
+}
+
+
+body.dark-mode::before {
+    background:
+        linear-gradient(
+            115deg,
+            #141430 0%,
+            #2a1b4e 25%,
+            #101f3d 50%,
+            #3b0f3a 75%,
+            #0c2233 100%
+        );
+}
+
+
+body.dark-mode::after {
+    background:
+        radial-gradient(
+            circle at 30% 30%,
+            rgba(99, 102, 241, 0.45),
+            rgba(217, 70, 239, 0.2) 45%,
+            transparent 70%
+        );
+
+    box-shadow:
+        -34vmax 24vmax 60vmax -12vmax rgba(14, 165, 233, 0.35),
+        -10vmax 40vmax 70vmax -16vmax rgba(217, 70, 239, 0.25);
+}
+
+
+/* ---------- PAGE WRAPPERS GO TRANSPARENT ---------- */
+
+.dash-app,
+.main-container,
+.feed,
+.sidebar,
+.socialhub-msg-page-wrap,
+.search-container {
+    background: transparent;
+}
+
+
+/* ---------- TOPBAR (LIQUID SHELF) ---------- */
+
+.topbar {
+    background-color: var(--glass-bg);
+
+    background-image: var(--glass-sheen);
+
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(190%);
+
+    backdrop-filter: blur(var(--glass-blur)) saturate(190%);
+
+    border-bottom: 1px solid var(--glass-border);
+
+    box-shadow:
+        var(--glass-shadow-soft),
+        inset 0 1px 0 var(--glass-edge);
+}
+
+
+/* ---------- CORE LIQUID GLASS PANELS ---------- */
+
+.sidebar-profile,
+.sidebar-menu,
+.create-post,
+.post,
+.profile-card:not(#profilePostsSection),
+.friend-mini,
+.socialhub-friends-widget,
+.socialhub-chats-widget,
+.socialhub-bot-card,
+.socialhub-chat-popup,
+.socialhub-msg-page,
+.socialhub-msg-conv,
+.socialhub-chat-card,
+.socialhub-search-dropdown,
+.socialhub-user-row,
+.welcome-card,
+.side-card,
+.post-lightbox-box,
+.edit-profile-box,
+.auth-card,
+.settings-sidebar,
+.settings-panel {
+    background-color: var(--glass-bg);
+
+    background-image: var(--glass-sheen);
+
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(190%);
+
+    backdrop-filter: blur(var(--glass-blur)) saturate(190%);
+
+    border: 1px solid var(--glass-border);
+
+    border-radius: var(--glass-radius);
+
+    box-shadow:
+        var(--glass-shadow),
+        inset 0 1px 0 var(--glass-edge),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+}
+
+
+.sidebar-profile,
+.sidebar-menu,
+.socialhub-user-row,
+.socialhub-chat-card {
+    border-radius: var(--glass-radius-sm);
+}
+
+
+/* ---------- STORY BAR ---------- */
+
+.socialhub-stories {
+    background-color: var(--glass-bg);
+
+    background-image: var(--glass-sheen);
+
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(190%);
+
+    backdrop-filter: blur(var(--glass-blur)) saturate(190%);
+
+    border: 1px solid var(--glass-border);
+
+    border-radius: var(--glass-radius);
+
+    box-shadow:
+        var(--glass-shadow-soft),
+        inset 0 1px 0 var(--glass-edge);
+}
+
+
+.socialhub-story-avatar {
+    background: var(--glass-bg-soft);
+
+    border-color: var(--glass-border-soft);
+}
+
+
+.feed > .socialhub-stories .socialhub-story-ring {
+    background: rgba(255, 255, 255, 0.35) !important;
+}
+
+
+.feed > .socialhub-stories .socialhub-story-ring::after {
+    background: rgba(255, 255, 255, 0.4);
+
+    -webkit-backdrop-filter: blur(4px);
+
+    backdrop-filter: blur(4px);
+}
+
+
+/* ---------- FROSTED SUB-ELEMENTS ---------- */
+
+.search-box,
+.top-icons button,
+.fb-nav-btn:hover,
+.profile-tabs button:hover {
+    background: var(--glass-bg-soft);
+
+    -webkit-backdrop-filter: blur(14px) saturate(180%);
+
+    backdrop-filter: blur(14px) saturate(180%);
+
+    border: 1px solid var(--glass-border-soft);
+
+    box-shadow:
+        inset 0 1px 0 var(--glass-edge),
+        0 2px 10px rgba(31, 38, 135, 0.08);
+}
+
+
+.profile-buttons button:not(.primary-btn) {
+    background: var(--glass-bg-strong);
+
+    -webkit-backdrop-filter: blur(14px) saturate(180%);
+
+    backdrop-filter: blur(14px) saturate(180%);
+
+    border: 1px solid var(--glass-border);
+
+    box-shadow: inset 0 1px 0 var(--glass-edge);
+}
+
+
+.profile-photo-item,
+.profile-post-tile,
+.about-card .about-row,
+.friend-mini-avatar {
+    background: var(--glass-bg-soft);
+
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+
+.profile-photo > * {
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+
+.profile-tabs {
+    border-top-color: var(--glass-border-soft);
+}
+
+
+/* ---------- INPUTS ---------- */
+
+#postInput,
+.create-post-top input,
+.comment-input,
+#editProfileForm input,
+#editProfileForm textarea,
+.auth-card input,
+.socialhub-msg-inputbar input,
+.settings-field input,
+.settings-field textarea {
+    background: var(--glass-bg-soft);
+
+    -webkit-backdrop-filter: blur(12px) saturate(170%);
+
+    backdrop-filter: blur(12px) saturate(170%);
+
+    border: 1px solid var(--glass-border-soft);
+
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+
+/* ---------- OVERLAYS ---------- */
+
+.edit-profile-modal,
+.post-lightbox {
+    background: rgba(255, 255, 255, 0.18);
+
+    -webkit-backdrop-filter: blur(16px) saturate(170%);
+
+    backdrop-filter: blur(16px) saturate(170%);
+}
+
+
+/* ---------- HOVER GLOW ---------- */
+
+.post:hover {
+    box-shadow:
+        var(--glass-shadow),
+        inset 0 1px 0 var(--glass-edge);
+}
+
+
+/* ---------- DARK MODE RE-ASSERTS ---------- */
+
+body.dark-mode .topbar,
+body.dark-mode .sidebar-profile,
+body.dark-mode .sidebar-menu,
+body.dark-mode .create-post,
+body.dark-mode .post,
+body.dark-mode .profile-card:not(#profilePostsSection),
+body.dark-mode .friend-mini,
+body.dark-mode .socialhub-friends-widget,
+body.dark-mode .socialhub-chats-widget,
+body.dark-mode .socialhub-bot-card,
+body.dark-mode .socialhub-chat-popup,
+body.dark-mode .socialhub-msg-page,
+body.dark-mode .socialhub-msg-conv,
+body.dark-mode .socialhub-chat-card,
+body.dark-mode .socialhub-search-dropdown,
+body.dark-mode .socialhub-user-row,
+body.dark-mode .welcome-card,
+body.dark-mode .side-card,
+body.dark-mode .post-lightbox-box,
+body.dark-mode .edit-profile-box,
+body.dark-mode .auth-card,
+body.dark-mode .socialhub-stories,
+body.dark-mode .settings-sidebar,
+body.dark-mode .settings-panel {
+    background-color: var(--glass-bg);
+
+    background-image: var(--glass-sheen);
+
+    border-color: var(--glass-border);
+
+    box-shadow:
+        var(--glass-shadow),
+        inset 0 1px 0 var(--glass-edge),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+}
+
+
+body.dark-mode .search-box,
+body.dark-mode .top-icons button,
+body.dark-mode .fb-nav-btn:hover,
+body.dark-mode .profile-tabs button:hover {
+    background: var(--glass-bg-soft);
+
+    border-color: var(--glass-border-soft);
+
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+
+body.dark-mode .settings-field input,
+body.dark-mode .settings-field textarea {
+    background: var(--glass-bg-soft);
+
+    border-color: var(--glass-border-soft);
+
+    box-shadow: none;
+}
+
+
+body.dark-mode .profile-buttons button:not(.primary-btn) {
+    background: var(--glass-bg-strong);
+}
+
+
+body.dark-mode .profile-photo-item,
+body.dark-mode .profile-post-tile,
+body.dark-mode .about-card .about-row,
+body.dark-mode .friend-mini-avatar,
+body.dark-mode .socialhub-story-avatar {
+    background: var(--glass-bg-soft);
+
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+
+body.dark-mode .feed > .socialhub-stories .socialhub-story-ring {
+    background: rgba(255, 255, 255, 0.12) !important;
+}
+
+
+body.dark-mode .feed > .socialhub-stories .socialhub-story-ring::after {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+
+body.dark-mode .profile-photo > * {
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+
+body.dark-mode .profile-tabs {
+    border-top-color: var(--glass-border-soft);
+}
+
+
+body.dark-mode .edit-profile-modal,
+body.dark-mode .post-lightbox {
+    background: rgba(0, 0, 0, 0.45);
+}
+
+
+/* ---------- REDUCED MOTION ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+
+    body::before,
+    body::after {
+        animation: none;
+    }
+
+}

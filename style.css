@@ -1,0 +1,1503 @@
+/* ========================================
+   SOCIALHUB GLOBAL STYLE
+======================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #f0f2f5;
+    --card-bg: #ffffff;
+    --text: #1c1e21;
+    --muted: #65676b;
+    --border: #dddfe2;
+    --primary: #1877f2;
+    --hover: #f2f3f5;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: 0.2s;
+}
+
+
+/* ========================================
+   TOPBAR
+======================================== */
+
+.topbar {
+    height: 64px;
+
+    background: var(--card-bg);
+
+    border-bottom: 1px solid var(--border);
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 25px;
+
+    position: sticky;
+    top: 0;
+
+    z-index: 1000;
+
+    gap: 25px;
+}
+
+
+/* LOGO */
+
+.logo {
+    font-size: 25px;
+
+    font-weight: 800;
+
+    color: var(--primary);
+
+    cursor: pointer;
+
+    white-space: nowrap;
+}
+
+
+/* SEARCH */
+
+.search-box {
+    width: 300px;
+
+    height: 42px;
+
+    background: var(--bg);
+
+    border-radius: 22px;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 15px;
+
+    gap: 8px;
+}
+
+
+.search-box span {
+    font-size: 16px;
+}
+
+
+.search-box input {
+    width: 100%;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    color: var(--text);
+
+    font-size: 14px;
+}
+
+
+/* TOP ICONS */
+
+.top-icons {
+    margin-left: auto;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.top-icons button {
+    width: 42px;
+    height: 42px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: var(--bg);
+
+    cursor: pointer;
+
+    font-size: 18px;
+
+    transition: 0.2s;
+}
+
+
+.top-icons button:hover {
+    background: var(--border);
+
+    transform: scale(1.04);
+}
+
+
+.profile-mini {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+
+    background: #e4e6eb;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    font-size: 20px;
+}
+
+
+/* ========================================
+   MAIN LAYOUT
+======================================== */
+
+.main-container {
+    width: 100%;
+
+    max-width: 1450px;
+
+    margin: 0 auto;
+
+    padding: 25px;
+
+    display: grid;
+
+    grid-template-columns:
+        250px
+        minmax(400px, 680px)
+        300px;
+
+    gap: 25px;
+
+    align-items: start;
+}
+
+
+/* ========================================
+   SIDEBAR
+======================================== */
+
+.sidebar {
+    position: sticky;
+
+    top: 89px;
+}
+
+
+/* LEFT PROFILE */
+
+.sidebar-profile {
+    background: var(--card-bg);
+
+    border-radius: 12px;
+
+    padding: 15px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    cursor: pointer;
+
+    margin-bottom: 15px;
+
+    box-shadow:
+        0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+
+.sidebar-profile:hover {
+    background: var(--hover);
+}
+
+
+.sidebar-avatar {
+    width: 45px;
+    height: 45px;
+
+    border-radius: 50%;
+
+    background: #e4e6eb;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 23px;
+}
+
+
+.sidebar-profile strong {
+    display: block;
+
+    font-size: 15px;
+}
+
+
+.sidebar-profile small {
+    display: block;
+
+    color: var(--muted);
+
+    margin-top: 3px;
+}
+
+
+/* SIDEBAR MENU */
+
+.sidebar-menu {
+    background: var(--card-bg);
+
+    border-radius: 12px;
+
+    padding: 8px;
+
+    box-shadow:
+        0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+
+.sidebar-menu button {
+    width: 100%;
+
+    border: none;
+
+    background: transparent;
+
+    padding: 13px;
+
+    border-radius: 8px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    font-size: 15px;
+
+    color: var(--text);
+
+    cursor: pointer;
+
+    text-align: left;
+}
+
+
+.sidebar-menu button:hover {
+    background: var(--hover);
+}
+
+
+.sidebar-menu button:first-child {
+    color: var(--primary);
+
+    font-weight: 600;
+}
+
+
+/* LOGOUT */
+
+.sidebar-logout {
+    width: 100%;
+
+    margin-top: 15px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    padding: 12px;
+
+    background: #ffe5e5;
+
+    color: #d93025;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+.sidebar-logout:hover {
+    background: #ffd6d6;
+}
+
+
+/* ========================================
+   FEED
+======================================== */
+
+.feed {
+    width: 100%;
+}
+
+
+/* WELCOME CARD */
+
+.welcome-card {
+    background: var(--card-bg);
+
+    border-radius: 12px;
+
+    padding: 20px;
+
+    margin-bottom: 15px;
+
+    box-shadow:
+        0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+
+.welcome-card h2 {
+    font-size: 21px;
+
+    margin-bottom: 7px;
+}
+
+
+.welcome-card p {
+    color: var(--muted);
+
+    font-size: 14px;
+}
+
+
+/* ========================================
+   CREATE POST
+======================================== */
+
+.create-post {
+    background: var(--card-bg);
+
+    border-radius: 12px;
+
+    padding: 16px;
+
+    margin-bottom: 15px;
+
+    box-shadow:
+        0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+
+.create-post-top {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+.avatar {
+    width: 44px;
+    height: 44px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #e4e6eb;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+}
+
+
+.create-post-top input {
+    flex: 1;
+
+    height: 44px;
+
+    border: none;
+
+    outline: none;
+
+    border-radius: 22px;
+
+    background: var(--bg);
+
+    padding: 0 18px;
+
+    color: var(--text);
+
+    font-size: 15px;
+}
+
+
+.create-post-actions {
+    border-top: 1px solid var(--border);
+
+    margin-top: 15px;
+
+    padding-top: 12px;
+
+    display: flex;
+
+    gap: 8px;
+}
+
+
+.create-post-actions button {
+    flex: 1;
+
+    border: none;
+
+    background: transparent;
+
+    border-radius: 8px;
+
+    padding: 10px;
+
+    cursor: pointer;
+
+    color: var(--muted);
+
+    font-weight: 600;
+}
+
+
+.create-post-actions button:hover {
+    background: var(--hover);
+}
+
+
+.create-post-actions .post-btn {
+    background: var(--primary);
+
+    color: white;
+}
+
+
+.create-post-actions .post-btn:hover {
+    background: #166fe5;
+}
+
+
+/* ========================================
+   POST
+======================================== */
+
+.post {
+    background: var(--card-bg);
+
+    border-radius: 12px;
+
+    padding: 18px;
+
+    margin-bottom: 15px;
+
+    box-shadow:
+        0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+
+/* POST HEADER */
+
+.post-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 15px;
+}
+
+
+.post-header h3 {
+    font-size: 15px;
+
+    margin-bottom: 4px;
+}
+
+
+.post-header small {
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+
+/* POST TEXT */
+
+.post-text {
+    font-size: 15px;
+
+    line-height: 1.6;
+
+    margin-bottom: 18px;
+
+    white-space: pre-wrap;
+
+    word-break: break-word;
+}
+
+
+/* POST STATS */
+
+.post-stats {
+    display: flex;
+
+    justify-content: space-between;
+
+    color: var(--muted);
+
+    font-size: 13px;
+
+    padding-bottom: 10px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+
+/* POST ACTIONS */
+
+.post-actions {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 5px;
+
+    padding: 7px 0;
+}
+
+
+.post-actions button {
+    border: none;
+
+    background: transparent;
+
+    padding: 10px;
+
+    border-radius: 7px;
+
+    color: var(--muted);
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+.post-actions button:hover {
+    background: var(--hover);
+}
+
+
+.post-actions button.liked {
+    color: var(--primary);
+
+    font-weight: 700;
+}
+
+
+/* ========================================
+   COMMENTS
+======================================== */
+
+.comment-box {
+    display: flex;
+
+    gap: 8px;
+
+    margin-top: 8px;
+}
+
+
+.comment-input {
+    flex: 1;
+
+    border: none;
+
+    outline: none;
+
+    background: var(--bg);
+
+    border-radius: 20px;
+
+    padding: 10px 15px;
+
+    color: var(--text);
+}
+
+
+.comment-box button {
+    border: none;
+
+    background: var(--primary);
+
+    color: white;
+
+    padding: 0 15px;
+
+    border-radius: 20px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+}
+
+
+.comments {
+    margin-top: 12px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+
+.comment {
+    display: flex;
+
+    gap: 8px;
+
+    align-items: flex-start;
+}
+
+
+.comment .avatar {
+    width: 34px;
+    height: 34px;
+
+    font-size: 17px;
+}
+
+
+.comment-content {
+    background: var(--bg);
+
+    border-radius: 10px;
+
+    padding: 8px 12px;
+
+    max-width: 80%;
+}
+
+
+.comment-content strong {
+    font-size: 13px;
+}
+
+
+.comment-content p {
+    margin-top: 3px;
+
+    font-size: 13px;
+
+    line-height: 1.4;
+}
+
+
+/* ========================================
+   RIGHT SIDEBAR
+======================================== */
+
+.side-card {
+    background: var(--card-bg);
+
+    border-radius: 12px;
+
+    padding: 17px;
+
+    margin-bottom: 15px;
+
+    box-shadow:
+        0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+
+.side-card h3 {
+    font-size: 16px;
+
+    margin-bottom: 15px;
+}
+
+
+.side-profile {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 15px;
+}
+
+
+.side-avatar,
+.suggestion-avatar {
+    width: 45px;
+    height: 45px;
+
+    border-radius: 50%;
+
+    background: #e4e6eb;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 21px;
+
+    flex-shrink: 0;
+}
+
+
+.side-profile strong {
+    display: block;
+
+    font-size: 14px;
+}
+
+
+.side-profile p {
+    color: var(--muted);
+
+    font-size: 12px;
+
+    margin-top: 3px;
+}
+
+
+/* VIEW PROFILE */
+
+.view-profile-btn {
+    width: 100%;
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 10px;
+
+    background: var(--primary);
+
+    color: white;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+.view-profile-btn:hover {
+    background: #166fe5;
+}
+
+
+/* ========================================
+   SIDE CARD TITLE
+======================================== */
+
+.side-card-title {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+
+.side-card-title h3 {
+    margin: 0;
+}
+
+
+.side-card-title a {
+    color: var(--primary);
+
+    text-decoration: none;
+
+    font-size: 13px;
+
+    font-weight: 600;
+}
+
+
+/* ========================================
+   SUGGESTIONS
+======================================== */
+
+.suggestion {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    padding: 9px 0;
+}
+
+
+.suggestion + .suggestion {
+    border-top: 1px solid var(--border);
+}
+
+
+.suggestion-info {
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+.suggestion-info strong {
+    display: block;
+
+    font-size: 13px;
+}
+
+
+.suggestion-info small {
+    display: block;
+
+    color: var(--muted);
+
+    margin-top: 3px;
+
+    font-size: 11px;
+}
+
+
+.suggestion > button {
+    border: none;
+
+    background: #e7f3ff;
+
+    color: var(--primary);
+
+    width: 32px;
+    height: 32px;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+
+    font-size: 15px;
+}
+
+
+/* ========================================
+   FOOTER
+======================================== */
+
+.side-footer {
+    color: var(--muted);
+
+    font-size: 11px;
+
+    line-height: 1.6;
+
+    padding: 5px;
+}
+
+
+.side-footer span {
+    cursor: pointer;
+}
+
+
+.side-footer span:hover {
+    text-decoration: underline;
+}
+
+
+/* ========================================
+   DARK MODE
+======================================== */
+
+body.dark-mode {
+    --bg: #18191a;
+
+    --card-bg: #242526;
+
+    --text: #e4e6eb;
+
+    --muted: #b0b3b8;
+
+    --border: #3e4042;
+
+    --hover: #3a3b3c;
+}
+
+
+body.dark-mode .search-box {
+    background: #3a3b3c;
+}
+
+
+body.dark-mode .sidebar-avatar,
+body.dark-mode .side-avatar,
+body.dark-mode .suggestion-avatar,
+body.dark-mode .avatar,
+body.dark-mode .profile-mini {
+    background: #3a3b3c;
+}
+
+
+body.dark-mode .sidebar-logout {
+    background: #3a2525;
+
+    color: #ff8a8a;
+}
+
+
+body.dark-mode .suggestion > button {
+    background: #263b52;
+}
+
+
+/* ========================================
+   RESPONSIVE — TABLET
+======================================== */
+
+@media (max-width: 1150px) {
+
+    .main-container {
+        grid-template-columns:
+            210px
+            minmax(350px, 1fr);
+
+        max-width: 1000px;
+    }
+
+
+    .right-sidebar {
+        display: none;
+    }
+
+}
+
+
+/* ========================================
+   RESPONSIVE — MOBILE
+======================================== */
+
+@media (max-width: 750px) {
+
+    .topbar {
+        height: 58px;
+
+        padding: 0 12px;
+
+        gap: 10px;
+    }
+
+
+    .logo {
+        font-size: 21px;
+    }
+
+
+    .search-box {
+        flex: 1;
+
+        width: auto;
+
+        height: 38px;
+    }
+
+
+    .top-icons {
+        gap: 3px;
+    }
+
+
+    .top-icons button {
+        width: 36px;
+        height: 36px;
+
+        font-size: 16px;
+    }
+
+
+    .top-icons button:nth-child(2),
+    .top-icons button:nth-child(3) {
+        display: none;
+    }
+
+
+    .main-container {
+        display: block;
+
+        padding: 10px;
+    }
+
+
+    .left-sidebar {
+        display: none;
+    }
+
+
+    .feed {
+        width: 100%;
+    }
+
+
+    .welcome-card {
+        padding: 16px;
+    }
+
+
+    .create-post {
+        padding: 13px;
+    }
+
+
+    .create-post-actions button {
+        font-size: 12px;
+
+        padding: 8px 4px;
+    }
+
+
+    .post {
+        padding: 14px;
+    }
+
+}
+
+
+/* ========================================
+   VERY SMALL MOBILE
+======================================== */
+
+@media (max-width: 450px) {
+
+    .search-box {
+        max-width: 180px;
+    }
+
+
+    .top-icons button:nth-child(4) {
+        display: none;
+    }
+
+
+    .create-post-actions {
+        gap: 3px;
+    }
+
+
+    .create-post-actions button {
+        font-size: 11px;
+    }
+
+
+    .post-stats {
+        font-size: 11px;
+    }
+
+
+    .post-actions button {
+        font-size: 12px;
+
+        padding: 9px 3px;
+    }
+
+
+    .comment-box button {
+        padding: 0 11px;
+
+        font-size: 12px;
+    }
+
+}
+/* ==========================================
+   SocialHub - Step 10.27
+   Premium Post Composer
+   ========================================== */
+
+.post-composer {
+    position: relative;
+    overflow: hidden;
+    border-radius: 18px;
+    transition: 0.3s ease;
+}
+
+.post-composer:focus-within {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+.post-composer textarea,
+.post-composer input {
+    transition: 0.25s ease;
+}
+
+.post-composer textarea:focus,
+.post-composer input:focus {
+    outline: none;
+}
+
+/* Premium action row */
+
+.post-composer-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(128, 128, 128, 0.15);
+}
+
+.post-composer-tools {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.post-tool {
+    border: none;
+    background: transparent;
+    border-radius: 10px;
+    padding: 8px 11px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s ease;
+}
+
+.post-tool:hover {
+    background: rgba(128, 128, 128, 0.12);
+    transform: translateY(-1px);
+}
+
+/* Main Post button */
+
+.premium-post-btn {
+    border: none;
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.premium-post-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.premium-post-btn:active {
+    transform: scale(0.97);
+}
+
+/* Background picker */
+
+.post-background-picker {
+    display: none;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 14px;
+    background: rgba(128, 128, 128, 0.08);
+}
+
+.post-background-picker.active {
+    display: grid;
+}
+
+.post-bg-option {
+    height: 42px;
+    border: 2px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.post-bg-option:hover {
+    transform: scale(1.06);
+}
+
+.post-bg-option.selected {
+    border-color: currentColor;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    .post-composer-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .post-composer-tools {
+        justify-content: space-between;
+    }
+
+    .premium-post-btn {
+        width: 100%;
+    }
+
+    .post-background-picker {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+/* ==========================================
+   SocialHub - Premium Emoji Picker
+   ========================================== */
+
+.premium-emoji-picker {
+    display: none;
+    position: absolute;
+    z-index: 1000;
+    right: 10px;
+    bottom: 65px;
+    width: 330px;
+    max-width: calc(100vw - 30px);
+    padding: 14px;
+    border-radius: 18px;
+    background: var(--card-bg, #ffffff);
+    border: 1px solid rgba(128, 128, 128, 0.18);
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.18);
+    backdrop-filter: blur(18px);
+}
+
+.premium-emoji-picker.active {
+    display: block;
+    animation: emojiPickerIn 0.18s ease;
+}
+
+@keyframes emojiPickerIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.emoji-picker-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.emoji-picker-header strong {
+    font-size: 14px;
+}
+
+.emoji-picker-close {
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(128, 128, 128, 0.12);
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.emoji-search-wrap {
+    margin-bottom: 10px;
+}
+
+.emoji-search {
+    width: 100%;
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    padding: 9px 12px;
+    background: rgba(128, 128, 128, 0.10);
+}
+
+.emoji-categories {
+    display: flex;
+    gap: 4px;
+    padding-bottom: 8px;
+    margin-bottom: 5px;
+    overflow-x: auto;
+}
+
+.emoji-categories button {
+    flex: 0 0 auto;
+    width: 36px;
+    height: 34px;
+    border: none;
+    border-radius: 9px;
+    background: transparent;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.emoji-categories button:hover,
+.emoji-categories button.active {
+    background: rgba(128, 128, 128, 0.13);
+}
+
+.emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 3px;
+    max-height: 190px;
+    overflow-y: auto;
+}
+
+.emoji-item {
+    aspect-ratio: 1;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+    font-size: 22px;
+    transition: 0.15s ease;
+}
+
+.emoji-item:hover {
+    background: rgba(128, 128, 128, 0.13);
+    transform: scale(1.15);
+}
+
+@media (max-width: 600px) {
+
+    .premium-emoji-picker {
+        right: 0;
+        left: 0;
+        bottom: 70px;
+        width: auto;
+        max-width: none;
+        margin: 0 5px;
+    }
+
+    .emoji-grid {
+        grid-template-columns: repeat(7, 1fr);
+        max-height: 210px;
+    }
+
+    .emoji-item {
+        font-size: 21px;
+    }
+}
+/* ======================================================
+   SocialHub - Step 10.31.1
+   Premium Feed Skeleton
+   ====================================================== */
+
+.socialhub-feed-loading {
+    width: 100%;
+}
+
+.loading-post {
+    background: var(--card-bg, #ffffff);
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+.loading-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.loading-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: #e8e8e8;
+    animation: socialhubLoading 1.4s infinite;
+}
+
+.loading-user {
+    flex: 1;
+}
+
+.loading-line {
+    height: 11px;
+    border-radius: 10px;
+    background: #e8e8e8;
+    margin-bottom: 8px;
+    animation: socialhubLoading 1.4s infinite;
+}
+
+.loading-line.short {
+    width: 130px;
+}
+
+.loading-line.tiny {
+    width: 80px;
+}
+
+.loading-content {
+    height: 13px;
+    width: 95%;
+    border-radius: 10px;
+    background: #e8e8e8;
+    margin-top: 24px;
+    animation: socialhubLoading 1.4s infinite;
+}
+
+.loading-content.medium {
+    width: 65%;
+    margin-top: 10px;
+}
+
+.loading-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+}
+
+.loading-actions div {
+    height: 34px;
+    flex: 1;
+    border-radius: 10px;
+    background: #e8e8e8;
+    animation: socialhubLoading 1.4s infinite;
+}
+
+@keyframes socialhubLoading {
+
+    0% {
+        opacity: 0.45;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.45;
+    }
+
+}

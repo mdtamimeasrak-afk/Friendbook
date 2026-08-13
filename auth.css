@@ -1,0 +1,350 @@
+/* =========================
+   AUTH PAGE
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+body {
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:
+        #f0f2f5;
+
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+}
+
+
+/* =========================
+   CONTAINER
+========================= */
+
+.auth-container {
+
+    width: 100%;
+
+    max-width: 980px;
+
+    padding: 30px;
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 400px;
+
+    gap: 80px;
+
+    align-items: center;
+
+}
+
+
+/* =========================
+   BRAND
+======================== */
+
+.brand-section .logo {
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #1877f2, #405de6);
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(24, 119, 242, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+}
+
+.brand-section .logo::after {
+    content: "TR";
+    font-size: 28px;
+    font-weight: 800;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #fff;
+    line-height: 1;
+    letter-spacing: -2px;
+    transform: translateY(-1px);
+}
+
+.brand-section h1 {
+
+    font-size: 55px;
+
+    color: #1877f2;
+
+    margin-bottom: 10px;
+
+}
+
+
+.brand-section p {
+
+    font-size: 24px;
+
+    line-height: 1.35;
+
+    max-width: 450px;
+
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+.auth-card {
+
+    background: white;
+
+    padding: 25px;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 3px 12px
+        rgba(0,0,0,.15);
+
+}
+
+
+.auth-card h2 {
+
+    text-align: center;
+
+    font-size: 25px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.subtitle {
+
+    text-align: center;
+
+    color: #777;
+
+    margin-bottom: 20px;
+
+}
+
+
+/* =========================
+   INPUT
+========================= */
+
+.auth-card input {
+
+    width: 100%;
+
+    height: 52px;
+
+    padding: 0 15px;
+
+    margin-bottom: 12px;
+
+    border: 1px solid #ddd;
+
+    border-radius: 7px;
+
+    outline: none;
+
+    font-size: 16px;
+
+}
+
+
+.auth-card input:focus {
+
+    border-color:
+        #1877f2;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(24,119,242,.15);
+
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+.login-btn {
+
+    width: 100%;
+
+    height: 48px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background:
+        #1877f2;
+
+    color: white;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+.login-btn:hover {
+
+    background:
+        #166fe5;
+
+}
+
+
+/* =========================
+   LINKS
+========================= */
+
+.forgot {
+
+    display: block;
+
+    text-align: center;
+
+    margin: 17px 0;
+
+    color:
+        #1877f2;
+
+    text-decoration: none;
+
+    font-size: 14px;
+
+}
+
+
+.divider {
+
+    height: 1px;
+
+    background:
+        #ddd;
+
+    margin: 20px 0;
+
+}
+
+
+/* =========================
+   SIGNUP
+========================= */
+
+.create-btn {
+
+    display: block;
+
+    margin: auto;
+
+    border: none;
+
+    border-radius: 7px;
+
+    padding: 13px 20px;
+
+    background:
+        #42b72a;
+
+    color: white;
+
+    font-weight: bold;
+
+    font-size: 15px;
+
+    cursor: pointer;
+
+}
+
+
+.create-btn:hover {
+
+    background:
+        #36a420;
+
+}
+
+
+.back-login {
+
+    width: 100%;
+
+    border: none;
+
+    background: transparent;
+
+    color:
+        #1877f2;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 750px) {
+
+    .auth-container {
+
+        display: block;
+
+        max-width: 450px;
+
+    }
+
+
+    .brand-section {
+
+        text-align: center;
+
+        margin-bottom: 30px;
+
+    }
+
+
+    .brand-section h1 {
+
+        font-size: 42px;
+
+    }
+
+
+    .brand-section p {
+
+        font-size: 18px;
+
+    }
+
+}

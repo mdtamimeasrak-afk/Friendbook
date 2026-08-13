@@ -1,0 +1,985 @@
+/* ======================================================
+   SOCIALHUB - REELS (Instagram/Facebook style)
+   ======================================================
+   Full-screen vertical video feed with scroll-snap,
+   action rail, comment panel and upload modal.
+   Loaded on reels.html only.
+   ====================================================== */
+
+
+/* ---------- VIEWPORT ---------- */
+
+.reels-viewport {
+    height: calc(100vh - 64px);
+
+    overflow-y: auto;
+
+    scroll-snap-type: y mandatory;
+
+    background: #000000;
+}
+
+
+.reels-feed {
+    max-width: 480px;
+
+    margin: 0 auto;
+
+    display: flex;
+
+    flex-direction: column;
+}
+
+
+.reels-empty {
+    text-align: center;
+
+    color: #b0b3b8;
+
+    padding: 40px 20px;
+
+    font-size: 15px;
+}
+
+
+/* ---------- REEL SLIDE ---------- */
+
+.reel-item {
+    height: calc(100vh - 64px);
+
+    scroll-snap-align: start;
+
+    scroll-snap-stop: always;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    position: relative;
+
+    animation: socialhubReelIn 0.35s ease;
+}
+
+
+@keyframes socialhubReelIn {
+    from {
+        opacity: 0;
+
+        transform: scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+
+        transform: scale(1);
+    }
+}
+
+
+.reel-frame {
+    position: relative;
+
+    width: 100%;
+
+    height: 100%;
+
+    overflow: hidden;
+
+    background: #000000;
+}
+
+
+.reel-video {
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+
+    cursor: pointer;
+}
+
+
+.reel-gradient {
+    position: absolute;
+
+    left: 0;
+
+    right: 0;
+
+    bottom: 0;
+
+    height: 45%;
+
+    background: linear-gradient(
+        transparent,
+        rgba(0, 0, 0, 0.75)
+    );
+
+    pointer-events: none;
+}
+
+
+/* ---------- LEFT INFO ---------- */
+
+.reel-info {
+    position: absolute;
+
+    left: 14px;
+
+    right: 84px;
+
+    bottom: 18px;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 10px;
+
+    pointer-events: none;
+}
+
+
+.reel-owner-avatar {
+    width: 40px;
+
+    height: 40px;
+
+    border-radius: 50%;
+
+    border: 2px solid rgba(255, 255, 255, 0.85);
+
+    overflow: hidden;
+
+    flex-shrink: 0;
+
+    background: #3a3b3c;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 18px;
+}
+
+
+.reel-owner-avatar img {
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+}
+
+
+.reel-owner-name {
+    font-size: 14.5px;
+
+    font-weight: 700;
+
+    color: #ffffff;
+
+    margin: 4px 0 2px;
+
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+
+.reel-caption {
+    font-size: 13.5px;
+
+    line-height: 1.5;
+
+    color: rgba(255, 255, 255, 0.92);
+
+    margin: 0;
+
+    max-height: 72px;
+
+    overflow: hidden;
+
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+
+.reel-time {
+    font-size: 11.5px;
+
+    color: rgba(255, 255, 255, 0.6);
+
+    margin-top: 4px;
+}
+
+
+/* ---------- RIGHT ACTION RAIL ---------- */
+
+.reel-rail {
+    position: absolute;
+
+    right: 12px;
+
+    bottom: 22px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 16px;
+
+    z-index: 5;
+}
+
+
+.reel-rail-btn {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 4px;
+
+    background: none;
+
+    border: none;
+
+    color: #ffffff;
+
+    cursor: pointer;
+
+    padding: 0;
+
+    font-size: 27px;
+
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
+
+    transition: transform 0.15s ease;
+}
+
+
+.reel-rail-btn:hover {
+    transform: scale(1.12);
+}
+
+
+.reel-rail-btn span {
+    font-size: 11.5px;
+
+    font-weight: 600;
+}
+
+
+.reel-rail-btn.liked i {
+    color: #ff2d55;
+
+    animation: socialhubReelPop 0.3s ease;
+}
+
+
+.reel-rail-btn.saved i {
+    color: #ffd400;
+}
+
+
+.reel-rail-btn.delete {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+
+@keyframes socialhubReelPop {
+    0% {
+        transform: scale(0.4);
+    }
+
+    60% {
+        transform: scale(1.35);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+
+/* ---------- MUTE + PLAY INDICATOR ---------- */
+
+.reel-mute {
+    position: absolute;
+
+    top: 14px;
+
+    right: 14px;
+
+    z-index: 6;
+
+    width: 38px;
+
+    height: 38px;
+
+    border-radius: 50%;
+
+    border: none;
+
+    background: rgba(0, 0, 0, 0.45);
+
+    color: #ffffff;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+    -webkit-backdrop-filter: blur(6px);
+
+    backdrop-filter: blur(6px);
+}
+
+
+.reel-play-badge {
+    position: absolute;
+
+    top: 50%;
+
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    z-index: 6;
+
+    width: 74px;
+
+    height: 74px;
+
+    border-radius: 50%;
+
+    background: rgba(0, 0, 0, 0.4);
+
+    color: #ffffff;
+
+    font-size: 30px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    pointer-events: none;
+
+    opacity: 0;
+
+    -webkit-backdrop-filter: blur(4px);
+
+    backdrop-filter: blur(4px);
+}
+
+
+.reel-play-badge.show {
+    animation: socialhubReelBadge 0.9s ease forwards;
+}
+
+
+@keyframes socialhubReelBadge {
+    0% {
+        opacity: 0.9;
+
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+
+    100% {
+        opacity: 0;
+
+        transform: translate(-50%, -50%) scale(1.3);
+    }
+}
+
+
+/* ---------- FAB ---------- */
+
+.reels-fab {
+    position: fixed;
+
+    right: 26px;
+
+    bottom: 26px;
+
+    z-index: 9000;
+
+    width: 58px;
+
+    height: 58px;
+
+    border-radius: 50%;
+
+    border: none;
+
+    background: linear-gradient(
+        135deg,
+        #1877f2,
+        #833ab4
+    );
+
+    color: #ffffff;
+
+    font-size: 22px;
+
+    cursor: pointer;
+
+    box-shadow: 0 8px 24px rgba(24, 119, 242, 0.45);
+
+    transition: transform 0.15s ease;
+}
+
+
+.reels-fab:hover {
+    transform: scale(1.08);
+}
+
+
+/* ---------- UPLOAD MODAL ---------- */
+
+.reels-modal {
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.6);
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    z-index: 10000;
+
+    padding: 20px;
+
+    -webkit-backdrop-filter: blur(6px);
+
+    backdrop-filter: blur(6px);
+}
+
+
+.reels-modal.open {
+    display: flex;
+}
+
+
+.reels-modal-box {
+    width: 100%;
+
+    max-width: 440px;
+
+    max-height: 88vh;
+
+    background: #ffffff;
+
+    border-radius: 16px;
+
+    overflow: hidden;
+
+    display: flex;
+
+    flex-direction: column;
+
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+
+    animation: socialhubReelModalIn 0.25s ease;
+}
+
+
+@keyframes socialhubReelModalIn {
+    from {
+        opacity: 0;
+
+        transform: translateY(24px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+.reels-modal-head {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 14px 18px;
+
+    border-bottom: 1px solid #e4e6eb;
+}
+
+
+.reels-modal-head h2 {
+    margin: 0;
+
+    font-size: 18px;
+}
+
+
+.reels-modal-close {
+    border: none;
+
+    background: #e4e6eb;
+
+    color: #1c1e21;
+
+    border-radius: 50%;
+
+    width: 32px;
+
+    height: 32px;
+
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+
+.reels-upload-body {
+    padding: 18px;
+
+    overflow-y: auto;
+}
+
+
+.reels-dropzone {
+    border: 2px dashed #d4d7dd;
+
+    border-radius: 12px;
+
+    padding: 30px 16px;
+
+    text-align: center;
+
+    cursor: pointer;
+
+    transition: border-color 0.2s ease,
+
+        background 0.2s ease;
+}
+
+
+.reels-dropzone:hover {
+    border-color: #1877f2;
+
+    background: rgba(24, 119, 242, 0.04);
+}
+
+
+.reels-dropzone-icon {
+    font-size: 34px;
+
+    display: block;
+
+    margin-bottom: 8px;
+}
+
+
+.reels-dropzone p {
+    margin: 0 0 4px;
+
+    font-size: 14.5px;
+
+    font-weight: 600;
+}
+
+
+.reels-dropzone small {
+    color: #65676b;
+
+    font-size: 12px;
+}
+
+
+.reels-preview video {
+    width: 100%;
+
+    max-height: 340px;
+
+    border-radius: 12px;
+
+    background: #000000;
+
+    display: block;
+}
+
+
+.reels-caption-wrap {
+    margin: 14px 0;
+}
+
+
+.reels-caption-wrap textarea {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 11px 14px;
+
+    border: 1px solid #d4d7dd;
+
+    border-radius: 9px;
+
+    font-size: 14px;
+
+    font-family: inherit;
+
+    resize: vertical;
+
+    min-height: 64px;
+
+    color: #1c1e21;
+}
+
+
+.reels-caption-wrap textarea:focus {
+    outline: none;
+
+    border-color: #1877f2;
+}
+
+
+.reels-upload-btn {
+    width: 100%;
+
+    padding: 12px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #1877f2;
+
+    color: #ffffff;
+
+    font-size: 14.5px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: background 0.15s ease;
+}
+
+
+.reels-upload-btn:hover {
+    background: #166fe5;
+}
+
+
+.reels-upload-btn:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+}
+
+
+/* ---------- COMMENT PANEL ---------- */
+
+.reels-comments {
+    position: fixed;
+
+    top: 64px;
+
+    right: 0;
+
+    bottom: 0;
+
+    width: 400px;
+
+    max-width: 92vw;
+
+    background: #ffffff;
+
+    z-index: 9500;
+
+    display: flex;
+
+    flex-direction: column;
+
+    transform: translateX(100%);
+
+    transition: transform 0.3s ease;
+
+    box-shadow: -8px 0 30px rgba(0, 0, 0, 0.18);
+}
+
+
+.reels-comments.open {
+    transform: translateX(0);
+}
+
+
+.reels-comments-head {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 13px 18px;
+
+    border-bottom: 1px solid #e4e6eb;
+}
+
+
+.reels-comments-head h3 {
+    margin: 0;
+
+    font-size: 16px;
+}
+
+
+.reels-comments-list {
+    flex: 1;
+
+    overflow-y: auto;
+
+    padding: 12px 18px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+}
+
+
+.reels-comment {
+    display: flex;
+
+    gap: 10px;
+}
+
+
+.reels-comment-avatar {
+    width: 34px;
+
+    height: 34px;
+
+    border-radius: 50%;
+
+    overflow: hidden;
+
+    flex-shrink: 0;
+
+    background: #e4e6eb;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 15px;
+}
+
+
+.reels-comment-avatar img {
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+}
+
+
+.reels-comment-body {
+    background: #f0f2f5;
+
+    padding: 8px 12px;
+
+    border-radius: 14px;
+
+    max-width: 82%;
+}
+
+
+.reels-comment-body strong {
+    font-size: 13px;
+
+    display: block;
+
+    margin-bottom: 2px;
+}
+
+
+.reels-comment-body p {
+    margin: 0;
+
+    font-size: 13.5px;
+
+    line-height: 1.5;
+}
+
+
+.reels-comments-input {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 12px 16px;
+
+    border-top: 1px solid #e4e6eb;
+}
+
+
+.reels-comments-input input {
+    flex: 1;
+
+    padding: 10px 14px;
+
+    border: 1px solid #d4d7dd;
+
+    border-radius: 24px;
+
+    font-size: 14px;
+
+    color: #1c1e21;
+}
+
+
+.reels-comments-input input:focus {
+    outline: none;
+
+    border-color: #1877f2;
+}
+
+
+.reels-comments-send {
+    width: 40px;
+
+    height: 40px;
+
+    border-radius: 50%;
+
+    border: none;
+
+    background: #1877f2;
+
+    color: #ffffff;
+
+    font-size: 15px;
+
+    cursor: pointer;
+
+    flex-shrink: 0;
+}
+
+
+.hidden {
+    display: none !important;
+}
+
+
+/* ---------- DARK MODE ---------- */
+
+body.dark-mode .reels-modal-box {
+    background: #242526;
+}
+
+
+body.dark-mode .reels-modal-head {
+    border-bottom-color: #3a3b3c;
+}
+
+
+body.dark-mode .reels-modal-close {
+    background: #3a3b3c;
+
+    color: #e4e6eb;
+}
+
+
+body.dark-mode .reels-dropzone {
+    border-color: #4e4f50;
+}
+
+
+body.dark-mode .reels-dropzone small {
+    color: #b0b3b8;
+}
+
+
+body.dark-mode .reels-caption-wrap textarea {
+    background: #3a3b3c;
+
+    border-color: #4e4f50;
+
+    color: #e4e6eb;
+}
+
+
+body.dark-mode .reels-caption-wrap textarea::placeholder {
+    color: #8a8d91;
+}
+
+
+body.dark-mode .reels-comments {
+    background: #242526;
+}
+
+
+body.dark-mode .reels-comments-head,
+body.dark-mode .reels-comments-input {
+    border-color: #3a3b3c;
+}
+
+
+body.dark-mode .reels-comment-body {
+    background: #3a3b3c;
+}
+
+
+body.dark-mode .reels-comments-input input {
+    background: #3a3b3c;
+
+    border-color: #4e4f50;
+
+    color: #e4e6eb;
+}
+
+
+body.dark-mode .reels-comments-input input::placeholder {
+    color: #8a8d91;
+}
+
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 900px) {
+
+    .reels-viewport,
+    .reel-item {
+        height: calc(100vh - 58px);
+    }
+
+    .reels-comments {
+        top: 58px;
+    }
+
+    .reels-fab {
+        right: 16px;
+
+        bottom: 16px;
+    }
+
+}

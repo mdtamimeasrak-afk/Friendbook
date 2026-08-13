@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>TRIYA - Home</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%231877f2'/%3E%3Ctext x='20' y='27' font-family='Arial' font-size='21' font-weight='800' fill='white' text-anchor='middle'%3ETR%3C/text%3E%3C/svg%3E">
+
+
+    <link rel="stylesheet" href="style.css?v=4">
+
+    <link rel="stylesheet" href="premium.css?v=6">
+
+    <link rel="stylesheet" href="dashboard.css?v=12">
+
+    <link rel="stylesheet" href="glass-theme.css?v=4">
+
+</head>
+
+
+<body>
+
+    <div class="dash-app">
+
+
+    <!-- ========================= -->
+    <!-- TOP NAVIGATION -->
+    <!-- ========================= -->
+
+    <header class="topbar">
+
+
+        <!-- LOGO (Facebook-style "f") -->
+
+        <div
+            class="logo"
+            onclick="location.href='index.html'"
+            title="TRIYA"
+        ></div>
+
+
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+            <span>
+                🔍
+            </span>
+
+            <input
+                type="text"
+                placeholder="Search TRIYA"
+            >
+
+        </div>
+
+
+
+        <!-- CENTER NAV (Facebook tabs) -->
+
+        <nav class="fb-center-nav">
+
+            <button
+                class="fb-nav-btn active"
+                onclick="location.href='index.html'"
+                title="Home"
+            >
+                <i class="fa-solid fa-house"></i>
+            </button>
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='reels.html'"
+                title="Reels"
+            >
+                <i class="fa-solid fa-clapperboard"></i>
+            </button>
+
+
+            <button
+                class="fb-nav-btn"
+                onclick="socialhubOpenFriendsModal()"
+                title="Friends"
+            >
+                <i class="fa-solid fa-user-group"></i>
+            </button>
+
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='messages.html'"
+                title="Messages"
+            >
+                <i class="fa-solid fa-comment-dots"></i>
+            </button>
+
+
+            <button
+                class="fb-nav-btn"
+                onclick="document.querySelector('.top-icons button[title=&quot;Notifications&quot;]')?.click()"
+                title="Notifications"
+            >
+                <i class="fa-solid fa-bell"></i>
+            </button>
+
+        </nav>
+
+
+
+        <!-- TOP ICONS (Facebook gray circles) -->
+
+        <div class="top-icons">
+
+
+            <button
+                title="Messages"
+            >
+                💬
+            </button>
+
+
+            <button
+                title="Notifications"
+            >
+                🔔
+            </button>
+
+
+            <button
+                onclick="toggleDarkMode()"
+                title="Dark Mode"
+            >
+                🌙
+            </button>
+
+
+            <button
+                onclick="location.href='settings.html'"
+                title="Settings"
+            >
+                ⚙️
+            </button>
+
+
+            <button
+                onclick="location.href='profile.html'"
+                class="profile-mini side-avatar"
+                title="Profile"
+            >
+                👤
+            </button>
+
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ========================= -->
+    <!-- MAIN LAYOUT -->
+    <!-- ========================= -->
+
+    <main class="main-container">
+
+
+        <!-- ========================= -->
+        <!-- LEFT SIDEBAR -->
+        <!-- ========================= -->
+
+        <aside class="sidebar left-sidebar">
+
+
+            <!-- USER PROFILE -->
+
+            <div
+                class="sidebar-profile"
+                onclick="location.href='profile.html'"
+            >
+
+                <div class="sidebar-avatar">
+                    👤
+                </div>
+
+
+                <div>
+
+                    <strong class="user-name">
+                        User
+                    </strong>
+
+
+                    <small class="profile-username">
+                        @username
+                    </small>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- MENU -->
+
+            <nav class="sidebar-menu">
+
+
+                <button
+                    onclick="location.href='profile.html'"
+                >
+                    👤
+                    <span>
+                        Profile
+                    </span>
+                </button>
+
+
+                <button
+                    onclick="location.href='search.html'"
+                >
+                    🔍
+                    <span>
+                        Search
+                    </span>
+                </button>
+
+
+                <button>
+                    👥
+                    <span>
+                        Friends
+                    </span>
+                </button>
+
+
+                <button>
+                    💬
+                    <span>
+                        Messages
+                    </span>
+                </button>
+
+
+                <button>
+                    🔔
+                    <span>
+                        Notifications
+                    </span>
+                </button>
+
+
+                <button
+                    onclick="location.href='settings.html'"
+                >
+                    ⚙️
+                    <span>
+                        Settings
+                    </span>
+                </button>
+
+
+            </nav>
+
+
+            <!-- LOGOUT -->
+
+            <button
+                onclick="logoutUser()"
+                class="sidebar-logout"
+            >
+                🚪
+                <span>
+                    Logout
+                </span>
+            </button>
+
+
+        </aside>
+
+
+
+        <!-- ========================= -->
+        <!-- CENTER FEED -->
+        <!-- ========================= -->
+
+        <section class="feed">
+
+
+            <div class="feed-main">
+
+
+                <!-- ========================= -->
+                <!-- NEW POST COMPOSER -->
+                <!-- ========================= -->
+
+                <div class="dash-label">
+                    New Post
+                </div>
+
+
+                <section class="create-post">
+
+
+                    <div class="create-post-top">
+
+
+                        <div class="avatar">
+                            👤
+                        </div>
+
+
+                        <input
+                            type="text"
+                            id="postInput"
+                            placeholder="What's on your mind?"
+                        >
+
+
+                    </div>
+
+
+
+                    <div class="create-post-actions">
+
+
+                        <button>
+                            <span class="cp-emoji">🖼️</span>
+                            <span>
+                                Photo/video
+                            </span>
+                        </button>
+
+
+                        <button>
+                            <span class="cp-emoji">🎥</span>
+                            <span>
+                                Live video
+                            </span>
+                        </button>
+
+
+                        <button>
+                            <span class="cp-emoji">😊</span>
+                            <span>
+                                Feeling/activity
+                            </span>
+                        </button>
+
+
+                        <button
+                            onclick="createPost()"
+                            class="post-btn"
+                        >
+                            Post
+                        </button>
+
+
+                    </div>
+
+
+                </section>
+
+
+            </div>
+
+
+
+            <!-- ========================= -->
+            <!-- POSTS -->
+            <!-- ========================= -->
+
+            <section id="posts">
+
+
+                <!-- ========================= -->
+                <!-- DEMO POST -->
+                <!-- ========================= -->
+
+                <article class="post">
+
+
+                    <!-- POST HEADER -->
+
+                    <div class="post-header">
+
+
+                        <div class="avatar">
+                            👤
+                        </div>
+
+
+                        <div>
+
+                            <h3 class="user-name">
+                                User
+                            </h3>
+
+
+                            <small>
+                                Just now · 🌎
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- POST TEXT -->
+
+                    <p class="post-text">
+
+                        Welcome to TRIYA! 🎉
+
+                        <br><br>
+
+                        This is your new social
+                        media space.
+
+                    </p>
+
+
+
+                    <!-- POST STATS -->
+
+                    <div class="post-stats">
+
+
+                        <span>
+                            ❤️ 0 Likes
+                        </span>
+
+
+                        <span>
+                            💬 0 Comments
+                        </span>
+
+
+                    </div>
+
+
+
+                    <!-- POST ACTIONS -->
+
+                    <div class="post-actions">
+
+
+                        <button
+                            onclick="likePost(this)"
+                        >
+                            ❤️ Like
+                        </button>
+
+
+                        <button
+                            onclick="this.closest('.post').querySelector('.comment-input').focus()"
+                        >
+                            💬 Comment
+                        </button>
+
+
+                        <button>
+                            <i class="fa-solid fa-share"></i>
+                            Share
+                        </button>
+
+
+                    </div>
+
+
+
+                    <!-- COMMENT BOX -->
+
+                    <div class="comment-box">
+
+
+                        <input
+                            type="text"
+                            placeholder="Write a comment..."
+                            class="comment-input"
+                        >
+
+
+                        <button
+                            onclick="addComment(this)"
+                        >
+                            Send
+                        </button>
+
+
+                    </div>
+
+
+
+                    <!-- COMMENTS -->
+
+                    <div class="comments"></div>
+
+                </article>
+
+
+            </section>
+
+
+
+        </section>
+
+
+
+        <!-- ========================= -->
+        <!-- FAR RIGHT: CONTACTS + BOT -->
+        <!-- ========================= -->
+
+        <aside class="sidebar right-sidebar">
+
+
+            <!-- CONTACTS (Facebook style) -->
+
+            <div class="socialhub-contacts">
+
+                <div class="dash-label">
+                    Contacts
+                </div>
+
+
+                <div class="socialhub-friends-widget">
+
+                    <p class="empty-message">
+                        Loading...
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- LAST CHATS -->
+
+            <div class="socialhub-chats-widget">
+
+                <div class="dash-label">
+                    Last Chats
+                </div>
+
+
+                <div class="socialhub-chat-list">
+
+                    <p class="empty-message">
+                        Loading...
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- BOT ASSISTANT -->
+
+            <div class="socialhub-bot-card">
+
+                <div class="socialhub-bot-head">
+
+                    <div class="socialhub-bot-icon">
+                        🤖
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Bot assistant
+                        </strong>
+
+                        <span>
+                            online · just now
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <svg
+                    class="socialhub-bot-chart"
+                    viewBox="0 0 260 52"
+                    preserveAspectRatio="none"
+                >
+
+                    <polyline
+                        points="0,38 40,30 80,34 120,18 160,26 200,10 260,16"
+                        fill="none"
+                        stroke="#1877f2"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+
+                    <circle cx="200" cy="10" r="3.5" fill="#4a9bff" />
+
+                </svg>
+
+            </div>
+
+
+        </aside>
+
+
+    </main>
+
+
+    </div>
+
+
+
+    <!-- ========================= -->
+    <!-- SCRIPTS -->
+    <!-- ========================= -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="supabase.js?v=4"></script>
+
+    <script src="premium-ui.js?v=4"></script>
+
+    <script src="script.js?v=13"></script>
+
+    <script src="likes-comments.js?v=7"></script>
+
+    <script src="image-upload.js?v=6"></script>
+
+    <script src="post-manage.js?v=4"></script>
+
+    <script src="friends.js?v=5"></script>
+
+    <script src="user-search.js?v=4"></script>
+
+    <script src="notifications.js?v=5"></script>
+
+    <script src="settings.js?v=5"></script>
+
+    <script src="messages.js?v=10"></script>
+
+    <script src="stories.js?v=7"></script>
+
+    <script src="realtime.js?v=4"></script>
+
+<!-- ==========================================
+     SocialHub - Step 10.28
+     Premium Composer Enhancement
+     ========================================== -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const composer =
+        document.querySelector(".create-post");
+
+    if (!composer) return;
+
+    const input =
+        document.getElementById("postInput");
+
+    if (!input) return;
+
+
+    /* ------------------------------------------
+       Premium composer classes
+       ------------------------------------------ */
+
+    composer.classList.add("post-composer");
+
+
+    /* ------------------------------------------
+       Create premium tools
+       ------------------------------------------ */
+
+    const actions =
+        composer.querySelector(
+            ".create-post-actions"
+        );
+
+    if (!actions) return;
+
+
+    // Prevent duplicate enhancement
+    if (
+        composer.querySelector(
+            ".post-background-toggle"
+        )
+    ) {
+        return;
+    }
+
+
+    /* ------------------------------------------
+       Background button
+       ------------------------------------------ */
+
+    const backgroundButton =
+        document.createElement("button");
+
+    backgroundButton.type = "button";
+
+    backgroundButton.className =
+        "post-tool post-background-toggle";
+
+    backgroundButton.innerHTML =
+        "🎨 Background";
+
+
+    /* ------------------------------------------
+       Emoji button
+       ------------------------------------------ */
+
+    const emojiButton =
+        document.createElement("button");
+
+    emojiButton.type = "button";
+
+    emojiButton.className =
+        "post-tool";
+
+    emojiButton.innerHTML =
+        "😊 Emoji";
+
+
+    /* ------------------------------------------
+       Photo button styling
+       ------------------------------------------ */
+
+    const photoButton =
+        actions.querySelector(
+            'button:first-child'
+        );
+
+    if (photoButton) {
+
+        photoButton.classList.add(
+            "post-tool"
+        );
+
+    }
+
+
+    /* ------------------------------------------
+       Video button styling
+       ------------------------------------------ */
+
+    const videoButton =
+        actions.querySelector(
+            'button:nth-child(2)'
+        );
+
+    if (videoButton) {
+
+        videoButton.classList.add(
+            "post-tool"
+        );
+
+    }
+
+
+    /* ------------------------------------------
+       Add new tools
+       ------------------------------------------ */
+
+    const postButton =
+        actions.querySelector(
+            ".post-btn"
+        );
+
+
+    actions.insertBefore(
+        backgroundButton,
+        postButton
+    );
+
+
+    actions.insertBefore(
+        emojiButton,
+        postButton
+    );
+
+
+    /* ------------------------------------------
+       Background picker
+       ------------------------------------------ */
+
+    const picker =
+        document.createElement("div");
+
+    picker.className =
+        "post-background-picker";
+
+
+    /* Background options */
+
+    const backgrounds = [
+
+        {
+            name: "Classic",
+            value: "none"
+        },
+
+        {
+            name: "Blue",
+            value:
+                "linear-gradient(135deg,#2563eb,#60a5fa)"
+        },
+
+        {
+            name: "Purple",
+            value:
+                "linear-gradient(135deg,#7c3aed,#c084fc)"
+        },
+
+        {
+            name: "Sunset",
+            value:
+                "linear-gradient(135deg,#f97316,#ec4899)"
+        },
+
+        {
+            name: "Ocean",
+            value:
+                "linear-gradient(135deg,#0891b2,#2563eb)"
+        },
+
+        {
+            name: "Emerald",
+            value:
+                "linear-gradient(135deg,#059669,#34d399)"
+        },
+
+        {
+            name: "Rose",
+            value:
+                "linear-gradient(135deg,#e11d48,#fb7185)"
+        },
+
+        {
+            name: "Dark",
+            value:
+                "linear-gradient(135deg,#111827,#374151)"
+        }
+
+    ];
+
+
+    backgrounds.forEach(
+        (background, index) => {
+
+            const option =
+                document.createElement(
+                    "button"
+                );
+
+            option.type = "button";
+
+            option.className =
+                "post-bg-option";
+
+            option.title =
+                background.name;
+
+            option.style.background =
+                background.value === "none"
+                    ? "var(--card-bg, #ffffff)"
+                    : background.value;
+
+
+            option.addEventListener(
+                "click",
+                () => {
+
+                    picker
+                        .querySelectorAll(
+                            ".post-bg-option"
+                        )
+                        .forEach(
+                            item =>
+                                item.classList
+                                    .remove(
+                                        "selected"
+                                    )
+                        );
+
+
+                    option.classList.add(
+                        "selected"
+                    );
+
+
+                    if (
+                        background.value ===
+                        "none"
+                    ) {
+
+                        input.style.background =
+                            "";
+
+                        input.style.color =
+                            "";
+
+                        input.dataset.background =
+                            "none";
+
+                    } else {
+
+                        input.style.background =
+                            background.value;
+
+                        input.style.color =
+                            "#ffffff";
+
+                        input.dataset.background =
+                            background.value;
+
+                    }
+
+                }
+            );
+
+
+            if (index === 0) {
+
+                option.classList.add(
+                    "selected"
+                );
+
+            }
+
+
+            picker.appendChild(option);
+
+        }
+    );
+
+
+    composer.appendChild(picker);
+
+
+    /* ------------------------------------------
+       Background toggle
+       ------------------------------------------ */
+
+    backgroundButton.addEventListener(
+        "click",
+        () => {
+
+            picker.classList.toggle(
+                "active"
+            );
+
+        }
+    );
+
+
+    /* ------------------------------------------
+   Premium Emoji Picker
+   ------------------------------------------ */
+
+const emojiPicker =
+    document.createElement("div");
+
+emojiPicker.className =
+    "premium-emoji-picker";
+
+emojiPicker.innerHTML = `
+
+    <div class="emoji-picker-header">
+
+        <strong>
+            Choose an emoji
+        </strong>
+
+        <button
+            type="button"
+            class="emoji-picker-close"
+        >
+            ×
+        </button>
+
+    </div>
+
+    <div class="emoji-search-wrap">
+
+        <input
+            type="text"
+            class="emoji-search"
+            placeholder="Search emoji..."
+        >
+
+    </div>
+
+    <div class="emoji-categories">
+
+        <button type="button" data-category="smileys">
+            😊
+        </button>
+
+        <button type="button" data-category="hearts">
+            ❤️
+        </button>
+
+        <button type="button" data-category="gestures">
+            👍
+        </button>
+
+        <button type="button" data-category="animals">
+            🐱
+        </button>
+
+        <button type="button" data-category="food">
+            🍕
+        </button>
+
+        <button type="button" data-category="objects">
+            🎮
+        </button>
+
+    </div>
+
+    <div class="emoji-grid"></div>
+
+`;
+
+
+composer.appendChild(emojiPicker);
+
+
+const emojiGrid =
+    emojiPicker.querySelector(
+        ".emoji-grid"
+    );
+
+
+const emojiSearch =
+    emojiPicker.querySelector(
+        ".emoji-search"
+    );
+
+
+const emojiClose =
+    emojiPicker.querySelector(
+        ".emoji-picker-close"
+    );
+
+
+/* ------------------------------------------
+   Emoji Database
+   ------------------------------------------ */
+
+const emojiData = {
+
+    smileys: [
+        "😀","😃","😄","😁","😆","😅",
+        "😂","🤣","😊","😇","🙂","🙃",
+        "😉","😌","😍","🥰","😘","😗",
+        "😙","😚","😋","😛","😝","😜",
+        "🤪","🤨","🧐","🤓","😎","🤩",
+        "🥳","😏","😒","😞","😔","😟",
+        "😕","🙁","☹️","😣","😖","😫",
+        "😩","🥺","😢","😭","😤","😠",
+        "😡","🤬","🤯","😳","🥵","🥶",
+        "😱","😨","😰","😥","😓","🤗",
+        "🤔","🤭","🤫","🤥","😶","😐",
+        "😑","😬","🙄","😯","😦","😧",
+        "😮","😲","🥱","😴","🤤","😪"
+    ],
+
+    hearts: [
+        "❤️","🧡","💛","💚","💙","💜",
+        "🖤","🤍","🤎","💔","❣️","💕",
+        "💞","💓","💗","💖","💘","💝",
+        "💟","💌","💋","😍","🥰","😘",
+        "❤️‍🔥","❤️‍🩹"
+    ],
+
+    gestures: [
+        "👍","👎","👌","✌️","🤞","🤟",
+        "🤘","🤙","👈","👉","👆","👇",
+        "☝️","✋","🤚","🖐️","🖖","👋",
+        "🤏","💪","👏","🙌","👐","🤲",
+        "🙏","🤝","👊","✊","🤌"
+    ],
+
+    animals: [
+        "🐶","🐱","🐭","🐹","🐰","🦊",
+        "🐻","🐼","🐨","🐯","🦁","🐮",
+        "🐷","🐸","🐵","🙈","🙉","🙊",
+        "🐔","🐧","🐦","🐤","🦄","🐝",
+        "🦋","🐌","🐞","🐢","🐍","🦎",
+        "🐙","🦀","🐠","🐟","🐬","🐳"
+    ],
+
+    food: [
+        "🍎","🍊","🍋","🍉","🍇","🍓",
+        "🫐","🍒","🍑","🥭","🍍","🥝",
+        "🍅","🥑","🌽","🥕","🥔","🍕",
+        "🍔","🍟","🌭","🌮","🌯","🍿",
+        "🍩","🍪","🎂","🍰","🍫","🍭",
+        "☕","🧋","🥤"
+    ],
+
+    objects: [
+        "⚽","🏀","🏈","⚾","🎾","🎮",
+        "🎯","🎸","🎧","📱","💻","⌚",
+        "📷","🎥","📺","💡","🔥","⭐",
+        "🌟","✨","💫","🎉","🎊","🎁",
+        "🚀","💎","🏆","🥇","🎵","🎶"
+    ]
+
+};
+
+
+/* ------------------------------------------
+   Render Emoji
+   ------------------------------------------ */
+
+function renderEmojis(
+    category = "smileys",
+    search = ""
+) {
+
+    emojiGrid.innerHTML = "";
+
+    let emojis = [];
+
+    if (search.trim() !== "") {
+
+        Object.values(emojiData)
+            .forEach(list => {
+
+                emojis.push(
+                    ...list
+                );
+
+            });
+
+    } else {
+
+        emojis =
+            emojiData[category] ||
+            emojiData.smileys;
+
+    }
+
+
+    /* Remove duplicates */
+
+    emojis =
+        [...new Set(emojis)];
+
+
+    emojis.forEach(
+        emoji => {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+            button.type =
+                "button";
+
+            button.className =
+                "emoji-item";
+
+            button.textContent =
+                emoji;
+
+            button.title =
+                emoji;
+
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    insertEmoji(
+                        emoji
+                    );
+
+                }
+            );
+
+
+            emojiGrid.appendChild(
+                button
+            );
+
+        }
+    );
+
+}
+
+
+/* ------------------------------------------
+   Insert Emoji at Cursor
+   ------------------------------------------ */
+
+function insertEmoji(emoji) {
+
+    const start =
+        input.selectionStart ??
+        input.value.length;
+
+    const end =
+        input.selectionEnd ??
+        input.value.length;
+
+    const before =
+        input.value.substring(
+            0,
+            start
+        );
+
+    const after =
+        input.value.substring(
+            end
+        );
+
+    input.value =
+        before +
+        emoji +
+        after;
+
+    const newPosition =
+        start +
+        emoji.length;
+
+    input.focus();
+
+    input.setSelectionRange(
+        newPosition,
+        newPosition
+    );
+
+}
+
+
+/* ------------------------------------------
+   Category Buttons
+   ------------------------------------------ */
+
+emojiPicker
+    .querySelectorAll(
+        ".emoji-categories button"
+    )
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    emojiPicker
+                        .querySelectorAll(
+                            ".emoji-categories button"
+                        )
+                        .forEach(
+                            item =>
+                                item.classList
+                                    .remove(
+                                        "active"
+                                    )
+                        );
+
+                    button.classList.add(
+                        "active"
+                    );
+
+                    emojiSearch.value =
+                        "";
+
+                    renderEmojis(
+                        button.dataset.category
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+/* ------------------------------------------
+   Search
+   ------------------------------------------ */
+
+emojiSearch.addEventListener(
+    "input",
+    () => {
+
+        renderEmojis(
+            "smileys",
+            emojiSearch.value
+        );
+
+    }
+);
+
+
+/* ------------------------------------------
+   Open Picker
+   ------------------------------------------ */
+
+emojiButton.addEventListener(
+    "click",
+    event => {
+
+        event.stopPropagation();
+
+        emojiPicker.classList.toggle(
+            "active"
+        );
+
+        if (
+            emojiPicker.classList
+                .contains("active")
+        ) {
+
+            emojiSearch.focus();
+
+        }
+
+    }
+);
+
+
+/* ------------------------------------------
+   Close Picker
+   ------------------------------------------ */
+
+emojiClose.addEventListener(
+    "click",
+    () => {
+
+        emojiPicker.classList.remove(
+            "active"
+        );
+
+    }
+);
+
+
+/* ------------------------------------------
+   Click Outside
+   ------------------------------------------ */
+
+document.addEventListener(
+    "click",
+    event => {
+
+        if (
+            !emojiPicker.contains(
+                event.target
+            ) &&
+            event.target !== emojiButton
+        ) {
+
+            emojiPicker.classList.remove(
+                "active"
+            );
+
+        }
+
+    }
+);
+
+
+/* ------------------------------------------
+   Initial Emoji List
+   ------------------------------------------ */
+
+const firstCategory =
+    emojiPicker.querySelector(
+        '.emoji-categories button[data-category="smileys"]'
+    );
+
+if (firstCategory) {
+
+    firstCategory.classList.add(
+        "active"
+    );
+
+}
+
+renderEmojis(
+    "smileys"
+);
+
+
+    /* ------------------------------------------
+       Input styling
+       ------------------------------------------ */
+
+    input.style.transition =
+        "all .25s ease";
+
+    input.style.padding =
+        "14px 16px";
+
+    input.style.borderRadius =
+        "14px";
+
+
+    console.log(
+        "✨ Premium SocialHub composer activated!"
+    );
+
+});
+
+</script>
+</body>
+
+</html>

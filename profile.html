@@ -1,0 +1,1972 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>TRIYA Profile</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%231877f2'/%3E%3Ctext x='20' y='27' font-family='Arial' font-size='21' font-weight='800' fill='white' text-anchor='middle'%3ETR%3C/text%3E%3C/svg%3E">
+
+
+    <link rel="stylesheet" href="style.css?v=4">
+
+    <link rel="stylesheet" href="dashboard.css?v=12">
+
+    <link rel="stylesheet" href="premium.css?v=6">
+
+    <link rel="stylesheet" href="profile.css?v=17">
+
+    <link rel="stylesheet" href="highlights.css?v=1">
+
+    <link rel="stylesheet" href="glass-theme.css?v=4">
+
+</head>
+
+
+<body>
+
+
+    <!-- ========================= -->
+    <!-- TOP NAVIGATION (home page style) -->
+    <!-- ========================= -->
+
+    <header class="topbar">
+
+
+        <!-- LOGO (Facebook-style "f") -->
+
+        <div
+            class="logo"
+            onclick="location.href='index.html'"
+            title="TRIYA"
+        ></div>
+
+
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+            <span>
+                🔍
+            </span>
+
+            <input
+                type="text"
+                placeholder="Search TRIYA"
+            >
+
+        </div>
+
+
+
+        <!-- CENTER NAV (Facebook tabs) -->
+
+        <nav class="fb-center-nav">
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='index.html'"
+                title="Home"
+            >
+                <i class="fa-solid fa-house"></i>
+            </button>
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='reels.html'"
+                title="Reels"
+            >
+                <i class="fa-solid fa-clapperboard"></i>
+            </button>
+
+
+            <button
+                class="fb-nav-btn"
+                onclick="socialhubOpenFriendsModal()"
+                title="Friends"
+            >
+                <i class="fa-solid fa-user-group"></i>
+            </button>
+
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='messages.html'"
+                title="Messages"
+            >
+                <i class="fa-solid fa-comment-dots"></i>
+            </button>
+
+
+            <button
+                class="fb-nav-btn"
+                onclick="document.querySelector('.top-icons button[title=&quot;Notifications&quot;]')?.click()"
+                title="Notifications"
+            >
+                <i class="fa-solid fa-bell"></i>
+            </button>
+
+        </nav>
+
+
+
+        <!-- TOP ICONS (Facebook gray circles) -->
+
+        <div class="top-icons">
+
+
+            <button
+                title="Messages"
+            >
+                💬
+            </button>
+
+
+            <button
+                title="Notifications"
+            >
+                🔔
+            </button>
+
+
+            <button
+                onclick="toggleDarkMode()"
+                title="Dark Mode"
+            >
+                🌙
+            </button>
+
+
+            <button
+                onclick="location.href='settings.html'"
+                title="Settings"
+            >
+                ⚙️
+            </button>
+
+
+            <button
+                onclick="location.href='profile.html'"
+                class="profile-mini side-avatar"
+                title="Profile"
+            >
+                👤
+            </button>
+
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ========================= -->
+    <!-- PROFILE CONTAINER -->
+    <!-- ========================= -->
+
+    <main class="profile-container">
+
+
+        <!-- ========================= -->
+        <!-- PROFILE HEADER (Facebook style) -->
+        <!-- ========================= -->
+
+        <section class="fb-header">
+
+
+            <!-- COVER PHOTO -->
+
+            <div class="cover-photo" id="coverPhoto"></div>
+
+
+
+            <!-- AVATAR + NAME + BUTTONS -->
+
+            <div class="fb-header-row">
+
+
+                <div class="fb-avatar-wrap">
+
+                    <div class="profile-photo">
+                        👤
+                    </div>
+
+                </div>
+
+
+                <div class="fb-header-right">
+
+                    <h1 class="fb-profile-name profile-name">
+                        User
+                    </h1>
+
+
+                    <div class="profile-buttons">
+
+                        <button
+                            class="primary-btn"
+                            onclick="openEditProfile()"
+                        >
+                            ✏️ Edit Profile
+                        </button>
+
+
+                        <button
+                            onclick="socialhubOpenStoryCreator()"
+                        >
+                            ➕ Story
+                        </button>
+
+
+                        <button
+                            onclick="logoutUser()"
+                            class="logout-btn"
+                        >
+                            🚪 Logout
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ========================= -->
+        <!-- PROFILE BODY (Facebook layout) -->
+        <!-- ========================= -->
+
+        <div class="fb-body">
+
+
+            <!-- ========================= -->
+            <!-- LEFT COLUMN -->
+            <!-- ========================= -->
+
+            <aside class="fb-left">
+
+
+                <!-- INTRO CARD -->
+
+                <section class="profile-card fb-intro-card">
+
+
+                    <div class="fb-intro-top">
+
+                        <div class="avatar fb-intro-avatar profile-photo">
+                            👤
+                        </div>
+
+
+                        <div class="fb-intro-id">
+
+                            <strong class="profile-name">
+                                User
+                            </strong>
+
+
+                            <span class="profile-username">
+                                @username
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <p class="profile-bio fb-intro-bio">
+                        Add a bio to tell people about yourself.
+                    </p>
+
+
+                    <div class="profile-buttons fb-intro-buttons">
+
+                        <button
+                            class="primary-btn"
+                            onclick="openEditProfile()"
+                        >
+                            ✏️ Edit Profile
+                        </button>
+
+
+                        <button
+                            onclick="socialhubOpenStoryCreator()"
+                        >
+                            ➕ Story
+                        </button>
+
+                    </div>
+
+
+                    <div class="fb-intro-divider"></div>
+
+
+                    <div class="fb-intro-details">
+
+                        <p class="about-row" data-field="work">
+                            <i class="fa-solid fa-briefcase"></i>
+                            <span class="profile-work">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="education">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                            <span class="profile-education">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="highschool">
+                            <i class="fa-solid fa-school"></i>
+                            <span class="profile-highschool">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="location">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <span class="profile-location">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="hometown">
+                            <i class="fa-solid fa-house"></i>
+                            <span class="profile-hometown">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="relationship">
+                            <i class="fa-solid fa-heart"></i>
+                            <span class="profile-relationship">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="website">
+                            <i class="fa-solid fa-link"></i>
+                            <a class="profile-website" href="#">Not added</a>
+                        </p>
+
+                        <p class="about-row" data-field="birthday">
+                            <i class="fa-solid fa-cake-candles"></i>
+                            <span class="profile-birthday">Not added</span>
+                        </p>
+
+                    </div>
+
+
+                    <div class="fb-intro-divider"></div>
+
+
+                    <div class="fb-friend-summary" id="fbFriendSummary" onclick="socialhubSwitchFbTab('friends')">
+                        <i class="fa-solid fa-user-group"></i>
+                        <span>0 friends</span>
+                    </div>
+
+
+                </section>
+
+
+
+                <!-- HIGHLIGHTS CARD -->
+
+                <section class="profile-card fb-highlights-card">
+
+                    <h2 class="fb-card-title">
+                        Highlights
+                    </h2>
+
+
+                    <div
+                        class="highlights-bar"
+                        id="highlightsBar"
+                    ></div>
+
+                </section>
+
+
+
+                <!-- PHOTOS MINI CARD -->
+
+                <section class="profile-card fb-mini-card">
+
+                    <div class="card-title">
+
+                        <h2>
+                            Photos
+                        </h2>
+
+
+                        <a
+                            href="#"
+                            onclick="socialhubSwitchFbTab('photos'); return false;"
+                        >
+                            See All Photos
+                        </a>
+
+                    </div>
+
+
+                    <div
+                        class="fb-mini-photos"
+                        id="fbMiniPhotos"
+                    ></div>
+
+                </section>
+
+
+
+                <!-- FRIENDS MINI CARD -->
+
+                <section class="profile-card fb-mini-card">
+
+                    <div class="card-title">
+
+
+                        <div>
+
+                            <h2>
+                                Friends
+                            </h2>
+
+
+                            <p>
+
+                                <span id="fbFriendCount">
+                                    0
+                                </span>
+
+                                friends
+
+                            </p>
+
+                        </div>
+
+
+                        <a
+                            href="#"
+                            onclick="socialhubSwitchFbTab('friends'); return false;"
+                        >
+                            See All Friends
+                        </a>
+
+                    </div>
+
+
+                    <div
+                        class="fb-mini-friends"
+                        id="fbMiniFriends"
+                    ></div>
+
+                </section>
+
+
+            </aside>
+
+
+
+            <!-- ========================= -->
+            <!-- MAIN COLUMN -->
+            <!-- ========================= -->
+
+            <section class="fb-main">
+
+
+                <!-- FACEBOOK TABS -->
+
+                <nav class="fb-tabs-bar">
+
+                    <button class="active" data-fb-tab="posts">
+                        <i class="fa-solid fa-table-cells-large"></i>
+                        Posts
+                    </button>
+
+                    <button data-fb-tab="about">
+                        <i class="fa-solid fa-circle-info"></i>
+                        About
+                    </button>
+
+                    <button data-fb-tab="friends">
+                        <i class="fa-solid fa-user-group"></i>
+                        Friends
+                    </button>
+
+                    <button data-fb-tab="photos">
+                        <i class="fa-solid fa-images"></i>
+                        Photos
+                    </button>
+
+                </nav>
+
+
+
+                <!-- POSTS AREA -->
+
+                <div class="fb-area" id="fbAreaPosts">
+
+
+            <!-- ========================= -->
+            <!-- POSTS (Facebook feed) -->
+            <!-- ========================= -->
+
+            <section class="profile-card" id="profilePostsSection">
+
+
+                <div id="profilePosts" class="profile-posts-grid">
+
+                    <p class="empty-message">
+                        Loading your posts...
+                    </p>
+
+                </div>
+
+
+            </section>
+
+
+            </div>
+
+
+
+            <!-- ========================= -->
+            <!-- ABOUT -->
+            <!-- ========================= -->
+
+            <div class="fb-area" id="fbAreaAbout" style="display:none;">
+
+            <section
+                class="profile-card about-card"
+                id="aboutSection"
+            >
+
+
+                <div class="card-title">
+
+                    <h2>
+                        About
+                    </h2>
+
+                </div>
+
+
+                <div class="about-block">
+
+                    <h3>
+                        <i class="fa-solid fa-circle-info"></i>
+                        Overview
+                    </h3>
+
+                    <p
+                        class="about-row"
+                        data-field="bio"
+                    >
+                        <span class="about-label">
+                            Bio
+                        </span>
+
+                        <span class="profile-bio">
+                            Add a bio to tell people about yourself.
+                        </span>
+                    </p>
+
+                </div>
+
+
+                <div class="about-block">
+
+                    <h3>
+                        <i class="fa-solid fa-briefcase"></i>
+                        Work &amp; Education
+                    </h3>
+
+                    <p
+                        class="about-row"
+                        data-field="work"
+                    >
+                        <span class="about-label">
+                            Work
+                        </span>
+
+                        <span class="profile-work">
+                            Not added
+                        </span>
+                    </p>
+
+                    <p
+                        class="about-row"
+                        data-field="education"
+                    >
+                        <span class="about-label">
+                            Education
+                        </span>
+
+                        <span class="profile-education">
+                            Not added
+                        </span>
+                    </p>
+
+                    <p
+                        class="about-row"
+                        data-field="highschool"
+                    >
+                        <span class="about-label">
+                            High School
+                        </span>
+
+                        <span class="profile-highschool">
+                            Not added
+                        </span>
+                    </p>
+
+                </div>
+
+
+                <div class="about-block">
+
+                    <h3>
+                        <i class="fa-solid fa-location-dot"></i>
+                        Places
+                    </h3>
+
+                    <p
+                        class="about-row"
+                        data-field="location"
+                    >
+                        <span class="about-label">
+                            Location
+                        </span>
+
+                        <span class="profile-location">
+                            Not added
+                        </span>
+                    </p>
+
+                    <p
+                        class="about-row"
+                        data-field="hometown"
+                    >
+                        <span class="about-label">
+                            Hometown
+                        </span>
+
+                        <span class="profile-hometown">
+                            Not added
+                        </span>
+                    </p>
+
+                </div>
+
+
+                <div class="about-block">
+
+                    <h3>
+                        <i class="fa-solid fa-address-book"></i>
+                        Contact &amp; Basic Info
+                    </h3>
+
+                    <p
+                        class="about-row"
+                        data-field="website"
+                    >
+                        <span class="about-label">
+                            Website
+                        </span>
+
+                        <a class="profile-website" href="#">
+                            Not added
+                        </a>
+                    </p>
+
+                    <p
+                        class="about-row"
+                        data-field="email"
+                    >
+                        <span class="about-label">
+                            Email
+                        </span>
+
+                        <span class="profile-email">
+                            Not added
+                        </span>
+                    </p>
+
+                    <p
+                        class="about-row"
+                        data-field="phone"
+                    >
+                        <span class="about-label">
+                            Phone
+                        </span>
+
+                        <span class="profile-phone">
+                            Not added
+                        </span>
+                    </p>
+
+                    <p
+                        class="about-row"
+                        data-field="sociallinks"
+                    >
+                        <span class="about-label">
+                            Social Links
+                        </span>
+
+                        <span class="profile-sociallinks">
+                            Not added
+                        </span>
+                    </p>
+
+                    <p
+                        class="about-row"
+                        data-field="languages"
+                    >
+                        <span class="about-label">
+                            Languages
+                        </span>
+
+                        <span class="profile-languages">
+                            Not added
+                        </span>
+                    </p>
+
+                    <p
+                        class="about-row"
+                        data-field="gender"
+                    >
+                        <span class="about-label">
+                            Gender
+                        </span>
+
+                        <span class="profile-gender">
+                            Not added
+                        </span>
+                    </p>
+
+                    <p
+                        class="about-row"
+                        data-field="birthday"
+                    >
+                        <span class="about-label">
+                            Birthday
+                        </span>
+
+                        <span class="profile-birthday">
+                            Not added
+                        </span>
+                    </p>
+
+                </div>
+
+
+                <div class="about-block">
+
+                    <h3>
+                        <i class="fa-solid fa-star"></i>
+                        Details About You
+                    </h3>
+
+                    <p
+                        class="about-row"
+                        data-field="othernames"
+                    >
+                        <span class="about-label">
+                            Other Names
+                        </span>
+
+                        <span class="profile-othernames">
+                            Not added
+                        </span>
+                    </p>
+
+                    <p
+                        class="about-row"
+                        data-field="hobbies"
+                    >
+                        <span class="about-label">
+                            Hobbies
+                        </span>
+
+                        <span class="profile-hobbies">
+                            Not added
+                        </span>
+                    </p>
+
+                    <p
+                        class="about-row"
+                        data-field="sports"
+                    >
+                        <span class="about-label">
+                            Sports
+                        </span>
+
+                        <span class="profile-sports">
+                            Not added
+                        </span>
+                    </p>
+
+                    <p
+                        class="about-row"
+                        data-field="teams"
+                    >
+                        <span class="about-label">
+                            Favorite Teams
+                        </span>
+
+                        <span class="profile-teams">
+                            Not added
+                        </span>
+                    </p>
+
+                    <p
+                        class="about-row"
+                        data-field="athletes"
+                    >
+                        <span class="about-label">
+                            Favorite Athletes
+                        </span>
+
+                        <span class="profile-athletes">
+                            Not added
+                        </span>
+                    </p>
+
+                    <p
+                        class="about-row"
+                        data-field="artists"
+                    >
+                        <span class="about-label">
+                            Favorite Artists
+                        </span>
+
+                        <span class="profile-artists">
+                            Not added
+                        </span>
+                    </p>
+
+                    <p
+                        class="about-row"
+                        data-field="tvshows"
+                    >
+                        <span class="about-label">
+                            Favorite TV Shows
+                        </span>
+
+                        <span class="profile-tvshows">
+                            Not added
+                        </span>
+                    </p>
+
+                    <p
+                        class="about-row"
+                        data-field="movies"
+                    >
+                        <span class="about-label">
+                            Favorite Movies
+                        </span>
+
+                        <span class="profile-movies">
+                            Not added
+                        </span>
+                    </p>
+
+                    <p
+                        class="about-row"
+                        data-field="games"
+                    >
+                        <span class="about-label">
+                            Favorite Games
+                        </span>
+
+                        <span class="profile-games">
+                            Not added
+                        </span>
+                    </p>
+
+                    <p
+                        class="about-row"
+                        data-field="quotes"
+                    >
+                        <span class="about-label">
+                            Favorite Quotes
+                        </span>
+
+                        <span class="profile-quotes">
+                            Not added
+                        </span>
+                    </p>
+
+                    <p
+                        class="about-row"
+                        data-field="religion"
+                    >
+                        <span class="about-label">
+                            Religious Views
+                        </span>
+
+                        <span class="profile-religion">
+                            Not added
+                        </span>
+                    </p>
+
+                    <p
+                        class="about-row"
+                        data-field="politics"
+                    >
+                        <span class="about-label">
+                            Political Views
+                        </span>
+
+                        <span class="profile-politics">
+                            Not added
+                        </span>
+                    </p>
+
+                </div>
+
+
+                <div class="about-block">
+
+                    <h3>
+                        <i class="fa-solid fa-heart"></i>
+                        Relationship
+                    </h3>
+
+                    <p
+                        class="about-row"
+                        data-field="relationship"
+                    >
+                        <span class="about-label">
+                            Relationship Status
+                        </span>
+
+                        <span class="profile-relationship">
+                            Not added
+                        </span>
+                    </p>
+
+                </div>
+
+
+            </section>
+
+            </div>
+
+
+
+            <!-- ========================= -->
+            <!-- PHOTOS -->
+            <!-- ========================= -->
+
+            <div class="fb-area" id="fbAreaPhotos" style="display:none;">
+
+            <section class="profile-card" id="photosCard">
+
+
+                <div class="card-title">
+
+                    <h2>
+                        Photos
+                    </h2>
+
+
+                    <a href="#">
+                        See All Photos
+                    </a>
+
+                </div>
+
+
+
+                <div class="photo-grid" id="profilePhotos">
+
+                    <p class="empty-message">
+                        Loading photos...
+                    </p>
+
+                </div>
+
+
+            </section>
+
+            </div>
+
+
+
+            <!-- ========================= -->
+            <!-- FRIENDS -->
+            <!-- ========================= -->
+
+            <div class="fb-area" id="fbAreaFriends" style="display:none;">
+
+            <section class="profile-card" id="friendsCard">
+
+
+                <div class="card-title">
+
+
+                    <div>
+
+                        <h2>
+                            Friends
+                        </h2>
+
+
+                        <p>
+
+                            <span class="friends-count">
+                                0
+                            </span>
+
+                            friends
+
+                        </p>
+
+                    </div>
+
+
+                    <a href="#">
+                        See All Friends
+                    </a>
+
+                </div>
+
+
+
+                <div class="friends-grid" id="profileFriends">
+
+                    <p class="empty-message">
+                        Loading friends...
+                    </p>
+
+                </div>
+
+
+            </section>
+
+            </div>
+
+        </section>
+
+        </div>
+
+    </main>
+
+
+
+    <!-- ================================= -->
+    <!-- POST LIGHTBOX (Instagram-style viewer) -->
+    <!-- ================================= -->
+
+    <div
+        id="postLightbox"
+        class="post-lightbox"
+        onclick="socialhubClosePostLightbox(event)"
+    >
+
+
+        <div class="post-lightbox-box" id="postLightboxBox">
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================================= -->
+    <!-- EDIT PROFILE MODAL (Facebook style) -->
+    <!-- ================================= -->
+
+    <div
+        id="editProfileModal"
+        class="edit-profile-modal"
+    >
+
+
+        <div class="edit-profile-box">
+
+
+            <!-- MODAL HEADER -->
+
+            <div class="edit-profile-header">
+
+                <h2>
+                    Edit Profile
+                </h2>
+
+
+                <button
+                    onclick="closeEditProfile()"
+                    class="close-modal"
+                >
+                    ✕
+                </button>
+
+            </div>
+
+
+
+            <!-- FORM (sidebar + panel + footer) -->
+
+            <form
+                id="editProfileForm"
+            >
+
+
+                <div class="edit-profile-body">
+
+
+                    <!-- SIDEBAR SECTIONS -->
+
+                    <aside class="edit-profile-sidebar">
+
+                        <button
+                            type="button"
+                            class="edit-profile-section active"
+                            data-section="general"
+                            onclick="switchEditSection('general')"
+                        >
+                            <i class="fa-solid fa-user"></i>
+                            General
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="edit-profile-section"
+                            data-section="work"
+                            onclick="switchEditSection('work')"
+                        >
+                            <i class="fa-solid fa-briefcase"></i>
+                            Work &amp; Education
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="edit-profile-section"
+                            data-section="places"
+                            onclick="switchEditSection('places')"
+                        >
+                            <i class="fa-solid fa-location-dot"></i>
+                            Places Lived
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="edit-profile-section"
+                            data-section="contact"
+                            onclick="switchEditSection('contact')"
+                        >
+                            <i class="fa-solid fa-address-book"></i>
+                            Contact &amp; Basic Info
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="edit-profile-section"
+                            data-section="details"
+                            onclick="switchEditSection('details')"
+                        >
+                            <i class="fa-solid fa-star"></i>
+                            Details About You
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="edit-profile-section"
+                            data-section="relationship"
+                            onclick="switchEditSection('relationship')"
+                        >
+                            <i class="fa-solid fa-heart"></i>
+                            Relationship
+                        </button>
+
+                    </aside>
+
+
+
+                    <!-- CONTENT PANELS -->
+
+                    <div class="edit-profile-panel">
+
+
+                        <!-- GENERAL -->
+
+                        <div
+                            class="edit-profile-fields active"
+                            id="editSectionGeneral"
+                        >
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Full Name
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    id="editFullName"
+                                    placeholder="Your full name"
+                                >
+
+                            </div>
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Username
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    id="editUsername"
+                                    placeholder="username"
+                                >
+
+                            </div>
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Birthday
+                                </label>
+
+
+                                <input
+                                    type="date"
+                                    id="editBirthday"
+                                >
+
+                            </div>
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Gender
+                                </label>
+
+
+                                <select
+                                    id="editGender"
+                                >
+                                    <option value="">
+                                        Select gender
+                                    </option>
+
+                                    <option value="Female">
+                                        Female
+                                    </option>
+
+                                    <option value="Male">
+                                        Male
+                                    </option>
+
+                                    <option value="Non-binary">
+                                        Non-binary
+                                    </option>
+
+                                    <option value="Prefer not to say">
+                                        Prefer not to say
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Languages
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    id="editLanguages"
+                                    placeholder="e.g. Bengali, English"
+                                >
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- WORK & EDUCATION -->
+
+                        <div
+                            class="edit-profile-fields"
+                            id="editSectionWork"
+                        >
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Workplace
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    id="editWork"
+                                    placeholder="Where do you work?"
+                                >
+
+                            </div>
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    University / College
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    id="editEducation"
+                                    placeholder="Where did you study?"
+                                >
+
+                            </div>
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    High School
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    id="editHighSchool"
+                                    placeholder="Where did you go to high school?"
+                                >
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- PLACES LIVED -->
+
+                        <div
+                            class="edit-profile-fields"
+                            id="editSectionPlaces"
+                        >
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Current City / Town
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    id="editLocation"
+                                    placeholder="Where do you live now?"
+                                >
+
+                            </div>
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Hometown
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    id="editHometown"
+                                    placeholder="Where are you from?"
+                                >
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- CONTACT & BASIC INFO -->
+
+                        <div
+                            class="edit-profile-fields"
+                            id="editSectionContact"
+                        >
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Website
+                                </label>
+
+
+                                <input
+                                    type="url"
+                                    id="editWebsite"
+                                    placeholder="https://example.com"
+                                >
+
+                            </div>
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Email
+                                </label>
+
+
+                                <input
+                                    type="email"
+                                    id="editEmail"
+                                    placeholder="your email"
+                                >
+
+                            </div>
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Phone Number
+                                </label>
+
+
+                                <input
+                                    type="tel"
+                                    id="editPhone"
+                                    placeholder="+880..."
+                                >
+
+                            </div>
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Other Social Links
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    id="editSocialLinks"
+                                    placeholder="https://instagram.com/..."
+                                >
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- DETAILS ABOUT YOU -->
+
+                        <div
+                            class="edit-profile-fields"
+                            id="editSectionDetails"
+                        >
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Bio
+                                </label>
+
+
+                                <textarea
+                                    id="editBio"
+                                    placeholder="Tell people about yourself..."
+                                    rows="3"
+                                ></textarea>
+
+                            </div>
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Other Names
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    id="editOtherNames"
+                                    placeholder="Nicknames, preferred names"
+                                >
+
+                            </div>
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Hobbies
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    id="editHobbies"
+                                    placeholder="e.g. Photography, Gaming"
+                                >
+
+                            </div>
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Sports
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    id="editSports"
+                                    placeholder="e.g. Football, Cricket"
+                                >
+
+                            </div>
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Favorite Teams
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    id="editTeams"
+                                    placeholder="e.g. FC Barcelona"
+                                >
+
+                            </div>
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Favorite Athletes
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    id="editAthletes"
+                                    placeholder="e.g. Lionel Messi"
+                                >
+
+                            </div>
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Favorite Artists
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    id="editArtists"
+                                    placeholder="e.g. Coldplay"
+                                >
+
+                            </div>
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Favorite TV Shows
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    id="editTvShows"
+                                    placeholder="e.g. Friends"
+                                >
+
+                            </div>
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Favorite Movies
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    id="editMovies"
+                                    placeholder="e.g. Inception"
+                                >
+
+                            </div>
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Favorite Games
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    id="editGames"
+                                    placeholder="e.g. Free Fire, PUBG"
+                                >
+
+                            </div>
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Favorite Quotes
+                                </label>
+
+
+                                <textarea
+                                    id="editQuotes"
+                                    placeholder="A quote you love..."
+                                    rows="2"
+                                ></textarea>
+
+                            </div>
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Religious Views
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    id="editReligion"
+                                    placeholder="e.g. Islam"
+                                >
+
+                            </div>
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Political Views
+                                </label>
+
+
+                                <input
+                                    type="text"
+                                    id="editPolitics"
+                                    placeholder="e.g. Moderate"
+                                >
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <!-- RELATIONSHIP -->
+
+                        <div
+                            class="edit-profile-fields"
+                            id="editSectionRelationship"
+                        >
+
+
+                            <div class="edit-profile-field">
+
+                                <label>
+                                    Relationship Status
+                                </label>
+
+
+                                <select
+                                    id="editRelationship"
+                                >
+                                    <option value="">
+                                        Select status
+                                    </option>
+
+                                    <option value="Single">
+                                        Single
+                                    </option>
+
+                                    <option value="In a relationship">
+                                        In a relationship
+                                    </option>
+
+                                    <option value="Engaged">
+                                        Engaged
+                                    </option>
+
+                                    <option value="Married">
+                                        Married
+                                    </option>
+
+                                    <option value="It's complicated">
+                                        It's complicated
+                                    </option>
+
+                                    <option value="In an open relationship">
+                                        In an open relationship
+                                    </option>
+
+                                    <option value="Divorced">
+                                        Divorced
+                                    </option>
+
+                                    <option value="Widowed">
+                                        Widowed
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- FOOTER ACTIONS -->
+
+                <div class="edit-profile-actions">
+
+                    <button
+                        type="button"
+                        onclick="closeEditProfile()"
+                    >
+                        Cancel
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="primary-btn"
+                    >
+                        Save
+                    </button>
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================================= -->
+    <!-- HIGHLIGHT CREATE / EDIT MODAL -->
+    <!-- ================================= -->
+
+    <div
+        id="highlightCreateModal"
+        class="highlight-create-modal"
+    >
+
+
+        <div class="highlight-create-box">
+
+
+            <div class="highlight-create-header">
+
+                <h2 id="highlightCreateTitle">
+                    New Highlight
+                </h2>
+
+
+                <button
+                    onclick="socialhubCloseHighlightCreate()"
+                    class="close-modal"
+                >
+                    ✕
+                </button>
+
+            </div>
+
+
+
+            <div class="highlight-create-body">
+
+                <label>
+                    Name
+                </label>
+
+
+                <input
+                    type="text"
+                    id="highlightNameInput"
+                    maxlength="20"
+                    placeholder="Highlight name"
+                >
+
+
+                <label>
+                    Choose posts
+                </label>
+
+
+                <p class="highlight-create-hint">
+                    Tap posts to select them. The first selected photo becomes the cover.
+                </p>
+
+
+                <div
+                    class="highlight-posts-grid"
+                    id="highlightPostsGrid"
+                ></div>
+
+            </div>
+
+
+
+            <div class="highlight-create-actions">
+
+                <button
+                    type="button"
+                    class="highlight-delete-btn"
+                    id="highlightDeleteBtn"
+                    onclick="socialhubDeleteHighlight()"
+                    style="display:none;"
+                >
+                    Delete Highlight
+                </button>
+
+
+                <div class="highlight-create-spacer"></div>
+
+
+                <button
+                    type="button"
+                    onclick="socialhubCloseHighlightCreate()"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="button"
+                    class="primary-btn"
+                    onclick="socialhubSaveHighlight()"
+                >
+                    Save
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================================= -->
+    <!-- HIGHLIGHT VIEWER -->
+    <!-- ================================= -->
+
+    <div
+        id="highlightViewer"
+        class="highlight-viewer"
+        onclick="socialhubCloseHighlightViewer(event)"
+    >
+
+
+        <div
+            class="highlight-viewer-stage"
+            id="highlightViewerStage"
+        ></div>
+
+    </div>
+
+
+
+    <!-- ========================= -->
+    <!-- SCRIPTS -->
+    <!-- ========================= -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="supabase.js?v=4"></script>
+
+    <script src="premium-ui.js?v=4"></script>
+
+    <script src="script.js?v=13"></script>
+
+    <script src="image-upload.js?v=6"></script>
+
+    <script src="post-manage.js?v=4"></script>
+
+    <script src="friends.js?v=5"></script>
+
+    <script src="likes-comments.js?v=7"></script>
+
+    <script src="profile-page.js?v=10"></script>
+
+    <script src="user-search.js?v=4"></script>
+
+    <script src="notifications.js?v=5"></script>
+
+    <script src="settings.js?v=5"></script>
+
+    <script src="messages.js?v=10"></script>
+
+    <script src="stories.js?v=7"></script>
+
+    <script src="highlights.js?v=1"></script>
+
+
+</body>
+
+</html>

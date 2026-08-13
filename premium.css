@@ -1,0 +1,862 @@
+/* ==========================================
+   SOCIALHUB - PREMIUM UPGRADE V2
+   Instagram + Facebook hybrid design
+   ========================================== */
+
+/* ---------- FONTS ---------- */
+
+body {
+    font-family: "Inter", Arial, Helvetica, sans-serif;
+    letter-spacing: -0.01em;
+}
+
+/* ---------- SCROLLBAR ---------- */
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(120, 120, 130, 0.35);
+    border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(120, 120, 130, 0.55);
+}
+
+/* ---------- GRADIENT LOGO ---------- */
+
+.logo {
+    background: linear-gradient(135deg, #1877f2, #8b5cf6);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    background-size: 200% 200%;
+    animation: socialhubLogoShift 6s ease infinite;
+}
+
+@keyframes socialhubLogoShift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* ---------- CARDS ---------- */
+
+.post,
+.create-post,
+.welcome-card,
+.side-card,
+.sidebar-menu,
+.sidebar-profile,
+.profile-card,
+.profile-header,
+.auth-card {
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.04),
+        0 4px 16px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(128, 128, 128, 0.08);
+}
+
+/* ---------- INSTAGRAM AVATAR RINGS ---------- */
+
+:root {
+    --avatar-bg: #e4e6eb;
+}
+
+body.dark-mode {
+    --avatar-bg: #3a3b3c;
+}
+
+.avatar,
+.sidebar-avatar,
+.side-avatar,
+.suggestion-avatar,
+.profile-mini {
+    background:
+        linear-gradient(var(--avatar-bg), var(--avatar-bg)) padding-box,
+        linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888) border-box;
+    border: 2px solid transparent;
+}
+
+/* ---------- POST HOVER LIFT ---------- */
+
+.post {
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.post:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* ---------- POST ENTRANCE ---------- */
+
+.post {
+    animation: socialhubPostIn 0.35s ease;
+}
+
+@keyframes socialhubPostIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+/* ---------- POST ACTIONS (4 buttons: like/comment/share/save) ---------- */
+
+.post-actions {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.post-actions button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.post-actions button i {
+    font-size: 17px;
+}
+
+.socialhub-save-btn {
+    color: var(--muted, #65676b);
+}
+
+.socialhub-save-btn.saved {
+    color: #f09433;
+}
+
+/* ---------- DOUBLE-TAP HEART BURST ---------- */
+
+.socialhub-heart-burst {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 68px;
+    pointer-events: none;
+    z-index: 50;
+    animation: socialhubHeartBurst 0.8s ease forwards;
+    filter: drop-shadow(0 4px 14px rgba(220, 39, 67, 0.4));
+}
+
+@keyframes socialhubHeartBurst {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.3);
+    }
+
+    30% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.15);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.5);
+    }
+}
+
+/* ---------- REACTIONS (FACEBOOK STYLE) ---------- */
+
+.post-actions button.socialhub-like-btn {
+    position: relative;
+    padding: 10px 6px;
+}
+
+.socialhub-reactions {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #ffffff;
+    border-radius: 30px;
+    padding: 8px 12px;
+    gap: 2px;
+    z-index: 70;
+    white-space: nowrap;
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.1),
+        0 8px 24px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Arrow pointing down to the like button */
+
+.socialhub-reactions::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    width: 11px;
+    height: 11px;
+    background: #ffffff;
+    transform: translateX(-50%) rotate(45deg);
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.post-actions button.socialhub-like-btn:hover .socialhub-reactions,
+.post-actions button.socialhub-like-btn:focus-within .socialhub-reactions {
+    display: flex;
+}
+
+.socialhub-reactions button {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 34px;
+    line-height: 52px;
+    border-radius: 50%;
+    transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.4, 1.2);
+    animation: socialhubReactionPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+}
+
+.socialhub-reactions button:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.socialhub-reactions button:nth-child(2) {
+    animation-delay: 0.03s;
+}
+
+.socialhub-reactions button:nth-child(3) {
+    animation-delay: 0.06s;
+}
+
+.socialhub-reactions button:nth-child(4) {
+    animation-delay: 0.09s;
+}
+
+.socialhub-reactions button:nth-child(5) {
+    animation-delay: 0.12s;
+}
+
+.socialhub-reactions button:nth-child(6) {
+    animation-delay: 0.15s;
+}
+
+.socialhub-reactions button:nth-child(7) {
+    animation-delay: 0.18s;
+}
+
+.socialhub-reactions button:hover {
+    transform: scale(1.35) translateY(-10px);
+    z-index: 2;
+}
+
+/* Emoji name tooltip (dark bubble above each emoji) */
+
+.socialhub-reactions button .socialhub-reaction-label {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    background: #1c1e21;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    padding: 5px 9px;
+    border-radius: 7px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.socialhub-reactions button .socialhub-reaction-label::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: #1c1e21;
+}
+
+.socialhub-reactions button:hover .socialhub-reaction-label {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Reaction name inside the like button (colored like Facebook) */
+
+.socialhub-reaction-emoji {
+    font-size: 16px;
+    margin-right: 4px;
+}
+
+.post-actions button.socialhub-like-btn .socialhub-reaction-name {
+    font-weight: 700;
+}
+
+@keyframes socialhubReactionPop {
+    from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.3);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes socialhubReactionIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+.socialhub-reaction-emoji {
+    font-size: 17px;
+}
+
+.post-actions button.liked {
+    color: #f23c5d !important;
+    animation: socialhubHeartPop 0.35s ease;
+}
+
+@keyframes socialhubHeartPop {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.35); }
+    100% { transform: scale(1); }
+}
+
+/* ---------- STORIES BAR ---------- */
+
+.socialhub-stories {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    padding: 16px;
+    background: var(--card-bg, #ffffff);
+    border-radius: 12px;
+    margin-bottom: 15px;
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.04),
+        0 4px 16px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(128, 128, 128, 0.08);
+    scrollbar-width: none;
+}
+
+.socialhub-stories::-webkit-scrollbar {
+    display: none;
+}
+
+.socialhub-story {
+    flex: 0 0 auto;
+    width: 68px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.socialhub-story-ring {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 6px;
+    border-radius: 50%;
+    padding: 3px;
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+    position: relative;
+}
+
+.socialhub-story-avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: var(--card-bg, #ffffff);
+    border: 2px solid var(--card-bg, #ffffff);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+}
+
+.socialhub-story-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.socialhub-story-add {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1877f2, #8b5cf6);
+    color: #fff;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--card-bg, #ffffff);
+}
+
+.socialhub-story-name {
+    display: block;
+    font-size: 11px;
+    color: var(--text, #1c1e21);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ---------- STORY VIEWER ---------- */
+
+.socialhub-story-viewer {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: socialhubStoryFade 0.25s ease;
+}
+
+@keyframes socialhubStoryFade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.socialhub-story-stage {
+    width: 100%;
+    max-width: 420px;
+    height: 100%;
+    max-height: 760px;
+    position: relative;
+    border-radius: 0;
+}
+
+@media (min-width: 480px) {
+    .socialhub-story-stage {
+        height: min(85vh, 720px);
+        border-radius: 16px;
+        overflow: hidden;
+    }
+}
+
+.socialhub-story-progress {
+    display: flex;
+    gap: 4px;
+    padding: 12px 12px 8px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 5;
+}
+
+.socialhub-story-seg {
+    flex: 1;
+    height: 3px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+}
+
+.socialhub-story-seg.fill .socialhub-story-seg-inner {
+    height: 100%;
+    background: #fff;
+    animation: socialhubStoryProgress 4s linear forwards;
+}
+
+@keyframes socialhubStoryProgress {
+    from { width: 0%; }
+    to { width: 100%; }
+}
+
+.socialhub-story-head {
+    position: absolute;
+    top: 22px;
+    left: 0;
+    right: 0;
+    padding: 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 5;
+}
+
+.socialhub-story-head .socialhub-story-ring {
+    width: 40px;
+    height: 40px;
+    margin: 0;
+}
+
+.socialhub-story-head-info strong {
+    display: block;
+    color: #fff;
+    font-size: 14px;
+}
+
+.socialhub-story-head-info small {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 12px;
+}
+
+.socialhub-story-close {
+    margin-left: auto;
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.18);
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.socialhub-story-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    color: #fff;
+}
+
+.socialhub-story-content .socialhub-story-ring {
+    width: 120px;
+    height: 120px;
+}
+
+.socialhub-story-content h3 {
+    margin: 0;
+    font-size: 22px;
+}
+
+.socialhub-story-content p {
+    margin: 0;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.socialhub-story-zone {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 50%;
+    z-index: 4;
+    cursor: pointer;
+}
+
+.socialhub-story-zone.prev {
+    left: 0;
+}
+
+.socialhub-story-zone.next {
+    right: 0;
+}
+
+/* ---------- BUTTONS ---------- */
+
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.login-btn,
+.create-btn,
+.post-btn,
+.primary-btn,
+.view-profile-btn,
+.sidebar-logout,
+.socialhub-btn-primary {
+    transition:
+        transform 0.15s ease,
+        filter 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.login-btn:hover,
+.create-btn:hover,
+.post-btn:hover,
+.primary-btn:hover,
+.view-profile-btn:hover,
+.socialhub-btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(24, 119, 242, 0.25);
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+/* ---------- GLASS TOPBAR ---------- */
+
+.topbar {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+body.dark-mode .topbar {
+    background: rgba(36, 37, 38, 0.85);
+}
+
+/* ---------- SEARCH GLOW ---------- */
+
+.search-box:focus-within {
+    box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.18);
+}
+
+/* ---------- WELCOME CARD ---------- */
+
+.welcome-card {
+    background:
+        linear-gradient(var(--card-bg, #ffffff), var(--card-bg, #ffffff)) padding-box,
+        linear-gradient(135deg, #1877f2, #8b5cf6) border-box;
+    border: 2px solid transparent;
+    border-radius: 14px;
+}
+
+/* ---------- TOASTS ---------- */
+
+.socialhub-toast-container {
+    position: fixed;
+    top: 76px;
+    right: 18px;
+    z-index: 100000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: calc(100vw - 36px);
+}
+
+.socialhub-toast {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--card-bg, #ffffff);
+    color: var(--text, #1c1e21);
+    padding: 13px 16px;
+    border-radius: 14px;
+    box-shadow: 0 10px 34px rgba(0, 0, 0, 0.18);
+    border: 1px solid rgba(128, 128, 128, 0.12);
+    font-size: 14px;
+    font-weight: 500;
+    min-width: 260px;
+    max-width: 380px;
+    position: relative;
+    overflow: hidden;
+    animation: socialhubToastIn 0.3s ease;
+}
+
+.socialhub-toast.success {
+    border-left: 4px solid #22c55e;
+}
+
+.socialhub-toast.error {
+    border-left: 4px solid #ef4444;
+}
+
+.socialhub-toast.info {
+    border-left: 4px solid #1877f2;
+}
+
+.socialhub-toast-icon {
+    font-size: 18px;
+}
+
+.socialhub-toast-msg {
+    flex: 1;
+}
+
+.socialhub-toast-close {
+    border: none;
+    background: transparent;
+    color: var(--muted, #888);
+    font-size: 16px;
+    cursor: pointer;
+    padding: 0 2px;
+}
+
+.socialhub-toast::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    width: 100%;
+    background: linear-gradient(90deg, #1877f2, #8b5cf6);
+    animation: socialhubToastBar 4s linear forwards;
+}
+
+.socialhub-toast.leaving {
+    animation: socialhubToastOut 0.25s ease forwards;
+}
+
+@keyframes socialhubToastIn {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes socialhubToastOut {
+    to {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+}
+
+@keyframes socialhubToastBar {
+    from { width: 100%; }
+    to { width: 0%; }
+}
+
+.socialhub-load-more {
+    display: block;
+    width: 100%;
+    margin: 14px 0;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #1877f2, #8b5cf6);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.socialhub-load-more:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+@media (max-width: 600px) {
+
+    .socialhub-toast-container {
+        left: 12px;
+        right: 12px;
+        align-items: stretch;
+    }
+
+    .socialhub-toast {
+        width: 100%;
+        min-width: 0;
+    }
+}
+
+/* ---------- STORY REACTIONS (FACEBOOK STYLE) ---------- */
+
+.socialhub-story-react {
+    position: absolute;
+    bottom: 26px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 7px 10px;
+    background: rgba(0, 0, 0, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 30px;
+    z-index: 10;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+    animation: socialhubStoryReactIn 0.3s ease;
+}
+
+@keyframes socialhubStoryReactIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+.socialhub-story-react-btn {
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    font-size: 24px;
+    line-height: 38px;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.4, 1.2);
+}
+
+.socialhub-story-react-btn:hover {
+    transform: scale(1.35) translateY(-5px);
+}
+
+.socialhub-story-react-btn.active {
+    background: rgba(255, 255, 255, 0.22);
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+/* Flying emoji after reacting */
+
+.socialhub-story-fly {
+    position: absolute;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 44px;
+    z-index: 12;
+    pointer-events: none;
+    animation: socialhubStoryFly 1s ease forwards;
+}
+
+@keyframes socialhubStoryFly {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(10px) scale(0.5);
+    }
+
+    25% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-10px) scale(1.15);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-110px) scale(1);
+    }
+}

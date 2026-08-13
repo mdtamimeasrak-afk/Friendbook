@@ -1,0 +1,4032 @@
+/* ========================================
+   SOCIALHUB PROFILE PAGE
+======================================== */
+
+
+/* ========================================
+   PROFILE CONTAINER
+======================================== */
+
+.profile-container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-bottom: 50px;
+}
+
+
+/* ========================================
+   PROFILE HEADER
+======================================== */
+
+.profile-header {
+    background: var(--card-bg, #ffffff);
+    border-radius: 0 0 12px 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+
+/* ========================================
+   COVER PHOTO
+======================================== */
+
+.cover-photo {
+    height: 300px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #667eea,
+            #764ba2,
+            #4facfe
+        );
+
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.cover-text {
+    color: white;
+
+    font-size: 28px;
+    font-weight: 700;
+
+    text-shadow:
+        0 2px 5px rgba(0, 0, 0, 0.35);
+}
+
+
+/* ========================================
+   PROFILE INFO
+======================================== */
+
+.profile-info {
+    min-height: 150px;
+
+    padding: 0 30px 25px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 20px;
+
+    position: relative;
+}
+
+
+/* ========================================
+   PROFILE PHOTO
+======================================== */
+
+.profile-photo {
+    width: 150px;
+    height: 150px;
+
+    border-radius: 50%;
+
+    background: #e4e6eb;
+
+    border: 5px solid var(--card-bg, #ffffff);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 65px;
+
+    margin-top: -60px;
+
+    flex-shrink: 0;
+
+    box-shadow:
+        0 3px 10px rgba(0, 0, 0, 0.15);
+}
+
+
+/* ========================================
+   PROFILE DETAILS
+======================================== */
+
+.profile-details {
+    flex: 1;
+}
+
+
+.profile-details h1 {
+    margin: 0 0 6px;
+
+    font-size: 30px;
+
+    font-weight: 700;
+}
+
+
+.profile-details p {
+    margin: 0;
+
+    color: #65676b;
+
+    font-size: 15px;
+}
+
+
+.profile-username {
+    font-weight: 600;
+}
+
+
+/* ========================================
+   PROFILE BUTTONS
+======================================== */
+
+.profile-buttons {
+    display: flex;
+
+    gap: 10px;
+
+    align-items: center;
+
+    flex-wrap: wrap;
+}
+
+
+.profile-buttons button {
+    border: none;
+
+    padding: 10px 16px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    background: #e4e6eb;
+
+    transition: 0.2s;
+}
+
+
+.profile-buttons button:hover {
+    transform: translateY(-1px);
+
+    filter: brightness(0.97);
+}
+
+
+.profile-buttons .primary-btn {
+    background: #1877f2;
+
+    color: white;
+}
+
+
+.profile-buttons .logout-btn {
+    background: #ff4d4f;
+
+    color: white;
+}
+
+
+/* ========================================
+   PROFILE CONTENT
+======================================== */
+
+.profile-content {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 20px;
+
+    margin-top: 20px;
+}
+
+
+/* ========================================
+   PROFILE CARD
+======================================== */
+
+.profile-card {
+    background: var(--card-bg, #ffffff);
+
+    border-radius: 12px;
+
+    padding: 22px;
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.07);
+}
+
+
+/* ========================================
+   CARD TITLE
+======================================== */
+
+.card-title {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 18px;
+}
+
+
+.card-title h2 {
+    margin: 0;
+
+    font-size: 22px;
+}
+
+
+.card-title p {
+    margin: 5px 0 0;
+
+    color: #65676b;
+
+    font-size: 14px;
+}
+
+
+.card-title a {
+    color: #1877f2;
+
+    text-decoration: none;
+
+    font-weight: 600;
+
+    font-size: 14px;
+}
+
+
+.card-title a:hover {
+    text-decoration: underline;
+}
+
+
+/* ========================================
+   BIO
+======================================== */
+
+.profile-bio {
+    line-height: 1.6;
+
+    color: #444;
+
+    margin-bottom: 20px;
+}
+
+
+.profile-details-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+
+    margin-bottom: 20px;
+}
+
+
+.profile-details-list p {
+    margin: 0;
+
+    color: #555;
+
+    font-size: 15px;
+}
+
+
+.profile-details-list span {
+    margin-left: 6px;
+}
+
+
+/* ========================================
+   EDIT INTRO BUTTON
+======================================== */
+
+.edit-intro {
+    width: 100%;
+
+    border: none;
+
+    padding: 11px;
+
+    border-radius: 8px;
+
+    background: #e4e6eb;
+
+    cursor: pointer;
+
+    font-weight: 600;
+
+    transition: 0.2s;
+}
+
+
+.edit-intro:hover {
+    background: #d8dadf;
+}
+
+
+/* ========================================
+   PHOTOS
+======================================== */
+
+.photo-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 10px;
+}
+
+
+.profile-photo-item {
+    height: 150px;
+
+    background: #e4e6eb;
+
+    border-radius: 10px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 45px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.profile-photo-item:hover {
+    transform: scale(1.02);
+}
+
+.profile-photo-item img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 10px;
+}
+
+
+/* ========================================
+   FRIENDS
+======================================== */
+
+.friends-grid {
+    min-height: 80px;
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 12px;
+}
+
+.friends-grid .empty-message {
+    grid-column: 1 / -1;
+}
+
+
+/* ========================================
+   FRIEND MINI CARD (MY PROFILE)
+======================================== */
+
+.friend-mini {
+    background: #f0f2f5;
+
+    border-radius: 12px;
+
+    padding: 14px 10px 12px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 8px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+
+    text-align: center;
+}
+
+.friend-mini:hover {
+    transform: translateY(-3px);
+
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.friend-mini-avatar {
+    width: 64px;
+    height: 64px;
+
+    border-radius: 50%;
+
+    overflow: hidden;
+
+    background: #e4e6eb;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 28px;
+}
+
+.friend-mini-avatar img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+.friend-mini span {
+    font-size: 12px;
+
+    font-weight: 600;
+
+    color: #444;
+}
+
+
+.empty-message {
+    color: #65676b;
+
+    text-align: center;
+
+    margin: 20px 0;
+}
+
+
+/* ========================================
+   POSTS
+======================================== */
+
+#profilePosts {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+}
+
+
+/* ========================================
+   EDIT PROFILE MODAL
+======================================== */
+
+.edit-profile-modal {
+    position: fixed;
+
+    inset: 0;
+
+    background:
+        rgba(0, 0, 0, 0.6);
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    z-index: 9999;
+}
+
+
+.edit-profile-modal.active {
+    display: flex;
+}
+
+
+/* ========================================
+   EDIT PROFILE BOX
+======================================== */
+
+.edit-profile-box {
+    width: 100%;
+
+    max-width: 550px;
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background: var(--card-bg, #ffffff);
+
+    border-radius: 14px;
+
+    padding: 25px;
+
+    box-shadow:
+        0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+
+/* ========================================
+   MODAL HEADER
+======================================== */
+
+.edit-profile-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 20px;
+}
+
+
+.edit-profile-header h2 {
+    margin: 0;
+
+    font-size: 24px;
+}
+
+
+.close-modal {
+    width: 38px;
+    height: 38px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #e4e6eb;
+
+    cursor: pointer;
+
+    font-size: 18px;
+}
+
+
+.close-modal:hover {
+    background: #d8dadf;
+}
+
+
+/* ========================================
+   FORM
+======================================== */
+
+#editProfileForm {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+
+#editProfileForm label {
+    font-size: 14px;
+
+    font-weight: 600;
+
+    margin-top: 5px;
+}
+
+
+#editProfileForm input,
+#editProfileForm textarea {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    border: 1px solid #ccd0d5;
+
+    border-radius: 8px;
+
+    padding: 12px;
+
+    font-size: 15px;
+
+    outline: none;
+
+    font-family: inherit;
+
+    background: #ffffff;
+
+    color: #1c1e21;
+}
+
+
+#editProfileForm input:focus,
+#editProfileForm textarea:focus {
+    border-color: #1877f2;
+
+    box-shadow:
+        0 0 0 2px rgba(24, 119, 242, 0.12);
+}
+
+
+#editProfileForm textarea {
+    resize: vertical;
+
+    min-height: 90px;
+}
+
+
+/* ========================================
+   MODAL ACTIONS
+======================================== */
+
+.edit-profile-actions {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 15px;
+}
+
+
+.edit-profile-actions button {
+    border: none;
+
+    padding: 11px 18px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-weight: 600;
+}
+
+
+.edit-profile-actions button[type="button"] {
+    background: #e4e6eb;
+}
+
+
+.edit-profile-actions .primary-btn {
+    background: #1877f2;
+
+    color: white;
+}
+
+
+/* ========================================
+   DARK MODE
+======================================== */
+
+body.dark-mode .profile-header,
+body.dark-mode .profile-card,
+body.dark-mode .edit-profile-box {
+    background: #242526;
+
+    color: #e4e6eb;
+}
+
+
+body.dark-mode .profile-details p,
+body.dark-mode .card-title p,
+body.dark-mode .profile-details-list p,
+body.dark-mode .empty-message {
+    color: #b0b3b8;
+}
+
+
+body.dark-mode .profile-photo {
+    background: #3a3b3c;
+
+    border-color: #242526;
+}
+
+
+body.dark-mode .profile-buttons button,
+body.dark-mode .edit-intro,
+body.dark-mode .close-modal,
+body.dark-mode .edit-profile-actions button[type="button"] {
+    background: #3a3b3c;
+
+    color: #e4e6eb;
+}
+
+
+body.dark-mode #editProfileForm input,
+body.dark-mode #editProfileForm textarea {
+    background: #3a3b3c;
+
+    color: #e4e6eb;
+
+    border-color: #555;
+}
+
+
+body.dark-mode .profile-photo-item {
+    background: #3a3b3c;
+}
+
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 800px) {
+
+    .profile-container {
+        padding: 0 10px 30px;
+    }
+
+
+    .cover-photo {
+        height: 220px;
+    }
+
+
+    .cover-text {
+        font-size: 22px;
+
+        text-align: center;
+    }
+
+
+    .profile-info {
+        padding: 0 18px 20px;
+
+        flex-wrap: wrap;
+
+        align-items: flex-start;
+    }
+
+
+    .profile-photo {
+        width: 110px;
+        height: 110px;
+
+        font-size: 48px;
+
+        margin-top: -45px;
+    }
+
+
+    .profile-details {
+        padding-top: 10px;
+
+        min-width: 200px;
+    }
+
+
+    .profile-details h1 {
+        font-size: 24px;
+    }
+
+
+    .profile-buttons {
+        width: 100%;
+
+        margin-top: 5px;
+    }
+
+
+    .profile-buttons button {
+        flex: 1;
+    }
+
+
+    .photo-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+
+    .profile-photo-item {
+        height: 130px;
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .profile-info {
+        display: block;
+    }
+
+
+    .profile-details {
+        padding-top: 12px;
+    }
+
+
+    .profile-buttons {
+        margin-top: 15px;
+    }
+
+
+    .profile-buttons button {
+        width: 100%;
+
+        flex: none;
+    }
+
+
+    .photo-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+
+    .profile-photo-item {
+        height: 110px;
+    }
+
+
+    .edit-profile-box {
+        padding: 18px;
+    }
+
+}
+
+
+/* ========================================
+   SOCIALHUB PREMIUM PROFILE
+   (Facebook-style + unique touches)
+======================================== */
+
+/* ---------- COVER: gradient + dot pattern + bottom fade ---------- */
+
+.cover-photo {
+    background:
+        radial-gradient(
+            rgba(255, 255, 255, 0.14) 1.5px,
+            transparent 1.5px
+        ),
+        linear-gradient(
+            135deg,
+            #667eea 0%,
+            #764ba2 45%,
+            #dc2743 100%
+        );
+
+    background-size:
+        26px 26px,
+        cover;
+}
+
+.cover-photo::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            to bottom,
+            transparent 55%,
+            rgba(0, 0, 0, 0.28)
+        );
+
+    pointer-events: none;
+}
+
+.cover-text {
+    position: relative;
+
+    z-index: 1;
+
+    letter-spacing: 0.5px;
+}
+
+
+/* ---------- AVATAR: premium gradient ring ---------- */
+
+.profile-header .profile-photo {
+    border: 5px solid var(--card-bg, #ffffff);
+
+    padding: 5px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f09433,
+            #dc2743,
+            #667eea
+        );
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    overflow: visible;
+}
+
+.profile-header .profile-photo > * {
+    width: 100%;
+    height: 100%;
+
+    border-radius: 50%;
+}
+
+.profile-header .profile-photo > img {
+    border: 4px solid var(--card-bg, #ffffff);
+}
+
+
+/* ---------- STAT STRIP ---------- */
+
+.profile-stats {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 16px 30px;
+
+    border-top: 1px solid #e4e6eb;
+
+    border-bottom: 1px solid #e4e6eb;
+}
+
+.profile-stat {
+    flex: 1;
+
+    max-width: 180px;
+
+    padding: 10px 18px;
+
+    border-radius: 12px;
+
+    text-align: center;
+
+    background: #f0f2f5;
+
+    transition: 0.2s;
+}
+
+.profile-stat:hover {
+    transform: translateY(-2px);
+
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.profile-stat span {
+    display: block;
+
+    font-size: 24px;
+
+    font-weight: 800;
+
+    background: linear-gradient(135deg, #f09433, #dc2743, #667eea);
+
+    -webkit-background-clip: text;
+
+    background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+}
+
+.profile-stat label {
+    display: block;
+
+    margin-top: 2px;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    color: #65676b;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.5px;
+}
+
+
+/* ---------- PROFILE TABS (Facebook-style nav) ---------- */
+
+.profile-tabs {
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 6px 30px 10px;
+
+    overflow-x: auto;
+}
+
+.profile-tabs button {
+    border: none;
+
+    background: transparent;
+
+    color: #65676b;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    padding: 10px 16px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    white-space: nowrap;
+
+    transition: 0.2s;
+}
+
+.profile-tabs button:hover {
+    background: #f0f2f5;
+}
+
+.profile-tabs button.active {
+    color: #1877f2;
+
+    background: #e7f0fe;
+}
+
+.profile-tabs button i {
+    font-size: 15px;
+}
+
+
+/* ---------- 2-COLUMN CONTENT LAYOUT ---------- */
+
+.profile-content.split {
+    display: grid;
+
+    grid-template-columns: 340px 1fr;
+
+    gap: 20px;
+
+    align-items: start;
+
+    margin-top: 20px;
+}
+
+.profile-content.split .profile-left,
+.profile-content.split .profile-right {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+
+    min-width: 0;
+}
+
+#profilePostsSection,
+#introCard,
+#photosCard,
+#friendsCard {
+    scroll-margin-top: 90px;
+}
+
+
+/* ---------- PHOTOS GRID TILES ---------- */
+
+#profilePhotos .empty-message {
+    grid-column: 1 / -1;
+}
+
+
+/* ---------- ABOUT CARD ---------- */
+
+.about-card .about-block {
+    margin-bottom: 22px;
+}
+
+.about-card .about-block:last-child {
+    margin-bottom: 0;
+}
+
+.about-card .about-block h3 {
+    margin: 0 0 10px;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+.about-card .about-block h3 i {
+    color: #1877f2;
+
+    font-size: 14px;
+
+    width: 20px;
+
+    text-align: center;
+}
+
+.about-card .about-row {
+    margin: 0 0 8px;
+
+    padding: 10px 14px;
+
+    background: #f0f2f5;
+
+    border-radius: 10px;
+
+    display: flex;
+
+    gap: 12px;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+.about-card .about-row:last-child {
+    margin-bottom: 0;
+}
+
+.about-card .about-label {
+    flex-shrink: 0;
+
+    min-width: 90px;
+
+    font-weight: 700;
+
+    color: #65676b;
+}
+
+.about-card .about-row span:last-child {
+    overflow-wrap: anywhere;
+
+    color: #1c1e21;
+}
+
+
+body.dark-mode .about-card .about-row {
+    background: #3a3b3c;
+}
+
+body.dark-mode .about-card .about-label {
+    color: #b0b3b8;
+}
+
+body.dark-mode .about-card .about-row span:last-child {
+    color: #e4e6eb;
+}
+
+
+/* ---------- DARK MODE ---------- */
+
+body.dark-mode .profile-stats {
+    border-color: #3a3b3c;
+}
+
+body.dark-mode .profile-stat {
+    background: #3a3b3c;
+}
+
+body.dark-mode .profile-stat label {
+    color: #b0b3b8;
+}
+
+body.dark-mode .profile-tabs button {
+    color: #b0b3b8;
+}
+
+body.dark-mode .profile-tabs button:hover {
+    background: #3a3b3c;
+}
+
+body.dark-mode .profile-tabs button.active {
+    color: #5ba0ff;
+
+    background: rgba(91, 160, 255, 0.12);
+}
+
+body.dark-mode .friend-mini {
+    background: #3a3b3c;
+}
+
+body.dark-mode .friend-mini span {
+    color: #e4e6eb;
+}
+
+body.dark-mode .friend-mini-avatar {
+    background: #4e4f50;
+}
+
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 900px) {
+
+    .profile-content.split {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .profile-stats {
+        padding: 12px 14px;
+    }
+
+    .profile-stat {
+        padding: 8px 6px;
+    }
+
+    .profile-stat span {
+        font-size: 19px;
+    }
+
+    .profile-tabs {
+        padding: 4px 14px 8px;
+    }
+
+    .profile-tabs button {
+        flex: 1;
+
+        justify-content: center;
+
+        padding: 10px 8px;
+    }
+
+    .friends-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+}
+
+
+/* ========================================
+   INSTAGRAM-STYLE PROFILE
+   (Instagram header + square post grid,
+    home-page topbar stays in dashboard.css)
+======================================== */
+
+body {
+    background: #fafafa;
+}
+
+
+.profile-container {
+    max-width: 935px;
+
+    padding: 0 16px 60px;
+}
+
+
+/* ---------- COVER HIDDEN (no cover in IG mode) ---------- */
+
+.cover-photo {
+    display: none;
+}
+
+
+/* ---------- HEADER: flat, no card ---------- */
+
+.profile-header {
+    background: transparent;
+
+    border: none;
+
+    border-radius: 0;
+
+    box-shadow: none;
+
+    overflow: visible;
+}
+
+
+/* ---------- PROFILE TOP: avatar + right column ---------- */
+
+.profile-top {
+    display: flex;
+
+    align-items: center;
+
+    gap: 40px;
+
+    padding: 40px 0 30px;
+
+    max-width: 935px;
+
+    margin: 0 auto;
+}
+
+
+.profile-top-right {
+    flex: 1;
+
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+}
+
+
+/* ---------- AVATAR: Instagram ring ---------- */
+
+.profile-photo {
+    width: 150px;
+
+    height: 150px;
+
+    margin: 0;
+
+    border: none;
+
+    padding: 5px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f09433,
+            #e6683c,
+            #dc2743,
+            #cc2366,
+            #bc1888
+        );
+
+    box-shadow: none;
+}
+
+
+.profile-photo > * {
+    width: 100%;
+
+    height: 100%;
+
+    border-radius: 50%;
+
+    object-fit: cover;
+
+    border: 4px solid #fafafa;
+}
+
+
+/* Camera badge (replaces the old bottom bar) */
+
+.profile-photo .socialhub-avatar-overlay {
+    bottom: 4px !important;
+
+    right: 4px !important;
+
+    left: auto !important;
+
+    width: 30px !important;
+
+    height: 30px !important;
+
+    border-radius: 50% !important;
+
+    font-size: 13px !important;
+
+    border: 3px solid #ffffff !important;
+
+    box-shadow:
+        0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+
+/* ---------- IDENTITY: username + buttons ---------- */
+
+.profile-identity {
+    display: flex;
+
+    align-items: center;
+
+    gap: 16px;
+
+    flex-wrap: wrap;
+}
+
+
+.profile-identity h1 {
+    margin: 0;
+
+    font-size: 24px;
+
+    font-weight: 600;
+
+    color: #262626;
+}
+
+
+.profile-buttons button {
+    background: #ffffff;
+
+    border: 1px solid #dbdbdb;
+
+    border-radius: 8px;
+
+    padding: 7px 16px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: #262626;
+}
+
+
+.profile-buttons button:hover {
+    transform: none;
+
+    filter: none;
+
+    background: #f7f7f7;
+}
+
+
+.profile-buttons .primary-btn {
+    background: #0095f6;
+
+    border-color: #0095f6;
+
+    color: #ffffff;
+}
+
+
+.profile-buttons .primary-btn:hover {
+    background: #0081d6;
+}
+
+
+.profile-buttons .logout-btn {
+    color: #ed4956;
+
+    border-color: #dbdbdb;
+
+    background: #ffffff;
+}
+
+
+.profile-buttons .logout-btn:hover {
+    background: #fef0f1;
+}
+
+
+/* ---------- STATS: inline Instagram style ---------- */
+
+.profile-stats {
+    display: flex;
+
+    align-items: center;
+
+    gap: 40px;
+
+    padding: 0;
+
+    border: none;
+}
+
+
+.profile-stat {
+    flex: none;
+
+    max-width: none;
+
+    padding: 0;
+
+    border-radius: 0;
+
+    background: transparent;
+
+    text-align: left;
+}
+
+
+.profile-stat:hover {
+    transform: none;
+
+    box-shadow: none;
+}
+
+
+.profile-stat span {
+    display: inline;
+
+    margin-right: 4px;
+
+    font-size: 18px;
+
+    font-weight: 700;
+
+    background: none;
+
+    -webkit-text-fill-color: currentColor;
+
+    color: #262626;
+}
+
+
+.profile-stat label {
+    display: inline;
+
+    margin-top: 0;
+
+    font-size: 14px;
+
+    font-weight: 400;
+
+    color: #262626;
+
+    text-transform: none;
+
+    letter-spacing: 0;
+}
+
+
+/* ---------- BIO BLOCK ---------- */
+
+.profile-bio-block {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+
+.profile-bio-block .profile-name {
+    margin: 0;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    color: #262626;
+}
+
+
+.profile-bio-block .profile-bio {
+    margin: 0;
+
+    font-size: 14px;
+
+    color: #262626;
+
+    line-height: 1.5;
+}
+
+
+/* ---------- TABS: Instagram bar ---------- */
+
+.profile-tabs {
+    display: flex;
+
+    align-items: stretch;
+
+    justify-content: center;
+
+    gap: 0;
+
+    padding: 0;
+
+    border-top: 1px solid #dbdbdb;
+
+    overflow: hidden;
+}
+
+
+.profile-tabs button {
+    min-width: 90px;
+
+    padding: 14px 12px;
+
+    border-radius: 0;
+
+    font-size: 13px;
+
+    color: #8e8e8e;
+
+    border-top: 2px solid transparent;
+
+    justify-content: center;
+
+    white-space: nowrap;
+}
+
+
+.profile-tabs button:hover {
+    background: transparent;
+}
+
+
+.profile-tabs button.active {
+    color: #0095f6;
+
+    background: transparent;
+
+    border-top-color: #0095f6;
+}
+
+
+/* ---------- CONTENT: single column ---------- */
+
+.profile-content {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 24px;
+
+    margin-top: 0;
+
+    max-width: 935px;
+
+    margin-left: auto;
+
+    margin-right: auto;
+}
+
+
+/* ---------- POSTS: Instagram square grid ---------- */
+
+#profilePostsSection {
+    background: transparent;
+
+    border: none;
+
+    box-shadow: none;
+
+    padding: 0;
+}
+
+
+#profilePosts,
+#upPosts {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 4px;
+}
+
+
+#profilePosts .empty-message,
+#upPosts .empty-message {
+    grid-column: 1 / -1;
+}
+
+
+.profile-post-tile {
+    position: relative;
+
+    aspect-ratio: 1 / 1;
+
+    overflow: hidden;
+
+    cursor: pointer;
+
+    background: #e4e6eb;
+}
+
+
+.profile-post-tile .tile-media {
+    width: 100%;
+
+    height: 100%;
+}
+
+
+.profile-post-tile img,
+.profile-post-tile video {
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+}
+
+
+.profile-post-tile img {
+    transition: transform 0.25s ease;
+}
+
+
+.profile-post-tile:hover img {
+    transform: scale(1.03);
+}
+
+
+.profile-post-tile .tile-text {
+    width: 100%;
+
+    height: 100%;
+
+    padding: 16px;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #667eea,
+            #764ba2,
+            #dc2743
+        );
+
+    overflow: hidden;
+}
+
+
+/* Hover overlay (like/comment icons) */
+
+.profile-post-tile .tile-overlay {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 24px;
+
+    background:
+        rgba(0, 0, 0, 0.35);
+
+    color: #ffffff;
+
+    font-size: 18px;
+
+    opacity: 0;
+
+    transition: opacity 0.2s ease;
+}
+
+
+.profile-post-tile:hover .tile-overlay {
+    opacity: 1;
+}
+
+
+.profile-post-tile .tile-overlay span {
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    font-weight: 700;
+
+    text-shadow:
+        0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+
+/* ---------- PHOTOS / FRIENDS CARDS ---------- */
+
+.profile-photo-item {
+    height: auto;
+
+    aspect-ratio: 1 / 1;
+}
+
+
+/* ---------- POST LIGHTBOX ---------- */
+
+.post-lightbox {
+    position: fixed;
+
+    inset: 0;
+
+    background:
+        rgba(0, 0, 0, 0.65);
+
+    display: none;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+
+    z-index: 10000;
+
+    overflow-y: auto;
+}
+
+
+.post-lightbox.open {
+    display: flex;
+}
+
+
+.post-lightbox-box {
+    position: relative;
+
+    width: 100%;
+
+    max-width: 600px;
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background: var(--card-bg, #ffffff);
+
+    border-radius: 14px;
+
+    padding: 20px;
+
+    box-shadow:
+        0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+
+.post-lightbox-box .post {
+    box-shadow: none;
+
+    border: none;
+
+    padding: 0;
+
+    background: transparent;
+}
+
+
+.post-lightbox-box .post:hover {
+    transform: none;
+}
+
+
+.post-lightbox-close {
+    position: absolute;
+
+    top: 10px;
+
+    right: 10px;
+
+    width: 34px;
+
+    height: 34px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #e4e6eb;
+
+    color: #1c1e21;
+
+    font-size: 15px;
+
+    cursor: pointer;
+
+    z-index: 5;
+}
+
+
+.post-lightbox-close:hover {
+    background: #d8dadf;
+}
+
+
+/* ---------- DARK MODE (Instagram) ---------- */
+
+body.dark-mode .profile-header {
+    background: transparent;
+}
+
+
+body.dark-mode .profile-photo {
+    background:
+        linear-gradient(
+            135deg,
+            #f09433,
+            #e6683c,
+            #dc2743,
+            #cc2366,
+            #bc1888
+        );
+
+    border-color: transparent;
+}
+
+
+body.dark-mode .profile-stat {
+    background: transparent;
+}
+
+
+body.dark-mode .profile-identity h1,
+body.dark-mode .profile-stat span,
+body.dark-mode .profile-stat label,
+body.dark-mode .profile-bio-block .profile-name,
+body.dark-mode .profile-bio-block .profile-bio {
+    color: #e4e6eb;
+}
+
+
+body.dark-mode .profile-buttons button {
+    background: #3a3b3c;
+
+    border-color: #3a3b3c;
+
+    color: #e4e6eb;
+}
+
+
+body.dark-mode .profile-buttons button:hover {
+    background: #4e4f50;
+}
+
+
+body.dark-mode .profile-buttons .primary-btn {
+    background: #0095f6;
+
+    border-color: #0095f6;
+
+    color: #ffffff;
+}
+
+
+body.dark-mode .profile-buttons .primary-btn:hover {
+    background: #0081d6;
+}
+
+
+body.dark-mode .profile-buttons .logout-btn {
+    background: #3a3b3c;
+
+    border-color: #3a3b3c;
+
+    color: #ff7b85;
+}
+
+
+body.dark-mode .profile-tabs {
+    border-color: #3a3b3c;
+}
+
+
+body.dark-mode .profile-tabs button {
+    color: #b0b3b8;
+}
+
+
+body.dark-mode .profile-tabs button.active {
+    color: #5ba0ff;
+
+    border-top-color: #5ba0ff;
+
+    background: transparent;
+}
+
+
+body.dark-mode .profile-photo > * {
+    border-color: #18191a;
+}
+
+
+body.dark-mode .profile-post-tile {
+    background: #3a3b3c;
+}
+
+
+body.dark-mode .post-lightbox-box {
+    background: #242526;
+}
+
+
+body.dark-mode .post-lightbox-close {
+    background: #3a3b3c;
+
+    color: #e4e6eb;
+}
+
+
+/* ---------- RESPONSIVE (Instagram) ---------- */
+
+@media (max-width: 735px) {
+
+    .profile-top {
+        flex-direction: column;
+
+        align-items: center;
+
+        gap: 20px;
+
+        padding: 24px 0 20px;
+
+        text-align: center;
+    }
+
+
+    .profile-top-right {
+        align-items: center;
+
+        gap: 14px;
+    }
+
+
+    .profile-identity {
+        justify-content: center;
+    }
+
+
+    .profile-identity h1 {
+        font-size: 20px;
+    }
+
+
+    .profile-stats {
+        justify-content: center;
+
+        gap: 28px;
+    }
+
+
+    .profile-photo {
+        width: 110px;
+
+        height: 110px;
+    }
+
+
+    .profile-tabs button {
+        flex: 1;
+
+        min-width: 0;
+    }
+
+
+    #profilePosts {
+        gap: 2px;
+    }
+
+    #upPosts {
+        gap: 2px;
+    }
+
+}
+
+
+/* ========================================
+   ANIMATIONS
+======================================== */
+
+/* ---------- PROFILE HEADER FADE UP ---------- */
+
+@keyframes socialhubProfileIn {
+    from {
+        opacity: 0;
+        transform: translateY(22px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.profile-header {
+    animation: socialhubProfileIn 0.5s ease backwards;
+}
+
+
+/* ---------- AVATAR RING POP ---------- */
+
+@keyframes socialhubRingPop {
+    0% {
+        opacity: 0;
+        transform: scale(0.6);
+    }
+
+    60% {
+        opacity: 1;
+        transform: scale(1.08);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.profile-top .profile-photo {
+    animation: socialhubRingPop 0.6s ease backwards;
+}
+
+
+/* ---------- IDENTITY + STATS STAGGER ---------- */
+
+.profile-identity,
+.profile-stats,
+.profile-bio-block {
+    animation: socialhubFadeUp 0.5s ease backwards;
+}
+
+.profile-identity {
+    animation-delay: 0.12s;
+}
+
+.profile-stats {
+    animation-delay: 0.2s;
+}
+
+.profile-bio-block {
+    animation-delay: 0.28s;
+}
+
+
+/* ---------- TABS ---------- */
+
+.profile-tabs button {
+    transition:
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.profile-tabs button.active {
+    animation: socialhubNavIn 0.3s ease;
+}
+
+
+/* ---------- POST TILES STAGGER ---------- */
+
+@keyframes socialhubTileIn {
+    from {
+        opacity: 0;
+        transform: scale(0.92);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.profile-post-tile {
+    animation: socialhubTileIn 0.4s ease backwards;
+}
+
+.profile-post-tile:nth-child(3n + 1) {
+    animation-delay: 0s;
+}
+
+.profile-post-tile:nth-child(3n + 2) {
+    animation-delay: 0.06s;
+}
+
+.profile-post-tile:nth-child(3n + 3) {
+    animation-delay: 0.12s;
+}
+
+
+/* ---------- CARDS BELOW ---------- */
+
+.profile-content > .profile-card:not(#profilePostsSection) {
+    animation: socialhubFadeUp 0.5s ease backwards;
+}
+
+.profile-content > .profile-card:not(#profilePostsSection):nth-of-type(2) {
+    animation-delay: 0.15s;
+}
+
+.profile-content > .profile-card:not(#profilePostsSection):nth-of-type(3) {
+    animation-delay: 0.25s;
+}
+
+.profile-content > .profile-card:not(#profilePostsSection):nth-of-type(4) {
+    animation-delay: 0.35s;
+}
+
+
+/* ---------- BUTTONS ---------- */
+
+.profile-buttons button {
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.profile-buttons button:hover {
+    transform: translateY(-1px);
+}
+
+
+/* ---------- LIGHTBOX POP ---------- */
+
+@keyframes socialhubLightboxIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes socialhubLightboxBoxIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(14px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.post-lightbox.open {
+    animation: socialhubLightboxIn 0.25s ease;
+}
+
+.post-lightbox.open .post-lightbox-box {
+    animation:
+        socialhubLightboxBoxIn 0.3s
+        cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+
+/* ---------- STAT NUMBERS FADE (on page load) ---------- */
+
+.profile-stat span {
+    animation: socialhubFadeUp 0.5s ease backwards;
+}
+
+.profile-stat:nth-child(1) span {
+    animation-delay: 0.22s;
+}
+
+.profile-stat:nth-child(2) span {
+    animation-delay: 0.3s;
+}
+
+.profile-stat:nth-child(3) span {
+    animation-delay: 0.38s;
+}
+
+
+/* ========================================
+   FACEBOOK-STYLE EDIT PROFILE (v8)
+   Sidebar sections + content panel dialog
+======================================== */
+
+.edit-profile-box {
+    width: 100%;
+
+    max-width: 760px;
+
+    height: min(640px, 90vh);
+
+    max-height: 90vh;
+
+    display: flex;
+
+    flex-direction: column;
+
+    overflow: hidden;
+
+    padding: 0;
+
+    border-radius: 16px;
+}
+
+
+.edit-profile-header {
+    flex-shrink: 0;
+
+    padding: 16px 20px;
+
+    margin: 0;
+
+    border-bottom: 1px solid #ced0d4;
+}
+
+
+.edit-profile-header h2 {
+    font-size: 20px;
+
+    font-weight: 700;
+}
+
+
+#editProfileForm {
+    flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    min-height: 0;
+
+    gap: 0;
+}
+
+
+.edit-profile-body {
+    flex: 1;
+
+    display: flex;
+
+    min-height: 0;
+}
+
+
+/* ---------- SIDEBAR ---------- */
+
+.edit-profile-sidebar {
+    width: 210px;
+
+    flex-shrink: 0;
+
+    padding: 12px 10px;
+
+    border-right: 1px solid #ced0d4;
+
+    overflow-y: auto;
+
+    background:
+        rgba(247, 248, 250, 0.6);
+}
+
+
+.edit-profile-section {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    width: 100%;
+
+    padding: 10px 14px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: transparent;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #050505;
+
+    cursor: pointer;
+
+    text-align: left;
+}
+
+
+.edit-profile-section i {
+    width: 20px;
+
+    font-size: 16px;
+
+    text-align: center;
+}
+
+
+.edit-profile-section:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+
+.edit-profile-section.active {
+    background: #e7f3ff;
+
+    color: #1877f2;
+}
+
+
+/* ---------- CONTENT PANEL ---------- */
+
+.edit-profile-panel {
+    flex: 1;
+
+    min-width: 0;
+
+    overflow-y: auto;
+
+    padding: 24px 28px;
+}
+
+
+.edit-profile-fields {
+    display: none;
+
+    flex-direction: column;
+
+    gap: 18px;
+}
+
+
+.edit-profile-fields.active {
+    display: flex;
+
+    animation: socialhubFadeUp 0.25s ease;
+}
+
+
+.edit-profile-field label {
+    display: block;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: #65676b;
+
+    margin-bottom: 7px;
+}
+
+
+.edit-profile-field input,
+.edit-profile-field textarea {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    height: 40px;
+
+    padding: 10px 14px;
+
+    border: 1px solid #ccd0d5;
+
+    border-radius: 6px;
+
+    font-size: 15px;
+
+    font-family: inherit;
+
+    outline: none;
+
+    background: #ffffff;
+
+    color: #1c1e21;
+}
+
+
+.edit-profile-field textarea {
+    height: auto;
+
+    resize: vertical;
+
+    min-height: 80px;
+}
+
+
+.edit-profile-field select {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    height: 40px;
+
+    padding: 0 14px;
+
+    border: 1px solid #ccd0d5;
+
+    border-radius: 6px;
+
+    font-size: 15px;
+
+    font-family: inherit;
+
+    outline: none;
+
+    background: #ffffff;
+
+    color: #1c1e21;
+
+    cursor: pointer;
+
+    appearance: none;
+
+    -webkit-appearance: none;
+
+    background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%2365676b' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+
+    background-repeat: no-repeat;
+
+    background-position: right 12px center;
+}
+
+
+.edit-profile-field input:focus,
+.edit-profile-field textarea:focus {
+    border-color: #1877f2;
+
+    box-shadow:
+        0 0 0 2px rgba(24, 119, 242, 0.15);
+}
+
+
+/* ---------- FOOTER ---------- */
+
+.edit-profile-actions {
+    flex-shrink: 0;
+
+    display: flex;
+
+    justify-content: flex-end;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 12px 16px;
+
+    margin: 0;
+
+    border-top: 1px solid #ced0d4;
+}
+
+
+.edit-profile-actions button {
+    height: 36px;
+
+    padding: 0 18px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    background: #e4e6eb;
+
+    color: #050505;
+}
+
+
+.edit-profile-actions button:hover {
+    background: #d8dadf;
+}
+
+
+.edit-profile-actions .primary-btn {
+    background: #1877f2;
+
+    color: #ffffff;
+}
+
+
+.edit-profile-actions .primary-btn:hover {
+    background: #166fe5;
+}
+
+
+/* ---------- DARK MODE (FB dialog) ---------- */
+
+body.dark-mode .edit-profile-header,
+body.dark-mode .edit-profile-actions {
+    border-color: #3a3b3c;
+}
+
+
+body.dark-mode .edit-profile-sidebar {
+    background:
+        rgba(255, 255, 255, 0.04);
+
+    border-right-color: #3a3b3c;
+}
+
+
+body.dark-mode .edit-profile-section {
+    color: #e4e6eb;
+}
+
+
+body.dark-mode .edit-profile-section:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+
+body.dark-mode .edit-profile-section.active {
+    background: rgba(24, 119, 242, 0.2);
+
+    color: #66b0ff;
+}
+
+
+body.dark-mode .edit-profile-field label {
+    color: #b0b3b8;
+}
+
+
+body.dark-mode .edit-profile-field input,
+body.dark-mode .edit-profile-field textarea {
+    background: #3a3b3c;
+
+    border-color: #4e4f52;
+
+    color: #e4e6eb;
+}
+
+
+body.dark-mode .edit-profile-field select {
+    background-color: #3a3b3c;
+
+    border-color: #4e4f52;
+
+    color: #e4e6eb;
+
+    background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23b0b3b8' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+
+body.dark-mode .edit-profile-actions button {
+    background: #3a3b3c;
+
+    color: #e4e6eb;
+}
+
+
+body.dark-mode .edit-profile-actions button:hover {
+    background: #4e4f52;
+}
+
+
+/* ---------- RESPONSIVE (FB dialog) ---------- */
+
+@media (max-width: 600px) {
+
+    .edit-profile-box {
+        height: 92vh;
+    }
+
+
+    .edit-profile-body {
+        flex-direction: column;
+    }
+
+
+    .edit-profile-sidebar {
+        width: 100%;
+
+        display: flex;
+
+        gap: 6px;
+
+        padding: 8px 10px;
+
+        border-right: none;
+
+        border-bottom: 1px solid #ced0d4;
+
+        overflow-x: auto;
+    }
+
+
+    .edit-profile-section {
+        flex: 1;
+
+        justify-content: center;
+
+        white-space: nowrap;
+    }
+
+
+    .edit-profile-panel {
+        padding: 18px;
+    }
+
+}
+
+
+body.dark-mode .edit-profile-sidebar {
+    border-bottom-color: #3a3b3c;
+}
+
+
+/* ========================================
+   FACEBOOK PROFILE LAYOUT (v10)
+======================================== */
+
+/* ---------- HEADER ---------- */
+
+.fb-header .cover-photo {
+    height: 340px;
+
+    border-radius: 0 0 16px 16px;
+}
+
+
+.fb-header-row {
+    display: flex;
+
+    align-items: flex-end;
+
+    gap: 20px;
+
+    padding: 0 28px 14px;
+}
+
+
+.fb-avatar-wrap .profile-photo {
+    width: 168px;
+
+    height: 168px;
+
+    margin: -104px 0 0 0;
+
+    padding: 4px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1877f2,
+            #405de6
+        );
+
+    border: none;
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+
+.fb-avatar-wrap .profile-photo > * {
+    border: 4px solid #ffffff;
+}
+
+
+.fb-header-right {
+    flex: 1;
+
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+    padding-bottom: 8px;
+}
+
+
+.fb-profile-name {
+    margin: 0;
+
+    font-size: 30px;
+
+    font-weight: 800;
+
+    color: #050505;
+}
+
+
+.fb-header-right .profile-buttons {
+    gap: 10px;
+}
+
+
+.fb-header-right .profile-buttons button {
+    padding: 9px 16px;
+
+    border-radius: 8px;
+
+    font-weight: 600;
+}
+
+
+/* ---------- BODY ---------- */
+
+.fb-body {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 20px;
+
+    margin-top: 20px;
+}
+
+
+.fb-left {
+    width: 360px;
+
+    flex-shrink: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+
+.fb-main {
+    flex: 1;
+
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 16px;
+}
+
+
+/* ---------- INTRO CARD ---------- */
+
+.fb-intro-card {
+    padding: 20px 22px;
+}
+
+
+.fb-intro-top {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+}
+
+
+.fb-intro-avatar {
+    width: 56px;
+
+    height: 56px;
+
+    margin: 0;
+
+    padding: 2px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #1877f2,
+            #405de6
+        );
+
+    border: none;
+
+    box-shadow: none;
+
+    font-size: 24px;
+}
+
+
+.fb-intro-avatar > * {
+    border: 2px solid #ffffff;
+}
+
+
+.fb-intro-id {
+    min-width: 0;
+}
+
+
+.fb-intro-id strong {
+    display: block;
+
+    font-size: 17px;
+
+    color: #050505;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+.fb-intro-id .profile-username {
+    display: block;
+
+    font-size: 14px;
+
+    color: #65676b;
+}
+
+
+.fb-intro-bio {
+    margin: 14px 0 0;
+
+    font-size: 14px;
+
+    color: #050505;
+
+    white-space: pre-wrap;
+
+    overflow-wrap: break-word;
+}
+
+
+.fb-intro-buttons {
+    margin-top: 14px;
+
+    width: 100%;
+}
+
+
+.fb-intro-buttons button {
+    flex: 1;
+
+    padding: 9px 10px;
+
+    border-radius: 8px;
+
+    font-weight: 600;
+}
+
+
+.fb-intro-divider {
+    height: 1px;
+
+    background: #ced0d4;
+
+    margin: 16px 0;
+}
+
+
+.fb-intro-details {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 11px;
+}
+
+
+.fb-intro-details .about-row {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin: 0;
+
+    padding: 0;
+
+    font-size: 14px;
+
+    color: #050505;
+}
+
+
+.fb-intro-details .about-row i {
+    width: 16px;
+
+    text-align: center;
+
+    color: #1877f2;
+
+    font-size: 14px;
+}
+
+
+.fb-intro-details .about-row a {
+    color: #1877f2;
+
+    text-decoration: none;
+}
+
+
+.fb-intro-details .about-row a:hover {
+    text-decoration: underline;
+}
+
+
+.fb-friend-summary {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #1877f2;
+
+    cursor: pointer;
+}
+
+
+.fb-friend-summary i {
+    width: 16px;
+
+    text-align: center;
+}
+
+
+.fb-friend-summary:hover {
+    text-decoration: underline;
+}
+
+
+/* ---------- HIGHLIGHTS CARD ---------- */
+
+.fb-highlights-card {
+    padding: 18px 22px;
+}
+
+
+.fb-card-title {
+    margin: 0 0 6px;
+
+    font-size: 20px;
+
+    font-weight: 700;
+}
+
+
+.fb-highlights-card .highlights-bar {
+    padding: 6px 0 0;
+
+    gap: 18px;
+}
+
+
+/* ---------- MINI CARDS ---------- */
+
+.fb-mini-card {
+    padding: 18px 22px;
+}
+
+
+.fb-mini-photos {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 6px;
+}
+
+
+.fb-mini-photos .profile-photo-item {
+    aspect-ratio: 1;
+
+    height: auto;
+
+    border-radius: 8px;
+}
+
+
+.fb-mini-friends {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 10px;
+}
+
+
+.fb-mini-friends .friend-mini {
+    align-items: center;
+}
+
+
+/* ---------- FACEBOOK TABS ---------- */
+
+.fb-tabs-bar {
+    display: flex;
+
+    background: var(--card-bg, #ffffff);
+
+    border-radius: 12px 12px 0 0;
+
+    padding: 0 10px;
+
+    border-bottom: 1px solid #ced0d4;
+}
+
+
+.fb-tabs-bar button {
+    flex: 1;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 15px 8px;
+
+    background: none;
+
+    border: none;
+
+    border-bottom: 3px solid transparent;
+
+    color: #65676b;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+.fb-tabs-bar button i {
+    font-size: 16px;
+}
+
+
+.fb-tabs-bar button:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+
+.fb-tabs-bar button.active {
+    color: #1877f2;
+
+    border-bottom-color: #1877f2;
+}
+
+
+/* ---------- FB AREAS ---------- */
+
+.fb-area {
+    display: block;
+}
+
+
+.fb-area > .profile-card {
+    padding: 20px 22px;
+}
+
+
+/* ---------- DARK MODE (FB profile) ---------- */
+
+body.dark-mode .fb-profile-name {
+    color: #e4e6eb;
+}
+
+
+body.dark-mode .fb-avatar-wrap .profile-photo > * {
+    border-color: #242526;
+}
+
+
+body.dark-mode .fb-intro-avatar > * {
+    border-color: #242526;
+}
+
+
+body.dark-mode .fb-intro-id strong {
+    color: #e4e6eb;
+}
+
+
+body.dark-mode .fb-intro-id .profile-username {
+    color: #b0b3b8;
+}
+
+
+body.dark-mode .fb-intro-bio {
+    color: #e4e6eb;
+}
+
+
+body.dark-mode .fb-intro-details .about-row {
+    color: #e4e6eb;
+}
+
+
+body.dark-mode .fb-intro-divider,
+body.dark-mode .fb-tabs-bar {
+    border-color: #3a3b3c;
+}
+
+
+body.dark-mode .fb-tabs-bar {
+    background: #242526;
+}
+
+
+body.dark-mode .fb-tabs-bar button {
+    color: #b0b3b8;
+}
+
+
+body.dark-mode .fb-tabs-bar button:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+
+body.dark-mode .fb-tabs-bar button.active {
+    color: #66b0ff;
+}
+
+
+body.dark-mode .fb-intro-details .about-row a {
+    color: #66b0ff;
+}
+
+
+body.dark-mode .fb-friend-summary {
+    color: #66b0ff;
+}
+
+
+/* ---------- RESPONSIVE (FB profile) ---------- */
+
+@media (max-width: 900px) {
+
+    .fb-body {
+        flex-direction: column;
+    }
+
+
+    .fb-left {
+        width: 100%;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .fb-header .cover-photo {
+        height: 210px;
+    }
+
+
+    .fb-avatar-wrap .profile-photo {
+        width: 118px;
+
+        height: 118px;
+
+        margin-top: -70px;
+    }
+
+
+    .fb-header-row {
+        gap: 12px;
+
+        padding: 0 14px 12px;
+
+        align-items: flex-end;
+    }
+
+
+    .fb-profile-name {
+        font-size: 22px;
+    }
+
+
+    .fb-header-right .profile-buttons {
+        flex-wrap: wrap;
+    }
+
+
+    .fb-header-right .profile-buttons button {
+        flex: 1;
+    }
+
+}
+
+
+/* ========================================
+   PROFILE LOWER + PHOTOS IG GRID (v11)
+======================================== */
+
+/* ---------- HEADER: lower position ---------- */
+
+.fb-header .cover-photo {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 100vw;
+
+    margin-left: calc(50% - 50vw);
+
+    height: 300px;
+}
+
+
+.fb-avatar-wrap .profile-photo {
+    margin-top: -84px;
+}
+
+
+.fb-header-row {
+    padding-bottom: 18px;
+}
+
+
+.fb-body {
+    margin-top: 24px;
+}
+
+
+/* ---------- PHOTOS: Instagram grid ---------- */
+
+.photo-grid {
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 3px;
+}
+
+
+.profile-photo-item {
+    border-radius: 0;
+}
+
+
+.profile-photo-item:hover {
+    transform: none;
+
+    filter: brightness(0.9);
+}
+
+
+.profile-photo-item img,
+.profile-photo-item video {
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 0;
+
+    display: block;
+}
+
+
+.photo-grid .profile-photo-item {
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+.profile-photo-video-badge {
+    position: absolute;
+
+    top: 6px;
+
+    right: 6px;
+
+    width: 24px;
+
+    height: 24px;
+
+    border-radius: 50%;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    color: #fff;
+
+    font-size: 11px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    pointer-events: none;
+}
+
+
+@media (max-width: 800px) {
+
+    .photo-grid {
+        grid-template-columns: repeat(3, 1fr);
+
+        gap: 2px;
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .photo-grid {
+        grid-template-columns: repeat(3, 1fr);
+
+        gap: 2px;
+    }
+
+}
+
+
+/* ---------- MINI PHOTOS (keep rounded) ---------- */
+
+.fb-mini-photos .profile-photo-item {
+    border-radius: 8px;
+
+    overflow: hidden;
+}
+
+
+.fb-mini-photos .profile-photo-item img,
+.fb-mini-photos .profile-photo-item video {
+    border-radius: 8px;
+}
+
+
+@media (max-width: 600px) {
+
+    .fb-header .cover-photo {
+        height: 190px;
+    }
+
+
+    .fb-avatar-wrap .profile-photo {
+        margin-top: -62px;
+    }
+
+}
+
+
+/* ========================================
+   PROFILE FEED: INSTAGRAM GRID (v12)
+======================================== */
+
+#profilePosts {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 3px;
+}
+
+
+#profilePosts .empty-message {
+    grid-column: 1 / -1;
+
+    padding: 30px 0;
+
+    text-align: center;
+}
+
+
+#profilePosts .profile-post-tile {
+    border-radius: 0;
+}
+
+
+.fb-area > .profile-card#profilePostsSection {
+    padding: 0;
+}
+
+
+@media (max-width: 600px) {
+
+    #profilePosts {
+        grid-template-columns: repeat(3, 1fr);
+
+        gap: 2px;
+    }
+
+}
+
+
+/* ========================================
+   FB-STYLE PHOTO EDIT CONTROLS (v15)
+======================================== */
+
+.fb-avatar-wrap {
+    position: relative;
+}
+
+
+.socialhub-cover-overlay {
+    position: absolute;
+
+    top: 12px;
+
+    right: 12px;
+
+    padding: 8px 14px;
+
+    background: rgba(0, 0, 0, 0.6);
+
+    color: #fff;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    z-index: 5;
+}
+
+
+.socialhub-avatar-overlay {
+    position: absolute;
+
+    bottom: 10px;
+
+    right: 10px;
+
+    width: 38px;
+
+    height: 38px;
+
+    border-radius: 50%;
+
+    background: #f0f2f5;
+
+    color: #050505;
+
+    border: none;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 17px;
+
+    cursor: pointer;
+
+    z-index: 5;
+}
+
+
+.socialhub-photo-menu {
+    position: absolute;
+
+    z-index: 3000;
+
+    min-width: 250px;
+
+    background: #fff;
+
+    border-radius: 10px;
+
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+
+    padding: 8px;
+}
+
+
+.socialhub-cover-menu {
+    top: 56px;
+
+    right: 12px;
+}
+
+
+.socialhub-avatar-menu {
+    top: calc(100% + 6px);
+
+    right: 6px;
+}
+
+
+.socialhub-menu-item {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 8px 12px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+}
+
+
+.socialhub-menu-item:hover {
+    background: #f0f2f5;
+}
+
+
+.socialhub-menu-icon {
+    font-size: 18px;
+
+    width: 32px;
+
+    height: 32px;
+
+    border-radius: 50%;
+
+    background: #f0f2f5;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+}
+
+
+.socialhub-menu-text {
+    display: flex;
+
+    flex-direction: column;
+
+    line-height: 1.3;
+}
+
+
+.socialhub-menu-text strong {
+    font-size: 14px;
+
+    color: #050505;
+
+    font-weight: 600;
+}
+
+
+.socialhub-menu-text small {
+    font-size: 12px;
+
+    color: #65676b;
+}
+
+
+@media (prefers-color-scheme: dark) {
+
+    .socialhub-avatar-overlay {
+        background: #3a3b3c;
+
+        color: #fff;
+    }
+
+    .socialhub-photo-menu {
+        background: #242526;
+
+        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.6);
+    }
+
+    .socialhub-menu-item:hover {
+        background: #3a3b3c;
+    }
+
+    .socialhub-menu-icon {
+        background: #3a3b3c;
+    }
+
+    .socialhub-menu-text strong {
+        color: #e4e6eb;
+    }
+
+    .socialhub-menu-text small {
+        color: #b0b3b8;
+    }
+}
+
+
+/* ========================================
+   FB-STYLE AVATAR CROP MODAL (v17)
+======================================== */
+
+.socialhub-crop-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.6);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    z-index: 9999;
+
+    padding: 16px;
+}
+
+
+.socialhub-crop-dialog {
+    width: 600px;
+
+    max-width: 100%;
+
+    background: #fff;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
+}
+
+
+.socialhub-crop-head {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 14px 18px;
+
+    border-bottom: 1px solid #e4e6eb;
+}
+
+
+.socialhub-crop-head strong {
+    font-size: 17px;
+
+    color: #050505;
+}
+
+
+.socialhub-crop-close {
+    width: 36px;
+
+    height: 36px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #e4e6eb;
+
+    color: #050505;
+
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+
+.socialhub-crop-body {
+    display: flex;
+
+    gap: 20px;
+
+    padding: 18px;
+}
+
+
+.socialhub-crop-preview {
+    flex: 1;
+
+    aspect-ratio: 1 / 1;
+
+    background: #e4e6eb;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+
+    position: relative;
+
+    cursor: grab;
+
+    touch-action: none;
+
+    user-select: none;
+}
+
+
+.socialhub-crop-preview img {
+    position: absolute;
+
+    left: 50%;
+
+    top: 50%;
+
+    max-width: none;
+
+    max-height: none;
+
+    will-change: transform;
+}
+
+
+.socialhub-crop-side {
+    width: 150px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    justify-content: center;
+}
+
+
+.socialhub-crop-side label {
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #050505;
+}
+
+
+.socialhub-crop-side input[type=range] {
+    width: 100%;
+
+    accent-color: #1877f2;
+}
+
+
+.socialhub-crop-side p {
+    font-size: 12px;
+
+    color: #65676b;
+
+    line-height: 1.4;
+}
+
+
+.socialhub-crop-foot {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    padding: 12px 18px;
+
+    border-top: 1px solid #e4e6eb;
+}
+
+
+.socialhub-crop-cancel {
+    padding: 9px 16px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #e4e6eb;
+
+    color: #050505;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+.socialhub-crop-save {
+    padding: 9px 16px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #1877f2;
+
+    color: #fff;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+.socialhub-crop-save:disabled {
+    opacity: 0.6;
+
+    cursor: default;
+}
+
+
+@media (max-width: 560px) {
+
+    .socialhub-crop-body {
+        flex-direction: column;
+    }
+
+    .socialhub-crop-side {
+        width: 100%;
+    }
+}
+
+
+@media (prefers-color-scheme: dark) {
+
+    .socialhub-crop-dialog {
+        background: #242526;
+    }
+
+    .socialhub-crop-head {
+        border-bottom-color: #3a3b3c;
+    }
+
+    .socialhub-crop-head strong {
+        color: #e4e6eb;
+    }
+
+    .socialhub-crop-close {
+        background: #3a3b3c;
+
+        color: #e4e6eb;
+    }
+
+    .socialhub-crop-preview {
+        background: #3a3b3c;
+    }
+
+    .socialhub-crop-side label {
+        color: #e4e6eb;
+    }
+
+    .socialhub-crop-side p {
+        color: #b0b3b8;
+    }
+
+    .socialhub-crop-foot {
+        border-top-color: #3a3b3c;
+    }
+
+    .socialhub-crop-cancel {
+        background: #3a3b3c;
+
+        color: #e4e6eb;
+    }
+}

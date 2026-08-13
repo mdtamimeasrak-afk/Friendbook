@@ -1,0 +1,1471 @@
+/* ======================================================
+   SOCIALHUB - FACEBOOK.COM CLONE HOME PAGE
+   ======================================================
+   Faithful facebook.com look: #f0f2f5 page bg, 56px white
+   topbar with "f" logo + search pill + center nav tabs +
+   gray circular right icons, left text menu, single-column
+   feed (stories circles + composer + posts), right contacts.
+   Loaded on index.html, profile.html, messages.html,
+   search.html and user-profile.html (after style.css,
+   before premium.css).
+   ====================================================== */
+
+/* ---------- PAGE ---------- */
+
+body {
+    background: #f0f2f5;
+    padding: 0;
+}
+
+.dash-app {
+    max-width: none;
+    margin: 0 auto;
+    background: #f0f2f5;
+    min-height: 100vh;
+}
+
+/* ---------- TOP NAV (Facebook style) ---------- */
+
+.topbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 16px;
+    height: 56px;
+    background: #ffffff;
+    border-bottom: 1px solid #e4e6eb;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+/* T+R combined logo (Facebook size) */
+
+.logo {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #1877f2, #405de6);
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(24, 119, 242, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo::after {
+    content: "TR";
+    font-size: 21px;
+    font-weight: 800;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #fff;
+    line-height: 1;
+    letter-spacing: -2px;
+    transform: translateY(-1px);
+}
+
+/* Search pill */
+
+.search-box {
+    flex: 0 1 240px;
+    background: #f0f2f5;
+    border: none;
+    border-radius: 50px;
+    padding: 0 12px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-box span {
+    color: #65676b;
+}
+
+.search-box input {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    color: #050505;
+    width: 100%;
+}
+
+/* ---------- CENTER NAV (Facebook tabs) ---------- */
+
+.fb-center-nav {
+    flex: 1;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 4px;
+    max-width: 600px;
+    margin: 0 auto;
+    height: 100%;
+}
+
+.fb-nav-btn {
+    position: relative;
+    flex: 1;
+    min-width: 60px;
+    max-width: 120px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+}
+
+.fb-nav-btn:hover {
+    background: #f0f2f5;
+}
+
+.fb-nav-btn i {
+    font-size: 20px;
+    color: #65676b;
+    transition: color 0.15s;
+}
+
+.fb-nav-btn:hover i {
+    color: #050505;
+}
+
+.fb-nav-btn.active i {
+    color: #1877f2;
+}
+
+.fb-nav-btn.active::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 3px;
+    background: #1877f2;
+    border-radius: 3px 3px 0 0;
+}
+
+/* ---------- TOP ICONS (Facebook gray circles) ---------- */
+
+.top-icons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 8px;
+}
+
+.top-icons button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: #e4e6eb;
+    color: #050505;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: background 0.15s;
+}
+
+.top-icons button:hover {
+    background: #d8dadf;
+}
+
+.top-icons button i {
+    font-size: 18px;
+}
+
+.top-icons .profile-mini {
+    background: #e4e6eb;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-left: 4px;
+}
+
+.top-icons .profile-mini::before {
+    content: "👤";
+    font-size: 22px;
+}
+
+.top-icons .profile-mini img {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+.top-icons .socialhub-notif-badge {
+    top: 4px;
+    right: 4px;
+    font-size: 10px;
+    min-width: 16px;
+    height: 16px;
+    line-height: 16px;
+}
+
+/* ---------- MAIN GRID (Facebook 3 columns) ---------- */
+
+.main-container {
+    display: grid;
+    grid-template-columns: 340px minmax(0, 1fr) 340px;
+    gap: 0;
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 16px 0 32px;
+    align-items: start;
+}
+
+/* ---------- LEFT SIDEBAR (text menu rows) ---------- */
+
+.left-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 12px 16px;
+    position: sticky;
+    top: 72px;
+    box-shadow: none;
+    height: calc(100vh - 88px);
+    overflow-y: auto;
+}
+
+.sidebar-profile {
+    flex-direction: row;
+    gap: 12px;
+    padding: 6px 8px;
+    cursor: pointer;
+    margin-bottom: 4px;
+    align-items: center;
+    border-radius: 8px;
+}
+
+.sidebar-profile:hover {
+    background: #e4e6eb;
+}
+
+.sidebar-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 17px;
+    border: none;
+    overflow: hidden;
+    flex-shrink: 0;
+    border-radius: 50%;
+}
+
+.sidebar-profile strong {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    color: #050505;
+}
+
+.sidebar-profile small {
+    display: block;
+    font-size: 12.5px;
+    color: #65676b;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+    align-items: stretch;
+    margin-top: 4px;
+}
+
+.sidebar-menu button {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    background: transparent;
+    border: none;
+    color: #050505;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 8px;
+    transition: background 0.15s;
+    position: relative;
+    justify-content: flex-start;
+}
+
+.sidebar-menu button:hover {
+    background: #e4e6eb;
+}
+
+.sidebar-menu button i {
+    font-size: 19px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #d8dadf;
+    border-radius: 50%;
+    color: #050505;
+}
+
+.sidebar-menu button span {
+    display: inline;
+    font-weight: 600;
+}
+
+.sidebar-menu button .socialhub-notif-badge {
+    top: 8px;
+    right: 8px;
+}
+
+.sidebar-logout {
+    margin-top: 10px;
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    background: transparent;
+    border: none;
+    color: #050505;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 8px;
+    justify-content: flex-start;
+}
+
+.sidebar-logout i {
+    font-size: 19px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0d8d8;
+    border-radius: 50%;
+    color: #f02849;
+}
+
+.sidebar-logout span {
+    display: inline;
+    font-weight: 600;
+}
+
+.sidebar-logout:hover {
+    background: #e4e6eb;
+}
+
+/* ---------- CENTER FEED (single column, FB width) ---------- */
+
+.feed {
+    max-width: 680px;
+    margin: 0 auto;
+    width: 100%;
+    min-width: 0;
+}
+
+.feed-main {
+    margin-bottom: 16px;
+}
+
+/* ---------- STORIES STRIP (FB circles with gradient ring) ---------- */
+
+.feed > .socialhub-stories {
+    display: flex;
+    gap: 14px;
+    padding: 8px 0 12px;
+    overflow-x: auto;
+    margin-bottom: 4px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.feed > .socialhub-stories::before {
+    content: none;
+}
+
+.feed > .socialhub-stories .socialhub-story {
+    flex: 0 0 auto;
+    width: 76px;
+    text-align: center;
+    cursor: pointer;
+}
+
+/* The circle (inline avatar photo is replaced by the avatar div) */
+
+.feed > .socialhub-stories .socialhub-story-ring {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: #ffffff !important;
+    position: relative;
+    display: block;
+    box-shadow: none;
+    margin: 0 auto;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Gradient ring */
+
+.feed > .socialhub-stories .socialhub-story-ring::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(
+        from 210deg,
+        #f7b928,
+        #e1306c,
+        #833ab4,
+        #405de6,
+        #f7b928
+    );
+}
+
+/* Inner white padding */
+
+.feed > .socialhub-stories .socialhub-story-ring::after {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    background: #ffffff;
+}
+
+/* Avatar in the middle */
+
+.feed > .socialhub-stories .socialhub-story-avatar {
+    position: absolute;
+    inset: 7px;
+    width: auto;
+    height: auto;
+    border: none;
+    background: #e4e6eb;
+    overflow: hidden;
+    border-radius: 50%;
+    font-size: 26px;
+    z-index: 2;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.feed > .socialhub-stories .socialhub-story-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* Name under the circle */
+
+.feed > .socialhub-stories .socialhub-story-name {
+    position: static;
+    display: block;
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #050505;
+    text-shadow: none;
+    text-align: center;
+    max-width: 76px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* "+" button (my story / add story) */
+
+.feed > .socialhub-stories .socialhub-story-add {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 26px;
+    height: 26px;
+    background: #1877f2;
+    color: #fff;
+    border-radius: 50%;
+    border: 3px solid #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    transform: none;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* ---------- COMPOSER (Facebook card) ---------- */
+
+.create-post {
+    background: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 16px 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    margin-bottom: 0;
+}
+
+.create-post-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.create-post-top .avatar {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border: none;
+    border-radius: 50%;
+}
+
+.create-post-top input {
+    height: 40px;
+    background: #f0f2f5;
+    border: none;
+    border-radius: 20px;
+    padding: 0 16px;
+    font-size: 15px;
+    outline: none;
+    color: #050505;
+    width: 100%;
+}
+
+.create-post-top input::placeholder {
+    color: #65676b;
+}
+
+.create-post-top input:hover {
+    background: #e4e6eb;
+}
+
+.create-post-top input:focus {
+    background: #f0f2f5;
+}
+
+/* Facebook action row */
+
+.create-post-actions {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid #e4e6eb;
+    flex-wrap: wrap;
+}
+
+.create-post-actions button {
+    border: none;
+    background: transparent;
+    color: #65676b;
+    border-radius: 8px;
+    padding: 9px 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    justify-content: center;
+    transition: background 0.15s;
+    white-space: nowrap;
+}
+
+.create-post-actions button:hover {
+    background: #f0f2f5;
+}
+
+.create-post-actions .cp-emoji {
+    font-size: 20px;
+    line-height: 1;
+}
+
+.create-post-actions .post-btn {
+    margin-left: auto;
+    background: #1877f2;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 14px;
+    border-radius: 6px;
+    padding: 9px 22px;
+    flex: none;
+}
+
+.create-post-actions .post-btn:hover {
+    background: #166fe5;
+}
+
+.create-post-actions .post-tool {
+    color: #65676b;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 9px 10px;
+}
+
+/* ---------- POST CARDS (Facebook style) ---------- */
+
+#posts {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.post {
+    background: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 16px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+
+.post-header .avatar {
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.post-header h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #050505;
+    cursor: pointer;
+}
+
+.post-header h3:hover {
+    text-decoration: underline;
+}
+
+.post-header small {
+    font-size: 13px;
+    color: #65676b;
+}
+
+.post-text {
+    font-size: 15px;
+    line-height: 1.5;
+    color: #050505;
+    margin: 10px 0;
+}
+
+.post-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #65676b;
+}
+
+.post-actions {
+    border-top: 1px solid #e4e6eb;
+    border-bottom: 1px solid #e4e6eb;
+    margin: 6px 0 10px;
+    padding: 2px 0;
+    display: flex;
+}
+
+.post-actions button {
+    background: transparent;
+    border: none;
+    color: #65676b;
+    font-weight: 600;
+    font-size: 14.5px;
+    border-radius: 6px;
+    padding: 9px 8px;
+    cursor: pointer;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+}
+
+.post-actions button:hover {
+    background: #f0f2f5;
+}
+
+.post-actions button i {
+    font-size: 17px;
+}
+
+.post-actions button.liked {
+    color: #1877f2;
+}
+
+/* ---------- RIGHT SIDEBAR (Facebook contacts) ---------- */
+
+.right-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    position: sticky;
+    top: 72px;
+    height: calc(100vh - 88px);
+    overflow-y: auto;
+    box-shadow: none;
+}
+
+/* Section titles (Contacts / Last Chats) */
+
+.socialhub-contacts .dash-label,
+.socialhub-chats-widget .dash-label {
+    display: block;
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: normal;
+    text-transform: none;
+    color: #65676b;
+    margin: 4px 8px 8px;
+}
+
+/* Contacts list */
+
+.socialhub-friends-widget {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+}
+
+.socialhub-friend-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 7px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.socialhub-friend-row:hover {
+    background: #e4e6eb;
+}
+
+.socialhub-friend-avatar {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #d8dadf;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.socialhub-friend-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.socialhub-friend-avatar::after {
+    content: "";
+    position: absolute;
+    right: -1px;
+    bottom: -1px;
+    width: 11px;
+    height: 11px;
+    background: #d5d9e0;
+    border-radius: 50%;
+    border: 2px solid #fff;
+}
+
+.socialhub-friend-avatar.online::after {
+    background: #31a24c;
+}
+
+.socialhub-friend-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.socialhub-friend-info strong {
+    display: block;
+    font-size: 14.5px;
+    font-weight: 500;
+    color: #050505;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.socialhub-friend-info small {
+    display: none;
+}
+
+.socialhub-friend-chat {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #65676b;
+    font-size: 15px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.socialhub-friend-chat:hover {
+    background: #f0f2f5;
+    color: #1877f2;
+}
+
+/* Last chats */
+
+.socialhub-chats-widget {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 12px;
+}
+
+.socialhub-chat-card {
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    padding: 7px 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    box-shadow: none;
+    transition: background 0.15s;
+}
+
+.socialhub-chat-card:hover {
+    background: #e4e6eb;
+    transform: none;
+}
+
+.socialhub-chat-card:nth-child(odd),
+.socialhub-chat-card:nth-child(even) {
+    transform: none;
+}
+
+.socialhub-chat-avatar {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #d8dadf;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.socialhub-chat-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.socialhub-chat-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.socialhub-chat-main strong {
+    display: block;
+    font-size: 14.5px;
+    font-weight: 500;
+    color: #050505;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.socialhub-chat-main span {
+    display: block;
+    font-size: 13px;
+    color: #65676b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.socialhub-chat-side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+}
+
+.socialhub-chat-time {
+    font-size: 12px;
+    color: #65676b;
+}
+
+.socialhub-chat-msg-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #e7f3ff;
+    color: #1877f2;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Bot assistant card */
+
+.socialhub-bot-card {
+    background: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 16px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    margin-top: 16px;
+}
+
+.socialhub-bot-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.socialhub-bot-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: #e7f3ff;
+    color: #1877f2;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.socialhub-bot-head strong {
+    display: block;
+    font-size: 14.5px;
+    font-weight: 600;
+    color: #050505;
+}
+
+.socialhub-bot-head span {
+    font-size: 12.5px;
+    color: #65676b;
+}
+
+.socialhub-bot-chart {
+    width: 100%;
+    height: 46px;
+    display: block;
+}
+
+/* ---------- DARK MODE (Facebook dark) ---------- */
+
+body.dark-mode {
+    background: #18191a;
+}
+
+body.dark-mode .dash-app {
+    background: #18191a;
+}
+
+body.dark-mode .topbar {
+    background: #242526;
+    border-bottom-color: #3a3b3c;
+}
+
+body.dark-mode .logo {
+    background: #1877f2;
+}
+
+body.dark-mode .search-box,
+body.dark-mode .create-post-top input {
+    background: #3a3b3c;
+    color: #e4e6eb;
+}
+
+body.dark-mode .search-box input {
+    color: #e4e6eb;
+}
+
+body.dark-mode .search-box span {
+    color: #b0b3b8;
+}
+
+body.dark-mode .fb-nav-btn:hover {
+    background: #3a3b3c;
+}
+
+body.dark-mode .fb-nav-btn i {
+    color: #b0b3b8;
+}
+
+body.dark-mode .fb-nav-btn:hover i {
+    color: #e4e6eb;
+}
+
+body.dark-mode .fb-nav-btn.active i {
+    color: #1877f2;
+}
+
+body.dark-mode .fb-nav-btn.active::after {
+    background: #1877f2;
+}
+
+body.dark-mode .top-icons button {
+    background: #3a3b3c;
+    color: #e4e6eb;
+}
+
+body.dark-mode .top-icons button:hover {
+    background: #4e4f50;
+}
+
+body.dark-mode .sidebar-profile:hover,
+body.dark-mode .sidebar-menu button:hover,
+body.dark-mode .sidebar-logout:hover,
+body.dark-mode .socialhub-friend-row:hover,
+body.dark-mode .socialhub-chat-card:hover {
+    background: #3a3b3c;
+}
+
+body.dark-mode .sidebar-profile strong,
+body.dark-mode .sidebar-menu button,
+body.dark-mode .sidebar-menu button span,
+body.dark-mode .sidebar-logout span,
+body.dark-mode .post-header h3,
+body.dark-mode .post-text,
+body.dark-mode .socialhub-friend-info strong,
+body.dark-mode .socialhub-chat-main strong,
+body.dark-mode .socialhub-bot-head strong,
+body.dark-mode .feed > .socialhub-stories .socialhub-story-name {
+    color: #e4e6eb;
+}
+
+body.dark-mode .sidebar-menu button i {
+    background: #3a3b3c;
+    color: #e4e6eb;
+}
+
+body.dark-mode .sidebar-profile small,
+body.dark-mode .post-header small,
+body.dark-mode .post-stats,
+body.dark-mode .post-actions button,
+body.dark-mode .create-post-actions button,
+body.dark-mode .create-post-actions .post-tool,
+body.dark-mode .socialhub-chat-main span,
+body.dark-mode .socialhub-chat-time,
+body.dark-mode .socialhub-bot-head span,
+body.dark-mode .socialhub-contacts .dash-label,
+body.dark-mode .socialhub-chats-widget .dash-label {
+    color: #b0b3b8;
+}
+
+body.dark-mode .create-post,
+body.dark-mode .post,
+body.dark-mode .socialhub-bot-card {
+    background: #242526;
+}
+
+body.dark-mode .post-actions {
+    border-top-color: #3a3b3c;
+    border-bottom-color: #3a3b3c;
+}
+
+body.dark-mode .create-post-actions {
+    border-top-color: #3a3b3c;
+}
+
+body.dark-mode .post-actions button:hover,
+body.dark-mode .create-post-actions button:hover,
+body.dark-mode .socialhub-friend-chat:hover {
+    background: #3a3b3c;
+}
+
+body.dark-mode .feed > .socialhub-stories .socialhub-story-ring {
+    background: #242526 !important;
+}
+
+body.dark-mode .feed > .socialhub-stories .socialhub-story-ring::after {
+    background: #242526;
+}
+
+body.dark-mode .feed > .socialhub-stories .socialhub-story-avatar {
+    background: #3a3b3c;
+}
+
+body.dark-mode .feed > .socialhub-stories .socialhub-story-add {
+    border-color: #242526;
+}
+
+body.dark-mode .socialhub-friend-avatar::after {
+    border-color: #18191a;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 1150px) {
+
+    .main-container {
+        grid-template-columns: minmax(0, 1fr);
+        padding: 0 12px 24px;
+    }
+
+    .left-sidebar,
+    .right-sidebar {
+        display: none;
+    }
+
+    .feed {
+        max-width: 680px;
+    }
+
+    .fb-center-nav {
+        max-width: 460px;
+    }
+}
+
+@media (max-width: 860px) {
+
+    .search-box {
+        display: none;
+    }
+
+    .fb-center-nav {
+        max-width: 360px;
+    }
+
+    .fb-nav-btn {
+        min-width: 44px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .topbar {
+        padding: 0 8px;
+        gap: 6px;
+    }
+
+    .fb-nav-btn {
+        min-width: 36px;
+    }
+
+    .top-icons {
+        gap: 4px;
+    }
+
+    .top-icons button {
+        width: 36px;
+        height: 36px;
+        font-size: 14px;
+    }
+
+    .top-icons button:nth-child(2),
+    .top-icons button:nth-child(3) {
+        display: none;
+    }
+
+    .feed > .socialhub-stories {
+        gap: 10px;
+    }
+
+    .feed > .socialhub-stories .socialhub-story {
+        width: 68px;
+    }
+
+    .feed > .socialhub-stories .socialhub-story-ring {
+        width: 68px;
+        height: 68px;
+    }
+}
+
+
+/* ======================================================
+   ANIMATIONS
+   ====================================================== */
+
+/* ---------- PAGE FADE IN ---------- */
+
+@keyframes socialhubBodyIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+body {
+    animation: socialhubBodyIn 0.3s ease;
+}
+
+
+/* ---------- TOPBAR SLIDE DOWN ---------- */
+
+@keyframes socialhubTopbarIn {
+    from {
+        opacity: 0;
+        transform: translateY(-16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.topbar {
+    animation: socialhubTopbarIn 0.45s ease backwards;
+}
+
+
+/* ---------- GENERIC FADE UP ---------- */
+
+@keyframes socialhubFadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(18px);
+    }
+
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+
+/* ---------- SIDEBARS + FEED ENTRANCE ---------- */
+
+.sidebar {
+    animation: socialhubFadeUp 0.5s ease backwards;
+}
+
+.sidebar.left-sidebar {
+    animation-delay: 0.08s;
+}
+
+.sidebar.right-sidebar {
+    animation-delay: 0.16s;
+}
+
+.feed > * {
+    animation: socialhubFadeUp 0.5s ease backwards;
+}
+
+.feed > *:nth-child(1) {
+    animation-delay: 0.06s;
+}
+
+.feed > *:nth-child(2) {
+    animation-delay: 0.14s;
+}
+
+.feed > *:nth-child(3) {
+    animation-delay: 0.22s;
+}
+
+
+/* ---------- RIGHT SIDEBAR WIDGETS ---------- */
+
+.sidebar.right-sidebar > * {
+    animation: socialhubFadeUp 0.5s ease backwards;
+}
+
+.sidebar.right-sidebar > *:nth-child(1) {
+    animation-delay: 0.2s;
+}
+
+.sidebar.right-sidebar > *:nth-child(2) {
+    animation-delay: 0.3s;
+}
+
+.sidebar.right-sidebar > *:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+
+/* ---------- CENTER NAV ACTIVE UNDERLINE ---------- */
+
+@keyframes socialhubNavIn {
+    from {
+        transform: scaleX(0);
+    }
+
+    to {
+        transform: scaleX(1);
+    }
+}
+
+.fb-nav-btn.active::after {
+    transform-origin: left;
+
+    animation: socialhubNavIn 0.3s ease;
+}
+
+.fb-nav-btn i {
+    transition: transform 0.15s ease;
+}
+
+.fb-nav-btn:hover i {
+    transform: translateY(-1px);
+}
+
+
+/* ---------- TOP ICONS MICRO LIFT ---------- */
+
+.top-icons button {
+    transition:
+        transform 0.2s ease,
+        background 0.15s;
+}
+
+.top-icons button:hover {
+    transform: translateY(-2px);
+}
+
+.top-icons .profile-mini {
+    transition: transform 0.2s ease;
+}
+
+.top-icons .profile-mini:hover {
+    transform: translateY(-2px);
+}
+
+
+/* ---------- STORY ADD BUTTON PULSE ---------- */
+
+@keyframes socialhubStoryPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(24, 119, 242, 0.45);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(24, 119, 242, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(24, 119, 242, 0);
+    }
+}
+
+.feed > .socialhub-stories .socialhub-story-add {
+    animation: socialhubStoryPulse 2.4s ease infinite;
+}
+
+
+/* ---------- STORY RING HOVER ---------- */
+
+.feed > .socialhub-stories .socialhub-story-ring {
+    transition: transform 0.2s ease;
+}
+
+.feed > .socialhub-stories .socialhub-story:hover .socialhub-story-ring {
+    transform: scale(1.05);
+}
+
+
+/* ---------- LIKE BUTTON POP ---------- */
+
+@keyframes socialhubLikePop {
+    0% {
+        transform: scale(1);
+    }
+
+    40% {
+        transform: scale(1.35) rotate(-10deg);
+    }
+
+    70% {
+        transform: scale(0.92);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.socialhub-like-btn.liked i {
+    animation: socialhubLikePop 0.35s ease;
+}
+
+.socialhub-like-btn i {
+    transition: transform 0.15s ease;
+}
+
+.socialhub-like-btn:hover i {
+    transform: scale(1.15);
+}
+
+
+/* ---------- SAVE BUTTON POP ---------- */
+
+@keyframes socialhubSavePop {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.3);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.socialhub-save-btn.saved i {
+    animation: socialhubSavePop 0.3s ease;
+}
+
+
+/* ---------- RESPECT REDUCED MOTION ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+}
