@@ -3790,3 +3790,75 @@ async function socialhubFilterVisiblePosts(posts) {
         return posts;
     }
 }
+
+// ======================================================
+// SocialHub - HEIC / HEIF → JPEG CONVERSION
+// (iPhone photos don't display in most browsers)
+// ======================================================
+
+async function socialhubHeicToJpeg(file) {
+
+    const isHeic =
+        file &&
+        (
+            file.type === "image/heic" ||
+            file.type === "image/heif" ||
+            /\.(heic|heif)$/i.test(
+                file.name || ""
+            )
+        );
+
+    if (!isHeic) {
+        return file;
+    }
+
+    if (typeof heic2any !== "function") {
+
+        alert(
+            "This iPhone HEIC photo can't be shown in browsers.\n\n" +
+            "Please choose a JPG or PNG photo."
+        );
+
+        return null;
+    }
+
+    try {
+
+        const output =
+            await heic2any({
+                blob: file,
+                toType: "image/jpeg",
+                quality: 0.92
+            });
+
+        const blob =
+            Array.isArray(output)
+                ? output[0]
+                : output;
+
+        const name =
+            (file.name || "photo")
+                .replace(/\.(heic|heif)$/i, "") +
+            ".jpg";
+
+        return new File(
+            [blob],
+            name,
+            { type: blob.type || "image/jpeg" }
+        );
+
+    } catch (error) {
+
+        console.error(
+            "❌ HEIC conversion error:",
+            error
+        );
+
+        alert(
+            "Could not convert this HEIC photo.\n\n" +
+            "Please choose a JPG or PNG photo."
+        );
+
+        return null;
+    }
+}

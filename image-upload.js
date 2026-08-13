@@ -326,7 +326,7 @@ function setupProfilePhotoUpload() {
 
 async function handleAvatarUpload() {
 
-    const file =
+    let file =
         avatarFileInput.files[0];
 
     if (!file) {
@@ -336,6 +336,16 @@ async function handleAvatarUpload() {
     if (!socialhubValidateImage(file)) {
         return;
     }
+
+    // Convert iPhone HEIC photos so they display everywhere
+    const converted =
+        await socialhubHeicToJpeg(file);
+
+    if (!converted) {
+        return;
+    }
+
+    file = converted;
 
     // Facebook style: crop / reposition first
     openAvatarCropModal(file);
@@ -868,9 +878,9 @@ function setupPostImageUpload() {
     // On file selected -> show preview
     postFileInput.addEventListener(
         "change",
-        () => {
+        async () => {
 
-            const file =
+            let file =
                 postFileInput.files[0];
 
             if (!file) {
@@ -880,6 +890,16 @@ function setupPostImageUpload() {
             if (!socialhubValidateImage(file)) {
                 return;
             }
+
+            // Convert iPhone HEIC photos so they display everywhere
+            const converted =
+                await socialhubHeicToJpeg(file);
+
+            if (!converted) {
+                return;
+            }
+
+            file = converted;
 
             // Remove pending video preview
             document

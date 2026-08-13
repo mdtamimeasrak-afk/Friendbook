@@ -761,9 +761,9 @@ async function socialhubOpenStoryCreator() {
             fileInput.click();
         });
 
-    fileInput.addEventListener("change", () => {
+    fileInput.addEventListener("change", async () => {
 
-        const file =
+        let file =
             fileInput.files[0];
 
         if (!file) {
@@ -787,6 +787,19 @@ async function socialhubOpenStoryCreator() {
             );
 
             return;
+        }
+
+        // Convert iPhone HEIC photos so they display everywhere
+        if (file.type.startsWith("image/")) {
+
+            const converted =
+                await socialhubHeicToJpeg(file);
+
+            if (!converted) {
+                return;
+            }
+
+            file = converted;
         }
 
         pendingFile = file;
