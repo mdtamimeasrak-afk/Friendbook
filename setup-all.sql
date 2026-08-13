@@ -27,6 +27,11 @@ create table if not exists public.profiles (
   created_at timestamptz not null default now()
 );
 
+-- Old schemas may have username as NOT NULL, which breaks the
+-- auto-create-profile trigger on signup (fixes HTTP 500 signup).
+alter table public.profiles
+  alter column username drop not null;
+
 create table if not exists public.posts (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references public.profiles (id) on delete cascade,
