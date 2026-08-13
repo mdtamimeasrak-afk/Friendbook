@@ -220,7 +220,45 @@ async function socialhubSearchUsers(query, limit) {
         return [];
     }
 
-    return data || [];
+    // Hide deactivated accounts (graceful if column missing)
+    let visible = data || [];
+
+    try {
+
+        const deactivatedData =
+            await db
+                .from("profiles")
+                .select("id")
+                .in(
+                    "id",
+                    visible.map(u => u.id)
+                )
+                .eq("deactivated", true);
+
+        if (
+            !deactivatedData.error &&
+            deactivatedData.data &&
+            deactivatedData.data.length > 0
+        ) {
+
+            const hidden =
+                new Set(
+                    deactivatedData.data.map(u => u.id)
+                );
+
+            visible =
+                visible.filter(u => !hidden.has(u.id));
+        }
+
+    } catch (deactError) {
+
+        console.warn(
+            "⚠️ Deactivated filter skipped:",
+            deactError
+        );
+    }
+
+    return visible;
 }
 
 

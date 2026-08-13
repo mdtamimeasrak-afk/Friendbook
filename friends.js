@@ -223,6 +223,44 @@ body.dark-mode .socialhub-btn-soft {
     background: #3a3b3c;
     color: #e4e6eb;
 }
+
+/* Block button on user profile */
+.socialhub-block-btn {
+    border: 1.5px solid #d4d7dd;
+    background: transparent;
+    color: #1c1e21;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.socialhub-block-btn:hover {
+    background: #f0f2f5;
+}
+
+.socialhub-block-btn.blocked {
+    background: #e7f3ff;
+    border-color: #1877f2;
+    color: #1877f2;
+}
+
+.socialhub-blocked-note {
+    color: #e41e3f;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0;
+}
+
+body.dark-mode .socialhub-block-btn {
+    border-color: #4e4f50;
+    color: #e4e6eb;
+}
+
+body.dark-mode .socialhub-block-btn:hover {
+    background: #3a3b3c;
+}
 `;
 
     document.head.appendChild(style);
@@ -551,6 +589,116 @@ async function socialhubUnfriend(userId, button) {
     alert("Unfriended.");
 
     socialhubUpdateFriendCounts();
+}
+
+
+// ======================================================
+// 2b. BLOCK / UNBLOCK
+// ======================================================
+
+async function socialhubToggleBlock(userId, button) {
+
+    const me =
+        await socialhubGetMe();
+
+    if (!me) {
+        return;
+    }
+
+    if (userId === me.id) {
+
+        alert("You can't block yourself.");
+
+        return;
+    }
+
+    const isBlocked =
+        button && button.dataset.blocked === "1";
+
+    if (isBlocked) {
+
+        const { error } =
+            await db
+                .from("blocks")
+                .delete()
+                .eq("blocker_id", me.id)
+                .eq("user_id", userId);
+
+        if (error) {
+
+            console.error("❌ Unblock error:", error);
+
+            alert("Could not unblock: " + error.message);
+
+            return;
+        }
+
+        alert("User unblocked.");
+
+        if (button) {
+
+            button.innerText = "🚫 Block";
+            button.classList.remove("blocked");
+            button.dataset.blocked = "";
+        }
+
+        return;
+    }
+
+    const ok =
+        confirm(
+            "Block this user?\n\n" +
+            "They won't see your posts, and " +
+            "their posts will be hidden from you."
+        );
+
+    if (!ok) {
+        return;
+    }
+
+    // Remove any existing friendship between us
+    await db
+        .from("friendships")
+        .delete()
+        .or(
+            `and(requester_id.eq.${me.id},addressee_id.eq.${userId}),` +
+            `and(requester_id.eq.${userId},addressee_id.eq.${me.id})`
+        );
+
+    // Also remove any pending friend requests
+    await db
+        .from("friend_requests")
+        .delete()
+        .or(
+            `and(sender_id.eq.${me.id},receiver_id.eq.${userId}),` +
+            `and(sender_id.eq.${userId},receiver_id.eq.${me.id})`
+        );
+
+    const { error } =
+        await db
+            .from("blocks")
+            .insert({
+                blocker_id: me.id,
+                user_id: userId
+            });
+
+    if (error) {
+
+        console.error("❌ Block error:", error);
+
+        alert("Could not block: " + error.message);
+
+        return;
+    }
+
+    alert("User blocked.");
+
+    if (button) {
+
+        button.innerText = "🚫 Blocked";
+        button.classList.add("blocked");
+        button.dataset.blocked = "1";
+    }
 }
 
 
@@ -1396,46 +1544,85 @@ async function loadUserProfilePage() {
     const { state } =
         await socialhubFriendState(userId);
 
+    let amIBlocked =
+        false;
+
+    let haveIBlocked =
+        false;
+
+    if (me && me.id !== userId) {
+
+        const [
+            a,
+            b
+        ] = await Promise.all([
+            db
+                .from("blocks")
+                .select("id")
+                .eq("blocker_id", me.id)
+                .eq("user_id", userId)
+                .limit(1),
+            db
+                .from("blocks")
+                .select("id")
+                .eq("blocker_id", userId)
+                .eq("user_id", me.id)
+                .limit(1)
+        ]);
+
+        haveIBlocked =
+            a.data && a.data.length > 0;
+
+        amIBlocked =
+            b.data && b.data.length > 0;
+    }
+
     const friendButtonArea =
         document.getElementById("upFriendButton");
 
     friendButtonArea.innerHTML = `
 
         ${
-            state === "friends"
+            amIBlocked
                 ? `
-                    <button
-                        class="logout-btn"
-                        onclick="socialhubUnfriend(
-                            '${userId}',
-                            this
-                        )"
-                    >
-                        👋 Unfriend
-                    </button>
+                    <p class="socialhub-blocked-note">
+                        🚫 This user has blocked you.
+                    </p>
                 `
-                : state === "requested"
+                : state === "friends"
                     ? `
                         <button
-                            onclick="socialhubCancelFriend(
+                            class="logout-btn"
+                            onclick="socialhubUnfriend(
                                 '${userId}',
                                 this
                             )"
                         >
-                            Cancel Request
+                            👋 Unfriend
                         </button>
                     `
-                    : state === "received"
+                    : state === "requested"
                         ? `
                             <button
-                                class="primary-btn"
-                                onclick="socialhubAcceptFriend(
+                                onclick="socialhubCancelFriend(
                                     '${userId}',
                                     this
                                 )"
                             >
-                                ✓ Accept Request
+                                Cancel Request
                             </button>
+                        `
+                        : state === "received"
+                            ? `
+                                <button
+                                    class="primary-btn"
+                                    onclick="socialhubAcceptFriend(
+                                        '${userId}',
+                                        this
+                                    )"
+                                >
+                                    ✓ Accept Request
+                                </button>
 
                             <button
                                 onclick="socialhubDeclineFriend(
@@ -1469,13 +1656,36 @@ async function loadUserProfilePage() {
                         ✏️ Edit My Profile
                     </button>
                 `
-                : `
-                    <button
-                        onclick="socialhubOpenChatPopup('${userId}')"
-                    >
-                        💬 Message
-                    </button>
-                `
+                : amIBlocked
+                    ? ""
+                    : `
+                        <button
+                            onclick="socialhubOpenChatPopup('${userId}')"
+                        >
+                            💬 Message
+                        </button>
+
+                        <button
+                            class="${
+                                haveIBlocked
+                                    ? "socialhub-block-btn blocked"
+                                    : "socialhub-block-btn"
+                            }"
+                            data-blocked="${
+                                haveIBlocked ? "1" : ""
+                            }"
+                            onclick="socialhubToggleBlock(
+                                '${userId}',
+                                this
+                            )"
+                        >
+                            ${
+                                haveIBlocked
+                                    ? "🚫 Blocked"
+                                    : "🚫 Block"
+                            }
+                        </button>
+                    `
         }
     `;
 

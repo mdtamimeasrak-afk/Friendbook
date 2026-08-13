@@ -30,11 +30,12 @@
 - [ ] Edit / delete comment (own) — done (delete done; edit later)
 
 ## 🔲 Phase 2 — Privacy & Account
-- [ ] Privacy settings: default post audience, profile visibility, block list
-- [ ] Block / unblock users
-- [ ] Change password
-- [ ] Change email / delete account
-- [ ] Activity log (who saw your post, etc.)
+- [x] Privacy settings tab: default post audience (persists) + blocked users list
+- [x] Block / unblock users (user-profile button + settings list, friendship auto-removed, feed hides their posts)
+- [x] Change password (auth.updateUser)
+- [x] Change email (auth.updateUser)
+- [x] Deactivate account (soft delete, reactivate on login; hidden from feed + search)
+- [ ] Activity log (who saw your post, etc.) — later
 
 ## 🔲 Phase 3 — Video
 - [ ] Watch page (video feed)

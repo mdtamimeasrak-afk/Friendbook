@@ -511,3 +511,34 @@ begin
 exception
   when others then null;
 end $$;
+
+-- ======================================================
+-- PHASE 2: PRIVACY & ACCOUNT
+-- ======================================================
+
+-- Blocked users
+create table if not exists public.blocks (
+  id uuid primary key default gen_random_uuid(),
+  blocker_id uuid not null references public.profiles (id) on delete cascade,
+  user_id uuid not null references public.profiles (id) on delete cascade,
+  created_at timestamptz not null default now(),
+  unique (blocker_id, user_id)
+);
+
+alter table public.blocks enable row level security;
+
+drop policy if exists "blocks_select" on public.blocks;
+create policy "blocks_select" on public.blocks
+  for select using (auth.uid() = blocker_id);
+
+drop policy if exists "blocks_insert" on public.blocks;
+create policy "blocks_insert" on public.blocks
+  for insert with check (auth.uid() = blocker_id);
+
+drop policy if exists "blocks_delete" on public.blocks;
+create policy "blocks_delete" on public.blocks
+  for delete using (auth.uid() = blocker_id);
+
+-- Deactivated accounts (soft delete)
+alter table public.profiles
+  add column if not exists deactivated boolean not null default false;

@@ -1748,6 +1748,22 @@ async function loginUser(event) {
         return;
     }
 
+    // Reactivate account on login
+    try {
+
+        await supabaseClient
+            .from("profiles")
+            .update({ deactivated: false })
+            .eq("id", data.user.id);
+
+    } catch (reactivateError) {
+
+        console.warn(
+            "⚠️ Reactivation skipped:",
+            reactivateError
+        );
+    }
+
 
     // First login after email confirm:
     // save the pending profile (name/username)
@@ -3914,6 +3930,52 @@ async function socialhubFilterVisiblePosts(posts) {
 
         const allowed = new Set(friends);
 
+        // Blocked + deactivated users never appear
+        const hiddenUsers = new Set();
+
+        try {
+
+            const {
+                data: blockedData
+            } = await db
+                .from("blocks")
+                .select("user_id")
+                .eq("blocker_id", me);
+
+            (blockedData || []).forEach(row => {
+
+                hiddenUsers.add(row.user_id);
+            });
+
+            const authorIds =
+                [...new Set(posts.map(p => p.user_id))].filter(
+                    id => id && id !== me
+                );
+
+            if (authorIds.length > 0) {
+
+                const {
+                    data: deactivated
+                } = await db
+                    .from("profiles")
+                    .select("id")
+                    .in("id", authorIds)
+                    .eq("deactivated", true);
+
+                (deactivated || []).forEach(row => {
+
+                    hiddenUsers.add(row.id);
+                });
+            }
+
+        } catch (error) {
+
+            console.error(
+                "❌ Blocked/deactivated filter error:",
+                error
+            );
+        }
+
         // Friends of friends (2-hop)
         const edgePool = [...friends];
 
@@ -3961,6 +4023,10 @@ async function socialhubFilterVisiblePosts(posts) {
 
             if (post.user_id === me) {
                 return true;
+            }
+
+            if (hiddenUsers.has(post.user_id)) {
+                return false;
             }
 
             if (audience === "public") {
