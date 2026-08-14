@@ -81,6 +81,7 @@
         "fa-copy": "copy",
         "fa-ban": "ban",
         "fa-user-plus": "user-plus",
+        "fa-user-pen": "user-pen",
         "fa-paper-plane": "send",
         "fa-shield": "shield",
         "fa-fire": "flame",

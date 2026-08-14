@@ -1731,20 +1731,24 @@ async function socialhubLoadMyStats() {
 
 
 // ======================================================
-// 6. COVER TEXT + FACEBOOK TABS
+// 6. COVER TEXT + FACEBOOK TABS (scroll anchors)
 // ======================================================
 
-const socialhubFbAreas = {
+const socialhubFbScrollTargets = {
 
-    posts: "fbAreaPosts",
+    posts: "#fbPostsStack",
 
-    about: "fbAreaAbout",
+    about: "#aboutSection",
 
-    photos: "fbAreaPhotos",
+    photos: "#photosCard",
 
-    videos: "fbAreaVideos",
+    videos: "#videosCard",
 
-    friends: "fbAreaFriends"
+    friends: "#friendsCard",
+
+    events: "#eventsCard",
+
+    groups: "#groupsCard"
 
 };
 
@@ -1762,26 +1766,17 @@ function socialhubSwitchFbTab(name) {
 
         });
 
+    const target =
+        document.querySelector(
+            socialhubFbScrollTargets[name] || ""
+        );
 
-    for (const key in socialhubFbAreas) {
+    if (target) {
 
-        const area =
-            document.getElementById(
-                socialhubFbAreas[key]
-            );
-
-
-        if (area) {
-
-            area.style.display =
-                key === name ? "" : "none";
-
-        }
-    }
-
-    if (name === "videos") {
-
-        socialhubLoadMyVideos();
+        target.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
     }
 }
 
@@ -1818,7 +1813,7 @@ function socialhubHideEmptyAboutRows() {
 
     const rows =
         document.querySelectorAll(
-            ".about-card .about-row, " +
+            ".fb-about-card .about-row, " +
             ".fb-intro-details .about-row"
         );
 
@@ -1990,6 +1985,52 @@ async function socialhubFillProfileHeader() {
             profile.full_name || "User";
     }
 
+    // ---------- ABOUT: bio + names (master layout) ----------
+
+    document
+        .querySelectorAll(".fb-about-bio")
+        .forEach(el => {
+
+            const bio = (profile.bio || "").trim();
+
+            if (bio) {
+
+                el.textContent = bio;
+
+                el.style.display = "";
+
+            } else {
+
+                el.textContent = "Not added";
+
+                el.style.display = "none";
+            }
+        });
+
+    document
+        .querySelectorAll(".fb-names-full")
+        .forEach(el => {
+
+            el.textContent =
+                profile.full_name || "Not added";
+        });
+
+    document
+        .querySelectorAll(".fb-names-nick")
+        .forEach(el => {
+
+            el.textContent =
+                profile.nickname || "Not added";
+        });
+
+    document
+        .querySelectorAll(".fb-names-user")
+        .forEach(el => {
+
+            el.textContent =
+                "@" + (profile.username || "user");
+        });
+
     // ---------- JOINED SOCIALHUB (About → Overview) ----------
 
     const joinedEl =
@@ -2087,6 +2128,52 @@ function socialhubTrimSideCards() {
 }
 
 
+function socialhubRenderAboutChips() {
+
+    document
+        .querySelectorAll(".fb-chip-wrap")
+        .forEach(wrap => {
+
+            const source =
+                wrap.querySelector(".fb-chip-source");
+
+            if (!source) {
+                return;
+            }
+
+            const text =
+                (source.innerText || "").trim();
+
+            const parts =
+                text
+                    .split(/[,،|;]+/)
+                    .map(part => part.trim())
+                    .filter(Boolean);
+
+            if (!parts.length) {
+
+                wrap.style.display = "none";
+
+                return;
+            }
+
+            source.style.display = "none";
+
+            parts.forEach(part => {
+
+                const chip =
+                    document.createElement("span");
+
+                chip.className = "fb-chip";
+
+                chip.textContent = part;
+
+                wrap.appendChild(chip);
+            });
+        });
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
 
     const isProfilePage =
@@ -2105,10 +2192,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // ---------- About two-column section switcher (visual) ----------
 
     const aboutBlocks =
-        [...document.querySelectorAll("#aboutSection .about-block")];
+        [...document.querySelectorAll("#aboutSection .fb-about-block")];
 
     const aboutSidebar =
-        document.querySelector(".about-sidebar");
+        document.querySelector(".fb-about-side");
 
     if (aboutSidebar && aboutBlocks.length) {
 
@@ -2123,18 +2210,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 btn.classList.add("active");
 
-                aboutBlocks.forEach((block, index) => {
+                aboutBlocks.forEach(block => {
 
-                    block.style.display =
-                        (index === Number(btn.dataset.aboutBlock)) ? "" : "none";
+                    block.classList.toggle(
+                        "active",
+                        block.dataset.aboutIndex === btn.dataset.aboutBlock
+                    );
                 });
             });
         });
 
-        aboutBlocks.forEach((block, index) => {
+        aboutBlocks.forEach(block => {
 
-            block.style.display =
-                (index === 0) ? "" : "none";
+            block.classList.toggle(
+                "active",
+                block.dataset.aboutIndex === "0"
+            );
         });
 
         // Hide empty sidebar categories after the row-trim pass
@@ -2144,7 +2235,9 @@ document.addEventListener("DOMContentLoaded", () => {
             aboutButtons.forEach(btn => {
 
                 const block =
-                    aboutBlocks[Number(btn.dataset.aboutBlock)];
+                    aboutBlocks.find(
+                        b => b.dataset.aboutIndex === btn.dataset.aboutBlock
+                    );
 
                 if (!block) {
                     return;
@@ -2153,12 +2246,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 const rows =
                     [...block.querySelectorAll(".about-row")];
 
-                const empty =
-                    rows.length &&
-                    rows.every(row => row.style.display === "none");
+                const chips =
+                    [...block.querySelectorAll(".fb-chip-wrap")];
+
+                const hasContent =
+                    (rows.length &&
+                        rows.some(row => row.style.display !== "none")) ||
+                    (chips.length &&
+                        chips.some(chip => chip.style.display !== "none"));
+
+                const isIntro =
+                    btn.dataset.aboutBlock === "0";
 
                 btn.style.display =
-                    empty ? "none" : "";
+                    (isIntro || hasContent) ? "" : "none";
             });
         };
 
@@ -2198,6 +2299,24 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(socialhubTrimInfoRow, 800);
 
     setTimeout(socialhubTrimInfoRow, 2500);
+
+    // ---------- About chips (Hobbies / Interests) ----------
+
+    setTimeout(socialhubRenderAboutChips, 1700);
+
+    setTimeout(socialhubRenderAboutChips, 4500);
+
+    // ---------- Default tab: About (stacked layout) ----------
+
+    document
+        .querySelectorAll(".fb-tabs-bar button")
+        .forEach(button => {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.fbTab === "about"
+            );
+        });
 
     // ---------- Composer wiring ----------
 
@@ -2312,6 +2431,8 @@ document.addEventListener("DOMContentLoaded", () => {
     socialhubLoadMyPhotos();
 
     socialhubLoadMyFriends();
+
+    socialhubLoadMyVideos();
 
     socialhubLoadMyPosts();
 

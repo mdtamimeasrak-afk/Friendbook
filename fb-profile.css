@@ -3877,3 +3877,732 @@ body:not(.dark-mode) .fb-friends-search::placeholder {
 body.dark-mode .lucide {
     color: #b0b3b8;
 }
+
+/* ============================================================ */
+/* PROFILE STACK LAYOUT — About master design                   */
+/* Order: ABOUT → FRIENDS → PHOTOS → REELS → EVENTS → GROUPS    */
+/* ============================================================ */
+
+.fb-stack-body {
+    display: block;
+
+    max-width: 1150px;
+
+    margin: 0 auto;
+
+    padding: 16px 16px 40px;
+}
+
+.fb-stack-body > .profile-card {
+    margin-bottom: 16px;
+}
+
+#aboutSection,
+#friendsCard,
+#photosCard,
+#videosCard,
+#eventsCard,
+#groupsCard,
+#fbPostsStack {
+    scroll-margin-top: 76px;
+}
+
+/* ---------- ABOUT CARD ---------- */
+
+.fb-about-card {
+    background: #242526;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    border-radius: 10px;
+
+    padding: 24px 0;
+}
+
+.fb-about-layout {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 0;
+}
+
+.fb-about-side {
+    flex: 0 0 25%;
+
+    max-width: 280px;
+
+    min-width: 210px;
+
+    padding: 0 20px 0 24px;
+
+    border-right: 1px solid rgba(255, 255, 255, 0.12);
+
+    position: sticky;
+
+    top: 76px;
+}
+
+.fb-about-title {
+    margin: 0 0 14px;
+
+    font-size: 22px;
+
+    font-weight: 800;
+
+    color: #ffffff;
+}
+
+.fb-about-side button {
+    display: block;
+
+    width: 100%;
+
+    padding: 10px 12px;
+
+    margin-bottom: 2px;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: #b0b3b8;
+
+    font-size: 15px;
+
+    font-weight: 500;
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+.fb-about-side button:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.fb-about-side button.active {
+    background: #2d88ff;
+
+    color: #ffffff;
+
+    font-weight: 700;
+}
+
+.fb-about-content {
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 4px 28px 4px 28px;
+}
+
+.fb-about-block {
+    display: none;
+}
+
+.fb-about-block.active {
+    display: block;
+}
+
+.fb-about-section-head {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 10px;
+}
+
+.fb-about-section-head h3 {
+    margin: 0;
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+    color: #ffffff;
+}
+
+.fb-about-edit {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 30px;
+
+    height: 30px;
+
+    border-radius: 50%;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    color: #b0b3b8;
+
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+.fb-about-edit:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.fb-about-bio {
+    margin: 0 0 4px;
+
+    font-size: 15px;
+
+    line-height: 1.5;
+
+    color: #b0b3b8;
+}
+
+.fb-about-divider {
+    height: 1px;
+
+    margin: 18px 0;
+
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.fb-about-card .about-row {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 7px 0;
+
+    font-size: 15px;
+
+    color: #e4e6eb;
+}
+
+.fb-about-card .about-row i {
+    width: 20px;
+
+    text-align: center;
+
+    color: #b0b3b8;
+
+    font-size: 16px;
+
+    flex: 0 0 20px;
+}
+
+.fb-about-card .about-row .about-label {
+    color: #b0b3b8;
+
+    min-width: 132px;
+
+    font-size: 14px;
+}
+
+.fb-about-card .about-row a {
+    color: #2d88ff;
+
+    text-decoration: none;
+}
+
+.fb-about-group-label {
+    margin: 4px 0 8px;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    color: #e4e6eb;
+}
+
+.fb-about-add {
+    margin-top: 14px;
+
+    padding: 9px 14px;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    color: #e4e6eb;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.fb-about-add:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+/* ---------- HIGHLIGHTS inside About Intro ---------- */
+
+.fb-about-highlights .fb-side-title {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 10px;
+}
+
+.fb-about-highlights .fb-side-title h2 {
+    margin: 0;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    color: #e4e6eb;
+}
+
+.fb-about-highlights .fb-side-title a {
+    color: #2d88ff;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+/* ---------- STACK CARDS (Friends / Photos / Reels / Events / Groups) ---------- */
+
+.fb-stack-card {
+    background: #242526;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    border-radius: 10px;
+
+    padding: 20px;
+}
+
+.fb-stack-head {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 16px;
+
+    margin-bottom: 6px;
+}
+
+.fb-stack-title h2 {
+    margin: 0;
+
+    font-size: 20px;
+
+    font-weight: 700;
+
+    color: #ffffff;
+}
+
+.fb-stack-title p {
+    margin: 2px 0 0;
+
+    font-size: 14px;
+
+    color: #b0b3b8;
+}
+
+.fb-stack-actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+.fb-stack-link {
+    border: 0;
+
+    border-radius: 6px;
+
+    padding: 8px 12px;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    color: #e4e6eb;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.fb-stack-link:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.fb-stack-tabs {
+    display: flex;
+
+    align-items: center;
+
+    gap: 4px;
+
+    margin: 10px 0 16px;
+
+    padding-bottom: 10px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+
+    overflow-x: auto;
+}
+
+.fb-stack-tabs button {
+    position: relative;
+
+    border: 0;
+
+    background: transparent;
+
+    color: #b0b3b8;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    padding: 8px 12px;
+
+    border-radius: 8px;
+
+    white-space: nowrap;
+
+    cursor: pointer;
+}
+
+.fb-stack-tabs button:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.fb-stack-tabs button.active {
+    color: #2d88ff;
+}
+
+.fb-stack-tabs button.active::after {
+    content: "";
+
+    position: absolute;
+
+    left: 12px;
+
+    right: 12px;
+
+    bottom: -11px;
+
+    height: 3px;
+
+    border-radius: 3px;
+
+    background: #2d88ff;
+}
+
+.fb-tab-spacer {
+    flex: 1;
+}
+
+.fb-tab-search {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 36px;
+
+    height: 36px;
+
+    padding: 0 !important;
+
+    border-radius: 50% !important;
+}
+
+.fb-see-all {
+    display: block;
+
+    width: 100%;
+
+    margin-top: 18px;
+
+    padding: 9px 0;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    color: #e4e6eb;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    text-align: center;
+
+    text-decoration: none;
+
+    cursor: pointer;
+}
+
+.fb-see-all:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.fb-stack-empty {
+    padding: 28px 0;
+
+    text-align: center;
+
+    color: #b0b3b8;
+
+    font-size: 15px;
+}
+
+/* ---------- grids: Friends 2-col / Photos 6-col / Reels 7-col ---------- */
+
+.fb-stack-card .friends-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 14px;
+}
+
+.fb-stack-card .photo-grid {
+    display: grid;
+
+    grid-template-columns: repeat(6, 1fr);
+
+    gap: 6px;
+}
+
+#videosCard .photo-grid {
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.fb-stack-card .photo-grid .profile-photo-item {
+    aspect-ratio: 1 / 1;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+}
+
+#videosCard .photo-grid .profile-photo-item {
+    aspect-ratio: 3 / 4;
+}
+
+/* ---------- chips (Hobbies / Interests) ---------- */
+
+.fb-chip-wrap {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 6px;
+}
+
+.fb-chip {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 7px 14px;
+
+    border-radius: 50px;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    color: #e4e6eb;
+
+    font-size: 14px;
+
+    font-weight: 500;
+}
+
+/* ---------- posts stack ---------- */
+
+.fb-posts-stack {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 16px;
+}
+
+/* ---------- LIGHT THEME ---------- */
+
+body:not(.dark-mode) .fb-about-card,
+body:not(.dark-mode) .fb-stack-card {
+    background: #ffffff;
+
+    border: none;
+
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+body:not(.dark-mode) .fb-about-title,
+body:not(.dark-mode) .fb-about-section-head h3,
+body:not(.dark-mode) .fb-stack-title h2,
+body:not(.dark-mode) .fb-about-group-label {
+    color: #050505;
+}
+
+body:not(.dark-mode) .fb-about-side {
+    border-right-color: #ced0d4;
+}
+
+body:not(.dark-mode) .fb-about-side button {
+    color: #65676b;
+}
+
+body:not(.dark-mode) .fb-about-side button:hover {
+    background: #e4e6eb;
+}
+
+body:not(.dark-mode) .fb-about-card .about-row {
+    color: #050505;
+}
+
+body:not(.dark-mode) .fb-about-card .about-row i,
+body:not(.dark-mode) .fb-about-card .about-row .about-label,
+body:not(.dark-mode) .fb-about-bio,
+body:not(.dark-mode) .fb-about-edit,
+body:not(.dark-mode) .fb-stack-title p,
+body:not(.dark-mode) .fb-stack-tabs button,
+body:not(.dark-mode) .fb-stack-empty {
+    color: #65676b;
+}
+
+body:not(.dark-mode) .fb-about-edit {
+    background: #e4e6eb;
+}
+
+body:not(.dark-mode) .fb-about-divider,
+body:not(.dark-mode) .fb-stack-tabs {
+    border-color: #ced0d4;
+}
+
+body:not(.dark-mode) .fb-about-divider {
+    background: #ced0d4;
+}
+
+body:not(.dark-mode) .fb-stack-link,
+body:not(.dark-mode) .fb-see-all,
+body:not(.dark-mode) .fb-about-add,
+body:not(.dark-mode) .fb-chip {
+    background: #e4e6eb;
+
+    color: #050505;
+}
+
+body:not(.dark-mode) .fb-stack-tabs button.active {
+    color: #1877f2;
+}
+
+body:not(.dark-mode) .fb-stack-tabs button.active::after {
+    background: #1877f2;
+}
+
+body:not(.dark-mode) .fb-about-highlights .fb-side-title h2 {
+    color: #050505;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 900px) {
+
+    .fb-stack-card .photo-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    #videosCard .photo-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 700px) {
+
+    .fb-about-layout {
+        flex-direction: column;
+    }
+
+    .fb-about-side {
+        flex: none;
+
+        width: 100%;
+
+        max-width: none;
+
+        min-width: 0;
+
+        position: static;
+
+        border-right: 0;
+
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+
+        display: flex;
+
+        overflow-x: auto;
+
+        gap: 4px;
+
+        padding: 0 16px 12px;
+    }
+
+    body:not(.dark-mode) .fb-about-side {
+        border-bottom-color: #ced0d4;
+    }
+
+    .fb-about-title {
+        display: none;
+    }
+
+    .fb-about-side button {
+        width: auto;
+
+        white-space: nowrap;
+    }
+
+    .fb-about-content {
+        padding: 16px;
+    }
+
+    .fb-stack-card .photo-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    #videosCard .photo-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .fb-stack-head {
+        flex-wrap: wrap;
+    }
+
+    .fb-stack-actions {
+        width: 100%;
+
+        flex-wrap: wrap;
+    }
+}
