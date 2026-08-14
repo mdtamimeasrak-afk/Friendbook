@@ -2012,7 +2012,7 @@ body.dark-mode .card-title a:hover {
     background: #3a3b3c;
 }
 
-/* ---------- SINGLE COLUMN CONTENT ---------- */
+/* ---------- CONTENT LAYOUT (2 columns desktop / 1 column mobile) ---------- */
 
 .fb-body {
     display: block;
@@ -2021,7 +2021,97 @@ body.dark-mode .card-title a:hover {
 
     margin: 0 auto;
 
-    padding: 16px 0 48px;
+    padding: 16px 16px 48px;
+}
+
+@media (min-width: 901px) {
+
+    .fb-body {
+        display: grid;
+
+        grid-template-columns: 360px 1fr;
+
+        gap: 16px;
+
+        align-items: start;
+    }
+
+    .fb-main {
+        width: auto;
+    }
+
+    .fb-timeline-photos-card {
+        display: none;
+    }
+}
+
+@media (max-width: 900px) {
+
+    .fb-left {
+        display: none;
+    }
+}
+
+/* ---------- LEFT COLUMN CARDS (desktop) ---------- */
+
+.fb-left .profile-card {
+    padding: 16px;
+
+    background: #242526;
+
+    border-radius: 8px;
+
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.fb-left .fb-side-title {
+    display: flex;
+
+    align-items: baseline;
+
+    justify-content: space-between;
+
+    margin-bottom: 12px;
+}
+
+.fb-left .fb-side-title h2 {
+    margin: 0;
+
+    font-size: 20px;
+
+    color: #e4e6eb;
+}
+
+.fb-left .fb-side-title a {
+    color: #1877f2;
+
+    font-size: 15px;
+
+    text-decoration: none;
+
+    cursor: pointer;
+}
+
+.fb-left .fb-side-title a:hover {
+    text-decoration: underline;
+}
+
+body:not(.dark-mode) .fb-left .profile-card {
+    background: #ffffff;
+}
+
+body:not(.dark-mode) .fb-left .fb-side-title h2 {
+    color: #050505;
+}
+
+.fb-intro-avatar img {
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 8px;
 }
 
 .fb-main {

@@ -971,11 +971,20 @@ async function socialhubLoadMyPhotos() {
 
     if (!posts || posts.length === 0) {
 
-        grid.innerHTML = `
+        const emptyHTML = `
             <p class="empty-message" style="grid-column:1/-1;">
                 No photos or videos yet. Post a photo or video to see it here!
             </p>
         `;
+
+        grid.innerHTML = emptyHTML;
+
+        document
+            .querySelectorAll(".fb-mini-photos")
+            .forEach(mini => {
+
+                mini.innerHTML = emptyHTML;
+            });
 
         return;
     }
@@ -1018,19 +1027,18 @@ async function socialhubLoadMyPhotos() {
         grid.appendChild(tile);
     });
 
-    const miniGrid =
-        document.getElementById("fbMiniPhotos");
+    const miniHTML =
+        [...grid.children]
+            .slice(0, 6)
+            .map(node => node.outerHTML)
+            .join("");
 
-    if (miniGrid) {
+    document
+        .querySelectorAll(".fb-mini-photos")
+        .forEach(mini => {
 
-        const miniHTML =
-            [...grid.children]
-                .slice(0, 6)
-                .map(node => node.outerHTML)
-                .join("");
-
-        miniGrid.innerHTML = miniHTML;
-    }
+            mini.innerHTML = miniHTML;
+        });
 }
 
 
@@ -1165,11 +1173,20 @@ async function socialhubLoadMyFriends() {
 
     if (!friendships || friendships.length === 0) {
 
-        grid.innerHTML = `
+        const emptyFriends = `
             <p class="empty-message">
                 No friends to show yet.
             </p>
         `;
+
+        grid.innerHTML = emptyFriends;
+
+        document
+            .querySelectorAll(".fb-mini-friends")
+            .forEach(mini => {
+
+                mini.innerHTML = emptyFriends;
+            });
 
         return;
     }
@@ -1217,13 +1234,12 @@ async function socialhubLoadMyFriends() {
             grid.appendChild(item);
         });
 
-    const miniGrid =
-        document.getElementById("fbMiniFriends");
+    document
+        .querySelectorAll(".fb-mini-friends")
+        .forEach(mini => {
 
-    if (miniGrid) {
-
-        miniGrid.innerHTML = grid.innerHTML;
-    }
+            mini.innerHTML = grid.innerHTML;
+        });
 }
 
 
@@ -1468,6 +1484,61 @@ async function socialhubFillProfileHeader() {
         } else {
 
             nickEl.style.display = "none";
+        }
+    }
+
+    // ---------- LEFT COLUMN INTRO CARD ----------
+
+    const introAvatar =
+        document.querySelector(
+            ".fb-intro-avatar"
+        );
+
+    if (introAvatar) {
+
+        introAvatar.innerHTML =
+            socialhubAvatarHTML(profile);
+    }
+
+    const introName =
+        document.querySelector(
+            ".fb-intro-id strong"
+        );
+
+    if (introName) {
+
+        introName.textContent =
+            profile.full_name || "User";
+    }
+
+    const introUser =
+        document.querySelector(
+            ".fb-intro-id .profile-username"
+        );
+
+    if (introUser) {
+
+        introUser.textContent =
+            "@" + (profile.username || "user");
+    }
+
+    const introBio =
+        document.querySelector(
+            ".fb-intro-bio"
+        );
+
+    if (introBio) {
+
+        const bio = (profile.bio || "").trim();
+
+        if (bio) {
+
+            introBio.textContent = bio;
+
+            introBio.style.display = "";
+        } else {
+
+            introBio.style.display = "none";
         }
     }
 }
