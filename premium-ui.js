@@ -261,7 +261,11 @@
         "📷": '<i class="fa-solid fa-image"></i>',
         "🎥": '<i class="fa-solid fa-video"></i>',
         "😊": '<i class="fa-solid fa-face-smile"></i>',
-        "🎨": '<i class="fa-solid fa-palette"></i>'
+        "🎨": '<i class="fa-solid fa-palette"></i>',
+        "📺": '<i class="fa-solid fa-tv"></i>',
+        "🎞️": '<i class="fa-solid fa-film"></i>',
+        "📅": '<i class="fa-solid fa-calendar-days"></i>',
+        "🏢": '<i class="fa-solid fa-building"></i>'
     };
 
 
