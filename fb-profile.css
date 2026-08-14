@@ -556,7 +556,41 @@ body {
 /* Highlights card */
 
 .fb-highlights-card {
-    display: none;
+    display: block;
+}
+
+.fb-highlights-bar {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 8px;
+
+    justify-items: center;
+
+    padding-top: 4px;
+}
+
+.fb-highlights-bar .highlight-tile {
+    width: 100%;
+}
+
+.fb-highlights-bar .highlight-ring {
+    width: 64px;
+
+    height: 64px;
+}
+
+.fb-highlights-bar .highlight-tile span {
+    font-size: 12px;
+
+    font-weight: 600;
+
+    color: #e4e6eb;
+}
+
+body:not(.dark-mode) .fb-highlights-bar .highlight-tile span {
+    color: #050505;
 }
 
 .fb-card-title {
@@ -2457,4 +2491,626 @@ body:not(.dark-mode) .fb-header-actions .socialhub-blocked-note {
     color: #65676b;
 
     background: #f0f2f5;
+}
+
+/* ---------- POST FILTERS (Recents / Photos / Videos) ---------- */
+
+.fb-post-filters {
+    display: flex;
+
+    align-items: center;
+
+    gap: 4px;
+
+    margin-bottom: 14px;
+
+    padding-bottom: 2px;
+
+    border-bottom: 1px solid #3e4042;
+}
+
+.fb-post-filters button {
+    background: transparent;
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 8px 14px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #b0b3b8;
+
+    cursor: pointer;
+
+    position: relative;
+
+    transition: background 0.15s, color 0.15s;
+}
+
+.fb-post-filters button:hover {
+    background: #3a3b3c;
+}
+
+.fb-post-filters button.active {
+    color: #1877f2;
+}
+
+.fb-post-filters button.active::after {
+    content: "";
+
+    position: absolute;
+
+    left: 10px;
+
+    right: 10px;
+
+    bottom: -3px;
+
+    height: 3px;
+
+    background: #1877f2;
+
+    border-radius: 3px 3px 0 0;
+}
+
+body:not(.dark-mode) .fb-post-filters {
+    border-bottom-color: #ced0d4;
+}
+
+body:not(.dark-mode) .fb-post-filters button {
+    color: #65676b;
+}
+
+body:not(.dark-mode) .fb-post-filters button:hover {
+    background: #f0f2f5;
+}
+
+body:not(.dark-mode) .fb-post-filters button.active {
+    color: #1877f2;
+}
+
+/* ---------- FULLSCREEN PHOTO VIEWER (avatar preview) ---------- */
+
+.socialhub-photo-viewer {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 20000;
+
+    background: rgba(0, 0, 0, 0.9);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    cursor: zoom-out;
+}
+
+.socialhub-photo-viewer img {
+    max-width: 90vw;
+
+    max-height: 90vh;
+
+    border-radius: 8px;
+
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+}
+
+.socialhub-photo-viewer-close {
+    position: absolute;
+
+    top: 16px;
+
+    right: 16px;
+
+    width: 42px;
+
+    height: 42px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #3a3b3c;
+
+    color: #e4e6eb;
+
+    font-size: 18px;
+
+    cursor: pointer;
+
+    transition: background 0.15s;
+}
+
+.socialhub-photo-viewer-close:hover {
+    background: #4e4f50;
+}
+
+/* ---------- COVER PICKER (Select from photos) ---------- */
+
+.socialhub-cover-picker {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 20000;
+
+    background: rgba(0, 0, 0, 0.7);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 20px;
+}
+
+.socialhub-cover-picker-box {
+    width: 100%;
+
+    max-width: 560px;
+
+    max-height: 80vh;
+
+    overflow-y: auto;
+
+    background: #242526;
+
+    border-radius: 12px;
+
+    padding: 18px;
+
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+body:not(.dark-mode) .socialhub-cover-picker-box {
+    background: #ffffff;
+}
+
+.socialhub-cover-picker-head {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 14px;
+}
+
+.socialhub-cover-picker-head h3 {
+    margin: 0;
+
+    font-size: 19px;
+
+    color: #e4e6eb;
+}
+
+body:not(.dark-mode) .socialhub-cover-picker-head h3 {
+    color: #050505;
+}
+
+.socialhub-cover-picker-close {
+    width: 36px;
+
+    height: 36px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #3a3b3c;
+
+    color: #e4e6eb;
+
+    font-size: 15px;
+
+    cursor: pointer;
+}
+
+.socialhub-cover-picker-close:hover {
+    background: #4e4f50;
+}
+
+body:not(.dark-mode) .socialhub-cover-picker-close {
+    background: #e4e6eb;
+
+    color: #050505;
+}
+
+.socialhub-cover-picker-grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 8px;
+}
+
+.socialhub-cover-picker-grid img {
+    width: 100%;
+
+    aspect-ratio: 4 / 3;
+
+    object-fit: cover;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.socialhub-cover-picker-grid img:hover {
+    transform: scale(1.03);
+
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+/* ---------- FRIEND CARD MENU (â‹¯) ---------- */
+
+.friend-mini {
+    position: relative;
+}
+
+.socialhub-friend-menu-btn {
+    position: absolute;
+
+    top: 2px;
+
+    right: 2px;
+
+    width: 22px;
+
+    height: 22px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: rgba(0, 0, 0, 0.35);
+
+    color: #ffffff;
+
+    font-size: 13px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    opacity: 0;
+
+    transition: opacity 0.15s, background 0.15s;
+}
+
+.friend-mini:hover .socialhub-friend-menu-btn {
+    opacity: 1;
+}
+
+.socialhub-friend-menu-btn:hover {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+/* ---------- PHOTOS TAB CHIPS ---------- */
+
+.fb-photo-chips {
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    flex-wrap: wrap;
+
+    margin-bottom: 14px;
+}
+
+.fb-photo-chips button {
+    background: transparent;
+
+    border: 1px solid #3e4042;
+
+    border-radius: 999px;
+
+    padding: 7px 14px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: #b0b3b8;
+
+    cursor: pointer;
+
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.fb-photo-chips button:hover {
+    background: #3a3b3c;
+}
+
+.fb-photo-chips button.active {
+    background: rgba(24, 119, 242, 0.15);
+
+    border-color: #1877f2;
+
+    color: #1877f2;
+}
+
+body:not(.dark-mode) .fb-photo-chips button {
+    border-color: #ced0d4;
+
+    color: #65676b;
+}
+
+body:not(.dark-mode) .fb-photo-chips button:hover {
+    background: #f0f2f5;
+}
+
+body:not(.dark-mode) .fb-photo-chips button.active {
+    background: rgba(24, 119, 242, 0.1);
+
+    color: #1877f2;
+}
+
+/* ---------- LIGHTBOX DOWNLOAD BUTTON ---------- */
+
+.post-lightbox-download {
+    position: absolute;
+
+    top: 10px;
+
+    right: 52px;
+
+    width: 34px;
+
+    height: 34px;
+
+    border-radius: 50%;
+
+    background: #e4e6eb;
+
+    color: #1c1e21;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 14px;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    z-index: 5;
+}
+
+.post-lightbox-download:hover {
+    background: #d8dadf;
+}
+
+body.dark-mode .post-lightbox-download {
+    background: #3a3b3c;
+
+    color: #e4e6eb;
+}
+
+/* ============ STEP 1 — COVER REPOSITION MODAL ============ */
+
+.socialhub-reposition-modal {
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.7);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    z-index: 100000;
+
+    padding: 20px;
+}
+
+.socialhub-reposition-box {
+    background: #fff;
+
+    width: 100%;
+
+    max-width: 660px;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .socialhub-reposition-box {
+    background: #242526;
+}
+
+.socialhub-reposition-head {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 14px 18px;
+
+    border-bottom: 1px solid #e4e6eb;
+}
+
+body.dark-mode .socialhub-reposition-head {
+    border-bottom-color: #3a3b3c;
+}
+
+.socialhub-reposition-head h3 {
+    font-size: 17px;
+
+    margin: 0;
+}
+
+.socialhub-reposition-close {
+    background: none;
+
+    border: none;
+
+    font-size: 18px;
+
+    cursor: pointer;
+
+    padding: 6px 10px;
+
+    border-radius: 50%;
+
+    color: inherit;
+}
+
+.socialhub-reposition-close:hover {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.socialhub-reposition-hint {
+    padding: 0 18px;
+
+    margin: 12px 0 0;
+
+    font-size: 13px;
+
+    color: #65676b;
+}
+
+body.dark-mode .socialhub-reposition-hint {
+    color: #b0b3b8;
+}
+
+.socialhub-reposition-stage {
+    margin: 14px 18px;
+
+    border: 2px dashed #ced0d4;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+
+    height: 320px;
+
+    cursor: grab;
+
+    touch-action: none;
+}
+
+.socialhub-reposition-stage:active {
+    cursor: grabbing;
+}
+
+.socialhub-reposition-preview {
+    width: 100%;
+
+    height: 100%;
+
+    background-repeat: no-repeat;
+
+    background-size: cover;
+
+    background-position: 50% 50%;
+
+    user-select: none;
+}
+
+.socialhub-reposition-sliders {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 12px;
+
+    padding: 0 18px 14px;
+}
+
+.socialhub-reposition-sliders label {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+    font-size: 13px;
+
+    color: #65676b;
+}
+
+body.dark-mode .socialhub-reposition-sliders label {
+    color: #b0b3b8;
+}
+
+.socialhub-reposition-sliders input[type="range"] {
+    width: 100%;
+
+    accent-color: #1877f2;
+}
+
+.socialhub-reposition-actions {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    padding: 14px 18px;
+
+    border-top: 1px solid #e4e6eb;
+}
+
+body.dark-mode .socialhub-reposition-actions {
+    border-top-color: #3a3b3c;
+}
+
+.socialhub-reposition-actions button {
+    padding: 9px 18px;
+
+    border-radius: 6px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    border: none;
+}
+
+.socialhub-reposition-cancel {
+    background: #e4e6eb;
+
+    color: #050505;
+}
+
+body.dark-mode .socialhub-reposition-cancel {
+    background: #3a3b3c;
+
+    color: #e4e6eb;
+}
+
+.socialhub-reposition-save {
+    background: #1877f2;
+
+    color: #fff;
+}
+
+.socialhub-reposition-save:hover {
+    background: #166fe5;
 }

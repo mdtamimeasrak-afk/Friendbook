@@ -383,14 +383,59 @@ async function socialhubLoadMyPosts() {
         profile
     };
 
+    socialhubRenderMyPosts();
+}
+
+
+// ======================================================
+// 2a. POST FILTERS (Recents / Photos / Videos)
+// ======================================================
+
+let socialhubProfilePostFilter = "all";
+
+
+function socialhubRenderMyPosts() {
+
+    const container =
+        document.getElementById("profilePosts");
+
+    if (!container) {
+        return;
+    }
+
+    const cache =
+        socialhubMyPostsCache;
+
+    let posts =
+        cache.posts || [];
+
+    const filter =
+        socialhubProfilePostFilter;
+
+    if (filter === "photos") {
+
+        posts =
+            posts.filter(post => post.image_url);
+
+    } else if (filter === "videos") {
+
+        posts =
+            posts.filter(post => post.video_url);
+    }
+
     container.innerHTML = "";
 
-    if (!posts || posts.length === 0) {
+    if (!posts.length) {
+
+        const messages = {
+            all: "You haven't created any posts yet. Go to the home feed and share something!",
+            photos: "No photos yet. Post a photo to see it here!",
+            videos: "No videos yet. Post a video to see it here!"
+        };
 
         container.innerHTML = `
             <p class="empty-message">
-                You haven't created any posts yet.
-                Go to the home feed and share something!
+                ${messages[filter] || messages.all}
             </p>
         `;
 
@@ -402,10 +447,28 @@ async function socialhubLoadMyPosts() {
         container.appendChild(
             socialhubCreatePostArticle(
                 post,
-                profile
+                cache.profile
             )
         );
     });
+}
+
+
+function socialhubProfileSetPostFilter(filter) {
+
+    socialhubProfilePostFilter = filter;
+
+    document
+        .querySelectorAll("#fbPostFilters [data-filter]")
+        .forEach(button => {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.filter === filter
+            );
+        });
+
+    socialhubRenderMyPosts();
 }
 
 
@@ -738,6 +801,29 @@ function socialhubOpenPostLightbox(postId) {
 
     box.appendChild(article);
 
+    if (post.image_url) {
+
+        const download =
+            document.createElement("a");
+
+        download.className =
+            "post-lightbox-download";
+
+        download.href =
+            post.image_url;
+
+        download.download =
+            "socialhub-photo";
+
+        download.title =
+            "Download photo";
+
+        download.innerHTML =
+            '<i class="fa-solid fa-download"></i>';
+
+        box.appendChild(download);
+    }
+
     box.appendChild(close);
 
     modal.classList.add("open");
@@ -931,6 +1017,9 @@ function socialhubEnhanceLightboxPost(article) {
 // 3. MY PHOTOS (from my posts with images)
 // ======================================================
 
+let socialhubPhotoFilter = "all";
+
+
 async function socialhubLoadMyPhotos() {
 
     const grid =
@@ -947,12 +1036,93 @@ async function socialhubLoadMyPhotos() {
         return;
     }
 
+    const filter =
+        socialhubPhotoFilter;
+
+    grid.innerHTML = "";
+
+    // ---------- PROFILE PICTURE / COVER PHOTOS ----------
+
+    if (
+        filter === "profile" ||
+        filter === "cover"
+    ) {
+
+        const field =
+            filter === "profile"
+                ? "avatar_url"
+                : "cover_url";
+
+        const {
+            data: profile
+        } = await db
+            .from("profiles")
+            .select(field)
+            .eq("id", me.id)
+            .single();
+
+        const url =
+            profile?.[field] || null;
+
+        if (url) {
+
+            const tile =
+                document.createElement("div");
+
+            tile.className = "profile-photo-item";
+
+            tile.style.cursor = "pointer";
+
+            tile.innerHTML = `
+                <img
+                    src="${socialhubEscape(url)}"
+                    alt="Photo"
+                    loading="lazy"
+                >
+            `;
+
+            tile.addEventListener("click", () => {
+
+                socialhubViewFullImage(url);
+            });
+
+            grid.appendChild(tile);
+
+        } else {
+
+            grid.innerHTML = `
+                <p class="empty-message" style="grid-column:1/-1;">
+                    ${filter === "profile"
+                        ? "No profile picture yet. Click the camera on your avatar to add one!"
+                        : "No cover photo yet. Click 'Edit cover photo' to add one!"}
+                </p>
+            `;
+        }
+
+        document
+            .querySelectorAll(".fb-mini-photos")
+            .forEach(mini => {
+
+                mini.innerHTML = "";
+
+                mini.innerHTML = `
+                    <p class="empty-message" style="grid-column:1/-1;">
+                        Switch to All Photos to see your uploads.
+                    </p>
+                `;
+            });
+
+        return;
+    }
+
+    // ---------- ALL PHOTOS (from my posts) ----------
+
     const {
         data: posts,
         error
     } = await db
         .from("posts")
-        .select("image_url, video_url")
+        .select("id, image_url, video_url")
         .eq("user_id", me.id)
         .or(
             "image_url.not.is.null," +
@@ -966,8 +1136,6 @@ async function socialhubLoadMyPhotos() {
     if (error) {
         return;
     }
-
-    grid.innerHTML = "";
 
     if (!posts || posts.length === 0) {
 
@@ -996,6 +1164,8 @@ async function socialhubLoadMyPhotos() {
 
         tile.className = "profile-photo-item";
 
+        tile.style.cursor = "pointer";
+
         if (
             post.video_url &&
             !post.image_url
@@ -1012,6 +1182,22 @@ async function socialhubLoadMyPhotos() {
                 <span class="profile-photo-video-badge">🎥</span>
             `;
 
+            tile.addEventListener("click", () => {
+
+                if (
+                    typeof socialhubWatchOpen ===
+                    "function"
+                ) {
+
+                    socialhubWatchOpen(post.id);
+
+                } else {
+
+                    location.href =
+                        `watch.html?video=${post.id}`;
+                }
+            });
+
         } else {
 
             tile.innerHTML = `
@@ -1022,6 +1208,10 @@ async function socialhubLoadMyPhotos() {
                 >
             `;
 
+            tile.addEventListener("click", () => {
+
+                socialhubOpenPostLightbox(post.id);
+            });
         }
 
         grid.appendChild(tile);
@@ -1039,6 +1229,26 @@ async function socialhubLoadMyPhotos() {
 
             mini.innerHTML = miniHTML;
         });
+}
+
+
+// Photos tab filter chips (All / Profile Pictures / Cover Photos)
+
+function socialhubProfileSetPhotoFilter(filter) {
+
+    socialhubPhotoFilter = filter;
+
+    document
+        .querySelectorAll("#fbPhotoChips [data-photo-filter]")
+        .forEach(button => {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.photoFilter === filter
+            );
+        });
+
+    socialhubLoadMyPhotos();
 }
 
 
@@ -1216,6 +1426,14 @@ async function socialhubLoadMyFriends() {
 
             item.innerHTML = `
 
+                <button
+                    type="button"
+                    class="socialhub-friend-menu-btn"
+                    title="Friend options"
+                >
+                    ⋯
+                </button>
+
                 <div class="friend-mini-avatar">
                     ${socialhubAvatarHTML(friend)}
                 </div>
@@ -1231,6 +1449,24 @@ async function socialhubLoadMyFriends() {
                     `user-profile.html?user=${friend.id}`;
             });
 
+            const menuButton =
+                item.querySelector(
+                    ".socialhub-friend-menu-btn"
+                );
+
+            menuButton.addEventListener(
+                "click",
+                event => {
+
+                    event.stopPropagation();
+
+                    socialhubFriendCardMenu(
+                        menuButton,
+                        friend
+                    );
+                }
+            );
+
             grid.appendChild(item);
         });
 
@@ -1240,6 +1476,148 @@ async function socialhubLoadMyFriends() {
 
             mini.innerHTML = grid.innerHTML;
         });
+}
+
+
+// ======================================================
+// 4b. FRIEND CARD MENU (⋯ on each friend card)
+// ======================================================
+
+function socialhubFriendCardMenu(button, friend) {
+
+    document
+        .querySelectorAll(".socialhub-friend-menu.open")
+        .forEach(menu => menu.remove());
+
+    const menu =
+        document.createElement("div");
+
+    menu.className =
+        "socialhub-post-menu socialhub-friend-menu open";
+
+    menu.innerHTML = `
+
+        <button type="button" data-action="view">
+            <i class="fa-solid fa-user"></i>
+            View Profile
+        </button>
+
+        <button type="button" data-action="message">
+            <i class="fa-solid fa-comment"></i>
+            Message
+        </button>
+
+        <button type="button" data-action="unfriend">
+            <i class="fa-solid fa-user-minus"></i>
+            Remove Friend
+        </button>
+
+        <button type="button" data-action="block">
+            <i class="fa-solid fa-ban"></i>
+            Block
+        </button>
+    `;
+
+    document.body.appendChild(menu);
+
+    const rect =
+        button.getBoundingClientRect();
+
+    menu.style.top =
+        `${rect.bottom + 4}px`;
+
+    menu.style.left =
+        `${rect.right}px`;
+
+    menu
+        .querySelector('[data-action="view"]')
+        .addEventListener("click", () => {
+
+            menu.remove();
+
+            window.location.href =
+                `user-profile.html?user=${friend.id}`;
+        });
+
+    menu
+        .querySelector('[data-action="message"]')
+        .addEventListener("click", () => {
+
+            menu.remove();
+
+            if (
+                typeof socialhubOpenChat ===
+                "function"
+            ) {
+
+                socialhubOpenChat(friend.id);
+
+            } else {
+
+                window.location.href =
+                    `messages.html?user=${friend.id}`;
+            }
+        });
+
+    menu
+        .querySelector('[data-action="unfriend"]')
+        .addEventListener("click", async () => {
+
+            menu.remove();
+
+            if (
+                confirm(
+                    `Remove ${friend.full_name || "this user"} from your friends?`
+                )
+            ) {
+
+                await socialhubUnfriend(friend.id);
+
+                await socialhubLoadMyFriends();
+
+                await socialhubLoadMyStats();
+            }
+        });
+
+    menu
+        .querySelector('[data-action="block"]')
+        .addEventListener("click", async () => {
+
+            menu.remove();
+
+            await socialhubToggleBlock(
+                friend.id,
+                null
+            );
+
+            await socialhubLoadMyFriends();
+
+            await socialhubLoadMyStats();
+        });
+
+    const close = event => {
+
+        if (
+            event.target !== button &&
+            !menu.contains(event.target)
+        ) {
+
+            menu.remove();
+
+            document.removeEventListener(
+                "click",
+                close
+            );
+        }
+    };
+
+    setTimeout(
+        () => document.addEventListener(
+            "click",
+            close
+        ),
+        0
+    );
 }
 
 
@@ -1541,6 +1919,65 @@ async function socialhubFillProfileHeader() {
             introBio.style.display = "none";
         }
     }
+
+    // ---------- HEADER BIO (hide completely when empty) ----------
+
+    const headerBio =
+        document.querySelector(
+            ".fb-header-bio"
+        );
+
+    if (headerBio) {
+
+        const bio = (profile.bio || "").trim();
+
+        if (bio) {
+
+            headerBio.textContent = bio;
+
+            headerBio.style.display = "";
+        } else {
+
+            headerBio.style.display = "none";
+        }
+    }
+
+    // ---------- JOINED SOCIALHUB (About → Overview) ----------
+
+    const joinedEl =
+        document.querySelector(
+            ".profile-joined"
+        );
+
+    if (joinedEl) {
+
+        const {
+            data: joinedData
+        } = await db
+            .from("profiles")
+            .select("created_at")
+            .eq("id", profile.id)
+            .single();
+
+        if (joinedData && joinedData.created_at) {
+
+            joinedEl.textContent =
+                new Date(
+                    joinedData.created_at
+                ).toLocaleDateString(
+                    undefined,
+                    {
+                        year: "numeric",
+                        month: "long"
+                    }
+                );
+
+        } else {
+
+            joinedEl.textContent =
+                "Not added";
+        }
+    }
 }
 
 
@@ -1570,6 +2007,38 @@ function socialhubTrimInfoRow() {
 }
 
 
+// Hide left-column cards (Education / Interests) whose rows
+// all have no data — keeps the layout clean
+
+function socialhubTrimSideCards() {
+
+    document
+        .querySelectorAll(
+            ".fb-left .fb-side-card .fb-intro-details"
+        )
+        .forEach(details => {
+
+            const card =
+                details.closest(".profile-card");
+
+            if (!card) {
+                return;
+            }
+
+            const rows =
+                [...details.querySelectorAll(".about-row")];
+
+            if (
+                rows.length &&
+                rows.every(row => row.style.display === "none")
+            ) {
+
+                card.style.display = "none";
+            }
+        });
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
 
     const isProfilePage =
@@ -1584,6 +2053,34 @@ document.addEventListener("DOMContentLoaded", () => {
     socialhubFillProfileHeader();
 
     socialhubSetupProfileTabs();
+
+    // ---------- Post filters (Recents / Photos / Videos) ----------
+
+    document
+        .querySelectorAll("#fbPostFilters [data-filter]")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => socialhubProfileSetPostFilter(
+                    button.dataset.filter
+                )
+            );
+        });
+
+    // ---------- Photos tab chips (All / Profile Pictures / Covers) ----------
+
+    document
+        .querySelectorAll("#fbPhotoChips [data-photo-filter]")
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                () => socialhubProfileSetPhotoFilter(
+                    button.dataset.photoFilter
+                )
+            );
+        });
 
     setTimeout(socialhubTrimInfoRow, 800);
 
@@ -1691,6 +2188,11 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(socialhubHideEmptyAboutRows, 1500);
 
     setTimeout(socialhubHideEmptyAboutRows, 4000);
+
+    // Hide empty side cards (Education / Interests)
+    setTimeout(socialhubTrimSideCards, 1800);
+
+    setTimeout(socialhubTrimSideCards, 4500);
 
     socialhubLoadMyStats();
 

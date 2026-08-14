@@ -448,6 +448,12 @@ async function showCurrentUserData() {
 
     if (profile.cover_url) {
 
+        const extra =
+            profile.extra || {};
+
+        const coverPos =
+            extra.cover_position || null;
+
         document
             .querySelectorAll(".cover-photo")
             .forEach(element => {
@@ -456,7 +462,11 @@ async function showCurrentUserData() {
                     `url(${profile.cover_url})`;
 
                 element.style.backgroundSize = "cover";
-                element.style.backgroundPosition = "center";
+
+                element.style.backgroundPosition =
+                    coverPos
+                        ? `${coverPos.x || 0}% ${coverPos.y || 0}%`
+                        : "center";
             });
 
     } else {

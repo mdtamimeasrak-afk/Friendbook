@@ -1621,12 +1621,21 @@ async function loadUserProfilePage() {
 
         if (profile.cover_url) {
 
+            const extra =
+                profile.extra || {};
+
+            const coverPos =
+                extra.cover_position || null;
+
             upCover.style.backgroundImage =
                 `url(${profile.cover_url})`;
 
             upCover.style.backgroundSize = "cover";
 
-            upCover.style.backgroundPosition = "center";
+            upCover.style.backgroundPosition =
+                coverPos
+                    ? `${coverPos.x || 0}% ${coverPos.y || 0}%`
+                    : "center";
 
         } else {
 

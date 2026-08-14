@@ -219,6 +219,112 @@ function socialhubPhotoMenuItem(icon, label, subtext, action) {
 }
 
 
+// Fullscreen photo viewer (avatar / cover preview)
+
+function socialhubViewFullImage(src) {
+
+    if (!src) {
+        return;
+    }
+
+    const overlay =
+        document.createElement("div");
+
+    overlay.className = "socialhub-photo-viewer";
+
+    overlay.innerHTML =
+        '<img src="' + src + '" alt="Picture">' +
+        '<button type="button" class="socialhub-photo-viewer-close">✕</button>';
+
+    overlay.addEventListener("click", () => {
+
+        overlay.remove();
+    });
+
+    document.body.appendChild(overlay);
+}
+
+
+// Profile photo menu (own: update/view/remove, other: view only)
+
+function socialhubOpenAvatarMenu(photo, anchor) {
+
+    socialhubClosePhotoMenus();
+
+    const isOwnProfile =
+        window.location.pathname
+            .split("/")
+            .pop() !== "user-profile.html";
+
+    const image =
+        photo.querySelector("img");
+
+    const menu =
+        document.createElement("div");
+
+    menu.className =
+        "socialhub-photo-menu socialhub-avatar-menu";
+
+    if (image) {
+
+        menu.appendChild(
+            socialhubPhotoMenuItem(
+                "🖼️",
+                "View picture",
+                "Open the full profile picture",
+                () => socialhubViewFullImage(image.src)
+            )
+        );
+    }
+
+    if (isOwnProfile) {
+
+        menu.appendChild(
+            socialhubPhotoMenuItem(
+                "📷",
+                "Update profile picture",
+                "Upload a photo from your device",
+                () => {
+
+                    if (!avatarFileInput) {
+                        return;
+                    }
+
+                    avatarFileInput.click();
+                }
+            )
+        );
+
+        menu.appendChild(
+            socialhubPhotoMenuItem(
+                "🖼️",
+                "Select from photos",
+                "Pick one of your posted photos",
+                () => socialhubOpenAvatarPicker()
+            )
+        );
+
+        if (image) {
+
+            menu.appendChild(
+                socialhubPhotoMenuItem(
+                    "🗑️",
+                    "Remove picture",
+                    "Remove your profile picture",
+                    handleAvatarRemove
+                )
+            );
+        }
+    }
+
+    if (!menu.children.length) {
+        return;
+    }
+
+    (anchor || photo).after(menu);
+}
+
+
 function setupProfilePhotoUpload() {
 
     const photo =
@@ -241,66 +347,45 @@ function setupProfilePhotoUpload() {
         )
         .forEach(el => el.remove());
 
-    // Camera button (Facebook style: bottom-right circle)
-    const button =
-        document.createElement("button");
+    const isOwnProfile =
+        window.location.pathname
+            .split("/")
+            .pop() !== "user-profile.html";
 
-    button.type = "button";
+    // Camera button (Facebook style: bottom-right circle).
+    // Only on your own profile — other users just get the
+    // "View picture" menu on click.
+    if (isOwnProfile) {
 
-    button.className =
-        "socialhub-avatar-overlay socialhub-photo-trigger";
+        const button =
+            document.createElement("button");
 
-    button.textContent = "📷";
+        button.type = "button";
 
-    button.setAttribute(
-        "aria-label",
-        "Update profile picture"
-    );
+        button.className =
+            "socialhub-avatar-overlay socialhub-photo-trigger";
 
-    button.addEventListener("click", (event) => {
+        button.textContent = "📷";
 
-        event.stopPropagation();
-
-        socialhubClosePhotoMenus();
-
-        const menu =
-            document.createElement("div");
-
-        menu.className =
-            "socialhub-photo-menu socialhub-avatar-menu";
-
-        menu.appendChild(
-            socialhubPhotoMenuItem(
-                "📷",
-                "Update profile picture",
-                "Upload a photo from your device",
-                () => {
-
-                    if (!avatarFileInput) {
-                        return;
-                    }
-
-                    avatarFileInput.click();
-                }
-            )
+        button.setAttribute(
+            "aria-label",
+            "Update profile picture"
         );
 
-        if (photo.querySelector("img")) {
+        button.addEventListener("click", (event) => {
 
-            menu.appendChild(
-                socialhubPhotoMenuItem(
-                    "🗑️",
-                    "Remove picture",
-                    "Remove your profile picture",
-                    handleAvatarRemove
-                )
-            );
-        }
+            event.stopPropagation();
 
-        button.after(menu);
+            socialhubOpenAvatarMenu(photo, button);
+        });
+
+        photo.appendChild(button);
+    }
+
+    photo.addEventListener("click", () => {
+
+        socialhubOpenAvatarMenu(photo);
     });
-
-    photo.appendChild(button);
 
     // Hidden file input (created only once)
     if (!avatarFileInput) {
@@ -1839,6 +1924,21 @@ function setupProfileCoverUpload() {
         menu.className =
             "socialhub-photo-menu socialhub-cover-menu";
 
+        const currentCover =
+            socialhubCurrentCoverUrl(cover);
+
+        if (currentCover) {
+
+            menu.appendChild(
+                socialhubPhotoMenuItem(
+                    "🖼️",
+                    "View cover photo",
+                    "Open the full cover image",
+                    () => socialhubViewFullImage(currentCover)
+                )
+            );
+        }
+
         menu.appendChild(
             socialhubPhotoMenuItem(
                 "📷",
@@ -1855,10 +1955,25 @@ function setupProfileCoverUpload() {
             )
         );
 
-        if (
-            cover.style.backgroundImage &&
-            cover.style.backgroundImage !== "none"
-        ) {
+        menu.appendChild(
+            socialhubPhotoMenuItem(
+                "🖼️",
+                "Select from photos",
+                "Pick one of your posted photos",
+                () => socialhubOpenCoverPicker()
+            )
+        );
+
+        if (currentCover) {
+
+            menu.appendChild(
+                socialhubPhotoMenuItem(
+                    "🎯",
+                    "Reposition",
+                    "Adjust how the cover is cropped",
+                    () => socialhubOpenCoverReposition(currentCover)
+                )
+            );
 
             menu.appendChild(
                 socialhubPhotoMenuItem(
@@ -1894,6 +2009,534 @@ function setupProfileCoverUpload() {
             handleCoverUpload
         );
     }
+}
+
+
+// Current cover URL parsed from the element's background style
+
+function socialhubCurrentCoverUrl(cover) {
+
+    const bg =
+        cover?.style?.backgroundImage || "";
+
+    const match =
+        bg.match(/url\(["']?(.*?)["']?\)/);
+
+    return match ? match[1] : "";
+}
+
+
+// Cover picker: choose from photos you already posted
+
+async function socialhubOpenCoverPicker() {
+
+    const me =
+        await socialhubGetMe();
+
+    if (!me) {
+        return;
+    }
+
+    const {
+        data: posts
+    } = await db
+        .from("posts")
+        .select("image_url")
+        .eq("user_id", me.id)
+        .not("image_url", "is", null)
+        .order("created_at", {
+            ascending: false
+        })
+        .limit(24);
+
+    const overlay =
+        document.createElement("div");
+
+    overlay.className = "socialhub-cover-picker";
+
+    overlay.innerHTML =
+        '<div class="socialhub-cover-picker-box">' +
+            '<div class="socialhub-cover-picker-head">' +
+                '<h3>Select from photos</h3>' +
+                '<button type="button" class="socialhub-cover-picker-close">✕</button>' +
+            '</div>' +
+            '<div class="socialhub-cover-picker-grid"></div>' +
+        '</div>';
+
+    const grid =
+        overlay.querySelector(".socialhub-cover-picker-grid");
+
+    if (!posts || !posts.length) {
+
+        grid.innerHTML =
+            '<p class="empty-message">' +
+            'No photos yet. Post a photo first!' +
+            '</p>';
+
+    } else {
+
+        posts.forEach(post => {
+
+            const tile =
+                document.createElement("img");
+
+            tile.src = post.image_url;
+
+            tile.alt = "Cover option";
+
+            tile.loading = "lazy";
+
+            tile.addEventListener("click", () => {
+
+                overlay.remove();
+
+                socialhubSetCoverFromUrl(post.image_url);
+            });
+
+            grid.appendChild(tile);
+        });
+    }
+
+    overlay
+        .querySelector(".socialhub-cover-picker-close")
+        .addEventListener("click", () => overlay.remove());
+
+    overlay.addEventListener("click", event => {
+
+        if (event.target === overlay) {
+
+            overlay.remove();
+        }
+    });
+
+    document.body.appendChild(overlay);
+}
+
+
+// Set a cover directly from an existing photo URL
+
+async function socialhubSetCoverFromUrl(url) {
+
+    const me =
+        await socialhubGetMe();
+
+    if (!me) {
+        return;
+    }
+
+    const {
+        error
+    } = await db
+        .from("profiles")
+        .update({
+            cover_url: url
+        })
+        .eq("id", me.id);
+
+    if (error) {
+
+        console.error(
+            "❌ Cover set error:",
+            error
+        );
+
+        alert(
+            "Could not set cover photo: " +
+            error.message
+        );
+
+        return;
+    }
+
+    if (
+        typeof showCurrentUserData ===
+        "function"
+    ) {
+
+        await showCurrentUserData();
+    }
+
+    setupProfileCoverUpload();
+
+    alert("Cover photo updated! 🎉");
+}
+
+
+// Avatar picker: choose from photos you already posted
+
+async function socialhubOpenAvatarPicker() {
+
+    const me =
+        await socialhubGetMe();
+
+    if (!me) {
+        return;
+    }
+
+    const {
+        data: posts
+    } = await db
+        .from("posts")
+        .select("image_url")
+        .eq("user_id", me.id)
+        .not("image_url", "is", null)
+        .order("created_at", {
+            ascending: false
+        })
+        .limit(24);
+
+    const overlay =
+        document.createElement("div");
+
+    overlay.className = "socialhub-cover-picker";
+
+    overlay.innerHTML =
+        '<div class="socialhub-cover-picker-box">' +
+            '<div class="socialhub-cover-picker-head">' +
+                '<h3>Select profile picture</h3>' +
+                '<button type="button" class="socialhub-cover-picker-close">✕</button>' +
+            '</div>' +
+            '<div class="socialhub-cover-picker-grid"></div>' +
+        '</div>';
+
+    const grid =
+        overlay.querySelector(".socialhub-cover-picker-grid");
+
+    if (!posts || !posts.length) {
+
+        grid.innerHTML =
+            '<p class="empty-message">' +
+            'No photos yet. Post a photo first!' +
+            '</p>';
+
+    } else {
+
+        posts.forEach(post => {
+
+            const tile =
+                document.createElement("img");
+
+            tile.src = post.image_url;
+
+            tile.alt = "Profile picture option";
+
+            tile.loading = "lazy";
+
+            tile.addEventListener("click", () => {
+
+                overlay.remove();
+
+                socialhubSetAvatarFromUrl(post.image_url);
+            });
+
+            grid.appendChild(tile);
+        });
+    }
+
+    overlay
+        .querySelector(".socialhub-cover-picker-close")
+        .addEventListener("click", () => overlay.remove());
+
+    overlay.addEventListener("click", event => {
+
+        if (event.target === overlay) {
+
+            overlay.remove();
+        }
+    });
+
+    document.body.appendChild(overlay);
+}
+
+
+// Set an avatar directly from an existing photo URL
+
+async function socialhubSetAvatarFromUrl(url) {
+
+    const me =
+        await socialhubGetMe();
+
+    if (!me) {
+        return;
+    }
+
+    const {
+        error
+    } = await db
+        .from("profiles")
+        .update({
+            avatar_url: url
+        })
+        .eq("id", me.id);
+
+    if (error) {
+
+        console.error(
+            "❌ Avatar set error:",
+            error
+        );
+
+        alert(
+            "Could not set profile picture: " +
+            error.message
+        );
+
+        return;
+    }
+
+    if (
+        typeof showCurrentUserData ===
+        "function"
+    ) {
+
+        await showCurrentUserData();
+    }
+
+    setupProfilePhotoUpload();
+
+    alert("Profile picture updated! 🎉");
+}
+
+
+// Cover reposition: drag the cover inside the crop viewport
+
+function socialhubOpenCoverReposition(coverUrl) {
+
+    const existing =
+        document.querySelector(".socialhub-reposition-modal");
+
+    if (existing) {
+        existing.remove();
+    }
+
+    const overlay =
+        document.createElement("div");
+
+    overlay.className = "socialhub-reposition-modal";
+
+    overlay.innerHTML = `
+
+        <div class="socialhub-reposition-box">
+
+            <div class="socialhub-reposition-head">
+
+                <h3>Reposition Cover Photo</h3>
+
+                <button
+                    type="button"
+                    class="socialhub-reposition-close"
+                >
+                    ✕
+                </button>
+
+            </div>
+
+            <p class="socialhub-reposition-hint">
+                Drag the photo to adjust the crop, then save.
+            </p>
+
+            <div class="socialhub-reposition-stage">
+                <div class="socialhub-reposition-preview"></div>
+            </div>
+
+            <div class="socialhub-reposition-sliders">
+
+                <label>
+                    Horizontal
+                    <input type="range" min="0" max="100" value="50" data-axis="x">
+                </label>
+
+                <label>
+                    Vertical
+                    <input type="range" min="0" max="100" value="50" data-axis="y">
+                </label>
+
+            </div>
+
+            <div class="socialhub-reposition-actions">
+
+                <button
+                    type="button"
+                    class="socialhub-reposition-cancel"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="button"
+                    class="socialhub-reposition-save"
+                >
+                    Save
+                </button>
+
+            </div>
+
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    const preview =
+        overlay.querySelector(".socialhub-reposition-preview");
+
+    preview.style.backgroundImage =
+        `url(${coverUrl})`;
+
+    let posX = 50;
+    let posY = 50;
+
+    const applyPosition = () => {
+
+        preview.style.backgroundPosition =
+            `${posX}% ${posY}%`;
+    };
+
+    const sliderX =
+        overlay.querySelector('[data-axis="x"]');
+
+    const sliderY =
+        overlay.querySelector('[data-axis="y"]');
+
+    sliderX.addEventListener("input", () => {
+
+        posX = Number(sliderX.value);
+
+        applyPosition();
+    });
+
+    sliderY.addEventListener("input", () => {
+
+        posY = Number(sliderY.value);
+
+        applyPosition();
+    });
+
+    // Drag on the preview
+    let dragging = false;
+    let startX = 0;
+    let startY = 0;
+    let startPosX = 50;
+    let startPosY = 50;
+
+    preview.addEventListener("pointerdown", event => {
+
+        dragging = true;
+
+        startX = event.clientX;
+        startY = event.clientY;
+
+        startPosX = posX;
+        startPosY = posY;
+
+        preview.setPointerCapture(event.pointerId);
+    });
+
+    preview.addEventListener("pointermove", event => {
+
+        if (!dragging) {
+            return;
+        }
+
+        const rect =
+            preview.getBoundingClientRect();
+
+        const deltaX =
+            ((event.clientX - startX) / rect.width) * 100;
+
+        const deltaY =
+            ((event.clientY - startY) / rect.height) * 100;
+
+        posX = Math.min(100, Math.max(0, startPosX + deltaX));
+        posY = Math.min(100, Math.max(0, startPosY + deltaY));
+
+        sliderX.value = posX;
+        sliderY.value = posY;
+
+        applyPosition();
+    });
+
+    preview.addEventListener("pointerup", () => {
+
+        dragging = false;
+    });
+
+    overlay
+        .querySelector(".socialhub-reposition-close")
+        .addEventListener("click", () => overlay.remove());
+
+    overlay
+        .querySelector(".socialhub-reposition-cancel")
+        .addEventListener("click", () => overlay.remove());
+
+    overlay.addEventListener("click", event => {
+
+        if (event.target === overlay) {
+
+            overlay.remove();
+        }
+    });
+
+    overlay
+        .querySelector(".socialhub-reposition-save")
+        .addEventListener("click", async () => {
+
+            const me =
+                await socialhubGetMe();
+
+            if (!me) {
+                return;
+            }
+
+            const {
+                data: current
+            } = await db
+                .from("profiles")
+                .select("extra")
+                .eq("id", me.id)
+                .single();
+
+            const extra =
+                { ...(current?.extra || {}) };
+
+            extra.cover_position = {
+                x: posX,
+                y: posY
+            };
+
+            const {
+                error
+            } = await db
+                .from("profiles")
+                .update({ extra })
+                .eq("id", me.id);
+
+            if (error) {
+
+                console.error(
+                    "❌ Reposition error:",
+                    error
+                );
+
+                alert(
+                    "Could not save position: " +
+                    error.message
+                );
+
+                return;
+            }
+
+            overlay.remove();
+
+            if (
+                typeof showCurrentUserData ===
+                "function"
+            ) {
+
+                await showCurrentUserData();
+            }
+
+            alert("Cover position saved! 🎯");
+        });
 }
 
 

@@ -263,6 +263,109 @@ body.dark-mode .socialhub-edit-box {
     background: #242526;
     border: 1px solid #3a3b3c;
 }
+
+/* ---------- EDIT AUDIENCE SELECT ---------- */
+
+.socialhub-edit-audience {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(128, 128, 128, 0.3);
+    background: rgba(128, 128, 128, 0.1);
+    color: inherit;
+    font-family: inherit;
+    font-size: 14px;
+    margin-bottom: 16px;
+    cursor: pointer;
+}
+
+/* ---------- SAVED POST MENU STATE ---------- */
+
+.socialhub-post-menu button[data-action="save"].saved {
+    color: #1877f2;
+}
+
+/* ---------- PRIVACY MODAL ---------- */
+
+.socialhub-privacy-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 100001;
+}
+
+.socialhub-privacy-box {
+    width: 100%;
+    max-width: 380px;
+    background: var(--card-bg, #ffffff);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+    animation: socialhubEditPop 0.18s ease;
+}
+
+.socialhub-privacy-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.socialhub-privacy-head h3 {
+    margin: 0;
+    font-size: 19px;
+}
+
+.socialhub-privacy-close {
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(128, 128, 128, 0.15);
+    color: inherit;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.socialhub-privacy-hint {
+    margin: 0 0 12px;
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+.socialhub-privacy-options {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.socialhub-privacy-options button {
+    width: 100%;
+    border: none;
+    background: rgba(128, 128, 128, 0.1);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    color: inherit;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s;
+}
+
+.socialhub-privacy-options button:hover {
+    background: rgba(128, 128, 128, 0.2);
+}
+
+body.dark-mode .socialhub-privacy-box {
+    background: #242526;
+    border: 1px solid #3a3b3c;
+}
 `;
 
     document.head.appendChild(style);
@@ -409,6 +512,26 @@ function socialhubInjectMenu(post, postId) {
 
     menu.innerHTML = `
 
+        <button type="button" data-action="save">
+            <i class="fa-solid fa-bookmark"></i>
+            <span>Save Post</span>
+        </button>
+
+        <button type="button" data-action="privacy">
+            <i class="fa-solid fa-lock"></i>
+            Edit Privacy
+        </button>
+
+        <button type="button" data-action="copy-link">
+            <i class="fa-solid fa-link"></i>
+            Copy Link
+        </button>
+
+        <button type="button" data-action="hide">
+            <i class="fa-solid fa-eye-slash"></i>
+            Hide Post
+        </button>
+
         <button type="button" data-action="edit">
             <i class="fa-solid fa-pen"></i>
             Edit Post
@@ -421,6 +544,40 @@ function socialhubInjectMenu(post, postId) {
     `;
 
     document.body.appendChild(menu);
+
+    const saveButton =
+        menu.querySelector('[data-action="save"]');
+
+    const refreshSaveState = async () => {
+
+        const me =
+            await socialhubGetMe();
+
+        if (!me) {
+            return;
+        }
+
+        const {
+            data
+        } = await db
+            .from("saved_posts")
+            .select("id")
+            .eq("user_id", me.id)
+            .eq("post_id", postId)
+            .maybeSingle();
+
+        const saved = !!data;
+
+        saveButton.classList.toggle("saved", saved);
+
+        saveButton.querySelector("span").textContent =
+            saved ? "Saved" : "Save Post";
+
+        saveButton.querySelector("i").className =
+            saved
+                ? "fa-solid fa-bookmark"
+                : "fa-regular fa-bookmark";
+    };
 
     const openMenu = event => {
 
@@ -440,9 +597,114 @@ function socialhubInjectMenu(post, postId) {
 
         menu.style.left =
             `${rect.right}px`;
+
+        refreshSaveState();
     };
 
     button.addEventListener("click", openMenu);
+
+    menu
+        .querySelector('[data-action="save"]')
+        .addEventListener("click", async () => {
+
+            const me =
+                await socialhubGetMe();
+
+            if (!me) {
+                return;
+            }
+
+            const saved =
+                saveButton.classList.contains("saved");
+
+            if (saved) {
+
+                await db
+                    .from("saved_posts")
+                    .delete()
+                    .eq("user_id", me.id)
+                    .eq("post_id", postId);
+
+                socialhubToast(
+                    "Post removed from saved.",
+                    "info"
+                );
+
+            } else {
+
+                await db
+                    .from("saved_posts")
+                    .insert({
+                        user_id: me.id,
+                        post_id: postId
+                    });
+
+                socialhubToast(
+                    "Post saved! 🔖",
+                    "success"
+                );
+            }
+
+            refreshSaveState();
+        });
+
+    menu
+        .querySelector('[data-action="copy-link"]')
+        .addEventListener("click", () => {
+
+            menu.classList.remove("open");
+
+            const link =
+                window.location.origin +
+                "/index.html?post=" +
+                postId;
+
+            if (
+                navigator.clipboard &&
+                navigator.clipboard.writeText
+            ) {
+
+                navigator.clipboard
+                    .writeText(link)
+                    .then(() => {
+
+                        socialhubToast(
+                            "Link copied! 🔗",
+                            "success"
+                        );
+                    });
+
+            } else {
+
+                window.prompt(
+                    "Copy the post link:",
+                    link
+                );
+            }
+        });
+
+    menu
+        .querySelector('[data-action="hide"]')
+        .addEventListener("click", () => {
+
+            menu.classList.remove("open");
+
+            post.style.display = "none";
+
+            socialhubToast(
+                "Post hidden.",
+                "info"
+            );
+        });
+
+    menu
+        .querySelector('[data-action="privacy"]')
+        .addEventListener("click", () => {
+
+            menu.classList.remove("open");
+
+            socialhubEditPrivacyModal(postId);
+        });
 
     menu
         .querySelector('[data-action="edit"]')
@@ -470,6 +732,121 @@ function socialhubInjectMenu(post, postId) {
         ) {
 
             menu.classList.remove("open");
+        }
+    });
+}
+
+
+// ======================================================
+// 3a2. EDIT PRIVACY MODAL (audience picker)
+// ======================================================
+
+function socialhubEditPrivacyModal(postId) {
+
+    const existing =
+        document.querySelector(".socialhub-privacy-modal");
+
+    if (existing) {
+        existing.remove();
+    }
+
+    const overlay =
+        document.createElement("div");
+
+    overlay.className = "socialhub-privacy-modal";
+
+    const values = [
+        "public",
+        "friends",
+        "friends_of_friends",
+        "only_me"
+    ];
+
+    overlay.innerHTML = `
+
+        <div class="socialhub-privacy-box">
+
+            <div class="socialhub-privacy-head">
+
+                <h3>Edit Privacy</h3>
+
+                <button
+                    type="button"
+                    class="socialhub-privacy-close"
+                >
+                    ✕
+                </button>
+
+            </div>
+
+            <p class="socialhub-privacy-hint">
+                Who can see this post?
+            </p>
+
+            <div class="socialhub-privacy-options">
+
+                ${values.map(value => `
+
+                    <button type="button" data-value="${value}">
+                        ${SOCIALHUB_AUDIENCE_LABELS[value] || value}
+                    </button>
+                `).join("")}
+
+            </div>
+
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    overlay
+        .querySelectorAll("[data-value]")
+        .forEach(button => {
+
+            button.addEventListener("click", async () => {
+
+                const value =
+                    button.dataset.value;
+
+                const {
+                    error
+                } = await db
+                    .from("posts")
+                    .update({
+                        audience: value
+                    })
+                    .eq("id", postId);
+
+                if (error) {
+
+                    alert(
+                        "Could not update privacy: " +
+                        error.message
+                    );
+
+                    return;
+                }
+
+                overlay.remove();
+
+                socialhubToast(
+                    "Privacy updated! 🔒",
+                    "success"
+                );
+
+                await socialhubReloadFeed();
+            });
+        });
+
+    overlay
+        .querySelector(".socialhub-privacy-close")
+        .addEventListener("click", () => overlay.remove());
+
+    overlay.addEventListener("click", event => {
+
+        if (event.target === overlay) {
+
+            overlay.remove();
         }
     });
 }
@@ -730,7 +1107,7 @@ async function socialhubOpenEditModal(postId) {
         error
     } = await db
         .from("posts")
-        .select("content, background")
+        .select("content, background, audience")
         .eq("id", postId)
         .single();
 
@@ -781,6 +1158,30 @@ async function socialhubOpenEditModal(postId) {
 
             <div class="socialhub-edit-bg-options"></div>
 
+            <label class="socialhub-edit-bg-label">
+                Audience
+            </label>
+
+            <select class="socialhub-edit-audience">
+
+                <option value="public">
+                    🌎 Public
+                </option>
+
+                <option value="friends">
+                    👥 Friends
+                </option>
+
+                <option value="friends_of_friends">
+                    🤝 Friends of Friends
+                </option>
+
+                <option value="only_me">
+                    🔒 Only Me
+                </option>
+
+            </select>
+
             <div class="socialhub-edit-actions">
 
                 <button
@@ -812,6 +1213,15 @@ async function socialhubOpenEditModal(postId) {
 
     let selectedBackground =
         post.background || "";
+
+    const audienceSelect =
+        modal.querySelector(".socialhub-edit-audience");
+
+    if (audienceSelect) {
+
+        audienceSelect.value =
+            post.audience || "public";
+    }
 
     socialhubEditBackgrounds.forEach(bg => {
 
@@ -889,7 +1299,11 @@ async function socialhubOpenEditModal(postId) {
                 .update({
                     content: content,
                     background:
-                        selectedBackground || null
+                        selectedBackground || null,
+                    audience:
+                        audienceSelect
+                            ? audienceSelect.value
+                            : undefined
                 })
                 .eq("id", postId);
 
