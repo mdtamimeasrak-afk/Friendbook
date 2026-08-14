@@ -1080,3 +1080,44 @@ create policy "group_members_delete" on public.group_members
         and gm.role in ('owner', 'admin')
     )
   );
+
+
+-- 7.0 CAMPUS COMMUNITY (Step 2: campuses + campus_members tables, RLS)
+-- 7.1 CAMPUSES table (one row per campus; e.g. Bogra Polytechnic Institute)
+create table if not exists public.campuses (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  short_name text,
+  location text,
+  description text,
+  logo_url text,
+  cover_url text,
+  verified boolean not null default false,
+  created_by uuid references public.profiles (id),
+  created_at timestamptz not null default now()
+);
+alter table public.campuses enable row level security;
+create policy campuses_select on public.campuses for select to authenticated using (true);
+create policy campuses_insert on public.campuses for insert to authenticated with check (true);
+create policy campuses_update on public.campuses for update to authenticated using (created_by = auth.uid());
+create policy campuses_delete on public.campuses for delete to authenticated using (created_by = auth.uid());
+
+-- 7.2 CAMPUS_MEMBERS table (who joined which campus; unique = no double join)
+create table if not exists public.campus_members (
+  id uuid primary key default gen_random_uuid(),
+  campus_id uuid not null references public.campuses (id) on delete cascade,
+  user_id uuid not null references public.profiles (id) on delete cascade,
+  role text not null default 'student',
+  joined_at timestamptz not null default now(),
+  unique (campus_id, user_id)
+);
+alter table public.campus_members enable row level security;
+create policy campus_members_select on public.campus_members for select to authenticated using (true);
+create policy campus_members_insert on public.campus_members for insert to authenticated with check (auth.uid() = user_id);
+create policy campus_members_update on public.campus_members for update to authenticated using (auth.uid() = user_id);
+create policy campus_members_delete on public.campus_members for delete to authenticated using (auth.uid() = user_id);
+
+-- 7.3 Seed: Bogra Polytechnic Institute (logo/cover/verified)
+insert into public.campuses (name, short_name, location, description, verified, created_by)
+values ('Bogra Polytechnic Institute', 'BPI', 'Bogra, Bangladesh', 'Polytechnic Institute in Bogra - Official TRIYA Campus', true, '20e7c3e4-e1b9-4a85-a8d2-73d1381d1fc8')
+on conflict do nothing;
