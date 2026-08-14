@@ -643,19 +643,38 @@ async function socialhubProfileSubmitPost() {
 
 
 // ======================================================
-// 2c. COVER MORE MENU (⋯)
+// 2c. HEADER / TABS MORE MENU (▾ / More ▼ / •••)
 // ======================================================
 
 function socialhubProfileToggleMore(event) {
 
     event.stopPropagation();
 
+    const wrap =
+        event.currentTarget.closest(
+            ".fb-more-wrap"
+        );
+
+    if (!wrap) {
+        return;
+    }
+
     const menu =
-        document.getElementById("profileMoreMenu");
+        wrap.querySelector(".fb-more-menu");
 
     if (!menu) {
         return;
     }
+
+    document
+        .querySelectorAll(".fb-more-wrap .fb-more-menu")
+        .forEach(other => {
+
+            if (other !== menu) {
+
+                other.style.display = "none";
+            }
+        });
 
     menu.style.display =
         menu.style.display === "none"
@@ -1359,6 +1378,11 @@ function socialhubSetupProfileTabs() {
 
     tabs.forEach(button => {
 
+        if (!button.dataset.fbTab) {
+
+            return;
+        }
+
         button.addEventListener(
             "click",
             () => {
@@ -1402,6 +1426,79 @@ function socialhubHideEmptyAboutRows() {
 // 7. AUTO-SYNC
 // ======================================================
 
+async function socialhubFillProfileHeader() {
+
+    const result =
+        await getCurrentProfile();
+
+    if (!result) {
+        return;
+    }
+
+    const profile =
+        result.profile;
+
+    if (!profile) {
+        return;
+    }
+
+    const nameEl =
+        document.getElementById("coverName");
+
+    if (nameEl) {
+
+        nameEl.firstChild.textContent =
+            profile.full_name || "User";
+    }
+
+    const nick =
+        (profile.extra || {}).other_names || "";
+
+    const nickEl =
+        document.getElementById("headerNickname");
+
+    if (nickEl) {
+
+        if (String(nick).trim()) {
+
+            nickEl.textContent =
+                `(${String(nick).trim()})`;
+
+            nickEl.style.display = "";
+        } else {
+
+            nickEl.style.display = "none";
+        }
+    }
+}
+
+
+// Hide header info items that have no value yet
+// (keeps the reference layout clean instead of "Not added")
+
+function socialhubTrimInfoRow() {
+
+    document
+        .querySelectorAll(".fb-info-item")
+        .forEach(item => {
+
+            const value =
+                (item.querySelector(
+                    "span:last-child"
+                )?.innerText || "")
+                    .trim();
+
+            if (
+                !value ||
+                value === "Not added"
+            ) {
+
+                item.style.display = "none";
+            }
+        });
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
 
     const isProfilePage =
@@ -1413,7 +1510,11 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
+    socialhubFillProfileHeader();
+
     socialhubSetupProfileTabs();
+
+    setTimeout(socialhubTrimInfoRow, 0);
 
     // ---------- Composer wiring ----------
 
@@ -1479,16 +1580,20 @@ document.addEventListener("DOMContentLoaded", () => {
         "click",
         event => {
 
-            // Close ⋯ menu
-
-            const moreMenu =
-                document.getElementById("profileMoreMenu");
+            // Close more menus (▾ / More ▼ / •••)
 
             if (
-                moreMenu &&
                 !event.target.closest(".fb-more-wrap")
             ) {
-                moreMenu.style.display = "none";
+
+                document
+                    .querySelectorAll(
+                        ".fb-more-wrap .fb-more-menu"
+                    )
+                    .forEach(menu => {
+
+                        menu.style.display = "none";
+                    });
             }
 
             // Close audience menu
