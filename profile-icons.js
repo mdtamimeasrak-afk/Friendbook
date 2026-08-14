@@ -368,8 +368,13 @@
                 if (el.children.length > 1) {
                     return;
                 }
+                var first =
+                    el.firstChild;
+                if (!first || first.nodeType !== 3) {
+                    return;
+                }
                 var text =
-                    (el.textContent || "").trim();
+                    (first.nodeValue || "").trim();
                 if (!text) {
                     return;
                 }
@@ -385,6 +390,11 @@
                 if (!key) {
                     return;
                 }
+                var idx =
+                    first.nodeValue.indexOf(key);
+                if (idx === -1) {
+                    return;
+                }
                 var iconEl =
                     document.createElement("i");
                 iconEl.className = "socialhub-lucide";
@@ -393,12 +403,9 @@
                     EMOJI_TO_LUCIDE[key]
                 );
                 el.prepend(iconEl);
-                var first =
-                    el.firstChild;
-                if (first && first.nodeType === 3) {
-                    first.nodeValue =
-                        first.nodeValue.slice(key.length);
-                }
+                first.nodeValue =
+                    first.nodeValue.slice(0, idx).replace(/\s+$/, "") +
+                    first.nodeValue.slice(idx + key.length);
             });
     }
 
