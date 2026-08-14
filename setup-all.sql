@@ -1180,3 +1180,8 @@ alter table public.campus_post_comments enable row level security;
 create policy campus_post_comments_select on public.campus_post_comments for select to authenticated using (true);
 create policy campus_post_comments_insert on public.campus_post_comments for insert to authenticated with check (auth.uid() = user_id);
 create policy campus_post_comments_delete on public.campus_post_comments for delete to authenticated using (auth.uid() = user_id);
+
+-- 9.0 CAMPUS COMMUNITY (Step 5: profile fields for students - department, semester, batch)
+alter table public.profiles add column if not exists department text;
+alter table public.profiles add column if not exists semester text;
+alter table public.profiles add column if not exists batch text;
