@@ -1013,3 +1013,44 @@ create policy "reports_select" on public.reports
       where p.id = auth.uid() and p.is_admin = true
     )
   );
+
+
+-- 6.7 ADMIN: dismiss reports + harden is_admin (no self-promotion)
+drop policy if exists "reports_delete" on public.reports;
+create policy "reports_delete" on public.reports
+  for delete using (
+    auth.uid() = reporter_id
+    or exists (
+      select 1 from public.profiles p
+      where p.id = auth.uid() and p.is_admin = true
+    )
+  );
+
+drop policy if exists "profiles_update" on public.profiles;
+create policy "profiles_update" on public.profiles
+  for update using (
+    auth.uid() = id
+    or exists (
+      select 1 from public.profiles p
+      where p.id = auth.uid() and p.is_admin = true
+    )
+  )
+  with check (
+    auth.uid() = id
+    and (
+      is_admin = false
+      or exists (
+        select 1 from public.profiles p
+        where p.id = auth.uid() and p.is_admin = true
+      )
+    )
+    or exists (
+      select 1 from public.profiles p
+      where p.id = auth.uid() and p.is_admin = true
+    )
+  );
+
+-- Give the test account admin rights (so the admin dashboard can be tested)
+update public.profiles
+  set is_admin = true
+  where id = '20e7c3e4-e1b9-4a85-a8d2-73d1381d1fc8';

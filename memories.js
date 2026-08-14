@@ -434,6 +434,14 @@ async function socialhubLoadMemories() {
                     const d =
                         new Date(post.created_at);
 
+                    // Same year posts are NOT memories
+                    if (
+                        d.getFullYear() ===
+                        new Date().getFullYear()
+                    ) {
+                        return false;
+                    }
+
                     const isSameDate =
                         d.getMonth() === todayMonth &&
                         d.getDate() === todayDay;
