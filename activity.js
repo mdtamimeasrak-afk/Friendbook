@@ -254,6 +254,30 @@
             const me = await socialhubGetMeSafe();
 
             if (!me) {
+
+                // Session may not be restored yet on first load;
+                // retry a couple of times (idempotent upsert).
+                if (
+                    !window.__socialhubTrackRetries
+                ) {
+                    window.__socialhubTrackRetries = 0;
+                }
+
+                if (
+                    window.__socialhubTrackRetries < 2
+                ) {
+                    window.__socialhubTrackRetries++;
+
+                    setTimeout(() => {
+
+                        socialhubTrackPostViews(
+                            feedItems,
+                            container
+                        );
+
+                    }, 2500);
+                }
+
                 return;
             }
 
