@@ -14,17 +14,17 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%231877f2'/%3E%3Ctext x='20' y='27' font-family='Arial' font-size='21' font-weight='800' fill='white' text-anchor='middle'%3ETR%3C/text%3E%3C/svg%3E">
 
 
-    <link rel="stylesheet" href="style.css?v=1786733503801">
+    <link rel="stylesheet" href="style.css?v=1786734518461">
 
-    <link rel="stylesheet" href="dashboard.css?v=1786733503801">
+    <link rel="stylesheet" href="dashboard.css?v=1786734518461">
 
-    <link rel="stylesheet" href="premium.css?v=1786733503801">
+    <link rel="stylesheet" href="premium.css?v=1786734518461">
 
-    <link rel="stylesheet" href="profile.css?v=1786733503801">
+    <link rel="stylesheet" href="profile.css?v=1786734518461">
 
-    <link rel="stylesheet" href="highlights.css?v=1786733503801">
+    <link rel="stylesheet" href="highlights.css?v=1786734518461">
 
-    <link rel="stylesheet" href="glass-theme.css?v=1786733503801">
+    <link rel="stylesheet" href="glass-theme.css?v=1786734518461">
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -211,79 +211,73 @@
 
 
 
-            <!-- AVATAR + NAME + BUTTONS -->
+            <!-- COVER BUTTONS (Facebook style, bottom-right) -->
 
-            <div class="fb-header-row">
+            <div class="fb-cover-buttons profile-buttons">
 
-                <div class="fb-avatar-wrap">
+                <button
+                    class="fb-cover-btn"
+                    onclick="openEditProfile()"
+                >
+                    ✏️ Edit Profile
+                </button>
 
-                    <div class="profile-photo">
-                        👤
-                    </div>
 
-                </div>
+                <button
+                    class="fb-cover-btn"
+                    onclick="socialhubOpenStoryCreator()"
+                >
+                    ➕ Story
+                </button>
 
 
-                <div class="fb-header-right">
+                <div
+                    class="fb-more-wrap"
+                >
 
-                    <div class="profile-buttons">
+                    <button
+                        class="fb-more-btn"
+                        title="More"
+                        onclick="socialhubProfileToggleMore(event)"
+                    >
+                        ⋯
+                    </button>
+
+                    <div
+                        class="fb-more-menu"
+                        id="profileMoreMenu"
+                        style="display:none"
+                    >
 
                         <button
-                            class="primary-btn"
-                            onclick="openEditProfile()"
+                            type="button"
+                            onclick="location.href='settings.html'"
                         >
-                            ✏️ Edit Profile
+                            ⚙️ Settings
                         </button>
-
 
                         <button
-                            class="fb-white-btn"
-                            onclick="socialhubOpenStoryCreator()"
+                            type="button"
+                            onclick="logoutUser()"
                         >
-                            ➕ Story
+                            🚪 Logout
                         </button>
-
-
-                        <div
-                            class="fb-more-wrap"
-                        >
-
-                            <button
-                                class="fb-more-btn"
-                                title="More"
-                                onclick="socialhubProfileToggleMore(event)"
-                            >
-                                ⋯
-                            </button>
-
-                            <div
-                                class="fb-more-menu"
-                                id="profileMoreMenu"
-                                style="display:none"
-                            >
-
-                                <button
-                                    type="button"
-                                    onclick="location.href='settings.html'"
-                                >
-                                    ⚙️ Settings
-                                </button>
-
-                                <button
-                                    type="button"
-                                    onclick="logoutUser()"
-                                >
-                                    🚪 Logout
-                                </button>
-
-                            </div>
-
-                        </div>
 
                     </div>
 
                 </div>
 
+            </div>
+
+
+
+            <!-- AVATAR (overlaps cover, Facebook style) -->
+
+            <div class="fb-avatar-wrap">
+
+                <div class="profile-photo">
+                    👤
+                </div>
 
             </div>
 
@@ -2178,39 +2172,39 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="supabase.js?v=1786733503801"></script>
+    <script src="supabase.js?v=1786734518461"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
 
-    <script src="premium-ui.js?v=1786733503801"></script>
+    <script src="premium-ui.js?v=1786734518461"></script>
 
-    <script src="script.js?v=1786733503801"></script>
+    <script src="script.js?v=1786734518461"></script>
 
-    <script src="image-upload.js?v=1786733503801"></script>
+    <script src="image-upload.js?v=1786734518461"></script>
 
-    <script src="post-manage.js?v=1786733503801"></script>
+    <script src="post-manage.js?v=1786734518461"></script>
 
-    <script src="friends.js?v=1786733503801"></script>
+    <script src="friends.js?v=1786734518461"></script>
 
-    <script src="likes-comments.js?v=1786733503801"></script>
+    <script src="likes-comments.js?v=1786734518461"></script>
 
-    <script src="shares.js?v=1786733503801"></script>
+    <script src="shares.js?v=1786734518461"></script>
 
-    <script src="profile-page.js?v=1786733503801"></script>
+    <script src="profile-page.js?v=1786734518461"></script>
 
-    <script src="user-search.js?v=1786733503801"></script>
+    <script src="user-search.js?v=1786734518461"></script>
 
-    <script src="notifications.js?v=1786733503801"></script>
+    <script src="notifications.js?v=1786734518461"></script>
 
-    <script src="settings.js?v=1786733503801"></script>
+    <script src="settings.js?v=1786734518461"></script>
 
-    <script src="messages.js?v=1786733503801"></script>
+    <script src="messages.js?v=1786734518461"></script>
 
-    <script src="stories.js?v=1786733503801"></script>
+    <script src="stories.js?v=1786734518461"></script>
 
-    <script src="watch.js?v=1786733503801"></script>
+    <script src="watch.js?v=1786734518461"></script>
 
-    <script src="highlights.js?v=1786733503801"></script>
+    <script src="highlights.js?v=1786734518461"></script>
 
 
 </body>
