@@ -16,57 +16,104 @@
     style.textContent = `
 
 .groups-main {
-    max-width: 860px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 18px 14px 40px;
 }
 
+.groups-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 4px;
+}
+
+.groups-head .groups-head-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #e7f3ff;
+    color: #1877f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
 .groups-main h1 {
-    margin: 0 0 4px;
+    margin: 0;
     font-size: 22px;
 }
 
 .groups-main .groups-sub {
-    margin: 0 0 16px;
+    margin: 0 0 16px 56px;
     color: #65676b;
     font-size: 13.5px;
 }
 
+.groups-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.groups-count-pill {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #65676b;
+    background: #fff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
 .groups-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 14px;
 }
 
 .group-card {
     background: #fff;
-    border-radius: 14px;
-    padding: 16px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     transition: 0.15s;
+    display: flex;
+    flex-direction: column;
 }
 
 .group-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+    transform: translateY(-1px);
+}
+
+.group-card-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
 }
 
 .group-avatar {
     width: 52px;
     height: 52px;
-    border-radius: 14px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
-    background: linear-gradient(135deg, #1877f2, #66a6ff);
+    background: linear-gradient(135deg, #1877f2, #42b0ff);
     color: #fff;
-    margin-bottom: 10px;
+    font-size: 22px;
+    flex-shrink: 0;
 }
 
 .group-card h3 {
-    margin: 0 0 4px;
+    margin: 0;
     font-size: 15.5px;
 }
 
@@ -78,126 +125,77 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    flex-grow: 1;
 }
 
-.group-card .group-card-meta {
-    margin-top: 10px;
-    font-size: 12.5px;
-    color: #1877f2;
-    font-weight: 700;
-}
-
-.socialhub-create-btn {
-    border: none;
-    background: #1877f2;
-    color: #fff;
-    padding: 10px 22px;
-    border-radius: 24px;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.socialhub-create-btn:hover {
-    background: #166fe5;
-}
-
-.socialhub-danger-btn {
-    border: none;
-    background: #e41e3f;
-    color: #fff;
-    padding: 8px 18px;
-    border-radius: 20px;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.socialhub-danger-btn:hover {
-    background: #c81233;
-}
-
-/* Create modal */
-.socialhub-cr-modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
+.group-card-bottom {
+    border-top: 1px solid #e4e6eb;
+    margin-top: 12px;
+    padding-top: 12px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    z-index: 10000;
-    padding: 20px;
+    justify-content: space-between;
 }
 
-.socialhub-cr-box {
-    background: #fff;
-    border-radius: 16px;
-    width: 100%;
-    max-width: 440px;
-    padding: 22px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
-}
-
-.socialhub-cr-box h2 {
-    margin: 0 0 16px;
-    font-size: 19px;
-}
-
-.socialhub-cr-box label {
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
+.group-card-bottom .group-card-meta {
+    font-size: 12.5px;
     color: #65676b;
-    margin: 10px 0 6px;
+    font-weight: 600;
 }
 
-.socialhub-cr-box input,
-.socialhub-cr-box textarea {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 10px 12px;
-    border: 1px solid #d4d7dd;
-    border-radius: 8px;
-    font-size: 14px;
-    font-family: inherit;
-    outline: none;
+.group-card-bottom .group-card-meta i {
+    color: #1877f2;
+    margin-right: 4px;
 }
 
-.socialhub-cr-box input:focus,
-.socialhub-cr-box textarea:focus {
-    border-color: #1877f2;
-}
-
-.socialhub-cr-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 18px;
-    justify-content: flex-end;
-}
-
-.socialhub-cr-cancel {
-    border: none;
-    background: #e4e6eb;
-    color: #1c1e21;
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-size: 14px;
+.group-public-pill {
+    font-size: 12px;
     font-weight: 700;
-    cursor: pointer;
+    color: #31a24c;
+    background: #e9f9ef;
+    padding: 5px 12px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
 }
 
 /* Group page */
 .group-page {
-    max-width: 760px;
+    max-width: 780px;
     margin: 0 auto;
     padding: 18px 14px 40px;
 }
 
+.group-cover {
+    height: 150px;
+    border-radius: 12px 12px 0 0;
+    background: linear-gradient(135deg, #1877f2, #42b0ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 52px;
+    color: rgba(255, 255, 255, 0.95);
+    position: relative;
+    overflow: hidden;
+}
+
+.group-cover::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.28));
+}
+
+.group-cover i {
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+}
+
 .group-hero {
     background: #fff;
-    border-radius: 16px;
-    padding: 22px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    border-radius: 0 0 12px 12px;
+    padding: 20px 22px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     margin-bottom: 16px;
 }
 
@@ -208,9 +206,23 @@
     margin-bottom: 10px;
 }
 
+.group-hero .group-hero-avatar {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1877f2, #42b0ff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    color: #fff;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
 .group-hero h1 {
-    margin: 0 0 2px;
-    font-size: 20px;
+    margin: 0 0 3px;
+    font-size: 22px;
 }
 
 .group-hero .group-hero-meta {
@@ -219,9 +231,15 @@
     color: #65676b;
 }
 
+.group-hero .group-hero-meta i {
+    color: #1877f2;
+    margin-right: 4px;
+}
+
 .group-hero .group-hero-desc {
     margin: 8px 0 14px;
     font-size: 14px;
+    color: #65676b;
 }
 
 .group-hero .group-hero-actions {
@@ -230,17 +248,52 @@
     flex-wrap: wrap;
 }
 
-.group-feed-title {
-    font-size: 16px;
+.group-join-btn {
+    border: none;
+    background: #1877f2;
+    color: #fff;
+    padding: 11px 24px;
+    border-radius: 22px;
+    font-size: 14px;
     font-weight: 700;
-    margin: 18px 0 10px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.12s;
+}
+
+.group-join-btn:hover {
+    background: #166fe5;
+}
+
+.group-join-btn.leave {
+    background: #e4e6eb;
+    color: #1c1e21;
+}
+
+.group-join-btn.leave:hover {
+    background: #d8dadf;
+}
+
+.group-feed-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin: 20px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.group-feed-title i {
+    color: #1877f2;
 }
 
 .group-composer {
     background: #fff;
-    border-radius: 14px;
+    border-radius: 12px;
     padding: 14px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     margin-bottom: 14px;
 }
 
@@ -268,6 +321,15 @@
 .group-composer .group-composer-row label {
     cursor: pointer;
     font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: #65676b;
+    font-weight: 600;
+}
+
+.group-composer .group-composer-row label:hover {
+    color: #1877f2;
 }
 
 .group-composer .group-composer-row img {
@@ -278,19 +340,26 @@
 }
 
 .group-members-title {
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 700;
-    margin: 18px 0 10px;
+    margin: 20px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.group-members-title i {
+    color: #1877f2;
 }
 
 .group-members {
     background: #fff;
-    border-radius: 14px;
-    padding: 10px 14px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 14px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 10px;
 }
 
 .group-member {
@@ -300,9 +369,10 @@
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
-    padding: 6px 10px;
+    padding: 6px 12px;
     border-radius: 20px;
     background: #f0f2f5;
+    transition: 0.12s;
 }
 
 .group-member:hover {
@@ -324,18 +394,179 @@
     font-weight: 700;
 }
 
+.group-member .fa-crown {
+    color: #f7b928;
+    font-size: 12px;
+}
+
+/* Create modal (FB style) */
+.socialhub-cr-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 20px;
+}
+
+.socialhub-cr-box {
+    background: #fff;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 460px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+}
+
+.socialhub-cr-box .cr-head {
+    padding: 16px 18px;
+    border-bottom: 1px solid #e4e6eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.socialhub-cr-box .cr-head h2 {
+    margin: 0;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.socialhub-cr-box .cr-head .cr-close {
+    border: none;
+    background: #e4e6eb;
+    color: #050505;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cr-body {
+    padding: 16px 18px;
+}
+
+.cr-body label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #65676b;
+    margin: 10px 0 6px;
+}
+
+.cr-body label:first-child {
+    margin-top: 0;
+}
+
+.cr-body input,
+.cr-body textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 13px;
+    border: 1px solid #d4d7dd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: 0.12s;
+}
+
+.cr-body input:focus,
+.cr-body textarea:focus {
+    border-color: #1877f2;
+    box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.15);
+}
+
+.cr-actions {
+    display: flex;
+    gap: 10px;
+    padding: 14px 18px;
+    border-top: 1px solid #e4e6eb;
+    justify-content: flex-end;
+}
+
+.socialhub-cr-cancel {
+    border: none;
+    background: #e4e6eb;
+    color: #1c1e21;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.socialhub-cr-cancel:hover {
+    background: #d8dadf;
+}
+
+.socialhub-create-btn {
+    border: none;
+    background: #1877f2;
+    color: #fff;
+    padding: 10px 22px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: 0.12s;
+}
+
+.socialhub-create-btn:hover {
+    background: #166fe5;
+}
+
+.socialhub-danger-btn {
+    border: none;
+    background: #e41e3f;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: 0.12s;
+}
+
+.socialhub-danger-btn:hover {
+    background: #c81233;
+}
+
 body.dark-mode .group-card,
 body.dark-mode .group-hero,
 body.dark-mode .group-composer,
 body.dark-mode .group-members,
-body.dark-mode .socialhub-cr-box {
+body.dark-mode .socialhub-cr-box,
+body.dark-mode .groups-count-pill {
     background: #242526;
 }
 
 body.dark-mode .group-card p,
 body.dark-mode .group-hero .group-hero-meta,
-body.dark-mode .groups-main .groups-sub {
+body.dark-mode .groups-main .groups-sub,
+body.dark-mode .groups-count-pill,
+body.dark-mode .group-card-bottom .group-card-meta,
+body.dark-mode .group-hero .group-hero-desc,
+body.dark-mode .group-composer .group-composer-row label {
     color: #b0b3b8;
+}
+
+body.dark-mode .group-card-bottom {
+    border-top-color: #3a3b3c;
 }
 
 body.dark-mode .group-composer textarea {
@@ -351,11 +582,28 @@ body.dark-mode .group-member {
     color: #e4e6eb;
 }
 
-body.dark-mode .socialhub-cr-box input,
-body.dark-mode .socialhub-cr-box textarea {
+body.dark-mode .group-member:hover {
+    background: #4e4f50;
+}
+
+body.dark-mode .group-join-btn.leave {
+    background: #3a3b3c;
+    color: #e4e6eb;
+}
+
+body.dark-mode .cr-body input,
+body.dark-mode .cr-body textarea {
     background: #3a3b3c;
     border-color: #4e4f50;
     color: #e4e6eb;
+}
+
+body.dark-mode .socialhub-cr-box .cr-head {
+    border-bottom-color: #3a3b3c;
+}
+
+body.dark-mode .cr-actions {
+    border-top-color: #3a3b3c;
 }
 `;
 
@@ -472,22 +720,45 @@ function socialhubGroupsOpenCreateModal() {
 
     modal.innerHTML = `
         <div class="socialhub-cr-box">
-            <h2>👥 Create Group</h2>
 
-            <label>Group name</label>
-            <input type="text" id="grName" placeholder="e.g. Web Developers BD" maxlength="60">
+            <div class="cr-head">
 
-            <label>Description</label>
-            <textarea id="grDesc" rows="3" placeholder="What is this group about?"></textarea>
+                <h2>
+                    <i class="fa-solid fa-users" style="color:#1877f2;"></i>
+                    Create Group
+                </h2>
 
-            <div class="socialhub-cr-actions">
+                <button class="cr-close" type="button" title="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+            </div>
+
+            <div class="cr-body">
+
+                <label>Group name</label>
+                <input type="text" id="grName" placeholder="e.g. Web Developers BD" maxlength="60">
+
+                <label>Description</label>
+                <textarea id="grDesc" rows="3" placeholder="What is this group about?"></textarea>
+
+            </div>
+
+            <div class="cr-actions">
                 <button class="socialhub-cr-cancel" type="button">Cancel</button>
-                <button class="socialhub-create-btn" type="button">Create Group</button>
+                <button class="socialhub-create-btn" type="button">
+                    <i class="fa-solid fa-plus"></i>
+                    Create Group
+                </button>
             </div>
         </div>
     `;
 
     document.body.appendChild(modal);
+
+    modal
+        .querySelector(".cr-close")
+        .addEventListener("click", () => modal.remove());
 
     modal
         .querySelector(".socialhub-cr-cancel")
@@ -612,24 +883,14 @@ async function socialhubGroupsLoad() {
         return;
     }
 
-    const creatorIds =
-        [...new Set(
-            groups.map(g => g.created_by)
-        )];
+    const countPill =
+        document.getElementById("groupsCount");
 
-    const {
-        data: profiles
-    } = await db
-        .from("profiles")
-        .select("id, full_name")
-        .in("id", creatorIds);
+    if (countPill) {
 
-    const nameMap = {};
-
-    (profiles || []).forEach(p => {
-
-        nameMap[p.id] = p.full_name;
-    });
+        countPill.textContent =
+            groups.length + " groups";
+    }
 
     const {
         data: members
@@ -655,15 +916,31 @@ async function socialhubGroupsLoad() {
         card.className = "group-card";
 
         card.innerHTML = `
-            <div class="group-avatar">👥</div>
 
-            <h3>${socialhubGroupsEscape(group.name)}</h3>
+            <div class="group-card-top">
+
+                <div class="group-avatar">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+
+                <h3>${socialhubGroupsEscape(group.name)}</h3>
+
+            </div>
 
             <p>${socialhubGroupsEscape(group.description || "")}</p>
 
-            <div class="group-card-meta">
-                ${memberCount[group.id] || 1} members ·
-                Created by ${socialhubGroupsEscape(nameMap[group.created_by] || "Someone")}
+            <div class="group-card-bottom">
+
+                <div class="group-card-meta">
+                    <i class="fa-solid fa-user-group"></i>
+                    ${memberCount[group.id] || 1} members
+                </div>
+
+                <span class="group-public-pill">
+                    <i class="fa-solid fa-globe"></i>
+                    Public
+                </span>
+
             </div>
         `;
 
@@ -782,60 +1059,76 @@ async function socialhubGroupLoad() {
 
     hero.innerHTML = `
 
-        <div class="group-hero-top">
-
-            <div class="group-avatar">👥</div>
-
-            <div>
-                <h1>${socialhubGroupsEscape(group.name)}</h1>
-                <p class="group-hero-meta">
-                    ${memberCount} members ·
-                    ${
-                        isCreator
-                            ? "You created this group"
-                            : "Admin: " + socialhubGroupsEscape(
-                                memberMap.get(group.created_by)?.full_name || "Admin"
-                            )
-                    }
-                </p>
-            </div>
-
+        <div class="group-cover">
+            <i class="fa-solid fa-users"></i>
         </div>
 
-        <p class="group-hero-desc">
-            ${socialhubGroupsEscape(group.description || "No description yet.")}
-        </p>
+        <div class="group-hero">
 
-        <div class="group-hero-actions">
+            <div class="group-hero-top">
 
-            ${
-                isCreator
-                    ? `
-                        <button
-                            class="socialhub-danger-btn"
-                            onclick="socialhubGroupDelete('${group.id}', this)"
-                        >
-                            🗑️ Delete Group
-                        </button>
-                    `
-                    : myMembership
+                <div class="group-hero-avatar">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+
+                <div>
+                    <h1>${socialhubGroupsEscape(group.name)}</h1>
+                    <p class="group-hero-meta">
+                        <i class="fa-solid fa-user-group"></i>
+                        ${memberCount} members ·
+                        <i class="fa-solid fa-globe"></i>
+                        Public group
+                        ${
+                            isCreator
+                                ? " · You created this group"
+                                : " · Admin: " + socialhubGroupsEscape(
+                                    memberMap.get(group.created_by)?.full_name || "Admin"
+                                )
+                        }
+                    </p>
+                </div>
+
+            </div>
+
+            <p class="group-hero-desc">
+                ${socialhubGroupsEscape(group.description || "No description yet.")}
+            </p>
+
+            <div class="group-hero-actions">
+
+                ${
+                    isCreator
                         ? `
                             <button
                                 class="socialhub-danger-btn"
-                                onclick="socialhubGroupLeave('${group.id}', this)"
+                                onclick="socialhubGroupDelete('${group.id}', this)"
                             >
-                                🚪 Leave Group
+                                <i class="fa-solid fa-trash-can"></i>
+                                Delete Group
                             </button>
                         `
-                        : `
-                            <button
-                                class="socialhub-create-btn"
-                                onclick="socialhubGroupJoin('${group.id}', this)"
-                            >
-                                ➕ Join Group
-                            </button>
-                        `
-            }
+                        : myMembership
+                            ? `
+                                <button
+                                    class="group-join-btn leave"
+                                    onclick="socialhubGroupLeave('${group.id}', this)"
+                                >
+                                    <i class="fa-solid fa-user-minus"></i>
+                                    Leave Group
+                                </button>
+                            `
+                            : `
+                                <button
+                                    class="group-join-btn"
+                                    onclick="socialhubGroupJoin('${group.id}', this)"
+                                >
+                                    <i class="fa-solid fa-user-plus"></i>
+                                    Join Group
+                                </button>
+                            `
+                }
+
+            </div>
 
         </div>
     `;
@@ -863,7 +1156,7 @@ async function socialhubGroupLoad() {
         chip.innerHTML = `
             ${socialhubGroupsAvatarHTML(profile)}
             ${socialhubGroupsEscape(profile.full_name || "@" + profile.username || "User")}
-            ${member.role === "admin" ? " 👑" : ""}
+            ${member.role === "admin" ? '<i class="fa-solid fa-crown"></i>' : ""}
         `;
 
         chip.addEventListener("click", () => {

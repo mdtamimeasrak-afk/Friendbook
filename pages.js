@@ -17,58 +17,105 @@
     style.textContent = `
 
 .pages-main {
-    max-width: 860px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 18px 14px 40px;
 }
 
+.pages-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 4px;
+}
+
+.pages-head .pages-head-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #e7f3ff;
+    color: #1877f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
 .pages-main h1 {
-    margin: 0 0 4px;
+    margin: 0;
     font-size: 22px;
 }
 
 .pages-main .pages-sub {
-    margin: 0 0 16px;
+    margin: 0 0 16px 56px;
     color: #65676b;
     font-size: 13.5px;
 }
 
+.pages-top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.pages-count-pill {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #65676b;
+    background: #fff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
 .pages-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 12px;
-    margin-top: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 14px;
 }
 
 .page-card {
     background: #fff;
-    border-radius: 14px;
-    padding: 16px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     transition: 0.15s;
+    display: flex;
+    flex-direction: column;
 }
 
 .page-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.14);
+    transform: translateY(-1px);
+}
+
+.page-card-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
 }
 
 .page-card-logo {
     width: 52px;
     height: 52px;
-    border-radius: 14px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
-    background: linear-gradient(135deg, #25a56a, #7bdcb5);
+    font-size: 21px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #25a56a, #63d9a8);
     color: #fff;
-    margin-bottom: 10px;
+    flex-shrink: 0;
 }
 
 .page-card h3 {
-    margin: 0 0 4px;
+    margin: 0;
     font-size: 15.5px;
 }
 
@@ -80,27 +127,89 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    flex-grow: 1;
 }
 
-.page-card .page-card-meta {
-    margin-top: 10px;
+.page-card-bottom {
+    border-top: 1px solid #e4e6eb;
+    margin-top: 12px;
+    padding-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.page-card-bottom .page-card-meta {
     font-size: 12.5px;
+    color: #65676b;
+    font-weight: 600;
+}
+
+.page-card-bottom .page-card-meta i {
     color: #1877f2;
+    margin-right: 4px;
+}
+
+.page-card-follow {
+    border: none;
+    background: #e7f3ff;
+    color: #1877f2;
+    font-size: 12.5px;
     font-weight: 700;
+    padding: 7px 14px;
+    border-radius: 18px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: 0.12s;
+}
+
+.page-card-follow:hover {
+    background: #d4e7ff;
+}
+
+.page-card-follow.following {
+    background: #e4e6eb;
+    color: #65676b;
 }
 
 /* Page page */
 .page-page {
-    max-width: 760px;
+    max-width: 780px;
     margin: 0 auto;
     padding: 18px 14px 40px;
 }
 
+.page-cover {
+    height: 150px;
+    border-radius: 12px 12px 0 0;
+    background: linear-gradient(135deg, #25a56a, #3ecfa3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 52px;
+    color: rgba(255, 255, 255, 0.95);
+    position: relative;
+    overflow: hidden;
+}
+
+.page-cover::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.08), rgba(0,0,0,0.28));
+}
+
+.page-cover i {
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+}
+
 .page-hero {
     background: #fff;
-    border-radius: 16px;
-    padding: 22px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    border-radius: 0 0 12px 12px;
+    padding: 20px 22px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     margin-bottom: 16px;
 }
 
@@ -112,21 +221,23 @@
 }
 
 .page-hero .page-hero-logo {
-    width: 64px;
-    height: 64px;
-    border-radius: 18px;
-    background: linear-gradient(135deg, #25a56a, #7bdcb5);
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #25a56a, #63d9a8);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 30px;
+    font-weight: 800;
     color: #fff;
     flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .page-hero h1 {
-    margin: 0 0 2px;
-    font-size: 20px;
+    margin: 0 0 3px;
+    font-size: 22px;
 }
 
 .page-hero .page-hero-meta {
@@ -135,9 +246,15 @@
     color: #65676b;
 }
 
+.page-hero .page-hero-meta i {
+    color: #1877f2;
+    margin-right: 4px;
+}
+
 .page-hero .page-hero-desc {
     margin: 8px 0 14px;
     font-size: 14px;
+    color: #65676b;
 }
 
 .page-hero .page-hero-actions {
@@ -146,17 +263,48 @@
     flex-wrap: wrap;
 }
 
-.page-feed-title {
-    font-size: 16px;
+.page-follow-btn {
+    border: none;
+    background: #1877f2;
+    color: #fff;
+    padding: 11px 24px;
+    border-radius: 22px;
+    font-size: 14px;
     font-weight: 700;
-    margin: 18px 0 10px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.12s;
+}
+
+.page-follow-btn:hover {
+    background: #166fe5;
+}
+
+.page-follow-btn.following {
+    background: #e4e6eb;
+    color: #65676b;
+}
+
+.page-feed-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin: 20px 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.page-feed-title i {
+    color: #1877f2;
 }
 
 .page-composer {
     background: #fff;
-    border-radius: 14px;
+    border-radius: 12px;
     padding: 14px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     margin-bottom: 14px;
 }
 
@@ -168,6 +316,19 @@
     font-size: 13px;
     font-weight: 600;
     color: #65676b;
+}
+
+.page-composer .page-composer-as .as-logo {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #25a56a, #63d9a8);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
 }
 
 .page-composer textarea {
@@ -194,6 +355,15 @@
 .page-composer .page-composer-row label {
     cursor: pointer;
     font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    color: #65676b;
+    font-weight: 600;
+}
+
+.page-composer .page-composer-row label:hover {
+    color: #1877f2;
 }
 
 .page-composer .page-composer-row img {
@@ -203,18 +373,174 @@
     object-fit: cover;
 }
 
+/* Create modal (FB style) */
+.socialhub-cr-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 20px;
+}
+
+.socialhub-cr-box {
+    background: #fff;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 460px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+}
+
+.socialhub-cr-box .cr-head {
+    padding: 16px 18px;
+    border-bottom: 1px solid #e4e6eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.socialhub-cr-box .cr-head h2 {
+    margin: 0;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.socialhub-cr-box .cr-head .cr-close {
+    border: none;
+    background: #e4e6eb;
+    color: #050505;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cr-body {
+    padding: 16px 18px;
+}
+
+.cr-body label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #65676b;
+    margin: 10px 0 6px;
+}
+
+.cr-body label:first-child {
+    margin-top: 0;
+}
+
+.cr-body input,
+.cr-body textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 13px;
+    border: 1px solid #d4d7dd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: 0.12s;
+}
+
+.cr-body input:focus,
+.cr-body textarea:focus {
+    border-color: #1877f2;
+    box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.15);
+}
+
+.cr-actions {
+    display: flex;
+    gap: 10px;
+    padding: 14px 18px;
+    border-top: 1px solid #e4e6eb;
+    justify-content: flex-end;
+}
+
+.socialhub-cr-cancel {
+    border: none;
+    background: #e4e6eb;
+    color: #1c1e21;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.socialhub-cr-cancel:hover {
+    background: #d8dadf;
+}
+
+.socialhub-create-btn {
+    border: none;
+    background: #1877f2;
+    color: #fff;
+    padding: 10px 22px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: 0.12s;
+}
+
+.socialhub-create-btn:hover {
+    background: #166fe5;
+}
+
+.socialhub-danger-btn {
+    border: none;
+    background: #e41e3f;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: 0.12s;
+}
+
+.socialhub-danger-btn:hover {
+    background: #c81233;
+}
+
 body.dark-mode .page-card,
 body.dark-mode .page-hero,
 body.dark-mode .page-composer,
-body.dark-mode .socialhub-cr-box {
+body.dark-mode .socialhub-cr-box,
+body.dark-mode .pages-count-pill {
     background: #242526;
 }
 
 body.dark-mode .page-card p,
 body.dark-mode .page-hero .page-hero-meta,
 body.dark-mode .pages-main .pages-sub,
-body.dark-mode .page-composer .page-composer-as {
+body.dark-mode .page-composer .page-composer-as,
+body.dark-mode .pages-count-pill,
+body.dark-mode .page-card-bottom .page-card-meta,
+body.dark-mode .page-hero .page-hero-desc,
+body.dark-mode .page-composer .page-composer-row label {
     color: #b0b3b8;
+}
+
+body.dark-mode .page-card-bottom {
+    border-top-color: #3a3b3c;
 }
 
 body.dark-mode .page-composer textarea {
@@ -225,11 +551,25 @@ body.dark-mode .page-composer .page-composer-row {
     border-top-color: #3a3b3c;
 }
 
-body.dark-mode .socialhub-cr-box input,
-body.dark-mode .socialhub-cr-box textarea {
+body.dark-mode .page-card-follow.following,
+body.dark-mode .page-follow-btn.following {
+    background: #3a3b3c;
+    color: #b0b3b8;
+}
+
+body.dark-mode .cr-body input,
+body.dark-mode .cr-body textarea {
     background: #3a3b3c;
     border-color: #4e4f50;
     color: #e4e6eb;
+}
+
+body.dark-mode .socialhub-cr-box .cr-head {
+    border-bottom-color: #3a3b3c;
+}
+
+body.dark-mode .cr-actions {
+    border-top-color: #3a3b3c;
 }
 `;
 
@@ -319,22 +659,39 @@ function socialhubPagesOpenCreateModal() {
 
     modal.innerHTML = `
         <div class="socialhub-cr-box">
-            <h2>🏢 Create Page</h2>
+            <div class="cr-head">
+                <h2>
+                    <i class="fa-solid fa-flag"></i>
+                    Create Page
+                </h2>
+                <button class="cr-close" type="button" title="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
 
-            <label>Page name</label>
-            <input type="text" id="pgName" placeholder="e.g. TRIYA Official" maxlength="60">
+            <div class="cr-body">
+                <label>Page name</label>
+                <input type="text" id="pgName" placeholder="e.g. TRIYA Official" maxlength="60">
 
-            <label>Description</label>
-            <textarea id="pgDesc" rows="3" placeholder="What is this page about?"></textarea>
+                <label>Description</label>
+                <textarea id="pgDesc" rows="3" placeholder="What is this page about?"></textarea>
+            </div>
 
-            <div class="socialhub-cr-actions">
+            <div class="cr-actions">
                 <button class="socialhub-cr-cancel" type="button">Cancel</button>
-                <button class="socialhub-create-btn" type="button">Create Page</button>
+                <button class="socialhub-create-btn" type="button">
+                    <i class="fa-solid fa-flag"></i>
+                    Create Page
+                </button>
             </div>
         </div>
     `;
 
     document.body.appendChild(modal);
+
+    modal
+        .querySelector(".cr-close")
+        .addEventListener("click", () => modal.remove());
 
     modal
         .querySelector(".socialhub-cr-cancel")
@@ -456,24 +813,14 @@ async function socialhubPagesLoad() {
         return;
     }
 
-    const creatorIds =
-        [...new Set(
-            pages.map(p => p.created_by)
-        )];
+    const countPill =
+        document.getElementById("pagesCount");
 
-    const {
-        data: profiles
-    } = await db
-        .from("profiles")
-        .select("id, full_name")
-        .in("id", creatorIds);
+    if (countPill) {
 
-    const nameMap = {};
-
-    (profiles || []).forEach(p => {
-
-        nameMap[p.id] = p.full_name;
-    });
+        countPill.textContent =
+            pages.length + " pages";
+    }
 
     const {
         data: followers
@@ -491,6 +838,31 @@ async function socialhubPagesLoad() {
 
     grid.innerHTML = "";
 
+    const pageIds =
+        pages.map(p => p.id);
+
+    const me =
+        await socialhubPagesGetMe();
+
+    const myFollowed =
+        new Set();
+
+    if (me && pageIds.length > 0) {
+
+        const {
+            data: myF
+        } = await db
+            .from("page_followers")
+            .select("page_id")
+            .eq("user_id", me.id)
+            .in("page_id", pageIds);
+
+        (myF || []).forEach(f => {
+
+            myFollowed.add(f.page_id);
+        });
+    }
+
     pages.forEach(page => {
 
         const card =
@@ -498,16 +870,51 @@ async function socialhubPagesLoad() {
 
         card.className = "page-card";
 
-        card.innerHTML = `
-            <div class="page-card-logo">🏢</div>
+        const letter =
+            (page.name || "P").charAt(0).toUpperCase();
 
-            <h3>${socialhubPagesEscape(page.name)}</h3>
+        const following =
+            myFollowed.has(page.id);
+
+        const count =
+            followCount[page.id] || 1;
+
+        card.innerHTML = `
+
+            <div class="page-card-top">
+
+                <div class="page-card-logo">
+                    ${socialhubPagesEscape(letter)}
+                </div>
+
+                <h3>${socialhubPagesEscape(page.name)}</h3>
+
+            </div>
 
             <p>${socialhubPagesEscape(page.description || "")}</p>
 
-            <div class="page-card-meta">
-                ${followCount[page.id] || 1} followers ·
-                Created by ${socialhubPagesEscape(nameMap[page.created_by] || "Someone")}
+            <div class="page-card-bottom">
+
+                <div class="page-card-meta" data-count="${count}">
+                    <i class="fa-solid fa-user-group"></i>
+                    ${count} followers
+                </div>
+
+                ${
+                    me
+                        ? `
+                            <button
+                                class="page-card-follow ${following ? "following" : ""}"
+                                data-following="${following}"
+                                onclick="event.stopPropagation(); socialhubPageCardToggle('${page.id}', this, ${following});"
+                            >
+                                <i class="fa-solid ${following ? "fa-check" : "fa-plus"}"></i>
+                                ${following ? "Following" : "Follow"}
+                            </button>
+                        `
+                        : ""
+                }
+
             </div>
         `;
 
@@ -517,6 +924,85 @@ async function socialhubPagesLoad() {
         });
 
         grid.appendChild(card);
+    });
+}
+
+
+async function socialhubPageCardToggle(pageId, button, following) {
+
+    const me =
+        await socialhubPagesGetMe();
+
+    if (!me) {
+        return;
+    }
+
+    if (following) {
+
+        await db
+            .from("page_followers")
+            .delete()
+            .eq("page_id", pageId)
+            .eq("user_id", me.id);
+
+    } else {
+
+        const { error } =
+            await db
+                .from("page_followers")
+                .insert({
+                    page_id: pageId,
+                    user_id: me.id
+                });
+
+        if (error) {
+
+            alert("Could not follow: " + error.message);
+
+            return;
+        }
+    }
+
+    const card =
+        button.closest(".page-card");
+
+    const meta =
+        card.querySelector(".page-card-meta");
+
+    const oldCount =
+        parseInt(meta.dataset.count || "1", 10) || 1;
+
+    const newCount =
+        following ? oldCount - 1 : oldCount + 1;
+
+    meta.dataset.count = newCount;
+
+    meta.innerHTML =
+        '<i class="fa-solid fa-user-group"></i> ' +
+        newCount + " followers";
+
+    const nowFollowing =
+        !following;
+
+    button.classList.toggle("following", nowFollowing);
+
+    button.dataset.following = String(nowFollowing);
+
+    button.innerHTML =
+        `<i class="fa-solid ${nowFollowing ? "fa-check" : "fa-plus"}"></i> ` +
+        (nowFollowing ? "Following" : "Follow");
+
+    button.onclick = null;
+
+    button.addEventListener("click", event => {
+
+        event.stopPropagation();
+
+        socialhubPageCardToggle(
+            pageId,
+            button,
+            nowFollowing
+        );
     });
 }
 
@@ -594,56 +1080,81 @@ async function socialhubPageLoad() {
     const hero =
         document.getElementById("pageHero");
 
+    const pageLetter =
+        (page.name || "P").charAt(0).toUpperCase();
+
+    const asLogo =
+        document.getElementById("pageAsLogo");
+
+    if (asLogo) {
+
+        asLogo.textContent = pageLetter;
+    }
+
     hero.innerHTML = `
 
-        <div class="page-hero-top">
-
-            <div class="page-hero-logo">🏢</div>
-
-            <div>
-                <h1>${socialhubPagesEscape(page.name)}</h1>
-                <p class="page-hero-meta">
-                    ${followerCount} followers
-                    ${isCreator ? " · You manage this page" : ""}
-                </p>
-            </div>
-
+        <div class="page-cover">
+            <i class="fa-solid fa-flag"></i>
         </div>
 
-        <p class="page-hero-desc">
-            ${socialhubPagesEscape(page.description || "No description yet.")}
-        </p>
+        <div class="page-hero">
 
-        <div class="page-hero-actions">
+            <div class="page-hero-top">
 
-            ${
-                isCreator
-                    ? `
-                        <button
-                            class="socialhub-danger-btn"
-                            onclick="socialhubPageDelete('${page.id}', this)"
-                        >
-                            🗑️ Delete Page
-                        </button>
-                    `
-                    : myFollow
+                <div class="page-hero-logo">
+                    ${socialhubPagesEscape((page.name || "P").charAt(0).toUpperCase())}
+                </div>
+
+                <div>
+                    <h1>${socialhubPagesEscape(page.name)}</h1>
+                    <p class="page-hero-meta">
+                        <i class="fa-solid fa-user-group"></i>
+                        ${followerCount} followers
+                        ${isCreator ? " · You manage this page" : ""}
+                    </p>
+                </div>
+
+            </div>
+
+            <p class="page-hero-desc">
+                ${socialhubPagesEscape(page.description || "No description yet.")}
+            </p>
+
+            <div class="page-hero-actions">
+
+                ${
+                    isCreator
                         ? `
                             <button
                                 class="socialhub-danger-btn"
-                                onclick="socialhubPageUnfollow('${page.id}', this)"
+                                onclick="socialhubPageDelete('${page.id}', this)"
                             >
-                                ✖️ Unfollow
+                                <i class="fa-solid fa-trash-can"></i>
+                                Delete Page
                             </button>
                         `
-                        : `
-                            <button
-                                class="socialhub-create-btn"
-                                onclick="socialhubPageFollow('${page.id}', this)"
-                            >
-                                👍 Follow
-                            </button>
-                        `
-            }
+                        : myFollow
+                            ? `
+                                <button
+                                    class="page-follow-btn following"
+                                    onclick="socialhubPageUnfollow('${page.id}', this)"
+                                >
+                                    <i class="fa-solid fa-check"></i>
+                                    Following
+                                </button>
+                            `
+                            : `
+                                <button
+                                    class="page-follow-btn"
+                                    onclick="socialhubPageFollow('${page.id}', this)"
+                                >
+                                    <i class="fa-solid fa-plus"></i>
+                                    Follow
+                                </button>
+                            `
+                }
+
+            </div>
 
         </div>
     `;

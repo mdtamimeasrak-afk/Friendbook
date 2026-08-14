@@ -135,21 +135,38 @@
 
     <main class="groups-main">
 
-        <h1>👥 Groups</h1>
+        <div class="groups-head">
+
+            <div class="groups-head-icon">
+                <i class="fa-solid fa-users"></i>
+            </div>
+
+            <h1>Groups</h1>
+
+        </div>
 
         <p class="groups-sub">Create groups, invite friends and share together.</p>
 
-        <button
-            class="socialhub-create-btn"
-            onclick="socialhubGroupsOpenCreateModal()"
-        >
-            ➕ Create New Group
-        </button>
+        <div class="groups-top-row">
+
+            <button
+                class="socialhub-create-btn"
+                onclick="socialhubGroupsOpenCreateModal()"
+            >
+                <i class="fa-solid fa-plus"></i>
+                Create New Group
+            </button>
+
+            <span
+                class="groups-count-pill"
+                id="groupsCount"
+            ></span>
+
+        </div>
 
         <div
             class="groups-grid"
             id="groupsGrid"
-            style="margin-top: 16px;"
         >
 
             <p class="empty-message" style="grid-column:1/-1;">
@@ -178,7 +195,7 @@
 
     <script src="shares.js?v=2"></script>
 
-    <script src="groups.js?v=1"></script>
+    <script src="groups.js?v=2"></script>
 
 </body>
 

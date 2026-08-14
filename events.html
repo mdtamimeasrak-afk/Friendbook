@@ -135,16 +135,34 @@
 
     <main class="events-main">
 
-        <h1>📅 Events</h1>
+        <div class="events-head">
+
+            <div class="events-head-icon">
+                <i class="fa-solid fa-calendar-days"></i>
+            </div>
+
+            <h1>Events</h1>
+
+        </div>
 
         <p class="events-sub">Create events and invite everyone.</p>
 
-        <button
-            class="socialhub-create-btn"
-            onclick="socialhubEventsOpenCreateModal()"
-        >
-            ➕ Create New Event
-        </button>
+        <div class="events-top-row">
+
+            <button
+                class="socialhub-create-btn"
+                onclick="socialhubEventsOpenCreateModal()"
+            >
+                <i class="fa-solid fa-plus"></i>
+                Create New Event
+            </button>
+
+            <span
+                class="events-count-pill"
+                id="eventsCount"
+            ></span>
+
+        </div>
 
         <div
             class="events-grid"
@@ -177,7 +195,7 @@
 
     <script src="shares.js?v=2"></script>
 
-    <script src="events.js?v=2"></script>
+    <script src="events.js?v=3"></script>
 
 </body>
 

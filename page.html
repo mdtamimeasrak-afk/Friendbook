@@ -150,7 +150,8 @@
         >
 
             <div class="page-composer-as">
-                🏢 Posting as this page
+                <span class="as-logo" id="pageAsLogo">P</span>
+                <span>Posting as this page</span>
             </div>
 
             <textarea
@@ -160,7 +161,8 @@
             <div class="page-composer-row">
 
                 <label>
-                    🖼️ Add Photo
+                    <i class="fa-solid fa-image"></i>
+                    Add Photo
                     <input
                         type="file"
                         accept="image/*"
@@ -174,6 +176,7 @@
                     style="margin-left:auto;"
                     onclick="socialhubPagePost(this)"
                 >
+                    <i class="fa-solid fa-paper-plane"></i>
                     Post
                 </button>
 
@@ -182,7 +185,10 @@
         </div>
 
 
-        <h3 class="page-feed-title">📝 Page Posts</h3>
+        <h3 class="page-feed-title">
+            <i class="fa-solid fa-newspaper"></i>
+            Page Posts
+        </h3>
 
 
         <div
@@ -214,7 +220,7 @@
 
     <script src="shares.js?v=2"></script>
 
-    <script src="pages.js?v=1"></script>
+    <script src="pages.js?v=2"></script>
 
 </body>
 

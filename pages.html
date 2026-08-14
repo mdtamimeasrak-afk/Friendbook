@@ -135,16 +135,34 @@
 
     <main class="pages-main">
 
-        <h1>🏢 Pages</h1>
+        <div class="pages-head">
+
+            <div class="pages-head-icon">
+                <i class="fa-solid fa-flag"></i>
+            </div>
+
+            <h1>Pages</h1>
+
+        </div>
 
         <p class="pages-sub">Create pages and share with your followers.</p>
 
-        <button
-            class="socialhub-create-btn"
-            onclick="socialhubPagesOpenCreateModal()"
-        >
-            ➕ Create New Page
-        </button>
+        <div class="pages-top-row">
+
+            <button
+                class="socialhub-create-btn"
+                onclick="socialhubPagesOpenCreateModal()"
+            >
+                <i class="fa-solid fa-plus"></i>
+                Create New Page
+            </button>
+
+            <span
+                class="pages-count-pill"
+                id="pagesCount"
+            ></span>
+
+        </div>
 
         <div
             class="pages-grid"
@@ -177,7 +195,7 @@
 
     <script src="shares.js?v=2"></script>
 
-    <script src="pages.js?v=1"></script>
+    <script src="pages.js?v=2"></script>
 
 </body>
 
