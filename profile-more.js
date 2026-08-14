@@ -887,6 +887,608 @@
         }
     }
 
+    // ======================================================
+    // 5. ACTIVITY LOG
+    // ======================================================
+
+    var activityCache =
+        [];
+
+    function socialhubProfileActivityLog() {
+
+        socialhubProfileMoreClose();
+
+        var modal =
+            document
+                .getElementById("fbActivityModal");
+
+        if (!modal) {
+
+            return;
+        }
+
+        modal.style.display =
+            "flex";
+
+        socialhubProfileActivityLoad();
+    }
+
+    function socialhubProfileActivityClose() {
+
+        var modal =
+            document
+                .getElementById("fbActivityModal");
+
+        if (modal) {
+
+            modal.style.display =
+                "none";
+        }
+    }
+
+    function socialhubProfileRelativeTime(date) {
+
+        var diff =
+            Date.now() - new Date(date).getTime();
+
+        var minutes =
+            Math.floor(diff / 60000);
+
+        if (minutes < 1) {
+
+            return "just now";
+        }
+
+        if (minutes < 60) {
+
+            return minutes + " minute" +
+                (minutes === 1 ? "" : "s") +
+                " ago";
+        }
+
+        var hours =
+            Math.floor(minutes / 60);
+
+        if (hours < 24) {
+
+            return hours + " hour" +
+                (hours === 1 ? "" : "s") +
+                " ago";
+        }
+
+        var days =
+            Math.floor(hours / 24);
+
+        return days + " day" +
+            (days === 1 ? "" : "s") +
+            " ago";
+    }
+
+    function socialhubProfileDayLabel(date) {
+
+        var now =
+            new Date();
+
+        var day =
+            new Date(date);
+
+        var today =
+            new Date(
+                now.getFullYear(),
+                now.getMonth(),
+                now.getDate()
+            );
+
+        var target =
+            new Date(
+                day.getFullYear(),
+                day.getMonth(),
+                day.getDate()
+            );
+
+        var diffDays =
+            Math.round(
+                (today.getTime() - target.getTime()) / 86400000
+            );
+
+        if (diffDays === 0) {
+
+            return "Today";
+        }
+
+        if (diffDays === 1) {
+
+            return "Yesterday";
+        }
+
+        return day.toLocaleDateString(
+            "en-GB",
+            {
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+            }
+        );
+    }
+
+    async function socialhubProfileActivityLoad() {
+
+        var body =
+            document
+                .getElementById("fbActivityBody");
+
+        if (!body) {
+
+            return;
+        }
+
+        var me =
+            await socialhubGetMe();
+
+        if (!me) {
+
+            body.innerHTML =
+                '<p class="fb-search-empty">You are not logged in.</p>';
+
+            return;
+        }
+
+        var [
+            postsResult,
+            commentsResult,
+            likesResult,
+            storiesResult
+        ] =
+            await Promise.all([
+                db
+                    .from("posts")
+                    .select("id, content, image_url, video_url, created_at")
+                    .eq("user_id", me.id)
+                    .order("created_at", { ascending: false })
+                    .limit(50),
+                db
+                    .from("comments")
+                    .select("id, post_id, content, created_at")
+                    .eq("user_id", me.id)
+                    .order("created_at", { ascending: false })
+                    .limit(50),
+                db
+                    .from("likes")
+                    .select("id, post_id, created_at")
+                    .eq("user_id", me.id)
+                    .order("created_at", { ascending: false })
+                    .limit(50),
+                db
+                    .from("stories")
+                    .select("id, media_type, created_at")
+                    .eq("user_id", me.id)
+                    .order("created_at", { ascending: false })
+                    .limit(20)
+            ]);
+
+        var items =
+            [];
+
+        (postsResult.data || []).forEach(function (post) {
+
+            var kind =
+                post.video_url && !post.image_url
+                    ? "reels"
+                    : post.image_url
+                        ? "photos"
+                        : "posts";
+
+            items.push({
+
+                kind: kind,
+                icon: post.video_url && !post.image_url
+                    ? "fa-video"
+                    : post.image_url
+                        ? "fa-image"
+                        : "fa-file-lines",
+                text: "You created a " +
+                    (post.video_url && !post.image_url
+                        ? "reel"
+                        : post.image_url
+                            ? "photo post"
+                            : "post"),
+                time: post.created_at,
+                postId: post.id
+            });
+        });
+
+        (commentsResult.data || []).forEach(function (comment) {
+
+            items.push({
+
+                kind: "comments",
+                icon: "fa-comment",
+                text: "You commented: " +
+                    (comment.content || "").slice(0, 60),
+                time: comment.created_at,
+                postId: comment.post_id
+            });
+        });
+
+        (likesResult.data || []).forEach(function (like) {
+
+            items.push({
+
+                kind: "likes",
+                icon: "fa-heart",
+                text: "You liked a post",
+                time: like.created_at,
+                postId: like.post_id
+            });
+        });
+
+        (storiesResult.data || []).forEach(function (story) {
+
+            items.push({
+
+                kind: "stories",
+                icon: "fa-camera",
+                text: "You shared a story",
+                time: story.created_at,
+                postId: null
+            });
+        });
+
+        items.sort(function (a, b) {
+
+            return (
+                new Date(b.time).getTime() -
+                new Date(a.time).getTime()
+            );
+        });
+
+        activityCache =
+            items;
+
+        socialhubProfileActivityRender();
+    }
+
+    function socialhubProfileActivityRender() {
+
+        var body =
+            document
+                .getElementById("fbActivityBody");
+
+        if (!body) {
+
+            return;
+        }
+
+        var typeFilter =
+            document
+                .getElementById("fbActivityType")
+                .value;
+
+        var dateFilter =
+            document
+                .getElementById("fbActivityDate")
+                .value;
+
+        var items =
+            activityCache.filter(function (item) {
+
+                if (
+                    typeFilter !== "all" &&
+                    item.kind !== typeFilter
+                ) {
+
+                    return false;
+                }
+
+                if (dateFilter === "today") {
+
+                    var now =
+                        new Date();
+
+                    var start =
+                        new Date(
+                            now.getFullYear(),
+                            now.getMonth(),
+                            now.getDate()
+                        );
+
+                    if (new Date(item.time) < start) {
+
+                        return false;
+                    }
+
+                } else if (dateFilter === "7") {
+
+                    var cutoff =
+                        Date.now() - 7 * 86400000;
+
+                    if (new Date(item.time).getTime() < cutoff) {
+
+                        return false;
+                    }
+                }
+
+                return true;
+            });
+
+        if (items.length === 0) {
+
+            body.innerHTML =
+                '<p class="fb-search-empty">No activity found.</p>';
+
+            return;
+        }
+
+        var html =
+            "";
+
+        var lastLabel =
+            null;
+
+        items.forEach(function (item) {
+
+            var label =
+                socialhubProfileDayLabel(item.time);
+
+            if (label !== lastLabel) {
+
+                html +=
+                    '<p class="fb-search-section-title">' +
+                    label +
+                    "</p>";
+
+                lastLabel =
+                    label;
+            }
+
+            html +=
+                '<button type="button" class="fb-search-result fb-activity-item" data-post-id="' +
+                (item.postId || "") + '">' +
+                '<i class="fa-solid ' + item.icon + '"></i>' +
+                "<span>" +
+                "<strong>" + socialhubEscape(item.text) + "</strong>" +
+                "<em>" + socialhubProfileRelativeTime(item.time) + "</em>" +
+                "</span>" +
+                "</button>";
+        });
+
+        body.innerHTML =
+            html;
+
+        body
+            .querySelectorAll(".fb-activity-item[data-post-id]:not([data-post-id=''])")
+            .forEach(function (btn) {
+
+                btn.addEventListener("click", function () {
+
+                    var id =
+                        btn.getAttribute("data-post-id");
+
+                    var inCache =
+                        (
+                            typeof socialhubMyPostsCache !== "undefined" &&
+                            socialhubMyPostsCache &&
+                            socialhubMyPostsCache.posts
+                        )
+                            ? socialhubMyPostsCache.posts
+                                .some(function (post) {
+
+                                    return post.id === id;
+                                })
+                            : false;
+
+                    if (
+                        inCache &&
+                        typeof socialhubOpenPostLightbox === "function"
+                    ) {
+
+                        socialhubProfileActivityClose();
+
+                        socialhubOpenPostLightbox(id);
+
+                        return;
+                    }
+
+                    socialhubProfileActivityClose();
+
+                    if (
+                        typeof socialhubSwitchFbTab === "function"
+                    ) {
+
+                        socialhubSwitchFbTab("posts");
+
+                        socialhubToast(
+                            "Found in your posts.",
+                            "info"
+                        );
+                    }
+                });
+            });
+    }
+
+    // ======================================================
+    // 6. PROFILE AND TAGGING SETTINGS
+    // ======================================================
+
+    var taggingDefaults = {
+
+        who_can_post: "friends",
+        who_can_see_others_posts: "friends",
+        who_can_tag: "friends",
+        review_tagged_posts: true,
+        review_post_tags: false
+
+    };
+
+    function socialhubProfileTaggingSettings() {
+
+        socialhubProfileMoreClose();
+
+        var modal =
+            document
+                .getElementById("fbTaggingModal");
+
+        if (!modal) {
+
+            return;
+        }
+
+        modal.style.display =
+            "flex";
+
+        socialhubProfileTaggingLoad();
+    }
+
+    function socialhubProfileTaggingClose() {
+
+        var modal =
+            document
+                .getElementById("fbTaggingModal");
+
+        if (modal) {
+
+            modal.style.display =
+                "none";
+        }
+    }
+
+    async function socialhubProfileTaggingLoad() {
+
+        var me =
+            await socialhubGetMe();
+
+        if (!me) {
+
+            return;
+        }
+
+        var {
+            data: profile,
+            error
+        } = await db
+            .from("profiles")
+            .select("id, extra")
+            .eq("id", me.id)
+            .single();
+
+        if (error || !profile) {
+
+            return;
+        }
+
+        var extra =
+            profile.extra || {};
+
+        var settings =
+            Object.assign(
+                {},
+                taggingDefaults,
+                (extra.profile_settings && typeof extra.profile_settings === "object")
+                    ? extra.profile_settings
+                    : {}
+            );
+
+        document
+            .querySelectorAll(".fb-tagging-select")
+            .forEach(function (select) {
+
+                var key =
+                    select.getAttribute("data-tag-key");
+
+                select.value =
+                    settings[key] || "friends";
+            });
+
+        document
+            .querySelectorAll(".fb-toggle input")
+            .forEach(function (checkbox) {
+
+                var key =
+                    checkbox.getAttribute("data-tag-key");
+
+                checkbox.checked =
+                    Boolean(settings[key]);
+            });
+    }
+
+    async function socialhubProfileTaggingSave() {
+
+        var me =
+            await socialhubGetMe();
+
+        if (!me) {
+
+            return;
+        }
+
+        var {
+            data: profile,
+            error
+        } = await db
+            .from("profiles")
+            .select("id, extra")
+            .eq("id", me.id)
+            .single();
+
+        if (error || !profile) {
+
+            socialhubToast("Could not save settings.", "error");
+
+            return;
+        }
+
+        var settings =
+            Object.assign(
+                {},
+                taggingDefaults,
+                (profile.extra && profile.extra.profile_settings) || {}
+            );
+
+        document
+            .querySelectorAll(".fb-tagging-select")
+            .forEach(function (select) {
+
+                var key =
+                    select.getAttribute("data-tag-key");
+
+                settings[key] =
+                    select.value;
+            });
+
+        document
+            .querySelectorAll(".fb-toggle input")
+            .forEach(function (checkbox) {
+
+                var key =
+                    checkbox.getAttribute("data-tag-key");
+
+                settings[key] =
+                    checkbox.checked;
+            });
+
+        var extra =
+            Object.assign({}, profile.extra || {});
+
+        extra.profile_settings =
+            settings;
+
+        var {
+            error: saveError
+        } = await db
+            .from("profiles")
+            .update({ extra: extra })
+            .eq("id", me.id);
+
+        if (saveError) {
+
+            socialhubToast("Could not save settings.", "error");
+
+            return;
+        }
+
+        socialhubToast("Settings saved.", "success");
+    }
+
     // ------------------------------------------
     // WIRE
     // ------------------------------------------
@@ -948,7 +1550,9 @@
         [
             "fbSearchModal",
             "fbHighlightsEditModal",
-            "fbStatusModal"
+            "fbStatusModal",
+            "fbActivityModal",
+            "fbTaggingModal"
         ]
             .forEach(function (id) {
 
@@ -976,9 +1580,17 @@
 
                         socialhubProfileHighlightsClose();
 
-                    } else {
+                    } else if (id === "fbStatusModal") {
 
                         socialhubProfileStatusClose();
+
+                    } else if (id === "fbActivityModal") {
+
+                        socialhubProfileActivityClose();
+
+                    } else {
+
+                        socialhubProfileTaggingClose();
                     }
                 });
             });
@@ -1016,7 +1628,40 @@
 
                 socialhubProfileStatusClose();
             }
+
+            if (
+                document
+                    .getElementById("fbActivityModal")
+                    .style.display !== "none"
+            ) {
+
+                socialhubProfileActivityClose();
+            }
+
+            if (
+                document
+                    .getElementById("fbTaggingModal")
+                    .style.display !== "none"
+            ) {
+
+                socialhubProfileTaggingClose();
+            }
         });
+
+        document
+            .getElementById("fbActivityType")
+            .addEventListener("change", socialhubProfileActivityRender);
+
+        document
+            .getElementById("fbActivityDate")
+            .addEventListener("change", socialhubProfileActivityRender);
+
+        document
+            .querySelectorAll(".fb-tagging-select, .fb-toggle input")
+            .forEach(function (control) {
+
+                control.addEventListener("change", socialhubProfileTaggingSave);
+            });
     });
 
 })();

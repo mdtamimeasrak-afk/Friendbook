@@ -14,19 +14,19 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%231877f2'/%3E%3Ctext x='20' y='27' font-family='Arial' font-size='21' font-weight='800' fill='white' text-anchor='middle'%3ETR%3C/text%3E%3C/svg%3E">
 
 
-    <link rel="stylesheet" href="style.css?v=1787000000021">
+    <link rel="stylesheet" href="style.css?v=1787000000022">
 
-    <link rel="stylesheet" href="dashboard.css?v=1787000000021">
+    <link rel="stylesheet" href="dashboard.css?v=1787000000022">
 
-    <link rel="stylesheet" href="premium.css?v=1787000000021">
+    <link rel="stylesheet" href="premium.css?v=1787000000022">
 
-    <link rel="stylesheet" href="profile.css?v=1787000000021">
+    <link rel="stylesheet" href="profile.css?v=1787000000022">
 
-    <link rel="stylesheet" href="highlights.css?v=1787000000021">
+    <link rel="stylesheet" href="highlights.css?v=1787000000022">
 
-    <link rel="stylesheet" href="glass-theme.css?v=1787000000021">
+    <link rel="stylesheet" href="glass-theme.css?v=1787000000022">
 
-    <link rel="stylesheet" href="fb-profile.css?v=1787000000021">
+    <link rel="stylesheet" href="fb-profile.css?v=1787000000022">
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -269,6 +269,26 @@
                         <button type="button" onclick="socialhubProfileStatusOpen()">
                             <i class="fa-solid fa-shield-halved"></i>
                             Profile status
+                        </button>
+
+                        <button type="button" onclick="location.href='archive.html'">
+                            <i class="fa-solid fa-box-archive"></i>
+                            Archive
+                        </button>
+
+                        <button type="button" onclick="location.href='story-archive.html'">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                            Story archive
+                        </button>
+
+                        <button type="button" onclick="socialhubProfileActivityLog()">
+                            <i class="fa-solid fa-wave-square"></i>
+                            Activity log
+                        </button>
+
+                        <button type="button" onclick="socialhubProfileTaggingSettings()">
+                            <i class="fa-solid fa-gear"></i>
+                            Profile and tagging settings
                         </button>
 
                     </div>
@@ -1475,6 +1495,178 @@
 
     </div>
 
+    <!-- ACTIVITY LOG MODAL -->
+
+    <div class="fb-profile-modal" id="fbActivityModal" style="display:none">
+
+        <div class="fb-profile-modal-box fb-activity-modal-box">
+
+            <div class="fb-search-head">
+
+                <button type="button" class="fb-search-back" onclick="socialhubProfileActivityClose()" title="Back">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+
+                <h3>Activity log</h3>
+
+                <button type="button" class="fb-modal-x" onclick="socialhubProfileActivityClose()" title="Close">
+                    <i class="fa-solid fa-x"></i>
+                </button>
+
+            </div>
+
+            <div class="fb-activity-filters">
+
+                <select class="fb-activity-select" id="fbActivityType">
+                    <option value="all">All activity</option>
+                    <option value="posts">Posts</option>
+                    <option value="comments">Comments</option>
+                    <option value="likes">Likes</option>
+                    <option value="photos">Photos</option>
+                    <option value="reels">Reels</option>
+                    <option value="stories">Stories</option>
+                </select>
+
+                <select class="fb-activity-select" id="fbActivityDate">
+                    <option value="all">All time</option>
+                    <option value="today">Today</option>
+                    <option value="7">Last 7 days</option>
+                </select>
+
+            </div>
+
+            <div class="fb-search-body" id="fbActivityBody">
+
+                <p class="fb-search-loading">Loading activity...</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- PROFILE AND TAGGING SETTINGS MODAL -->
+
+    <div class="fb-profile-modal" id="fbTaggingModal" style="display:none">
+
+        <div class="fb-profile-modal-box">
+
+            <div class="fb-search-head">
+
+                <button type="button" class="fb-search-back" onclick="socialhubProfileTaggingClose()" title="Back">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+
+                <h3>Profile and tagging settings</h3>
+
+                <button type="button" class="fb-modal-x" onclick="socialhubProfileTaggingClose()" title="Close">
+                    <i class="fa-solid fa-x"></i>
+                </button>
+
+            </div>
+
+            <div class="fb-tagging-body">
+
+                <p class="fb-tagging-section-title">Profile</p>
+
+                <div class="fb-tagging-row">
+
+                    <div class="fb-tagging-text">
+
+                        <strong>Who can post on your profile?</strong>
+
+                        <span>Choose who can publish posts on your profile.</span>
+
+                    </div>
+
+                    <select class="fb-activity-select fb-tagging-select" data-tag-key="who_can_post">
+                        <option value="public">Public</option>
+                        <option value="friends">Friends</option>
+                        <option value="only_me">Only me</option>
+                    </select>
+
+                </div>
+
+                <div class="fb-tagging-row">
+
+                    <div class="fb-tagging-text">
+
+                        <strong>Who can see what others post on your profile?</strong>
+
+                        <span>Choose who can see posts others share on your profile.</span>
+
+                    </div>
+
+                    <select class="fb-activity-select fb-tagging-select" data-tag-key="who_can_see_others_posts">
+                        <option value="public">Public</option>
+                        <option value="friends">Friends</option>
+                        <option value="only_me">Only me</option>
+                    </select>
+
+                </div>
+
+                <p class="fb-tagging-section-title">Tagging</p>
+
+                <div class="fb-tagging-row">
+
+                    <div class="fb-tagging-text">
+
+                        <strong>Who can tag you?</strong>
+
+                        <span>Choose who can tag you in posts and photos.</span>
+
+                    </div>
+
+                    <select class="fb-activity-select fb-tagging-select" data-tag-key="who_can_tag">
+                        <option value="public">Public</option>
+                        <option value="friends">Friends</option>
+                        <option value="only_me">Only me</option>
+                    </select>
+
+                </div>
+
+                <p class="fb-tagging-section-title">Review</p>
+
+                <div class="fb-tagging-row">
+
+                    <div class="fb-tagging-text">
+
+                        <strong>Review posts you're tagged in before they appear on your profile</strong>
+
+                        <span>Choose whether to review tagged posts before they show up.</span>
+
+                    </div>
+
+                    <label class="fb-toggle">
+                        <input type="checkbox" data-tag-key="review_tagged_posts" />
+                        <span class="fb-toggle-track"></span>
+                    </label>
+
+                </div>
+
+                <div class="fb-tagging-row">
+
+                    <div class="fb-tagging-text">
+
+                        <strong>Review tags people add to your posts before they appear</strong>
+
+                        <span>Choose whether to review tags before they show on your posts.</span>
+
+                    </div>
+
+                    <label class="fb-toggle">
+                        <input type="checkbox" data-tag-key="review_post_tags" />
+                        <span class="fb-toggle-track"></span>
+                    </label>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
     <!-- PERSONAL DETAILS EDIT MODAL -->
 
     <div class="pd-modal-backdrop" id="pdEditModal" style="display:none">
@@ -2320,45 +2512,45 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="supabase.js?v=1787000000021"></script>
+    <script src="supabase.js?v=1787000000022"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
 
-    <script src="premium-ui.js?v=1787000000021"></script>
+    <script src="premium-ui.js?v=1787000000022"></script>
 
-    <script src="script.js?v=1787000000021"></script>
+    <script src="script.js?v=1787000000022"></script>
 
-    <script src="image-upload.js?v=1787000000021"></script>
+    <script src="image-upload.js?v=1787000000022"></script>
 
-    <script src="post-manage.js?v=1787000000021"></script>
+    <script src="post-manage.js?v=1787000000022"></script>
 
-    <script src="friends.js?v=1787000000021"></script>
+    <script src="friends.js?v=1787000000022"></script>
 
-    <script src="likes-comments.js?v=1787000000021"></script>
+    <script src="likes-comments.js?v=1787000000022"></script>
 
-    <script src="shares.js?v=1787000000021"></script>
+    <script src="shares.js?v=1787000000022"></script>
 
-    <script src="profile-page.js?v=1787000000021"></script>
+    <script src="profile-page.js?v=1787000000022"></script>
 
-    <script src="user-search.js?v=1787000000021"></script>
+    <script src="user-search.js?v=1787000000022"></script>
 
-    <script src="notifications.js?v=1787000000021"></script>
+    <script src="notifications.js?v=1787000000022"></script>
 
-    <script src="settings.js?v=1787000000021"></script>
+    <script src="settings.js?v=1787000000022"></script>
 
-    <script src="messages.js?v=1787000000021"></script>
+    <script src="messages.js?v=1787000000022"></script>
 
-    <script src="stories.js?v=1787000000021"></script>
+    <script src="stories.js?v=1787000000022"></script>
 
-    <script src="watch.js?v=1787000000021"></script>
+    <script src="watch.js?v=1787000000022"></script>
 
-    <script src="highlights.js?v=1787000000021"></script>
+    <script src="highlights.js?v=1787000000022"></script>
 
-    <script src="profile-icons.js?v=1787000000021"></script>
+    <script src="profile-icons.js?v=1787000000022"></script>
 
-    <script src="profile-more.js?v=1787000000021"></script>
+    <script src="profile-more.js?v=1787000000022"></script>
 
-    <script src="profile-edit.js?v=1787000000021"></script>
+    <script src="profile-edit.js?v=1787000000022"></script>
 
 </body>
 

@@ -6525,3 +6525,207 @@ body:not(.dark-mode) .fb-status-warn-card {
     color: #f7b928;
 }
 
+/* ---------------- ACTIVITY LOG + TAGGING SETTINGS ---------------- */
+
+.fb-activity-modal-box {
+    max-width: 600px;
+}
+
+.fb-activity-filters {
+    display: flex;
+    gap: 10px;
+
+    margin-top: 14px;
+}
+
+.fb-activity-select {
+    padding: 9px 12px;
+
+    border: none;
+
+    background: #3a3b3c;
+
+    border-radius: 8px;
+
+    color: #e4e6eb;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    outline: none;
+
+    flex: 1;
+}
+
+.fb-activity-select:focus {
+    border: 1px solid #2d88ff;
+
+    padding: 8px 11px;
+}
+
+.fb-tagging-body {
+    margin-top: 6px;
+}
+
+.fb-tagging-section-title {
+    color: #b0b3b8;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.4px;
+
+    margin: 16px 0 6px 0;
+}
+
+.fb-tagging-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    padding: 10px 4px;
+
+    border-bottom: 1px solid #3e4042;
+}
+
+.fb-tagging-row:last-child {
+    border-bottom: none;
+}
+
+.fb-tagging-text {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+
+    min-width: 0;
+
+    flex: 1;
+}
+
+.fb-tagging-text strong {
+    color: #e4e6eb;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.fb-tagging-text span {
+    color: #b0b3b8;
+
+    font-size: 12px;
+}
+
+.fb-tagging-select {
+    flex: 0 0 auto;
+
+    min-width: 110px;
+}
+
+.fb-toggle {
+    position: relative;
+
+    display: inline-block;
+
+    width: 52px;
+    height: 30px;
+
+    flex-shrink: 0;
+
+    cursor: pointer;
+}
+
+.fb-toggle input {
+    position: absolute;
+
+    opacity: 0;
+
+    width: 100%;
+    height: 100%;
+
+    margin: 0;
+
+    cursor: pointer;
+
+    z-index: 2;
+}
+
+.fb-toggle-track {
+    position: absolute;
+    inset: 0;
+
+    background: #3a3b3c;
+
+    border-radius: 999px;
+
+    transition: background 0.2s;
+}
+
+.fb-toggle-track::after {
+    content: "";
+
+    position: absolute;
+    top: 3px;
+    left: 3px;
+
+    width: 24px;
+    height: 24px;
+
+    background: #b0b3b8;
+
+    border-radius: 50%;
+
+    transition: transform 0.2s, background 0.2s;
+}
+
+.fb-toggle input:checked + .fb-toggle-track {
+    background: #2d88ff;
+}
+
+.fb-toggle input:checked + .fb-toggle-track::after {
+    transform: translateX(22px);
+
+    background: #ffffff;
+}
+
+body:not(.dark-mode) .fb-activity-select,
+body:not(.dark-mode) .fb-toggle-track {
+    background: #f0f2f5;
+}
+
+body:not(.dark-mode) .fb-activity-select {
+    color: #050505;
+}
+
+body:not(.dark-mode) .fb-activity-select:focus {
+    border-color: #0866ff;
+}
+
+body:not(.dark-mode) .fb-tagging-row {
+    border-color: #ced0d4;
+}
+
+body:not(.dark-mode) .fb-tagging-text strong {
+    color: #050505;
+}
+
+body:not(.dark-mode) .fb-tagging-text span,
+body:not(.dark-mode) .fb-tagging-section-title {
+    color: #65676b;
+}
+
+body:not(.dark-mode) .fb-toggle-track::after {
+    background: #b0b3b8;
+}
+
+body:not(.dark-mode) .fb-toggle input:checked + .fb-toggle-track {
+    background: #0866ff;
+}
+
+.fb-activity-item em {
+    max-width: 420px;
+}
+

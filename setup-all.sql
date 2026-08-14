@@ -47,6 +47,10 @@ create table if not exists public.posts (
 alter table public.posts
   add column if not exists audience text not null default 'public';
 
+-- Archived posts (Profile More -> Archive)
+alter table public.posts
+  add column if not exists archived boolean not null default false;
+
 create table if not exists public.likes (
   id uuid primary key default gen_random_uuid(),
   post_id uuid not null references public.posts (id) on delete cascade,
@@ -383,6 +387,10 @@ create table if not exists public.stories (
 
 alter table public.stories enable row level security;
 
+-- Archived stories (Profile More -> Story archive)
+alter table public.stories
+  add column if not exists archived boolean not null default false;
+
 drop policy if exists "stories_select" on public.stories;
 create policy "stories_select" on public.stories
   for select using (true);
@@ -506,7 +514,7 @@ begin
   perform cron.schedule(
     'delete-expired-stories',
     '0 * * * *',
-    $sql$ delete from public.stories where expires_at < now(); $sql$
+    $sql$ delete from public.stories where expires_at < now() and archived = false; $sql$
   );
 exception
   when others then null;
