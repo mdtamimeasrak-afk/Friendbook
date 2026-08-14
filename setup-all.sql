@@ -1121,3 +1121,62 @@ create policy campus_members_delete on public.campus_members for delete to authe
 insert into public.campuses (name, short_name, location, description, verified, created_by)
 values ('Bogra Polytechnic Institute', 'BPI', 'Bogra, Bangladesh', 'Polytechnic Institute in Bogra - Official TRIYA Campus', true, '20e7c3e4-e1b9-4a85-a8d2-73d1381d1fc8')
 on conflict do nothing;
+
+-- 8.0 CAMPUS COMMUNITY (Step 4: campus_posts + likes + comments)
+-- 8.1 CAMPUS_POSTS: text/image posts; only campus members may post
+create table if not exists public.campus_posts (
+  id uuid primary key default gen_random_uuid(),
+  campus_id uuid not null references public.campuses (id) on delete cascade,
+  user_id uuid not null references public.profiles (id) on delete cascade,
+  content text not null default '',
+  image_url text,
+  created_at timestamptz not null default now()
+);
+alter table public.campus_posts enable row level security;
+create policy campus_posts_select on public.campus_posts for select to authenticated using (true);
+create policy campus_posts_insert on public.campus_posts for insert to authenticated with check (
+  auth.uid() = user_id
+  and exists (
+    select 1 from public.campus_members cm
+    where cm.campus_id = campus_posts.campus_id
+      and cm.user_id = auth.uid()
+  )
+);
+create policy campus_posts_update on public.campus_posts for update to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id);
+create policy campus_posts_delete on public.campus_posts for delete to authenticated using (
+  auth.uid() = user_id
+  or exists (
+    select 1 from public.campus_members cm
+    where cm.campus_id = campus_posts.campus_id
+      and cm.user_id = auth.uid()
+      and cm.role = 'admin'
+  )
+);
+
+-- 8.2 CAMPUS_POST_LIKES: one reaction per user per campus post
+create table if not exists public.campus_post_likes (
+  id uuid primary key default gen_random_uuid(),
+  campus_post_id uuid not null references public.campus_posts (id) on delete cascade,
+  user_id uuid not null references public.profiles (id) on delete cascade,
+  reaction text not null default 'like',
+  created_at timestamptz not null default now(),
+  unique (campus_post_id, user_id)
+);
+alter table public.campus_post_likes enable row level security;
+create policy campus_post_likes_select on public.campus_post_likes for select to authenticated using (true);
+create policy campus_post_likes_insert on public.campus_post_likes for insert to authenticated with check (auth.uid() = user_id);
+create policy campus_post_likes_update on public.campus_post_likes for update to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id);
+create policy campus_post_likes_delete on public.campus_post_likes for delete to authenticated using (auth.uid() = user_id);
+
+-- 8.3 CAMPUS_POST_COMMENTS
+create table if not exists public.campus_post_comments (
+  id uuid primary key default gen_random_uuid(),
+  campus_post_id uuid not null references public.campus_posts (id) on delete cascade,
+  user_id uuid not null references public.profiles (id) on delete cascade,
+  content text not null,
+  created_at timestamptz not null default now()
+);
+alter table public.campus_post_comments enable row level security;
+create policy campus_post_comments_select on public.campus_post_comments for select to authenticated using (true);
+create policy campus_post_comments_insert on public.campus_post_comments for insert to authenticated with check (auth.uid() = user_id);
+create policy campus_post_comments_delete on public.campus_post_comments for delete to authenticated using (auth.uid() = user_id);

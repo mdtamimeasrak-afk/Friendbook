@@ -16,15 +16,15 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%231877f2'/%3E%3Ctext x='20' y='27' font-family='Arial' font-size='21' font-weight='800' fill='white' text-anchor='middle'%3ETR%3C/text%3E%3C/svg%3E">
 
 
-    <link rel="stylesheet" href="style.css?v=1786710887321">
+    <link rel="stylesheet" href="style.css?v=1786711753692">
 
-    <link rel="stylesheet" href="dashboard.css?v=1786710887321">
+    <link rel="stylesheet" href="dashboard.css?v=1786711753692">
 
-    <link rel="stylesheet" href="premium.css?v=1786710887321">
+    <link rel="stylesheet" href="premium.css?v=1786711753692">
 
-    <link rel="stylesheet" href="glass-theme.css?v=1786710887321">
+    <link rel="stylesheet" href="glass-theme.css?v=1786711753692">
 
-    <link rel="stylesheet" href="campus.css?v=1786710887321">
+    <link rel="stylesheet" href="campus.css?v=1786711753692">
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -277,16 +277,60 @@
                 id="campusPane-home"
             >
 
-                <div class="campus-empty-card">
-                    <div class="campus-empty-icon">
-                        <i class="fa-solid fa-newspaper"></i>
+                <!-- CAMPUS COMPOSER -->
+                <div class="campus-composer">
+
+                    <div
+                        class="campus-composer-avatar"
+                        id="campusComposerAvatar"
+                    >
+                        👤
                     </div>
-                    <h3>Campus Feed</h3>
-                    <p>
-                        Posts from your campus students will appear here.
-                    </p>
-                    <span class="campus-coming">Coming in Step 4</span>
+
+                    <div class="campus-composer-body">
+
+                        <textarea
+                            id="campusPostInput"
+                            rows="2"
+                            placeholder="Share something with your campus..."
+                        ></textarea>
+
+                        <div class="campus-composer-tools">
+
+                            <label class="campus-composer-photo">
+                                <i class="fa-solid fa-image"></i>
+                                Photo
+                                <input
+                                    type="file"
+                                    id="campusPostImage"
+                                    accept="image/*"
+                                    hidden
+                                >
+                            </label>
+
+                            <span
+                                class="campus-image-name"
+                                id="campusImageName"
+                                style="display:none"
+                            ></span>
+
+                            <button
+                                class="campus-post-btn"
+                                id="campusPostBtn"
+                                type="button"
+                            >
+                                Post
+                            </button>
+
+                        </div>
+
+                    </div>
+
                 </div>
+
+
+                <!-- CAMPUS FEED -->
+                <div id="campusFeed"></div>
 
             </div>
 
@@ -402,17 +446,17 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="supabase.js?v=1786710887321"></script>
+    <script src="supabase.js?v=1786711753692"></script>
 
-    <script src="premium-ui.js?v=1786710887321"></script>
+    <script src="premium-ui.js?v=1786711753692"></script>
 
-    <script src="script.js?v=1786710887321"></script>
+    <script src="script.js?v=1786711753692"></script>
 
-    <script src="likes-comments.js?v=1786710887321"></script>
+    <script src="likes-comments.js?v=1786711753692"></script>
 
-    <script src="shares.js?v=1786710887321"></script>
+    <script src="shares.js?v=1786711753692"></script>
 
-    <script src="campus.js?v=1786710887321"></script>
+    <script src="campus.js?v=1786711753692"></script>
 
 </body>
 

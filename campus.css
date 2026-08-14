@@ -459,6 +459,274 @@
 }
 
 
+/* ---------- CAMPUS COMPOSER ---------- */
+
+.campus-composer {
+    display: flex;
+
+    gap: 12px;
+
+    background: var(--card-bg, #ffffff);
+
+    border-radius: 16px;
+
+    padding: 16px;
+
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.06);
+
+    margin-bottom: 16px;
+}
+
+
+.campus-composer-avatar {
+    width: 42px;
+
+    height: 42px;
+
+    border-radius: 50%;
+
+    background: #e4e6eb;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 20px;
+
+    flex-shrink: 0;
+
+    overflow: hidden;
+}
+
+
+.campus-composer-avatar img {
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+}
+
+
+.campus-composer-body {
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+.campus-composer-body textarea {
+    width: 100%;
+
+    border: none;
+
+    outline: none;
+
+    resize: none;
+
+    background: var(--hover, #f0f2f5);
+
+    border-radius: 20px;
+
+    padding: 10px 16px;
+
+    font-size: 15px;
+
+    font-family: inherit;
+
+    color: var(--text, #1c1e21);
+
+    box-sizing: border-box;
+
+    min-height: 42px;
+}
+
+
+.campus-composer-tools {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 10px;
+}
+
+
+.campus-composer-photo {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: var(--muted, #65676b);
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    padding: 8px 14px;
+
+    border-radius: 20px;
+
+    transition: background 0.2s ease;
+}
+
+
+.campus-composer-photo:hover {
+    background: var(--hover, #f0f2f5);
+
+    color: var(--primary, #1877f2);
+}
+
+
+.campus-composer-photo i {
+    font-size: 16px;
+
+    color: #45bd62;
+}
+
+
+.campus-image-name {
+    font-size: 12px;
+
+    color: var(--muted, #65676b);
+
+    max-width: 160px;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.campus-post-btn {
+    margin-left: auto;
+
+    border: none;
+
+    background: linear-gradient(
+        135deg,
+        #1877f2 0%,
+        #4f7df9 100%
+    );
+
+    color: #ffffff;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    font-family: inherit;
+
+    padding: 9px 22px;
+
+    border-radius: 20px;
+
+    cursor: pointer;
+
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+.campus-post-btn:hover {
+    transform: translateY(-1px);
+
+    box-shadow: 0 4px 12px rgba(24, 119, 242, 0.35);
+}
+
+
+.campus-post-btn:active {
+    transform: scale(0.97);
+}
+
+
+.campus-feed-loading {
+    text-align: center;
+
+    color: var(--muted, #65676b);
+
+    font-size: 14px;
+
+    padding: 30px 0;
+}
+
+
+/* ---------- CAMPUS POSTS (FB style, reuses .post) ---------- */
+
+#campusFeed .post {
+    margin-bottom: 16px;
+}
+
+
+#campusFeed .post-header .post-user-name {
+    display: inline;
+}
+
+
+.campus-post-delete {
+    margin-left: auto;
+
+    border: none;
+
+    background: transparent;
+
+    color: var(--muted, #65676b);
+
+    font-size: 15px;
+
+    cursor: pointer;
+
+    padding: 6px 8px;
+
+    border-radius: 50%;
+
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+
+.campus-post-delete:hover {
+    background: var(--hover, #f0f2f5);
+
+    color: #e41e3f;
+}
+
+
+.campus-post-img {
+    width: 100%;
+
+    max-height: 480px;
+
+    object-fit: cover;
+
+    border-radius: 12px;
+
+    margin-top: 12px;
+
+    background: var(--hover, #f0f2f5);
+}
+
+
+#campusFeed .comment {
+    margin: 6px 0;
+}
+
+
+#campusFeed .comment-content {
+    background: var(--hover, #f0f2f5);
+
+    border-radius: 18px;
+}
+
+
 /* ---------- DARK MODE ---------- */
 
 body.dark-mode .campus-hero,
@@ -513,6 +781,45 @@ body.dark-mode .campus-join-btn.joined {
 
 body.dark-mode .campus-empty-card {
     border-color: #3e4042;
+}
+
+
+body.dark-mode .campus-composer {
+    background: #242526;
+
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+
+body.dark-mode .campus-composer-avatar {
+    background: #3a3b3c;
+}
+
+
+body.dark-mode .campus-composer-body textarea {
+    background: #3a3b3c;
+
+    color: #e4e6eb;
+}
+
+
+body.dark-mode .campus-composer-photo {
+    color: #b0b3b8;
+}
+
+
+body.dark-mode .campus-composer-photo:hover {
+    background: #3a3b3c;
+}
+
+
+body.dark-mode .campus-image-name {
+    color: #b0b3b8;
+}
+
+
+body.dark-mode .campus-post-delete:hover {
+    background: #3a3b3c;
 }
 
 
