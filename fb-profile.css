@@ -2185,7 +2185,7 @@ body:not(.dark-mode) .fb-avatar-wrap .profile-photo {
     }
 
     .fb-header .cover-photo {
-        height: 200px;
+        height: 140px;
 
         border-radius: 0;
     }
@@ -2193,7 +2193,7 @@ body:not(.dark-mode) .fb-avatar-wrap .profile-photo {
     .fb-header-row {
         flex-wrap: wrap;
 
-        margin-top: -55px;
+        margin-top: -48px;
 
         gap: 10px;
     }
@@ -2211,7 +2211,7 @@ body:not(.dark-mode) .fb-avatar-wrap .profile-photo {
     .fb-share-thought {
         left: 128px;
 
-        top: 172px;
+        top: 112px;
 
         padding: 7px 14px;
 
@@ -2272,5 +2272,69 @@ body:not(.dark-mode) .fb-avatar-wrap .profile-photo {
 
     .fb-header-divider {
         margin: 14px 16px 0;
+    }
+}
+
+/* ---------- TIMELINE PHOTOS SECTION (FB reference) ---------- */
+
+.fb-timeline-photos-card .card-title {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+}
+
+.fb-timeline-photos-card .card-title h2 {
+    font-size: 20px;
+}
+
+.fb-timeline-photos-card .card-title a {
+    font-size: 15px;
+
+    font-weight: 600;
+
+    color: #1877f2;
+
+    padding: 6px 10px;
+}
+
+.fb-timeline-photos-card .card-title a:hover {
+    background: rgba(24, 119, 242, 0.12);
+
+    text-decoration: none;
+}
+
+.fb-timeline-photos-card .fb-mini-photos {
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 4px;
+}
+
+.fb-timeline-photos-card .fb-mini-photos .profile-photo-item {
+    background: #3a3b3c;
+
+    cursor: pointer;
+}
+
+body:not(.dark-mode) .fb-timeline-photos-card .fb-mini-photos .profile-photo-item {
+    background: #f0f2f5;
+}
+
+.fb-timeline-photos-card .fb-mini-photos .empty-message {
+    font-size: 14px;
+
+    color: #b0b3b8;
+}
+
+body:not(.dark-mode) .fb-timeline-photos-card .fb-mini-photos .empty-message {
+    color: #65676b;
+}
+
+@media (max-width: 700px) {
+    .fb-timeline-photos-card .fb-mini-photos {
+        grid-template-columns: repeat(2, 1fr);
+
+        gap: 4px;
     }
 }
