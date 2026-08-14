@@ -3034,6 +3034,7 @@ async function loadPostsWithUserNames() {
             .select("*", { count: "exact" })
             .is("group_id", null)
             .is("page_id", null)
+            .is("campus_id", null)
             .order("created_at", {
                 ascending: false
             })
@@ -3559,6 +3560,7 @@ function socialhubMaybeShowLoadMore() {
             .select("*")
             .is("group_id", null)
             .is("page_id", null)
+            .is("campus_id", null)
             .order("created_at", {
                 ascending: false
             })

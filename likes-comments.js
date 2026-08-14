@@ -438,7 +438,8 @@ function socialhubAttachReactionUI() {
 
     document
         .querySelectorAll(
-            "#posts .post, #upPosts .post, #profilePosts .post"
+            "#posts .post, #upPosts .post, #profilePosts .post, " +
+            "#campusFeed .post"
         )
         .forEach(post => {
 
@@ -486,7 +487,7 @@ async function socialhubLoadInteractions() {
         document.querySelectorAll(
             "#posts .post, #upPosts .post, " +
             "#profilePosts .post, #postLightbox .post, " +
-            "#watchPlayer .post"
+            "#watchPlayer .post, #campusFeed .post"
         );
 
     const posts = [];

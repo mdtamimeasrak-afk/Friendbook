@@ -1,0 +1,565 @@
+/* ======================================================
+   TRIYA - CAMPUS COMMUNITY (Step 1)
+   Modern premium campus hero + tabs.
+   Consistent with SocialHub colors / fonts / dark mode.
+   ====================================================== */
+
+.campus-main {
+    max-width: 860px;
+
+    margin: 25px auto 60px;
+
+    padding: 0 16px;
+}
+
+
+/* ---------- CAMPUS HERO ---------- */
+
+.campus-hero {
+    background: var(--card-bg, #ffffff);
+
+    border-radius: 16px;
+
+    overflow: hidden;
+
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.06),
+        0 8px 24px rgba(31, 38, 135, 0.08);
+
+    margin-bottom: 18px;
+}
+
+
+.campus-cover {
+    height: 190px;
+
+    background:
+        linear-gradient(
+            130deg,
+            #1877f2 0%,
+            #6a5cff 45%,
+            #a855f7 75%,
+            #ec4899 110%
+        );
+
+    position: relative;
+}
+
+
+.campus-cover::after {
+    content: "🎓";
+
+    position: absolute;
+
+    right: 28px;
+
+    bottom: 14px;
+
+    font-size: 72px;
+
+    opacity: 0.25;
+
+    transform: rotate(-12deg);
+
+    pointer-events: none;
+}
+
+
+.campus-hero-body {
+    display: flex;
+
+    align-items: center;
+
+    gap: 18px;
+
+    padding: 0 22px 22px;
+
+    position: relative;
+}
+
+
+.campus-logo {
+    width: 96px;
+
+    height: 96px;
+
+    border-radius: 50%;
+
+    background: var(--card-bg, #ffffff);
+
+    border: 4px solid var(--card-bg, #ffffff);
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.18),
+        inset 0 0 0 1px var(--border, #dddfe2);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 44px;
+
+    margin-top: -52px;
+
+    position: relative;
+
+    z-index: 2;
+
+    flex-shrink: 0;
+}
+
+
+.campus-hero-info {
+    flex: 1;
+
+    min-width: 0;
+
+    padding-top: 6px;
+}
+
+
+.campus-name {
+    font-size: 24px;
+
+    font-weight: 800;
+
+    color: var(--text, #1c1e21);
+
+    display: inline;
+
+    margin-right: 8px;
+
+    word-break: break-word;
+}
+
+
+.campus-verified {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 22px;
+
+    height: 22px;
+
+    border-radius: 50%;
+
+    background: #1877f2;
+
+    color: #ffffff;
+
+    font-size: 12px;
+
+    vertical-align: 4px;
+
+    cursor: default;
+}
+
+
+.campus-location,
+.campus-students {
+    color: var(--muted, #65676b);
+
+    font-size: 14px;
+
+    margin-top: 6px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+}
+
+
+.campus-location i,
+.campus-students i {
+    font-size: 13px;
+
+    color: var(--primary, #1877f2);
+
+    width: 16px;
+
+    text-align: center;
+}
+
+
+.campus-hero-actions {
+    display: flex;
+
+    align-items: flex-end;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+
+.campus-join-btn {
+    border: none;
+
+    background: linear-gradient(
+        135deg,
+        #1877f2 0%,
+        #4f7df9 100%
+    );
+
+    color: #ffffff;
+
+    font-size: 15px;
+
+    font-weight: 700;
+
+    font-family: inherit;
+
+    padding: 11px 22px;
+
+    border-radius: 24px;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    box-shadow:
+        0 4px 14px rgba(24, 119, 242, 0.35);
+
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    white-space: nowrap;
+}
+
+
+.campus-join-btn:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 6px 18px rgba(24, 119, 242, 0.45);
+}
+
+
+.campus-join-btn:active {
+    transform: scale(0.97);
+}
+
+
+.campus-join-btn.joined {
+    background: var(--hover, #f2f3f5);
+
+    color: var(--primary, #1877f2);
+
+    box-shadow: none;
+
+    border: 1px solid var(--border, #dddfe2);
+}
+
+
+/* ---------- CAMPUS TABS ---------- */
+
+.campus-tabs {
+    display: flex;
+
+    gap: 6px;
+
+    overflow-x: auto;
+
+    background: var(--card-bg, #ffffff);
+
+    border-radius: 14px;
+
+    padding: 8px;
+
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.06);
+
+    margin-bottom: 18px;
+
+    scrollbar-width: none;
+}
+
+
+.campus-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+
+.campus-tab {
+    border: none;
+
+    background: transparent;
+
+    color: var(--muted, #65676b);
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    font-family: inherit;
+
+    padding: 10px 16px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    white-space: nowrap;
+
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+
+.campus-tab i {
+    font-size: 15px;
+}
+
+
+.campus-tab:hover {
+    background: var(--hover, #f2f3f5);
+
+    color: var(--text, #1c1e21);
+}
+
+
+.campus-tab.active {
+    background: rgba(24, 119, 242, 0.12);
+
+    color: var(--primary, #1877f2);
+}
+
+
+/* ---------- CAMPUS PANES ---------- */
+
+.campus-pane {
+    display: none;
+
+    animation: campusPaneIn 0.25s ease;
+}
+
+
+.campus-pane.active {
+    display: block;
+}
+
+
+@keyframes campusPaneIn {
+    from {
+        opacity: 0;
+
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform: none;
+    }
+}
+
+
+.campus-empty-card {
+    background: var(--card-bg, #ffffff);
+
+    border: 1px dashed var(--border, #dddfe2);
+
+    border-radius: 16px;
+
+    padding: 48px 24px;
+
+    text-align: center;
+
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+
+.campus-empty-icon {
+    width: 64px;
+
+    height: 64px;
+
+    margin: 0 auto 16px;
+
+    border-radius: 50%;
+
+    background: rgba(24, 119, 242, 0.1);
+
+    color: var(--primary, #1877f2);
+
+    font-size: 26px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+
+.campus-empty-card h3 {
+    font-size: 18px;
+
+    color: var(--text, #1c1e21);
+
+    margin-bottom: 8px;
+}
+
+
+.campus-empty-card p {
+    color: var(--muted, #65676b);
+
+    font-size: 14px;
+
+    max-width: 380px;
+
+    margin: 0 auto 14px;
+
+    line-height: 1.6;
+}
+
+
+.campus-coming {
+    display: inline-block;
+
+    background: rgba(24, 119, 242, 0.1);
+
+    color: var(--primary, #1877f2);
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    padding: 6px 14px;
+
+    border-radius: 20px;
+}
+
+
+/* ---------- DARK MODE ---------- */
+
+body.dark-mode .campus-hero,
+body.dark-mode .campus-tabs,
+body.dark-mode .campus-empty-card {
+    background: #242526;
+
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+
+body.dark-mode .campus-logo {
+    background: #3a3b3c;
+
+    border-color: #3a3b3c;
+
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.4),
+        inset 0 0 0 1px #3e4042;
+}
+
+
+body.dark-mode .campus-name {
+    color: #e4e6eb;
+}
+
+
+body.dark-mode .campus-location,
+body.dark-mode .campus-students {
+    color: #b0b3b8;
+}
+
+
+body.dark-mode .campus-tab:hover {
+    background: #3a3b3c;
+
+    color: #e4e6eb;
+}
+
+
+body.dark-mode .campus-tab.active {
+    background: rgba(24, 119, 242, 0.2);
+
+    color: #7bb1f7;
+}
+
+
+body.dark-mode .campus-join-btn.joined {
+    background: #3a3b3c;
+
+    border-color: #3e4042;
+}
+
+
+body.dark-mode .campus-empty-card {
+    border-color: #3e4042;
+}
+
+
+body.dark-mode .campus-empty-card h3 {
+    color: #e4e6eb;
+}
+
+
+body.dark-mode .campus-empty-card p {
+    color: #b0b3b8;
+}
+
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 600px) {
+
+    .campus-hero-body {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        text-align: left;
+    }
+
+
+    .campus-logo {
+        margin-top: -60px;
+
+        width: 84px;
+
+        height: 84px;
+
+        font-size: 38px;
+    }
+
+
+    .campus-name {
+        font-size: 20px;
+    }
+
+
+    .campus-cover {
+        height: 150px;
+    }
+
+
+    .campus-hero-actions {
+        width: 100%;
+
+        align-items: stretch;
+    }
+
+
+    .campus-join-btn {
+        justify-content: center;
+    }
+
+}
