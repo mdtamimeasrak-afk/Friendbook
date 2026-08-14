@@ -14,15 +14,15 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%231877f2'/%3E%3Ctext x='20' y='27' font-family='Arial' font-size='21' font-weight='800' fill='white' text-anchor='middle'%3ETR%3C/text%3E%3C/svg%3E">
 
 
-    <link rel="stylesheet" href="style.css?v=1786732667336">
+    <link rel="stylesheet" href="style.css?v=1786733503801">
 
-    <link rel="stylesheet" href="dashboard.css?v=1786732667336">
+    <link rel="stylesheet" href="dashboard.css?v=1786733503801">
 
-    <link rel="stylesheet" href="premium.css?v=1786732667336">
+    <link rel="stylesheet" href="premium.css?v=1786733503801">
 
-    <link rel="stylesheet" href="profile.css?v=1786732667336">
+    <link rel="stylesheet" href="profile.css?v=1786733503801">
 
-    <link rel="stylesheet" href="glass-theme.css?v=1786732667336">
+    <link rel="stylesheet" href="glass-theme.css?v=1786733503801">
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -184,10 +184,26 @@
 
             <!-- COVER PHOTO (hidden in Instagram mode) -->
 
-            <div class="cover-photo">
+            <div class="cover-photo fb-user-cover">
 
-                <div class="cover-text">
-                    Welcome to my profile
+                <div
+                    class="fb-cover-name"
+                    id="upCoverName"
+                >
+                    <h1
+                        class="fb-cover-name-h"
+                        id="upCoverNameText"
+                    >
+                        User
+                    </h1>
+
+                    <span
+                        class="fb-cover-username"
+                        id="upCoverUsername"
+                    >
+                        @username
+                    </span>
+
                 </div>
 
             </div>
@@ -231,6 +247,31 @@
                             class="profile-buttons"
                             id="upFriendButton"
                         ></div>
+
+
+                        <!-- MORE (⋯) MENU -->
+
+                        <div
+                            class="fb-more-wrap"
+                            id="upMoreWrap"
+                            style="display:none"
+                        >
+
+                            <button
+                                class="fb-more-btn"
+                                title="More"
+                                onclick="socialhubUpToggleMore(event)"
+                            >
+                                ⋯
+                            </button>
+
+                            <div
+                                class="fb-more-menu"
+                                id="upMoreMenu"
+                                style="display:none"
+                            ></div>
+
+                        </div>
 
                     </div>
 
@@ -437,29 +478,29 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="supabase.js?v=1786732667336"></script>
+    <script src="supabase.js?v=1786733503801"></script>
 
-    <script src="premium-ui.js?v=1786732667336"></script>
+    <script src="premium-ui.js?v=1786733503801"></script>
 
-    <script src="script.js?v=1786732667336"></script>
+    <script src="script.js?v=1786733503801"></script>
 
-    <script src="settings.js?v=1786732667336"></script>
+    <script src="settings.js?v=1786733503801"></script>
 
-    <script src="friends.js?v=1786732667336"></script>
+    <script src="friends.js?v=1786733503801"></script>
 
-    <script src="likes-comments.js?v=1786732667336"></script>
+    <script src="likes-comments.js?v=1786733503801"></script>
 
-    <script src="user-search.js?v=1786732667336"></script>
+    <script src="user-search.js?v=1786733503801"></script>
 
-    <script src="post-manage.js?v=1786732667336"></script>
+    <script src="post-manage.js?v=1786733503801"></script>
 
-    <script src="notifications.js?v=1786732667336"></script>
+    <script src="notifications.js?v=1786733503801"></script>
 
-    <script src="messages.js?v=1786732667336"></script>
+    <script src="messages.js?v=1786733503801"></script>
 
-    <script src="shares.js?v=1786732667336"></script>
+    <script src="shares.js?v=1786733503801"></script>
 
-    <script src="watch.js?v=1786732667336"></script>
+    <script src="watch.js?v=1786733503801"></script>
 
 
 </body>

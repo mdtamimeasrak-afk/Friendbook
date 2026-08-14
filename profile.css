@@ -4030,3 +4030,700 @@ body.dark-mode .fb-friend-summary {
         color: #e4e6eb;
     }
 }
+/* ======================================================
+   FACEBOOK-STYLE PROFILE UPGRADE
+   (cover name, more menu, composer, full posts)
+   ====================================================== */
+
+.fb-header {
+    position: relative;
+}
+
+.fb-cover-name {
+    position: absolute;
+
+    left: 40px;
+
+    bottom: 130px;
+
+    z-index: 3;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+
+    pointer-events: none;
+}
+
+.fb-cover-name-h {
+    margin: 0;
+
+    font-size: 32px;
+
+    font-weight: 800;
+
+    color: #ffffff;
+
+    text-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.fb-cover-username {
+    font-size: 15px;
+
+    font-weight: 600;
+
+    color: rgba(255, 255, 255, 0.95);
+
+    text-shadow:
+        0 1px 6px rgba(0, 0, 0, 0.8);
+}
+
+.fb-white-btn {
+    background: #ffffff;
+
+    color: #050505;
+
+    border: 1px solid #ced0d4;
+
+    font-weight: 700;
+}
+
+.fb-white-btn:hover {
+    background: #f2f2f2;
+}
+
+.fb-more-wrap {
+    position: relative;
+}
+
+.fb-more-btn {
+    min-width: 44px;
+
+    padding: 8px 12px;
+
+    background: #e4e6eb;
+
+    color: #050505;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 18px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+.fb-more-btn:hover {
+    background: #d8dade;
+}
+
+.fb-more-menu {
+    position: absolute;
+
+    top: calc(100% + 6px);
+
+    right: 0;
+
+    z-index: 50;
+
+    min-width: 200px;
+
+    background: #ffffff;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.18);
+
+    padding: 6px;
+
+}
+
+.fb-more-menu button {
+    display: flex;
+
+    width: 100%;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 10px 12px;
+
+    background: transparent;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #050505;
+
+    cursor: pointer;
+}
+
+.fb-more-menu button:hover {
+    background: #f2f2f2;
+}
+
+.fb-more-menu button:last-child {
+    color: #d6323f;
+}
+
+.fb-more-menu button:last-child:hover {
+    background: #ffe9e9;
+}
+
+/* ---------- Profile composer box ---------- */
+
+.fb-profile-composer {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 16px 18px;
+}
+
+.fb-profile-composer .avatar {
+    width: 44px;
+
+    height: 44px;
+
+    font-size: 22px;
+
+    flex-shrink: 0;
+}
+
+.fb-composer-open {
+    flex: 1;
+
+    text-align: left;
+
+    padding: 12px 16px;
+
+    background: #f0f2f5;
+
+    color: #65676b;
+
+    border: none;
+
+    border-radius: 999px;
+
+    font-size: 15px;
+
+    font-weight: 500;
+
+    cursor: pointer;
+}
+
+.fb-composer-open:hover {
+    background: #e4e6eb;
+}
+
+/* ---------- Composer modal ---------- */
+
+.fb-composer-modal {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 400;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.6);
+
+    padding: 20px;
+}
+
+.fb-composer-box {
+    width: 100%;
+
+    max-width: 520px;
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background: #ffffff;
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.3);
+
+    padding: 18px;
+}
+
+.fb-composer-head {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding-bottom: 12px;
+
+    border-bottom: 1px solid #e4e6eb;
+
+    margin-bottom: 14px;
+}
+
+.fb-composer-head strong {
+    font-size: 19px;
+
+    color: #050505;
+}
+
+.fb-composer-close {
+    width: 36px;
+
+    height: 36px;
+
+    background: #e4e6eb;
+
+    color: #050505;
+
+    border: none;
+
+    border-radius: 50%;
+
+    font-size: 16px;
+
+    cursor: pointer;
+}
+
+.fb-composer-close:hover {
+    background: #d8dade;
+}
+
+.fb-composer-top {
+    display: flex;
+
+    gap: 12px;
+
+    margin-bottom: 12px;
+}
+
+.fb-composer-top .avatar {
+    width: 42px;
+
+    height: 42px;
+
+    font-size: 21px;
+
+    flex-shrink: 0;
+}
+
+.fb-composer-top textarea {
+    flex: 1;
+
+    border: none;
+
+    outline: none;
+
+    resize: none;
+
+    font-size: 17px;
+
+    font-family: inherit;
+
+    color: #050505;
+
+    background: transparent;
+}
+
+.fb-composer-top textarea::placeholder {
+    color: #65676b;
+}
+
+.fb-composer-preview {
+    position: relative;
+
+    display: flex;
+
+    margin-bottom: 12px;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+}
+
+.fb-composer-preview img {
+    width: 100%;
+
+    max-height: 320px;
+
+    object-fit: cover;
+
+    display: block;
+}
+
+.fb-preview-remove {
+    position: absolute;
+
+    top: 10px;
+
+    right: 10px;
+
+    width: 34px;
+
+    height: 34px;
+
+    background: rgba(0, 0, 0, 0.65);
+
+    color: #ffffff;
+
+    border: none;
+
+    border-radius: 50%;
+
+    font-size: 15px;
+
+    cursor: pointer;
+}
+
+.fb-preview-remove:hover {
+    background: rgba(0, 0, 0, 0.85);
+}
+
+.fb-composer-tools {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 10px;
+
+    padding: 10px 0;
+
+    border-top: 1px solid #e4e6eb;
+
+    border-bottom: 1px solid #e4e6eb;
+
+    margin-bottom: 14px;
+}
+
+.fb-composer-photo-btn {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 8px 14px;
+
+    background: transparent;
+
+    color: #1877f2;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.fb-composer-photo-btn:hover {
+    background: #eaf2ff;
+}
+
+.fb-composer-audience-wrap {
+    position: relative;
+}
+
+.fb-composer-audience-btn {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 8px 12px;
+
+    background: #e4e6eb;
+
+    color: #050505;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.fb-composer-audience-btn:hover {
+    background: #d8dade;
+}
+
+.fb-composer-audience-menu {
+    position: absolute;
+
+    top: calc(100% + 6px);
+
+    right: 0;
+
+    z-index: 60;
+
+    min-width: 200px;
+
+    background: #ffffff;
+
+    border-radius: 10px;
+
+    box-shadow:
+        0 8px 24px rgba(0, 0, 0, 0.18);
+
+    padding: 6px;
+
+    flex-direction: column;
+}
+
+.fb-composer-audience-menu button {
+    display: flex;
+
+    width: 100%;
+
+    padding: 10px 12px;
+
+    background: transparent;
+
+    color: #050505;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+.fb-composer-audience-menu button:hover {
+    background: #f2f2f2;
+}
+
+.fb-composer-post {
+    width: 100%;
+
+    padding: 12px;
+
+    background: #1877f2;
+
+    color: #ffffff;
+
+    border: none;
+
+    border-radius: 10px;
+
+    font-size: 15px;
+
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+.fb-composer-post:hover {
+    background: #166fe5;
+}
+
+.fb-composer-post:disabled {
+    opacity: 0.6;
+
+    cursor: not-allowed;
+}
+
+/* ---------- Full posts list in Posts tab ---------- */
+
+#profilePosts {
+    display: block;
+}
+
+#profilePosts .post {
+    margin-bottom: 16px;
+}
+
+#profilePosts .post:last-child {
+    margin-bottom: 0;
+}
+
+/* ---------- Dark mode ---------- */
+
+.fb-dark .fb-white-btn,
+body.fb-dark .fb-white-btn {
+    background: #3a3b3c;
+
+    color: #e4e6eb;
+
+    border-color: #3a3b3c;
+}
+
+body.fb-dark .fb-more-btn {
+    background: #3a3b3c;
+
+    color: #e4e6eb;
+}
+
+body.fb-dark .fb-more-menu {
+    background: #242526;
+}
+
+body.fb-dark .fb-more-menu button {
+    color: #e4e6eb;
+}
+
+body.fb-dark .fb-more-menu button:hover {
+    background: #3a3b3c;
+}
+
+body.fb-dark .fb-more-menu button:last-child {
+    color: #f02849;
+}
+
+body.fb-dark .fb-composer-open {
+    background: #3a3b3c;
+
+    color: #b0b3b8;
+}
+
+body.fb-dark .fb-composer-open:hover {
+    background: #4e4f50;
+}
+
+body.fb-dark .fb-composer-box {
+    background: #242526;
+}
+
+body.fb-dark .fb-composer-head {
+    border-bottom-color: #3a3b3c;
+}
+
+body.fb-dark .fb-composer-head strong {
+    color: #e4e6eb;
+}
+
+body.fb-dark .fb-composer-close {
+    background: #3a3b3c;
+
+    color: #e4e6eb;
+}
+
+body.fb-dark .fb-composer-top textarea {
+    color: #e4e6eb;
+}
+
+body.fb-dark .fb-composer-tools {
+    border-top-color: #3a3b3c;
+
+    border-bottom-color: #3a3b3c;
+}
+
+body.fb-dark .fb-composer-audience-btn {
+    background: #3a3b3c;
+
+    color: #e4e6eb;
+}
+
+body.fb-dark .fb-composer-audience-menu {
+    background: #242526;
+}
+
+body.fb-dark .fb-composer-audience-menu button {
+    color: #e4e6eb;
+}
+
+body.fb-dark .fb-composer-audience-menu button:hover {
+    background: #3a3b3c;
+}
+
+body.fb-dark .fb-composer-post {
+    background: #2374e1;
+}
+
+/* ======================================================
+   OTHER-USER PROFILE (Facebook style)
+   ====================================================== */
+
+.fb-user-cover {
+    position: relative;
+}
+
+.fb-user-cover .fb-cover-name {
+    left: 20px;
+
+    bottom: 16px;
+}
+
+.fb-user-cover .fb-cover-name-h {
+    font-size: 26px;
+}
+
+#upMoreWrap {
+    flex-shrink: 0;
+}
+
+.fb-friends-btn {
+    background: #e4e6eb;
+
+    color: #050505;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-weight: 700;
+}
+
+.fb-friends-btn:hover {
+    background: #d8dade;
+}
+
+#upPosts.up-posts-list {
+    display: block;
+}
+
+#upPosts.up-posts-list .post {
+    margin-bottom: 16px;
+}
+
+#upPosts.up-posts-list .post:last-child {
+    margin-bottom: 0;
+}
+
+#upPosts.up-posts-list .empty-message {
+    grid-column: auto;
+}
+
+body.fb-dark .fb-friends-btn {
+    background: #3a3b3c;
+
+    color: #e4e6eb;
+}

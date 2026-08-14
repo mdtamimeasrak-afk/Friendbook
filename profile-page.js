@@ -177,7 +177,8 @@ function socialhubCreatePostArticle(post, profile) {
                     @${socialhubEscape(profile?.username || "user")}
                     ·
                     ${new Date(post.created_at).toLocaleString()}
-                    · 🌎
+                    ·
+                    ${socialhubAudienceIcon(post.audience)}
                 </small>
 
             </div>
@@ -399,9 +400,267 @@ async function socialhubLoadMyPosts() {
     posts.forEach(post => {
 
         container.appendChild(
-            socialhubCreateProfileTile(post)
+            socialhubCreatePostArticle(
+                post,
+                profile
+            )
         );
     });
+}
+
+
+// ======================================================
+// 2b. PROFILE POST COMPOSER (Facebook style)
+// ======================================================
+
+const socialhubProfileComposer = {
+    image: null
+};
+
+
+function socialhubProfileOpenComposer() {
+
+    const modal =
+        document.getElementById("profileComposerModal");
+
+    if (!modal) {
+        return;
+    }
+
+    modal.style.display = "flex";
+
+    setTimeout(() => {
+
+        document
+            .getElementById("profilePostInput")
+            ?.focus();
+    }, 80);
+}
+
+
+function socialhubProfileCloseComposer() {
+
+    document.getElementById("profileComposerModal").style.display =
+        "none";
+}
+
+
+function socialhubProfilePickPhoto() {
+
+    document.getElementById("profilePostFile")?.click();
+}
+
+
+function socialhubProfileToggleAudience(event) {
+
+    event.stopPropagation();
+
+    const menu =
+        document.getElementById("profileAudienceMenu");
+
+    if (!menu) {
+        return;
+    }
+
+    menu.style.display =
+        menu.style.display === "none"
+            ? "flex"
+            : "none";
+}
+
+
+function socialhubProfileSetAudience(value) {
+
+    localStorage.setItem(
+        "socialhubProfileAudience",
+        value
+    );
+
+    const label =
+        document.getElementById("profileAudienceLabel");
+
+    if (label) {
+
+        label.textContent =
+            SOCIALHUB_AUDIENCE_LABELS[value] ||
+            "🌎 Public";
+    }
+
+    document.getElementById("profileAudienceMenu").style.display =
+        "none";
+}
+
+
+function socialhubProfileComposerRemovePhoto() {
+
+    socialhubProfileComposer.image = null;
+
+    const preview =
+        document.getElementById("profilePostPreview");
+
+    if (preview) {
+
+        preview.style.display = "none";
+
+        document.getElementById("profilePostPreviewImg").src = "";
+    }
+
+    document.getElementById("profilePostFile").value = "";
+}
+
+
+async function socialhubProfileSubmitPost() {
+
+    const input =
+        document.getElementById("profilePostInput");
+
+    const content =
+        (input?.value || "").trim();
+
+    const image =
+        socialhubProfileComposer.image;
+
+    if (!content && !image) {
+
+        socialhubToast(
+            "Write something or attach a photo first.",
+            "info"
+        );
+
+        return;
+    }
+
+    const me =
+        await socialhubGetMe();
+
+    if (!me) {
+
+        alert("Please login first.");
+
+        return;
+    }
+
+    const button =
+        document.getElementById("profileComposerPostBtn");
+
+    button.disabled = true;
+
+    button.innerText = "Posting...";
+
+    let imageUrl = null;
+
+    try {
+
+        if (image) {
+
+            const ext =
+                socialhubFileExtension(image);
+
+            const path =
+                `${me.id}-${Date.now()}.${ext}`;
+
+            const { error: uploadError } =
+                await db
+                    .storage
+                    .from("post-images")
+                    .upload(path, image, {
+                        upsert: true,
+                        contentType: image.type
+                    });
+
+            if (uploadError) {
+                throw uploadError;
+            }
+
+            const { data: urlData } =
+                db
+                    .storage
+                    .from("post-images")
+                    .getPublicUrl(path);
+
+            imageUrl = urlData.publicUrl;
+        }
+
+        const audience =
+            localStorage.getItem(
+                "socialhubProfileAudience"
+            ) || "public";
+
+        const { error } =
+            await db
+                .from("posts")
+                .insert({
+                    user_id: me.id,
+                    content: content,
+                    image_url: imageUrl,
+                    audience: audience
+                });
+
+        if (error) {
+            throw error;
+        }
+    }
+    catch (err) {
+
+        console.error(
+            "❌ Profile post error:",
+            err
+        );
+
+        button.disabled = false;
+
+        button.innerText = "Post";
+
+        alert(
+            "Could not create the post.\n\n" +
+            err.message
+        );
+
+        return;
+    }
+
+    socialhubProfileCloseComposer();
+
+    if (input) {
+        input.value = "";
+    }
+
+    socialhubProfileComposerRemovePhoto();
+
+    button.disabled = false;
+
+    button.innerText = "Post";
+
+    socialhubToast(
+        "Posted! 🎉",
+        "success"
+    );
+
+    await socialhubLoadMyPosts();
+
+    socialhubLoadMyStats();
+}
+
+
+// ======================================================
+// 2c. COVER MORE MENU (⋯)
+// ======================================================
+
+function socialhubProfileToggleMore(event) {
+
+    event.stopPropagation();
+
+    const menu =
+        document.getElementById("profileMoreMenu");
+
+    if (!menu) {
+        return;
+    }
+
+    menu.style.display =
+        menu.style.display === "none"
+            ? "block"
+            : "none";
 }
 
 
@@ -1155,6 +1414,100 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     socialhubSetupProfileTabs();
+
+    // ---------- Composer wiring ----------
+
+    const fileInput =
+        document.getElementById("profilePostFile");
+
+    if (fileInput) {
+
+        fileInput.addEventListener(
+            "change",
+            async event => {
+
+                const file =
+                    event.target.files?.[0];
+
+                if (!file) {
+                    return;
+                }
+
+                const preview =
+                    document.getElementById("profilePostPreview");
+
+                const img =
+                    document.getElementById("profilePostPreviewImg");
+
+                img.src =
+                    URL.createObjectURL(file);
+
+                preview.style.display = "flex";
+
+                socialhubProfileComposer.image = file;
+            }
+        );
+    }
+
+    document
+        .querySelectorAll(
+            "#profileAudienceMenu [data-audience]"
+        )
+        .forEach(btn => {
+
+            btn.addEventListener(
+                "click",
+                () => socialhubProfileSetAudience(
+                    btn.dataset.audience
+                )
+            );
+        });
+
+    // Restore saved audience choice
+
+    const savedAudience =
+        localStorage.getItem(
+            "socialhubProfileAudience"
+        );
+
+    if (savedAudience) {
+
+        socialhubProfileSetAudience(savedAudience);
+    }
+
+    document.addEventListener(
+        "click",
+        event => {
+
+            // Close ⋯ menu
+
+            const moreMenu =
+                document.getElementById("profileMoreMenu");
+
+            if (
+                moreMenu &&
+                !event.target.closest(".fb-more-wrap")
+            ) {
+                moreMenu.style.display = "none";
+            }
+
+            // Close audience menu
+
+            const audienceMenu =
+                document.getElementById("profileAudienceMenu");
+
+            if (
+                audienceMenu &&
+                !event.target.closest(
+                    ".fb-composer-audience-wrap"
+                )
+            ) {
+                audienceMenu.style.display = "none";
+            }
+        }
+    );
+
+    // ---------- End composer wiring ----------
 
     // Hide empty About rows once the profile loads
     setTimeout(socialhubHideEmptyAboutRows, 1500);

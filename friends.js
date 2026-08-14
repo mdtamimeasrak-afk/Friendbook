@@ -1553,6 +1553,26 @@ async function loadUserProfilePage() {
     document.getElementById("upUsername").innerText =
         `@${profile.username || "user"}`;
 
+    // ---------- COVER NAME (Facebook style) ----------
+
+    const upCoverNameText =
+        document.getElementById("upCoverNameText");
+
+    if (upCoverNameText) {
+
+        upCoverNameText.innerText =
+            profile.full_name || "User";
+    }
+
+    const upCoverUsername =
+        document.getElementById("upCoverUsername");
+
+    if (upCoverUsername) {
+
+        upCoverUsername.innerText =
+            `@${profile.username || "user"}`;
+    }
+
     document.getElementById("upBio").innerText =
         profile.bio || "No bio added yet.";
 
@@ -1630,13 +1650,14 @@ async function loadUserProfilePage() {
                 : state === "friends"
                     ? `
                         <button
-                            class="logout-btn"
+                            class="fb-friends-btn"
                             onclick="socialhubUnfriend(
                                 '${userId}',
                                 this
                             )"
+                            title="Friends"
                         >
-                            👋 Unfriend
+                            ✓ Friends
                         </button>
                     `
                     : state === "requested"
@@ -1659,7 +1680,7 @@ async function loadUserProfilePage() {
                                         this
                                     )"
                                 >
-                                    ✓ Accept Request
+                                    ✓ Accept
                                 </button>
 
                             <button
@@ -1698,34 +1719,83 @@ async function loadUserProfilePage() {
                     ? ""
                     : `
                         <button
+                            class="fb-white-btn"
                             onclick="socialhubOpenChatPopup('${userId}')"
                         >
                             💬 Message
                         </button>
-
-                        <button
-                            class="${
-                                haveIBlocked
-                                    ? "socialhub-block-btn blocked"
-                                    : "socialhub-block-btn"
-                            }"
-                            data-blocked="${
-                                haveIBlocked ? "1" : ""
-                            }"
-                            onclick="socialhubToggleBlock(
-                                '${userId}',
-                                this
-                            )"
-                        >
-                            ${
-                                haveIBlocked
-                                    ? "🚫 Blocked"
-                                    : "🚫 Block"
-                            }
-                        </button>
                     `
         }
     `;
+
+    // ---------- MORE (⋯) MENU ----------
+
+    const moreWrap =
+        document.getElementById("upMoreWrap");
+
+    const moreMenu =
+        document.getElementById("upMoreMenu");
+
+    if (moreWrap && moreMenu) {
+
+        const canBlock =
+            !amIBlocked &&
+            !(me && userId === me.id);
+
+        const isFriend =
+            state === "friends";
+
+        if (canBlock || isFriend) {
+
+            moreWrap.style.display = "inline-block";
+
+            moreMenu.innerHTML = `
+                ${
+                    isFriend
+                        ? `
+                            <button
+                                type="button"
+                                onclick="socialhubUpMenuUnfriend(
+                                    '${userId}'
+                                )"
+                            >
+                                👋 Unfriend
+                            </button>
+                        `
+                        : ""
+                }
+                ${
+                    canBlock
+                        ? `
+                            <button
+                                type="button"
+                                class="socialhub-block-btn ${
+                                    haveIBlocked ? "blocked" : ""
+                                }"
+                                data-blocked="${
+                                    haveIBlocked ? "1" : ""
+                                }"
+                                onclick="socialhubToggleBlock(
+                                    '${userId}',
+                                    this
+                                )"
+                            >
+                                ${
+                                    haveIBlocked
+                                        ? "🚫 Unblock"
+                                        : "🚫 Block"
+                                }
+                            </button>
+                        `
+                        : ""
+                }
+            `;
+
+        } else {
+
+            moreWrap.style.display = "none";
+        }
+    }
 
     // ---------- FRIEND COUNT ----------
 
@@ -1880,7 +1950,36 @@ async function loadUserProfilePosts(userId) {
         return;
     }
 
-    const profile = {
+    const { data: upProfile, error: profileError } =
+        await db
+            .from("profiles")
+            .select("id, full_name, username, avatar_url")
+            .eq("id", userId)
+            .single();
+
+    if (profileError) {
+        console.error("❌ User profile error:", profileError);
+    }
+
+    socialhubUpPostsCache = {
+        posts,
+        profile: upProfile || null
+    };
+
+    const statPosts =
+        document.getElementById("upStatPosts");
+
+    if (statPosts) {
+
+        statPosts.innerText =
+            String(posts.length);
+    }
+
+    postsContainer.innerHTML = "";
+
+    postsContainer.classList.add("up-posts-list");
+
+    const fallbackProfile = {
         full_name:
             document.getElementById("upName")?.innerText || "User",
         username:
@@ -1896,29 +1995,16 @@ async function loadUserProfilePosts(userId) {
 
     if (photoImg) {
 
-        profile.avatar_url = photoImg.src;
+        fallbackProfile.avatar_url = photoImg.src;
     }
-
-    socialhubUpPostsCache = {
-        posts,
-        profile
-    };
-
-    const statPosts =
-        document.getElementById("upStatPosts");
-
-    if (statPosts) {
-
-        statPosts.innerText =
-            String(posts.length);
-    }
-
-    postsContainer.innerHTML = "";
 
     posts.forEach(post => {
 
         postsContainer.appendChild(
-            socialhubCreateUpTile(post)
+            socialhubBuildUserPostArticle(
+                post,
+                upProfile || fallbackProfile
+            )
         );
     });
 }
@@ -1929,6 +2015,65 @@ async function loadUserProfilePosts(userId) {
 // ======================================================
 
 let socialhubUpCurrentTab = "all";
+
+
+function socialhubUpToggleMore(event) {
+
+    event.stopPropagation();
+
+    const menu =
+        document.getElementById("upMoreMenu");
+
+    if (!menu) {
+        return;
+    }
+
+    menu.style.display =
+        menu.style.display === "none"
+            ? "block"
+            : "none";
+}
+
+
+async function socialhubUpMenuUnfriend(userId) {
+
+    const me =
+        await socialhubGetMe();
+
+    if (!me) {
+        return;
+    }
+
+    if (!confirm("Unfriend this person?")) {
+        return;
+    }
+
+    await db
+        .from("friendships")
+        .delete()
+        .or(
+            `and(requester_id.eq.${me.id},addressee_id.eq.${userId}),` +
+            `and(requester_id.eq.${userId},addressee_id.eq.${me.id})`
+        );
+
+    socialhubUpdateFriendCounts();
+
+    await loadUserProfilePage();
+}
+
+
+document.addEventListener("click", event => {
+
+    const moreMenu =
+        document.getElementById("upMoreMenu");
+
+    if (
+        moreMenu &&
+        !event.target.closest("#upMoreWrap")
+    ) {
+        moreMenu.style.display = "none";
+    }
+});
 
 
 function socialhubSwitchUpTab(name) {
@@ -2030,6 +2175,8 @@ async function socialhubLoadUserVideos(userId) {
     }
 
     postsContainer.innerHTML = "";
+
+    postsContainer.classList.remove("up-posts-list");
 
     posts.forEach(post => {
 
