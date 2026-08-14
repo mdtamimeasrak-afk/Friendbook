@@ -1514,7 +1514,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     socialhubSetupProfileTabs();
 
-    setTimeout(socialhubTrimInfoRow, 0);
+    setTimeout(socialhubTrimInfoRow, 800);
+
+    setTimeout(socialhubTrimInfoRow, 2500);
 
     // ---------- Composer wiring ----------
 
