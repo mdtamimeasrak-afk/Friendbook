@@ -2244,7 +2244,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 const rows =
-                    [...block.querySelectorAll(".about-row")];
+                    [...block.querySelectorAll(".about-row, .pd-row")];
 
                 const chips =
                     [...block.querySelectorAll(".fb-chip-wrap")];
