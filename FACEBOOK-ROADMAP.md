@@ -44,10 +44,11 @@
 - [x] Video like/comment/share/reaction (player reuses feed interaction system)
 - [ ] Live video (experimental) — Phase 5 backlog
 
-## 🔲 Phase 4 — Communities
-- [ ] Groups: create / join / group feed / members
-- [ ] Events: create / RSVP / event page
-- [ ] Pages: create / follow / post as page
+## ✅ Phase 4 — Communities
+- [x] Groups: create / join / leave / group feed / members / delete (groups.html + group.html)
+- [x] Events: create / RSVP (going-maybe-declined) / event page / attendees / delete (events.html + event.html)
+- [x] Pages: create / follow / unfollow / post as page / delete (pages.html + page.html)
+- [x] Main feed excludes group & page posts (posts.group_id / posts.page_id columns)
 
 ## 🔲 Phase 5 — Extra Facebook Features
 - [ ] Marketplace (buy/sell listing)

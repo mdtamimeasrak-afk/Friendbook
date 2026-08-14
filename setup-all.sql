@@ -542,3 +542,170 @@ create policy "blocks_delete" on public.blocks
 -- Deactivated accounts (soft delete)
 alter table public.profiles
   add column if not exists deactivated boolean not null default false;
+
+-- ======================================================
+-- PHASE 4: COMMUNITIES (Groups / Events / Pages)
+-- ======================================================
+
+create table if not exists public.groups (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  description text not null default '',
+  created_by uuid not null references public.profiles (id) on delete cascade,
+  created_at timestamptz not null default now()
+);
+
+alter table public.groups enable row level security;
+
+drop policy if exists "groups_select" on public.groups;
+create policy "groups_select" on public.groups
+  for select using (true);
+
+drop policy if exists "groups_insert" on public.groups;
+create policy "groups_insert" on public.groups
+  for insert with check (auth.uid() = created_by);
+
+drop policy if exists "groups_update" on public.groups;
+create policy "groups_update" on public.groups
+  for update using (auth.uid() = created_by);
+
+drop policy if exists "groups_delete" on public.groups;
+create policy "groups_delete" on public.groups
+  for delete using (auth.uid() = created_by);
+
+create table if not exists public.group_members (
+  id uuid primary key default gen_random_uuid(),
+  group_id uuid not null references public.groups (id) on delete cascade,
+  user_id uuid not null references public.profiles (id) on delete cascade,
+  role text not null default 'member',
+  created_at timestamptz not null default now(),
+  unique (group_id, user_id)
+);
+
+alter table public.group_members enable row level security;
+
+drop policy if exists "group_members_select" on public.group_members;
+create policy "group_members_select" on public.group_members
+  for select using (true);
+
+drop policy if exists "group_members_insert" on public.group_members;
+create policy "group_members_insert" on public.group_members
+  for insert with check (auth.uid() = user_id);
+
+drop policy if exists "group_members_update" on public.group_members;
+create policy "group_members_update" on public.group_members
+  for update using (auth.uid() = user_id);
+
+drop policy if exists "group_members_delete" on public.group_members;
+create policy "group_members_delete" on public.group_members
+  for delete using (auth.uid() = user_id);
+
+create table if not exists public.events (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  description text not null default '',
+  location text not null default '',
+  event_date timestamptz not null,
+  created_by uuid not null references public.profiles (id) on delete cascade,
+  created_at timestamptz not null default now()
+);
+
+alter table public.events enable row level security;
+
+drop policy if exists "events_select" on public.events;
+create policy "events_select" on public.events
+  for select using (true);
+
+drop policy if exists "events_insert" on public.events;
+create policy "events_insert" on public.events
+  for insert with check (auth.uid() = created_by);
+
+drop policy if exists "events_update" on public.events;
+create policy "events_update" on public.events
+  for update using (auth.uid() = created_by);
+
+drop policy if exists "events_delete" on public.events;
+create policy "events_delete" on public.events
+  for delete using (auth.uid() = created_by);
+
+create table if not exists public.event_rsvps (
+  id uuid primary key default gen_random_uuid(),
+  event_id uuid not null references public.events (id) on delete cascade,
+  user_id uuid not null references public.profiles (id) on delete cascade,
+  status text not null default 'going',
+  created_at timestamptz not null default now(),
+  unique (event_id, user_id)
+);
+
+alter table public.event_rsvps enable row level security;
+
+drop policy if exists "event_rsvps_select" on public.event_rsvps;
+create policy "event_rsvps_select" on public.event_rsvps
+  for select using (true);
+
+drop policy if exists "event_rsvps_insert" on public.event_rsvps;
+create policy "event_rsvps_insert" on public.event_rsvps
+  for insert with check (auth.uid() = user_id);
+
+drop policy if exists "event_rsvps_update" on public.event_rsvps;
+create policy "event_rsvps_update" on public.event_rsvps
+  for update using (auth.uid() = user_id);
+
+drop policy if exists "event_rsvps_delete" on public.event_rsvps;
+create policy "event_rsvps_delete" on public.event_rsvps
+  for delete using (auth.uid() = user_id);
+
+create table if not exists public.pages (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  description text not null default '',
+  created_by uuid not null references public.profiles (id) on delete cascade,
+  created_at timestamptz not null default now()
+);
+
+alter table public.pages enable row level security;
+
+drop policy if exists "pages_select" on public.pages;
+create policy "pages_select" on public.pages
+  for select using (true);
+
+drop policy if exists "pages_insert" on public.pages;
+create policy "pages_insert" on public.pages
+  for insert with check (auth.uid() = created_by);
+
+drop policy if exists "pages_update" on public.pages;
+create policy "pages_update" on public.pages
+  for update using (auth.uid() = created_by);
+
+drop policy if exists "pages_delete" on public.pages;
+create policy "pages_delete" on public.pages
+  for delete using (auth.uid() = created_by);
+
+create table if not exists public.page_followers (
+  id uuid primary key default gen_random_uuid(),
+  page_id uuid not null references public.pages (id) on delete cascade,
+  user_id uuid not null references public.profiles (id) on delete cascade,
+  created_at timestamptz not null default now(),
+  unique (page_id, user_id)
+);
+
+alter table public.page_followers enable row level security;
+
+drop policy if exists "page_followers_select" on public.page_followers;
+create policy "page_followers_select" on public.page_followers
+  for select using (true);
+
+drop policy if exists "page_followers_insert" on public.page_followers;
+create policy "page_followers_insert" on public.page_followers
+  for insert with check (auth.uid() = user_id);
+
+drop policy if exists "page_followers_delete" on public.page_followers;
+create policy "page_followers_delete" on public.page_followers
+  for delete using (auth.uid() = user_id);
+
+-- Group / page posts live in the posts table
+alter table public.posts
+  add column if not exists group_id uuid references public.groups (id) on delete cascade;
+
+alter table public.posts
+  add column if not exists page_id uuid references public.pages (id) on delete cascade;

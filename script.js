@@ -3006,6 +3006,8 @@ async function loadPostsWithUserNames() {
         } = await db
             .from("posts")
             .select("*", { count: "exact" })
+            .is("group_id", null)
+            .is("page_id", null)
             .order("created_at", {
                 ascending: false
             })
@@ -3513,6 +3515,8 @@ function socialhubMaybeShowLoadMore() {
         } = await db
             .from("posts")
             .select("*")
+            .is("group_id", null)
+            .is("page_id", null)
             .order("created_at", {
                 ascending: false
             })
