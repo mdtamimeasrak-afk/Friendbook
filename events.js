@@ -468,7 +468,7 @@ function socialhubEventsOpenCreateModal() {
             const description =
                 modal.querySelector("#evDesc").value.trim();
 
-            const location =
+            const eventLocation =
                 modal.querySelector("#evLocation").value.trim();
 
             const dateValue =
@@ -504,7 +504,7 @@ function socialhubEventsOpenCreateModal() {
                     .insert({
                         title,
                         description,
-                        location,
+                        location: eventLocation,
                         event_date: new Date(dateValue).toISOString(),
                         created_by: me.id
                     })
