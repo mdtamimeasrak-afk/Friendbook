@@ -1,0 +1,1481 @@
+/* ======================================================
+   FACEBOOK-EXACT PROFILE PAGE
+   Loaded LAST on profile.html + user-profile.html.
+   Replicates Facebook's fonts, colors, spacing, shadows,
+   structure and animations on the profile pages.
+   ====================================================== */
+
+/* ---------- 1. FONTS + COLORS ---------- */
+
+body {
+    font-family: "SF Pro Text", -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+
+    background: #f0f2f5;
+
+    color: #050505;
+}
+
+/* ---------- 2. TOPBAR (Facebook) ---------- */
+
+.topbar {
+    height: 56px;
+
+    padding: 0 16px;
+
+    gap: 8px;
+
+    background: #ffffff;
+
+    border-bottom: 1px solid #ced0d4;
+
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.topbar .logo {
+    width: 40px;
+
+    height: 40px;
+
+    border-radius: 8px;
+
+    background: #0866ff;
+
+    box-shadow: none;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+.topbar .logo::after {
+    content: "f";
+
+    font-size: 28px;
+
+    font-weight: 800;
+
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+
+    color: #ffffff;
+
+    letter-spacing: 0;
+
+    transform: none;
+}
+
+.topbar .search-box {
+    width: 240px;
+
+    height: 40px;
+
+    border-radius: 999px;
+
+    background: #f0f2f5;
+
+    padding: 0 12px;
+}
+
+.topbar .search-box span {
+    color: #65676b;
+
+    font-size: 15px;
+}
+
+.topbar .search-box input {
+    font-size: 15px;
+
+    color: #050505;
+}
+
+.topbar .search-box input::placeholder {
+    color: #65676b;
+}
+
+.fb-center-nav .fb-nav-btn {
+    width: 48px;
+
+    height: 48px;
+
+    border-radius: 12px;
+
+    color: #65676b;
+
+    font-size: 20px;
+
+    transition: background 0.2s;
+}
+
+.fb-center-nav .fb-nav-btn:hover {
+    background: #f0f2f5;
+}
+
+.top-icons button {
+    width: 40px;
+
+    height: 40px;
+
+    border-radius: 50%;
+
+    background: #e4e6eb;
+
+    font-size: 17px;
+
+    transition: background 0.2s;
+}
+
+.top-icons button:hover {
+    background: #d8dadf;
+}
+
+/* ---------- 3. COVER + HEADER (Facebook) ---------- */
+
+.fb-header {
+    background: transparent;
+}
+
+.fb-header .cover-photo {
+    position: relative;
+}
+
+.fb-header .cover-photo::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.35),
+        transparent 55%
+    );
+
+    border-radius: 0 0 8px 8px;
+
+    pointer-events: none;
+}
+
+.fb-cover-name {
+    left: 212px;
+
+    bottom: 22px;
+}
+
+.fb-cover-name-h {
+    font-size: 28px;
+
+    font-weight: 800;
+
+    letter-spacing: -0.2px;
+
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+
+.fb-cover-username {
+    font-size: 15px;
+
+    font-weight: 400;
+
+    color: rgba(255, 255, 255, 0.95);
+
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Avatar: white ring like Facebook */
+
+.fb-avatar-wrap .profile-photo {
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.15),
+        0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.fb-avatar-wrap .profile-photo > * {
+    border: 4px solid #ffffff;
+}
+
+/* Cover buttons (gray pills) */
+
+.fb-cover-btn {
+    background: #e4e6eb;
+
+    color: #050505;
+
+    font-weight: 700;
+
+    transition: background 0.2s;
+}
+
+.fb-cover-btn:hover {
+    background: #d8dadf;
+}
+
+.fb-more-btn {
+    background: #e4e6eb;
+
+    transition: background 0.2s;
+}
+
+.fb-more-btn:hover {
+    background: #d8dadf;
+}
+
+.fb-more-menu {
+    background: #ffffff;
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 12px 28px rgba(0, 0, 0, 0.2),
+        0 2px 4px rgba(0, 0, 0, 0.1);
+
+    animation: fbMenuIn 0.15s ease-out;
+
+    transform-origin: top right;
+}
+
+@keyframes fbMenuIn {
+    from {
+        opacity: 0;
+
+        transform: scale(0.96);
+    }
+    to {
+        opacity: 1;
+
+        transform: scale(1);
+    }
+}
+
+.fb-more-menu button {
+    border-radius: 6px;
+
+    transition: background 0.15s;
+}
+
+/* ---------- 4. TABS (Facebook) ---------- */
+
+.fb-tabs-bar {
+    background: #ffffff;
+
+    border-radius: 8px;
+
+    padding: 0 16px;
+
+    display: flex;
+
+    align-items: flex-end;
+
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+
+    position: relative;
+}
+
+.fb-tabs-bar button {
+    position: relative;
+
+    background: transparent;
+
+    border: none;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 16px 10px;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    color: #65676b;
+
+    border-radius: 8px 8px 0 0;
+
+    transition: background 0.15s;
+
+    cursor: pointer;
+}
+
+.fb-tabs-bar button i {
+    font-size: 17px;
+
+    color: #65676b;
+
+    transition: color 0.15s;
+}
+
+.fb-tabs-bar button:hover {
+    background: #f0f2f5;
+}
+
+.fb-tabs-bar button.active {
+    color: #050505;
+}
+
+.fb-tabs-bar button.active i {
+    color: #1877f2;
+}
+
+.fb-tabs-bar button.active::after {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+
+    right: 0;
+
+    bottom: 0;
+
+    height: 3px;
+
+    background: #1877f2;
+
+    border-radius: 3px 3px 0 0;
+}
+
+.fb-tab-more {
+    margin-left: auto;
+}
+
+/* ---------- 5. LAYOUT (Facebook columns) ---------- */
+
+.fb-body {
+    max-width: 1100px;
+
+    margin: 0 auto;
+
+    display: grid;
+
+    grid-template-columns: 360px 1fr;
+
+    gap: 16px;
+
+    align-items: start;
+
+    padding: 16px 16px 40px;
+}
+
+.fb-left {
+    position: sticky;
+
+    top: 72px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 16px;
+}
+
+.fb-main {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 16px;
+
+    min-width: 0;
+}
+
+/* ---------- 6. CARDS (Facebook) ---------- */
+
+.profile-card {
+    background: #ffffff;
+
+    border-radius: 8px;
+
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+
+    border: none;
+
+    padding: 16px;
+}
+
+.card-title {
+    margin-bottom: 12px;
+}
+
+.card-title h2 {
+    font-size: 17px;
+
+    font-weight: 700;
+
+    color: #050505;
+}
+
+.card-title p {
+    font-size: 13px;
+
+    color: #65676b;
+}
+
+.card-title a {
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: #050505;
+
+    padding: 6px 8px;
+
+    border-radius: 6px;
+
+    transition: background 0.15s;
+}
+
+.card-title a:hover {
+    background: #f0f2f5;
+
+    text-decoration: none;
+}
+
+/* Intro card */
+
+.fb-intro-card {
+    padding-top: 20px;
+}
+
+.fb-intro-top {
+    justify-content: flex-start;
+}
+
+.fb-intro-avatar {
+    width: 44px;
+
+    height: 44px;
+
+    background: #f0f2f5;
+}
+
+.fb-intro-id strong {
+    font-size: 17px;
+
+    color: #050505;
+}
+
+.fb-intro-id .profile-username {
+    color: #65676b;
+
+    font-size: 14px;
+}
+
+.fb-intro-bio {
+    color: #65676b;
+
+    font-size: 15px;
+}
+
+/* FB hides the intro action buttons (they live on the cover) */
+
+.fb-intro-buttons {
+    display: none;
+}
+
+.fb-intro-divider {
+    border-top: 1px solid #e4e6eb;
+}
+
+.fb-intro-details .about-row {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 14px;
+
+    color: #050505;
+
+    padding: 6px 8px;
+
+    margin: 0;
+
+    border-radius: 8px;
+
+    transition: background 0.15s;
+}
+
+.fb-intro-details .about-row:hover {
+    background: #f0f2f5;
+}
+
+.fb-intro-details .about-row i {
+    width: 22px;
+
+    text-align: center;
+
+    color: #65676b;
+
+    font-size: 16px;
+}
+
+.fb-intro-details .about-row a {
+    color: #1877f2;
+}
+
+.fb-friend-summary {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #050505;
+
+    padding: 8px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    transition: background 0.15s;
+}
+
+.fb-friend-summary:hover {
+    background: #f0f2f5;
+}
+
+.fb-friend-summary i {
+    color: #65676b;
+
+    font-size: 16px;
+}
+
+/* Highlights card */
+
+.fb-highlights-card {
+    display: none;
+}
+
+.fb-card-title {
+    font-size: 17px;
+
+    font-weight: 700;
+}
+
+/* Photos mini card */
+
+.fb-mini-photos {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 3px;
+}
+
+.fb-mini-photos .profile-photo-item {
+    aspect-ratio: 1;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+
+    background: #f0f2f5;
+}
+
+.fb-mini-photos .profile-photo-item img,
+.fb-mini-photos .profile-photo-item video {
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 8px;
+}
+
+/* Friends mini card */
+
+.fb-mini-friends {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 6px;
+}
+
+.fb-mini-friends .friend-mini {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+    cursor: pointer;
+
+    border-radius: 8px;
+
+    padding: 4px;
+
+    transition: background 0.15s;
+}
+
+.fb-mini-friends .friend-mini:hover {
+    background: #f0f2f5;
+}
+
+.fb-mini-friends .friend-mini .avatar {
+    width: 100%;
+
+    aspect-ratio: 1;
+
+    height: auto;
+
+    border-radius: 8px;
+
+    font-size: 28px;
+}
+
+.fb-mini-friends .friend-mini img {
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 8px;
+}
+
+.fb-mini-friends .friend-mini span {
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: #050505;
+
+    text-align: left;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+/* ---------- 7. COMPOSER (Facebook) ---------- */
+
+.fb-profile-composer {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 0;
+
+    padding: 16px;
+
+}
+
+.fb-profile-composer .avatar {
+    width: 40px;
+
+    height: 40px;
+
+    font-size: 20px;
+
+    flex-shrink: 0;
+}
+
+.fb-composer-open {
+    background: #f0f2f5;
+
+    color: #65676b;
+
+    font-size: 17px;
+
+    font-weight: 400;
+
+    transition: background 0.2s;
+}
+
+.fb-composer-open:hover {
+    background: #e4e6eb;
+}
+
+.fb-composer-top-row {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    width: 100%;
+}
+
+.fb-composer-actions {
+    display: flex;
+
+    align-items: center;
+
+    border-top: 1px solid #e4e6eb;
+
+    margin-top: 12px;
+
+    padding-top: 8px;
+}
+
+.fb-composer-actions button {
+    flex: 1;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    padding: 8px;
+
+    background: transparent;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: #65676b;
+
+    cursor: pointer;
+
+    transition: background 0.15s;
+}
+
+.fb-composer-actions button:hover {
+    background: #f0f2f5;
+}
+
+.fb-composer-actions button i {
+    font-size: 20px;
+}
+
+/* ---------- 8. POSTS (Facebook) ---------- */
+
+#profilePosts,
+#upPosts {
+    display: block;
+}
+
+#profilePosts .post,
+#upPosts .post {
+    background: #ffffff;
+
+    border-radius: 8px;
+
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+
+    padding: 12px 16px 10px;
+
+    margin-bottom: 16px;
+
+    transition: box-shadow 0.2s;
+}
+
+#profilePosts .post:hover,
+#upPosts .post:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.post-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 10px;
+}
+
+.post-header .avatar {
+    width: 40px;
+
+    height: 40px;
+
+    border-radius: 50%;
+
+    flex-shrink: 0;
+}
+
+.post-header .post-user-name {
+    font-size: 15px;
+
+    font-weight: 600;
+
+    color: #050505;
+
+    margin: 0;
+}
+
+.post-header small {
+    font-size: 13px;
+
+    color: #65676b;
+}
+
+.post-text {
+    font-size: 15px;
+
+    line-height: 1.45;
+
+    color: #050505;
+}
+
+.socialhub-post-image {
+    border-radius: 8px !important;
+}
+
+.post-stats {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 8px 0;
+
+    font-size: 13px;
+
+    color: #65676b;
+
+    border-top: none;
+}
+
+.post-stats .fb-reaction-emoji {
+    font-size: 16px;
+}
+
+/* Actions */
+
+.post-actions {
+    display: flex;
+
+    align-items: center;
+
+    border-top: 1px solid #e4e6eb;
+
+    padding: 2px 0;
+}
+
+.post-actions .fb-action-btn {
+    flex: 1;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    height: 40px;
+
+    border-radius: 8px;
+
+    background: transparent;
+
+    border: none;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #65676b;
+
+    cursor: pointer;
+
+    position: relative;
+
+    transition: background 0.15s, color 0.15s;
+}
+
+.post-actions .fb-action-btn:hover {
+    background: #f0f2f5;
+}
+
+.post-actions .fb-action-btn i {
+    font-size: 18px;
+
+    color: #65676b;
+}
+
+.post-actions .fb-action-btn .socialhub-reaction-emoji {
+    font-size: 18px;
+}
+
+.post-actions .fb-action-btn.liked,
+.post-actions .fb-action-btn.socialhub-like-btn.liked,
+.post-actions .fb-action-btn.socialhub-like-btn.liked i,
+.post-actions .fb-action-btn.liked .fb-action-label {
+    color: #1877f2;
+}
+
+/* Comment box */
+
+.comment-box {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 4px;
+}
+
+.comment-box .comment-input {
+    flex: 1;
+
+    height: 40px;
+
+    border-radius: 999px;
+
+    background: #f0f2f5;
+
+    border: none;
+
+    outline: none;
+
+    padding: 0 14px;
+
+    font-size: 14px;
+
+    color: #050505;
+}
+
+.comment-box .comment-input::placeholder {
+    color: #65676b;
+}
+
+.comment-box button {
+    width: 36px;
+
+    height: 36px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #e4e6eb;
+
+    color: #050505;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: background 0.15s;
+}
+
+.comment-box button:hover {
+    background: #d8dadf;
+}
+
+/* Comments */
+
+.comments .comment {
+    display: flex;
+
+    gap: 8px;
+
+    margin-top: 10px;
+}
+
+.comments .comment > .avatar {
+    width: 32px;
+
+    height: 32px;
+
+    flex-shrink: 0;
+
+    font-size: 15px;
+}
+
+.comments .comment-content {
+    background: #f0f2f5;
+
+    border-radius: 18px;
+
+    padding: 8px 12px;
+
+    max-width: calc(100% - 40px);
+}
+
+.comments .comment-content strong {
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: #050505;
+
+    display: block;
+}
+
+.comments .comment-content p {
+    margin: 2px 0 0;
+
+    font-size: 14px;
+
+    color: #050505;
+}
+
+.comments .comment-actions {
+    display: flex;
+
+    gap: 8px;
+
+    margin-top: 2px;
+}
+
+.comments .comment-actions button {
+    background: transparent;
+
+    border: none;
+
+    padding: 0;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    color: #65676b;
+
+    cursor: pointer;
+}
+
+.comments .comment-actions button:hover {
+    text-decoration: underline;
+}
+
+.comment-reply-row {
+    display: flex;
+
+    gap: 6px;
+
+    margin-top: 6px;
+}
+
+.comment-reply-row input {
+    flex: 1;
+
+    height: 32px;
+
+    border-radius: 999px;
+
+    border: none;
+
+    outline: none;
+
+    background: #f0f2f5;
+
+    padding: 0 12px;
+
+    font-size: 13px;
+}
+
+.comment-reply-row button {
+    background: transparent;
+
+    border: none;
+
+    color: #1877f2;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+/* ---------- 9. REACTION PICKER (Facebook popup) ---------- */
+
+.post-actions .socialhub-reactions {
+    position: absolute;
+
+    bottom: calc(100% + 8px);
+
+    left: 0;
+
+    display: flex;
+
+    gap: 4px;
+
+    background: #ffffff;
+
+    border-radius: 999px;
+
+    padding: 6px 10px;
+
+    box-shadow:
+        0 12px 28px rgba(0, 0, 0, 0.25),
+        0 2px 4px rgba(0, 0, 0, 0.1);
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transform: scale(0.3);
+
+    transform-origin: bottom left;
+
+    transition:
+        opacity 0.15s ease-out,
+        transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+        visibility 0.15s;
+
+    z-index: 60;
+}
+
+.post-actions .fb-action-btn:hover .socialhub-reactions,
+.post-actions .fb-action-btn:focus-within .socialhub-reactions {
+    opacity: 1;
+
+    visibility: visible;
+
+    transform: scale(1);
+}
+
+.post-actions .socialhub-reactions button {
+    background: transparent;
+
+    border: none;
+
+    font-size: 34px;
+
+    padding: 0 2px;
+
+    cursor: pointer;
+
+    transition: transform 0.15s;
+
+    position: relative;
+}
+
+.post-actions .socialhub-reactions button:hover {
+    transform: scale(1.35) translateY(-4px);
+}
+
+.post-actions .socialhub-reactions .socialhub-reaction-label {
+    position: absolute;
+
+    bottom: calc(100% + 8px);
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    background: rgba(0, 0, 0, 0.8);
+
+    color: #ffffff;
+
+    font-size: 12px;
+
+    font-weight: 600;
+
+    padding: 4px 8px;
+
+    border-radius: 6px;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transition: opacity 0.15s;
+
+    white-space: nowrap;
+}
+
+.post-actions .socialhub-reactions button:hover .socialhub-reaction-label {
+    opacity: 1;
+
+    visibility: visible;
+}
+
+/* Like press animation */
+
+.post-actions .fb-action-btn.socialhub-like-btn.liked i {
+    animation: fbLikePop 0.3s ease-out;
+}
+
+@keyframes fbLikePop {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.4);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* ---------- 10. OTHER-PROFILE (user-profile.html) ---------- */
+
+.fb-user-cover .fb-cover-name {
+    left: 20px;
+
+    bottom: 16px;
+}
+
+.up-posts-tabs {
+    display: flex;
+
+    background: #ffffff;
+
+    border-radius: 8px;
+
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+
+    overflow: hidden;
+}
+
+.up-posts-tab {
+    position: relative;
+
+    flex: 1;
+
+    background: transparent;
+
+    border: none;
+
+    padding: 14px 10px;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    color: #65676b;
+
+    cursor: pointer;
+
+    transition: background 0.15s;
+}
+
+.up-posts-tab:hover {
+    background: #f0f2f5;
+}
+
+.up-posts-tab.active {
+    color: #050505;
+}
+
+.up-posts-tab.active::after {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+
+    right: 0;
+
+    bottom: 0;
+
+    height: 3px;
+
+    background: #1877f2;
+}
+
+body.dark-mode .up-posts-tabs {
+    background: #242526;
+}
+
+body.dark-mode .up-posts-tab {
+    color: #b0b3b8;
+}
+
+body.dark-mode .up-posts-tab:hover {
+    background: #3a3b3c;
+}
+
+body.dark-mode .up-posts-tab.active {
+    color: #e4e6eb;
+}
+
+/* ---------- 11. DARK MODE (Facebook dark) ---------- */
+
+body.dark-mode {
+    background: #18191a;
+}
+
+body.dark-mode .topbar {
+    background: #242526;
+
+    border-bottom-color: #393a3b;
+}
+
+body.dark-mode .topbar .search-box {
+    background: #3a3b3c;
+}
+
+body.dark-mode .topbar .search-box input {
+    color: #e4e6eb;
+}
+
+body.dark-mode .fb-center-nav .fb-nav-btn,
+body.dark-mode .top-icons button {
+    color: #e4e6eb;
+}
+
+body.dark-mode .fb-center-nav .fb-nav-btn:hover {
+    background: #3a3b3c;
+}
+
+body.dark-mode .top-icons button,
+body.dark-mode .fb-more-btn,
+body.dark-mode .fb-cover-btn,
+body.dark-mode .fb-composer-audience-btn,
+body.dark-mode .fb-friends-btn {
+    background: #3a3b3c;
+
+    color: #e4e6eb;
+}
+
+body.dark-mode .top-icons button:hover,
+body.dark-mode .fb-more-btn:hover,
+body.dark-mode .fb-cover-btn:hover {
+    background: #4e4f50;
+}
+
+body.dark-mode .fb-more-menu {
+    background: #242526;
+
+    box-shadow:
+        0 12px 28px rgba(0, 0, 0, 0.5),
+        0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .fb-more-menu button {
+    color: #e4e6eb;
+}
+
+body.dark-mode .fb-more-menu button:hover {
+    background: #3a3b3c;
+}
+
+body.dark-mode .fb-more-menu button:last-child {
+    color: #f02849;
+}
+
+body.dark-mode .fb-tabs-bar,
+body.dark-mode .profile-card,
+body.dark-mode #profilePosts .post,
+body.dark-mode #upPosts .post {
+    background: #242526;
+}
+
+body.dark-mode .fb-tabs-bar button {
+    color: #b0b3b8;
+}
+
+body.dark-mode .fb-tabs-bar button:hover {
+    background: #3a3b3c;
+}
+
+body.dark-mode .fb-tabs-bar button.active {
+    color: #e4e6eb;
+}
+
+body.dark-mode .fb-tabs-bar button.active i {
+    color: #4599ff;
+}
+
+body.dark-mode .card-title h2,
+body.dark-mode .fb-intro-id strong,
+body.dark-mode .fb-intro-details .about-row,
+body.dark-mode .fb-friend-summary,
+body.dark-mode .fb-mini-friends .friend-mini span,
+body.dark-mode .post-header .post-user-name,
+body.dark-mode .post-text,
+body.dark-mode .comments .comment-content strong,
+body.dark-mode .comments .comment-content p {
+    color: #e4e6eb;
+}
+
+body.dark-mode .fb-intro-details .about-row:hover,
+body.dark-mode .fb-friend-summary:hover,
+body.dark-mode .fb-mini-friends .friend-mini:hover,
+body.dark-mode .post-actions .fb-action-btn:hover {
+    background: #3a3b3c;
+}
+
+body.dark-mode .fb-intro-bio,
+body.dark-mode .card-title p,
+body.dark-mode .post-header small,
+body.dark-mode .post-stats {
+    color: #b0b3b8;
+}
+
+body.dark-mode .fb-composer-open {
+    background: #3a3b3c;
+
+    color: #b0b3b8;
+}
+
+body.dark-mode .fb-composer-open:hover {
+    background: #4e4f50;
+}
+
+body.dark-mode .fb-composer-actions {
+    border-top-color: #3a3b3c;
+}
+
+body.dark-mode .fb-composer-actions button {
+    color: #b0b3b8;
+}
+
+body.dark-mode .fb-composer-actions button:hover {
+    background: #3a3b3c;
+}
+
+body.dark-mode .comment-box .comment-input,
+body.dark-mode .comment-reply-row input {
+    background: #3a3b3c;
+
+    color: #e4e6eb;
+}
+
+body.dark-mode .comments .comment-content {
+    background: #3a3b3c;
+}
+
+body.dark-mode .post-actions {
+    border-top-color: #3a3b3c;
+}
+
+body.dark-mode .post-actions .fb-action-btn {
+    color: #b0b3b8;
+}
+
+body.dark-mode .post-actions .fb-action-btn i {
+    color: #b0b3b8;
+}
+
+body.dark-mode .post-actions .socialhub-reactions {
+    background: #242526;
+
+    box-shadow:
+        0 12px 28px rgba(0, 0, 0, 0.6),
+        0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .card-title a {
+    color: #e4e6eb;
+}
+
+body.dark-mode .card-title a:hover {
+    background: #3a3b3c;
+}
