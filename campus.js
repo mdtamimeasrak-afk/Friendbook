@@ -1716,15 +1716,15 @@ async function socialhubCampusDeleteComment(commentId, button) {
         return;
     }
 
+    const post =
+        button.closest(".post");
+
     const row =
         button.closest(".comment");
 
     if (row) {
         row.remove();
     }
-
-    const post =
-        button.closest(".post");
 
     if (post) {
 
