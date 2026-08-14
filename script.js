@@ -1228,12 +1228,14 @@ async function createPost() {
 
         <div class="post-stats">
 
-            <span>
-                ❤️ 0 Likes
+            <span class="fb-stats-reactions">
+                <i class="fa-solid fa-heart"></i>
+                0 Likes
             </span>
 
-            <span>
-                💬 0 Comments
+            <span class="fb-stats-comments">
+                <i class="fa-solid fa-comment"></i>
+                0 Comments
             </span>
 
         </div>
@@ -1242,17 +1244,27 @@ async function createPost() {
         <div class="post-actions">
 
             <button
+                class="fb-action-btn fb-like-slot"
                 onclick="likePost(this)"
             >
-                ❤️ Like
+                <i class="fa-solid fa-thumbs-up"></i>
+                <span class="fb-action-label">Like</span>
             </button>
 
-            <button>
-                💬 Comment
+            <button
+                class="fb-action-btn"
+                onclick="this.closest('.post').querySelector('.comment-input').focus()"
+            >
+                <i class="fa-solid fa-comment"></i>
+                <span class="fb-action-label">Comment</span>
             </button>
 
-            <button>
-                ↗️ Share
+            <button
+                class="fb-action-btn"
+                onclick="socialhubShareDialog('${post.id}')"
+            >
+                <i class="fa-solid fa-share-from-square"></i>
+                <span class="fb-action-label">Share</span>
             </button>
 
         </div>
@@ -1338,8 +1350,9 @@ function likePost(button) {
             "liked"
         );
 
-        button.innerText =
-            "❤️ Like";
+        button.innerHTML =
+            '<i class="fa-solid fa-thumbs-up"></i>' +
+            '<span class="fb-action-label">Like</span>';
 
     } else {
 
@@ -1349,13 +1362,14 @@ function likePost(button) {
             "liked"
         );
 
-        button.innerText =
-            "❤️ Liked";
+        button.innerHTML =
+            '<i class="fa-solid fa-thumbs-up"></i>' +
+            '<span class="fb-action-label">Liked</span>';
     }
 
 
-    stats.innerText =
-        `❤️ ${likes} Likes`;
+    stats.innerHTML =
+        `<i class="fa-solid fa-heart"></i> ${likes} Likes`;
 }
 
 
@@ -2646,12 +2660,14 @@ async function loadPostsFromSupabase() {
 
                 <div class="post-stats">
 
-                    <span>
-                        ❤️ 0 Likes
+                    <span class="fb-stats-reactions">
+                        <i class="fa-solid fa-heart"></i>
+                        0 Likes
                     </span>
 
-                    <span>
-                        💬 0 Comments
+                    <span class="fb-stats-comments">
+                        <i class="fa-solid fa-comment"></i>
+                        0 Comments
                     </span>
 
                 </div>
@@ -2659,17 +2675,27 @@ async function loadPostsFromSupabase() {
                 <div class="post-actions">
 
                     <button
+                        class="fb-action-btn fb-like-slot"
                         onclick="likePost(this)"
                     >
-                        ❤️ Like
+                        <i class="fa-solid fa-thumbs-up"></i>
+                        <span class="fb-action-label">Like</span>
                     </button>
 
-                    <button>
-                        💬 Comment
+                    <button
+                        class="fb-action-btn"
+                        onclick="this.closest('.post').querySelector('.comment-input').focus()"
+                    >
+                        <i class="fa-solid fa-comment"></i>
+                        <span class="fb-action-label">Comment</span>
                     </button>
 
-                    <button>
-                        ↗️ Share
+                    <button
+                        class="fb-action-btn"
+                        onclick="socialhubShareDialog('${post.id}')"
+                    >
+                        <i class="fa-solid fa-share-from-square"></i>
+                        <span class="fb-action-label">Share</span>
                     </button>
 
                 </div>
@@ -3381,12 +3407,14 @@ function socialhubBuildPostArticle(post, profileMap) {
 
 <div class="post-stats">
 
-    <span>
-        ❤️ 0 Likes
+    <span class="fb-stats-reactions">
+        <i class="fa-solid fa-heart"></i>
+        0 Likes
     </span>
 
-    <span>
-        💬 0 Comments
+    <span class="fb-stats-comments">
+        <i class="fa-solid fa-comment"></i>
+        0 Comments
     </span>
 
 </div>
@@ -3395,22 +3423,27 @@ function socialhubBuildPostArticle(post, profileMap) {
 <div class="post-actions">
 
     <button
+        class="fb-action-btn fb-like-slot"
         onclick="likePost(this)"
     >
-        ❤️ Like
+        <i class="fa-solid fa-thumbs-up"></i>
+        <span class="fb-action-label">Like</span>
     </button>
 
     <button
+        class="fb-action-btn"
         onclick="this.closest('.post').querySelector('.comment-input').focus()"
     >
-        💬 Comment
+        <i class="fa-solid fa-comment"></i>
+        <span class="fb-action-label">Comment</span>
     </button>
 
     <button
+        class="fb-action-btn"
         onclick="socialhubShareDialog('${post.id}')"
     >
-        <i class="fa-solid fa-share"></i>
-        Share
+        <i class="fa-solid fa-share-from-square"></i>
+        <span class="fb-action-label">Share</span>
     </button>
 
 </div>

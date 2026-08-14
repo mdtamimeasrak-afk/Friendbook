@@ -706,16 +706,28 @@ function socialhubBuildShareCard(share, originalPost, originalProfile, sharerPro
 
         <div class="post-actions">
 
-            <button onclick="socialhubReact(this, '${originalPost.id}', 'like')">
-                <i class="fa-solid fa-thumbs-up"></i> Like
+            <button
+                class="fb-action-btn fb-like-slot"
+                onclick="socialhubReact(this, '${originalPost.id}', 'like')"
+            >
+                <i class="fa-solid fa-thumbs-up"></i>
+                <span class="fb-action-label">Like</span>
             </button>
 
-            <button onclick="this.closest('.post').querySelector('.comment-input').focus()">
-                💬 Comment
+            <button
+                class="fb-action-btn"
+                onclick="this.closest('.post').querySelector('.comment-input').focus()"
+            >
+                <i class="fa-solid fa-comment"></i>
+                <span class="fb-action-label">Comment</span>
             </button>
 
-            <button onclick="socialhubShareDialog('${originalPost.id}')">
-                <i class="fa-solid fa-share"></i> Share
+            <button
+                class="fb-action-btn"
+                onclick="socialhubShareDialog('${originalPost.id}')"
+            >
+                <i class="fa-solid fa-share-from-square"></i>
+                <span class="fb-action-label">Share</span>
             </button>
 
         </div>

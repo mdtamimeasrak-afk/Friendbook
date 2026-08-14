@@ -356,8 +356,25 @@ function socialhubReactionPickerHTML() {
 }
 
 
-function socialhubLikeButtonHTML(liked, reactionLabel) {
+function socialhubStatsHTML(reactionLabel, count) {
 
+    const emoji =
+        REACTION_EMOJI[reactionLabel] || "👍";
+
+    const color =
+        REACTION_COLOR[reactionLabel] || "#1877f2";
+
+    return `
+        <span
+            class="fb-reaction-emoji"
+            style="--fb-react-color:${color}"
+        >${emoji}</span>
+        <b>${count}</b>
+    `;
+}
+
+
+function socialhubLikeButtonHTML(liked, reactionLabel) {
     if (liked) {
 
         const emoji =
@@ -589,16 +606,33 @@ async function socialhubLoadInteractions() {
 
         if (stats[0]) {
 
+            const total =
+                likeCount[id] || 0;
+
+            const mine =
+                myReaction[id] || null;
+
+            const emoji =
+                mine
+                    ? (REACTION_EMOJI[mine] || "👍")
+                    : "👍";
+
+            const color =
+                mine
+                    ? (REACTION_COLOR[mine] || "#1877f2")
+                    : "#1877f2";
+
             stats[0].innerHTML = `
-                <i class="fa-solid fa-heart"></i>
-                ${likeCount[id] || 0} Likes
+                <span class="fb-reaction-emoji"
+                    style="--fb-react-color:${color}"
+                >${emoji}</span>
+                <b>${total}</b>
             `;
         }
 
         if (stats[1]) {
 
             stats[1].innerHTML = `
-                <i class="fa-solid fa-comment"></i>
                 ${(commentMap[id] || []).length} Comments
             `;
         }
@@ -666,7 +700,11 @@ async function socialhubLoadInteractions() {
                 }
             });
 
-            topLevel.forEach(comment => {
+            const SHOW_TOP = 2;
+
+            const SHOW_REPLIES = 2;
+
+            topLevel.forEach((comment, index) => {
 
                 socialhubRenderComment(
                     commentsDiv,
@@ -674,22 +712,111 @@ async function socialhubLoadInteractions() {
                     profileMap
                 );
 
-                const repliesDiv =
+                const commentRow =
                     commentsDiv.querySelector(
-                        `.comment[data-comment-id="${comment.id}"] .comment-replies`
+                        `.comment[data-comment-id="${comment.id}"]`
                     );
 
-                (byParent[comment.id] || [])
-                    .forEach(reply => {
+                if (index >= SHOW_TOP) {
 
-                        socialhubRenderComment(
-                            repliesDiv,
-                            reply,
-                            profileMap,
-                            true
-                        );
-                    });
+                    commentRow.setAttribute(
+                        "data-hidden",
+                        "1"
+                    );
+                }
+
+                const repliesDiv =
+                    commentRow.querySelector(
+                        ".comment-replies"
+                    );
+
+                const replies =
+                    byParent[comment.id] || [];
+
+                replies.forEach((reply, rIndex) => {
+
+                    socialhubRenderComment(
+                        repliesDiv,
+                        reply,
+                        profileMap,
+                        true
+                    );
+
+                    if (rIndex >= SHOW_REPLIES) {
+
+                        repliesDiv
+                            .lastElementChild
+                            .setAttribute(
+                                "data-hidden",
+                                "1"
+                            );
+                    }
+                });
+
+                if (replies.length > SHOW_REPLIES) {
+
+                    const replyToggle =
+                        document.createElement("button");
+
+                    replyToggle.type = "button";
+
+                    replyToggle.className =
+                        "fb-comments-toggle fb-replies-toggle";
+
+                    replyToggle.textContent =
+                        "View more replies";
+
+                    replyToggle.addEventListener(
+                        "click",
+                        () => {
+
+                            repliesDiv
+                                .querySelectorAll("[data-hidden]")
+                                .forEach(el => {
+                                    el.removeAttribute("data-hidden");
+                                });
+
+                            replyToggle.remove();
+                        }
+                    );
+
+                    repliesDiv.appendChild(
+                        replyToggle
+                    );
+                }
             });
+
+            if (topLevel.length > SHOW_TOP) {
+
+                const toggle =
+                    document.createElement("button");
+
+                toggle.type = "button";
+
+                toggle.className =
+                    "fb-comments-toggle";
+
+                toggle.textContent =
+                    `View all ${allComments.length} comments`;
+
+                toggle.addEventListener(
+                    "click",
+                    () => {
+
+                        commentsDiv
+                            .querySelectorAll("[data-hidden]")
+                            .forEach(el => {
+                                el.removeAttribute("data-hidden");
+                            });
+
+                        toggle.remove();
+                    }
+                );
+
+                commentsDiv.appendChild(
+                    toggle
+                );
+            }
         }
     });
 }
@@ -1252,10 +1379,11 @@ async function likePost(button) {
         const count =
             match ? parseInt(match[0]) : 0;
 
-        stats.innerHTML = `
-            <i class="fa-solid fa-heart"></i>
-            ${Math.max(0, count + (wasLiked ? -1 : 1))} Likes
-        `;
+        stats.innerHTML =
+            socialhubStatsHTML(
+                "like",
+                Math.max(0, count + (wasLiked ? -1 : 1))
+            );
     }
 
     if (wasLiked) {
@@ -1395,10 +1523,11 @@ async function socialhubReact(post, button, reactionLabel) {
         const count =
             match ? parseInt(match[0]) : 0;
 
-        stats.innerHTML = `
-            <i class="fa-solid fa-heart"></i>
-            ${count + 1} Likes
-        `;
+        stats.innerHTML =
+            socialhubStatsHTML(
+                reactionLabel,
+                count + 1
+            );
     }
 
     button.classList.add("liked");

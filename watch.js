@@ -730,16 +730,28 @@ async function socialhubWatchOpen(postId, index) {
 
                 <div class="post-actions">
 
-                    <button onclick="likePost(this)">
-                        👍 Like
+                    <button
+                        class="fb-action-btn fb-like-slot"
+                        onclick="likePost(this)"
+                    >
+                        <i class="fa-solid fa-thumbs-up"></i>
+                        <span class="fb-action-label">Like</span>
                     </button>
 
-                    <button onclick="socialhubWatchToggleComments(this)">
-                        💬 Comment
+                    <button
+                        class="fb-action-btn"
+                        onclick="socialhubWatchToggleComments(this)"
+                    >
+                        <i class="fa-solid fa-comment"></i>
+                        <span class="fb-action-label">Comment</span>
                     </button>
 
-                    <button onclick="socialhubShareDialog('${post.id}')">
-                        ↗️ Share
+                    <button
+                        class="fb-action-btn"
+                        onclick="socialhubShareDialog('${post.id}')"
+                    >
+                        <i class="fa-solid fa-share-from-square"></i>
+                        <span class="fb-action-label">Share</span>
                     </button>
 
                 </div>

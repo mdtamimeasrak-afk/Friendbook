@@ -570,8 +570,6 @@ body {
     font-size: 13px;
 
     padding-bottom: 10px;
-
-    border-bottom: 1px solid var(--border);
 }
 
 
@@ -638,7 +636,7 @@ body {
 
     outline: none;
 
-    background: var(--bg);
+    background: var(--hover);
 
     border-radius: 20px;
 
@@ -655,13 +653,15 @@ body {
 
     color: white;
 
-    padding: 0 15px;
+    padding: 0 16px;
 
     border-radius: 20px;
 
     cursor: pointer;
 
     font-weight: 600;
+
+    font-size: 13px;
 }
 
 
@@ -715,6 +715,322 @@ body {
     font-size: 13px;
 
     line-height: 1.4;
+}
+
+
+/* ========================================
+   FACEBOOK-STYLE FEED (TRIYA)
+======================================== */
+
+.post {
+    border-radius: 8px;
+}
+
+
+.post-stats {
+    align-items: center;
+
+    padding: 10px 2px 11px;
+
+    font-weight: 600;
+}
+
+
+.post-stats .fb-stats-reactions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    color: var(--muted);
+}
+
+
+.post-stats .fb-stats-reactions b {
+    font-weight: 600;
+}
+
+
+.post-stats .fb-stats-comments {
+    color: var(--muted);
+}
+
+
+.fb-reaction-emoji {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 18px;
+
+    height: 18px;
+
+    border-radius: 50%;
+
+    background: var(--fb-react-color, #1877f2);
+
+    color: #fff;
+
+    font-size: 10px;
+
+    line-height: 1;
+
+    font-style: normal;
+
+    font-weight: 400;
+}
+
+
+.post-actions {
+    display: flex;
+
+    gap: 4px;
+
+    padding: 6px 0 2px;
+
+    border-top: 1px solid var(--border);
+
+    margin-top: 2px;
+}
+
+
+.post-actions .fb-action-btn {
+    flex: 1;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 8px;
+
+    border: none;
+
+    background: transparent;
+
+    padding: 9px 6px;
+
+    border-radius: 6px;
+
+    color: var(--muted);
+
+    font-weight: 600;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    transition: background 0.2s ease;
+
+    font-family: inherit;
+}
+
+
+.post-actions .fb-action-btn:hover {
+    background: var(--hover);
+}
+
+
+.post-actions .fb-action-btn i {
+    font-size: 15px;
+
+    pointer-events: none;
+}
+
+
+.post-actions .fb-like-slot {
+    position: relative;
+}
+
+
+.post-actions .socialhub-like-btn.liked {
+    color: var(--primary, #1877f2);
+}
+
+
+.post-actions .socialhub-like-btn.liked i {
+    color: inherit;
+}
+
+
+.socialhub-reactions {
+    position: absolute;
+
+    bottom: calc(100% + 8px);
+
+    left: 50%;
+
+    transform: translateX(-50%) scale(0.6);
+
+    transform-origin: bottom center;
+
+    background: #fff;
+
+    border: 1px solid rgba(0, 0, 0, 0.08);
+
+    border-radius: 40px;
+
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+
+    padding: 6px 10px;
+
+    display: flex;
+
+    gap: 2px;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+    transition:
+        opacity 0.15s ease,
+        transform 0.15s ease;
+
+    z-index: 100;
+
+    white-space: nowrap;
+}
+
+
+.socialhub-like-btn:hover .socialhub-reactions {
+    opacity: 1;
+
+    pointer-events: auto;
+
+    transform: translateX(-50%) scale(1);
+}
+
+
+.socialhub-reactions button {
+    background: none;
+
+    border: none;
+
+    font-size: 26px;
+
+    line-height: 1;
+
+    padding: 4px 3px;
+
+    cursor: pointer;
+
+    border-radius: 50%;
+
+    transition: transform 0.15s ease;
+
+    position: relative;
+}
+
+
+.socialhub-reactions button:hover {
+    transform: translateY(-4px) scale(1.15);
+}
+
+
+.socialhub-reaction-label {
+    display: none;
+}
+
+
+.comment-content {
+    background: var(--hover, #f0f2f5);
+
+    border-radius: 18px;
+
+    padding: 7px 12px;
+
+    max-width: 100%;
+
+    min-width: 0;
+}
+
+
+.comment-content > strong {
+    display: block;
+
+    margin-bottom: 2px;
+}
+
+
+.comment-content > p {
+    margin: 0;
+
+    font-size: 14px;
+
+    line-height: 1.45;
+
+    word-break: break-word;
+}
+
+
+.comment-content .comment-actions {
+    margin: 5px 0 0;
+
+    padding-left: 2px;
+}
+
+
+.comment-content .comment-reply-row {
+    margin: 8px 0 0;
+}
+
+
+.comment.reply .comment-content {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+
+.dark .comment.reply .comment-content,
+.dark-theme .comment.reply .comment-content {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+
+.fb-comments-toggle {
+    align-self: flex-start;
+
+    border: none;
+
+    background: transparent;
+
+    color: var(--muted, #65676b);
+
+    font-weight: 600;
+
+    font-size: 13px;
+
+    padding: 6px 8px;
+
+    border-radius: 16px;
+
+    cursor: pointer;
+}
+
+
+.fb-comments-toggle:hover {
+    background: var(--hover, #f0f2f5);
+}
+
+
+.fb-replies-toggle {
+    margin: 4px 0 0 44px;
+}
+
+
+[data-hidden] {
+    display: none !important;
+}
+
+
+.dark .socialhub-reactions,
+.dark-theme .socialhub-reactions {
+    background: #242526;
+
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
 

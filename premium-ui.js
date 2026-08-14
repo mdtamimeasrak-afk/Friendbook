@@ -202,7 +202,7 @@
 
         const shareButton =
             event.target.closest(
-                '.post-actions button:nth-child(3)'
+                '.post-actions button:nth-child(3):not([onclick^="socialhubShareDialog"])'
             );
 
         if (!shareButton) {
