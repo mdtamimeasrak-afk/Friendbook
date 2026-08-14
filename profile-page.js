@@ -1287,7 +1287,7 @@ async function socialhubLoadMyVideos() {
         error
     } = await db
         .from("posts")
-        .select("id, image_url, video_url")
+        .select("id, image_url, video_url, content")
         .eq("user_id", me.id)
         .not("video_url", "is", null)
         .order("created_at", {
@@ -1329,7 +1329,21 @@ async function socialhubLoadMyVideos() {
                 preload="metadata"
             ></video>
 
-            <span class="profile-photo-video-badge">🎥</span>
+            <span class="profile-photo-video-badge">
+                <i class="fa-solid fa-play"></i>
+            </span>
+
+            ${
+                (post.content || "").trim()
+                    ? `
+                        <p class="profile-photo-video-caption">
+                            ${socialhubEscape(
+                                (post.content || "").trim()
+                            )}
+                        </p>
+                    `
+                    : ""
+            }
         `;
 
         tile.addEventListener("click", () => {

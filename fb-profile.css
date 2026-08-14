@@ -2903,7 +2903,7 @@ body.dark-mode .post-lightbox-download {
     color: #e4e6eb;
 }
 
-/* ============ STEP 1 — COVER REPOSITION MODAL ============ */
+/* ============ STEP 1 ï¿½ COVER REPOSITION MODAL ============ */
 
 .socialhub-reposition-modal {
     position: fixed;
@@ -3113,4 +3113,61 @@ body.dark-mode .socialhub-reposition-cancel {
 
 .socialhub-reposition-save:hover {
     background: #166fe5;
+}
+
+/* ============ STEP 5 â€” REELS TILE POLISH ============ */
+
+#profileVideos .profile-photo-video-badge {
+    top: 50%;
+
+    left: 50%;
+
+    right: auto;
+
+    width: 46px;
+
+    height: 46px;
+
+    transform: translate(-50%, -50%);
+
+    background: rgba(0, 0, 0, 0.55);
+
+    font-size: 16px;
+
+    border: 2px solid rgba(255, 255, 255, 0.85);
+}
+
+#profileVideos .profile-photo-video-badge i {
+    margin-left: 3px;
+}
+
+#profileVideos .profile-photo-video-caption {
+    position: absolute;
+
+    left: 0;
+
+    right: 0;
+
+    bottom: 0;
+
+    margin: 0;
+
+    padding: 22px 10px 8px;
+
+    font-size: 12px;
+
+    color: #fff;
+
+    background: linear-gradient(
+        transparent,
+        rgba(0, 0, 0, 0.65)
+    );
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    pointer-events: none;
 }
