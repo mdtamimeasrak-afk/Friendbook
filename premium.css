@@ -216,7 +216,7 @@ body.dark-mode {
     display: flex;
 }
 
-.socialhub-reactions button {
+.post-actions .socialhub-reactions button {
     position: relative;
     width: 60px;
     height: 60px;
