@@ -441,6 +441,8 @@ body.dark-mode .profile-tabs {
 
 .post:hover {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+
+    transform: none;
 }
 
 
@@ -453,6 +455,18 @@ body.dark-mode .profile-tabs {
     width: calc(100% + 32px);
 
     border-radius: 0;
+}
+
+
+#posts,
+#upPosts {
+    gap: 16px;
+}
+
+
+#posts .post,
+#upPosts .post {
+    margin-bottom: 0;
 }
 
 
@@ -482,4 +496,6 @@ body.dark-mode .socialhub-stories {
 
 body.dark-mode .post:hover {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+
+    transform: none;
 }
