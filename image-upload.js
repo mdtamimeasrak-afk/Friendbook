@@ -1910,7 +1910,7 @@ function setupProfileCoverUpload() {
     button.className =
         "socialhub-cover-overlay socialhub-photo-trigger";
 
-    button.textContent = "📷 Edit cover photo";
+    button.textContent = "📷 Edit Cover";
 
     button.addEventListener("click", (event) => {
 

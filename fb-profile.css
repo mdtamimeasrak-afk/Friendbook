@@ -1575,12 +1575,12 @@ body.dark-mode .card-title a:hover {
     border-radius: 8px 8px 0 0;
 }
 
-/* Edit cover photo (bottom-right, white like the reference) */
+/* Edit cover photo (top-right, like the sketch) */
 
 .fb-header .socialhub-cover-overlay {
-    top: auto;
+    top: 16px;
 
-    bottom: 16px;
+    bottom: auto;
 
     right: 16px;
 
