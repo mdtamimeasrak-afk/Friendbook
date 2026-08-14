@@ -171,6 +171,8 @@ async function socialhubCampusLoad() {
         socialhubCampusRender(current);
 
         await socialhubCampusLoadPosts();
+
+        await socialhubCampusLoadStudents();
     }
     catch (err) {
 
@@ -1830,4 +1832,519 @@ async function socialhubCampusDeletePost(postId, button) {
 
         socialhubCampusLoadPosts();
     }
+}
+
+
+// ======================================================
+// 17. STEP 5 - STUDENTS
+// ======================================================
+
+const socialhubCampusStudents = {
+    list: [],
+    loaded: false
+};
+
+
+async function socialhubCampusLoadStudents() {
+
+    const list =
+        document.getElementById("campusStudentsList");
+
+    if (!list) {
+        return;
+    }
+
+    const campus =
+        socialhubCampusState.campus;
+
+    if (!campus) {
+        return;
+    }
+
+    list.innerHTML =
+        '<div class="campus-feed-loading">Loading students...</div>';
+
+    const {
+        data: members,
+        error
+    } =
+        await supabaseClient
+            .from("campus_members")
+            .select(`
+                user_id,
+                joined_at,
+                profiles (
+                    id,
+                    full_name,
+                    username,
+                    avatar_url,
+                    department,
+                    semester,
+                    batch
+                )
+            `)
+            .eq("campus_id", campus.id)
+            .order("joined_at", { ascending: true });
+
+    if (error) {
+
+        list.innerHTML = "";
+
+        socialhubToast(
+            "Could not load students.",
+            "error"
+        );
+
+        return;
+    }
+
+    let me = null;
+
+    try {
+
+        const { data: sessionData } =
+            await supabaseClient.auth.getSession();
+
+        if (sessionData && sessionData.session) {
+
+            me = sessionData.session.user;
+        }
+    }
+    catch (err) {
+        me = null;
+    }
+
+    const students =
+        (members || [])
+            .map(member => member.profiles)
+            .filter(Boolean);
+
+    socialhubCampusStudents.list = students;
+
+    socialhubCampusStudents.loaded = true;
+
+    socialhubCampusBindStudentSearch();
+
+    await socialhubCampusRenderStudents();
+}
+
+
+async function socialhubCampusRenderStudents() {
+
+    const list =
+        document.getElementById("campusStudentsList");
+
+    if (!list) {
+        return;
+    }
+
+    const students =
+        socialhubCampusStudents.list;
+
+    const search =
+        (
+            document.getElementById("campusStudentSearch")
+                ?.value || ""
+        ).trim().toLowerCase();
+
+    const dept =
+        document.getElementById("campusStudentDept")
+            ?.value || "";
+
+    let me = null;
+
+    try {
+
+        const { data: sessionData } =
+            await supabaseClient.auth.getSession();
+
+        if (sessionData && sessionData.session) {
+
+            me = sessionData.session.user;
+        }
+    }
+    catch (err) {
+        me = null;
+    }
+
+    const ids =
+        students.map(s => s.id);
+
+    let outMap = {};
+
+    let inMap = {};
+
+    if (me && ids.length > 0) {
+
+        const [
+            outResult,
+            inResult
+        ] =
+            await Promise.all([
+
+                supabaseClient
+                    .from("friendships")
+                    .select("requester_id, addressee_id, status")
+                    .eq("requester_id", me.id)
+                    .in("addressee_id", ids),
+
+                supabaseClient
+                    .from("friendships")
+                    .select("requester_id, addressee_id, status")
+                    .eq("addressee_id", me.id)
+                    .in("requester_id", ids)
+            ]);
+
+        (outResult.data || []).forEach(f => {
+            outMap[f.addressee_id] = f.status;
+        });
+
+        (inResult.data || []).forEach(f => {
+            inMap[f.requester_id] = f.status;
+        });
+    }
+
+    const filtered =
+        students.filter(student => {
+
+            const name =
+                (student.full_name || "").toLowerCase();
+
+            const user =
+                (student.username || "").toLowerCase();
+
+            if (
+                search &&
+                !name.includes(search) &&
+                !user.includes(search)
+            ) {
+                return false;
+            }
+
+            if (
+                dept &&
+                (student.department || "") !== dept
+            ) {
+                return false;
+            }
+
+            return true;
+        });
+
+    if (filtered.length === 0) {
+
+        list.innerHTML = `
+            <div class="campus-empty-card">
+                <div class="campus-empty-icon">
+                    <i class="fa-solid fa-user-graduate"></i>
+                </div>
+                <h3>No students found</h3>
+                <p>
+                    Try a different search or department.
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+    list.innerHTML = "";
+
+    filtered.forEach(student => {
+
+        const card =
+            socialhubCampusStudentCard(
+                student,
+                me,
+                outMap[student.id] || null,
+                inMap[student.id] || null
+            );
+
+        list.appendChild(card);
+    });
+}
+
+
+function socialhubCampusStudentCard(student, me, outStatus, inStatus) {
+
+    const card =
+        document.createElement("div");
+
+    card.className = "campus-student-card";
+
+    card.dataset.name =
+        (student.full_name || "").toLowerCase();
+
+    card.dataset.dept =
+        (student.department || "").toLowerCase();
+
+    const avatarUrl =
+        student.avatar_url || "";
+
+    const avatarHTML =
+        avatarUrl
+            ? `
+                <img
+                    src="${socialhubCampusEscape(avatarUrl)}"
+                    alt="${socialhubCampusEscape(student.full_name || "")}"
+                >
+            `
+            : "👤";
+
+    const meta =
+        [
+            student.department,
+            student.semester
+                ? student.semester + "th"
+                : null,
+            student.batch
+        ]
+            .filter(Boolean)
+            .join(" · ") || "Student";
+
+    let action = "";
+
+    const mine =
+        me && student.id === me.id;
+
+    if (mine) {
+
+        action = `
+            <span class="campus-student-you">You</span>
+        `;
+    }
+    else if (outStatus === "accepted" || inStatus === "accepted") {
+
+        action = `
+            <button
+                type="button"
+                class="campus-student-follow friends"
+                disabled
+            >
+                <i class="fa-solid fa-user-check"></i>
+                Friends
+            </button>
+        `;
+    }
+    else if (outStatus === "pending") {
+
+        action = `
+            <button
+                type="button"
+                class="campus-student-follow requested"
+                disabled
+            >
+                <i class="fa-solid fa-clock"></i>
+                Requested
+            </button>
+        `;
+    }
+    else if (inStatus === "pending") {
+
+        action = `
+            <button
+                type="button"
+                class="campus-student-follow accept"
+                onclick="socialhubCampusAccept('${student.id}', this)"
+            >
+                <i class="fa-solid fa-user-plus"></i>
+                Accept
+            </button>
+        `;
+    }
+    else {
+
+        action = `
+            <button
+                type="button"
+                class="campus-student-follow"
+                onclick="socialhubCampusFollow('${student.id}', this)"
+            >
+                <i class="fa-solid fa-user-plus"></i>
+                Follow
+            </button>
+        `;
+    }
+
+    card.innerHTML = `
+
+        <div class="campus-student-avatar">
+            ${avatarHTML}
+        </div>
+
+        <div class="campus-student-info">
+
+            <strong>${socialhubCampusEscape(student.full_name || "Student")}</strong>
+
+            <small>@${socialhubCampusEscape(student.username || "")}</small>
+
+            <span class="campus-student-meta">
+                ${socialhubCampusEscape(meta)}
+            </span>
+
+        </div>
+
+        <div class="campus-student-actions">
+            ${action}
+        </div>
+
+    `;
+
+    return card;
+}
+
+
+function socialhubCampusBindStudentSearch() {
+
+    const search =
+        document.getElementById("campusStudentSearch");
+
+    if (search && !search.dataset.bound) {
+
+        search.dataset.bound = "1";
+
+        search.addEventListener(
+            "input",
+            () => socialhubCampusRenderStudents()
+        );
+    }
+
+    const dept =
+        document.getElementById("campusStudentDept");
+
+    if (dept && !dept.dataset.bound) {
+
+        dept.dataset.bound = "1";
+
+        dept.addEventListener(
+            "change",
+            () => socialhubCampusRenderStudents()
+        );
+    }
+}
+
+
+async function socialhubCampusFollow(userId, button) {
+
+    let me = null;
+
+    try {
+
+        const { data: sessionData } =
+            await supabaseClient.auth.getSession();
+
+        if (sessionData && sessionData.session) {
+
+            me = sessionData.session.user;
+        }
+    }
+    catch (err) {
+        me = null;
+    }
+
+    if (!me) {
+
+        socialhubToast(
+            "Please login first.",
+            "error"
+        );
+
+        return;
+    }
+
+    if (button.disabled) {
+        return;
+    }
+
+    button.disabled = true;
+
+    const { error } =
+        await supabaseClient
+            .from("friendships")
+            .insert({
+                requester_id: me.id,
+                addressee_id: userId,
+                status: "pending"
+            });
+
+    if (error) {
+
+        button.disabled = false;
+
+        socialhubToast(
+            "Could not send the request. " + error.message,
+            "error"
+        );
+
+        return;
+    }
+
+    button.innerHTML =
+        '<i class="fa-solid fa-clock"></i> Requested';
+
+    button.classList.add("requested");
+
+    socialhubToast(
+        "Follow request sent.",
+        "success"
+    );
+}
+
+
+async function socialhubCampusAccept(userId, button) {
+
+    let me = null;
+
+    try {
+
+        const { data: sessionData } =
+            await supabaseClient.auth.getSession();
+
+        if (sessionData && sessionData.session) {
+
+            me = sessionData.session.user;
+        }
+    }
+    catch (err) {
+        me = null;
+    }
+
+    if (!me) {
+
+        socialhubToast(
+            "Please login first.",
+            "error"
+        );
+
+        return;
+    }
+
+    const { error } =
+        await supabaseClient
+            .from("friendships")
+            .update({ status: "accepted" })
+            .eq("requester_id", userId)
+            .eq("addressee_id", me.id);
+
+    if (error) {
+
+        socialhubToast(
+            "Could not accept the request.",
+            "error"
+        );
+
+        return;
+    }
+
+    button.innerHTML =
+        '<i class="fa-solid fa-user-check"></i> Friends';
+
+    button.classList.add("friends");
+
+    button.disabled = true;
+
+    socialhubToast(
+        "You are now friends! 🎉",
+        "success"
+    );
 }
