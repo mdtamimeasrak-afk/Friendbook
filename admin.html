@@ -11,7 +11,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>TRIYA - Events</title>
+    <title>TRIYA - Admin</title>
 
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%231877f2'/%3E%3Ctext x='20' y='27' font-family='Arial' font-size='21' font-weight='800' fill='white' text-anchor='middle'%3ETR%3C/text%3E%3C/svg%3E">
 
@@ -136,45 +136,27 @@
     <!-- MAIN CONTENT -->
     <!-- ========================= -->
 
-    <main class="events-main">
+    <main class="birthdays-main">
 
-        <div class="events-head">
+        <div class="birthdays-head">
 
-            <div class="events-head-icon">
-                <i class="fa-solid fa-calendar-days"></i>
+            <div class="birthdays-head-icon">
+                <i class="fa-solid fa-shield-halved"></i>
             </div>
 
-            <h1>Events</h1>
+            <div>
+
+                <h1>Admin Dashboard</h1>
+
+                <p class="birthdays-sub">Moderation & community health.</p>
+
+            </div>
 
         </div>
 
-        <p class="events-sub">Create events and invite everyone.</p>
+        <div id="adminBody">
 
-        <div class="events-top-row">
-
-            <button
-                class="socialhub-create-btn"
-                onclick="socialhubEventsOpenCreateModal()"
-            >
-                <i class="fa-solid fa-plus"></i>
-                Create New Event
-            </button>
-
-            <span
-                class="events-count-pill"
-                id="eventsCount"
-            ></span>
-
-        </div>
-
-        <div
-            class="events-grid"
-            id="eventsGrid"
-        >
-
-            <p class="empty-message" style="grid-column:1/-1;">
-                Loading events...
-            </p>
+            <p class="empty-message">Loading...</p>
 
         </div>
 
@@ -192,13 +174,7 @@
 
     <script src="premium-ui.js?v=1786700015985"></script>
 
-    <script src="script.js?v=1786700015985"></script>
-
-    <script src="likes-comments.js?v=1786700015985"></script>
-
-    <script src="shares.js?v=1786700015985"></script>
-
-    <script src="events.js?v=1786700015985"></script>
+    <script src="admin.js?v=1786700015985"></script>
 
 </body>
 

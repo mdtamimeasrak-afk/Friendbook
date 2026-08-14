@@ -912,3 +912,104 @@ begin
 exception
   when duplicate_object then null;
 end $$;
+
+-- ======================================================
+-- PHASE 6: POWER FEATURES
+-- ======================================================
+
+-- 6.1 POST VIEWS (activity log / seen by)
+create table if not exists public.post_views (
+  id uuid primary key default gen_random_uuid(),
+  post_id uuid not null references public.posts (id) on delete cascade,
+  viewer_id uuid not null references public.profiles (id) on delete cascade,
+  created_at timestamptz not null default now(),
+  unique (post_id, viewer_id)
+);
+
+alter table public.post_views enable row level security;
+
+drop policy if exists "post_views_select" on public.post_views;
+create policy "post_views_select" on public.post_views
+  for select using (
+    exists (
+      select 1 from public.posts p
+      where p.id = post_views.post_id and p.user_id = auth.uid()
+    )
+    or auth.uid() = post_views.viewer_id
+  );
+
+drop policy if exists "post_views_insert" on public.post_views;
+create policy "post_views_insert" on public.post_views
+  for insert with check (auth.uid() = viewer_id);
+
+-- 6.2 ADMIN FLAG
+alter table public.profiles
+  add column if not exists is_admin boolean not null default false;
+
+-- 6.3 COMMENTS: edit own comment
+drop policy if exists "comments_update" on public.comments;
+create policy "comments_update" on public.comments
+  for update using (auth.uid() = user_id);
+
+-- 6.4 GROUPS: cover image + member roles
+alter table public.groups
+  add column if not exists cover_url text;
+
+-- Creator becomes owner; backfill old data
+insert into public.group_members (group_id, user_id, role)
+  select g.id, g.created_by, 'owner'
+  from public.groups g
+on conflict (group_id, user_id)
+  do update set role = 'owner';
+
+-- Role changes (promote/demote) only by owner or admins
+drop policy if exists "group_members_update" on public.group_members;
+create policy "group_members_update" on public.group_members
+  for update using (
+    exists (
+      select 1 from public.group_members gm
+      where gm.group_id = group_members.group_id
+        and gm.user_id = auth.uid()
+        and gm.role in ('owner', 'admin')
+    )
+  );
+
+-- Owner/admin may invite others (insert rows for any user in their group)
+drop policy if exists "group_members_insert" on public.group_members;
+create policy "group_members_insert" on public.group_members
+  for insert with check (
+    auth.uid() = user_id
+    or exists (
+      select 1 from public.group_members gm
+      where gm.group_id = group_members.group_id
+        and gm.user_id = auth.uid()
+        and gm.role in ('owner', 'admin')
+    )
+  );
+
+-- 6.5 EVENTS: cover image + invite friends
+alter table public.events
+  add column if not exists cover_url text;
+
+-- Event creator may invite others (status 'invited')
+drop policy if exists "event_rsvps_insert" on public.event_rsvps;
+create policy "event_rsvps_insert" on public.event_rsvps
+  for insert with check (
+    auth.uid() = user_id
+    or exists (
+      select 1 from public.events e
+      where e.id = event_rsvps.event_id and e.created_by = auth.uid()
+    )
+  );
+
+
+-- 6.6 ADMIN: view all reports
+drop policy if exists "reports_select" on public.reports;
+create policy "reports_select" on public.reports
+  for select using (
+    auth.uid() = reporter_id
+    or exists (
+      select 1 from public.profiles p
+      where p.id = auth.uid() and p.is_admin = true
+    )
+  );

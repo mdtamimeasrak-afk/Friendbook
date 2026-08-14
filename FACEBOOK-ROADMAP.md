@@ -75,3 +75,6 @@
 - [ ] Memories: share memory as post
 - [ ] Notifications: friend request list page
 - [ ] Admin/moderation dashboard (view reports)
+
+> Note: Phase 6 SQL (post_views, profiles.is_admin, comments edit policy, groups cover_url + owner/role policies, events cover_url + invite policy, reports admin select policy) must be run in the Supabase SQL editor (section 6.x of setup-all.sql) before the new features work.
+> Hosting moved to GitHub Pages: https://mdtamimeasrak-afk.github.io/triya-social/ (Netlify blocked — credits exhausted). Deploy = push to main; run `node bump-versions.js` before each release.

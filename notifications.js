@@ -479,6 +479,12 @@ function socialhubNotificationText(notification, profile) {
         case "friend_accepted":
             return `${name} accepted your friend request`;
 
+        case "group_invite":
+            return `${name} invited you to join their group`;
+
+        case "event_invite":
+            return `${name} invited you to an event`;
+
         default:
             return `${name} interacted with you`;
     }
@@ -493,6 +499,16 @@ function socialhubNotificationTarget(notification) {
     ) {
 
         return `user-profile.html?user=${notification.actor_id}`;
+    }
+
+    if (notification.type === "group_invite") {
+
+        return "groups.html";
+    }
+
+    if (notification.type === "event_invite") {
+
+        return "events.html";
     }
 
     // like / comment -> the home feed

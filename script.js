@@ -3219,6 +3219,15 @@ async function loadPostsWithUserNames() {
         // Load More button when there are more posts
         socialhubMaybeShowLoadMore();
 
+        // Activity log: track views + "Seen by" on own posts
+        if (typeof socialhubTrackPostViews === "function") {
+
+            socialhubTrackPostViews(
+                feedItems,
+                postsContainer
+            );
+        }
+
         console.log(
             "✅ FINAL POSTS LOADED:",
             feedItems.length
@@ -3642,6 +3651,14 @@ function socialhubMaybeShowLoadMore() {
         ) {
 
             socialhubApplyShareCounts(container);
+        }
+
+        if (typeof socialhubTrackPostViews === "function") {
+
+            socialhubTrackPostViews(
+                feedItems,
+                container
+            );
         }
 
         socialhubMaybeShowLoadMore();

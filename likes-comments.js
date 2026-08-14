@@ -840,6 +840,14 @@ function socialhubRenderComment(container, comment, profileMap, isReply) {
                     Delete
                 </button>
 
+                <button
+                    type="button"
+                    class="comment-edit-btn"
+                    style="display:none;"
+                >
+                    Edit
+                </button>
+
             </div>
 
             <div class="comment-reply-row">
@@ -917,7 +925,167 @@ function socialhubRenderComment(container, comment, profileMap, isReply) {
         socialhubDeleteComment(deleteBtn);
     });
 
+    // Edit own comment
+    const editBtn =
+        commentDiv.querySelector(".comment-edit-btn");
+
+    socialhubGetMe().then(me => {
+
+        if (
+            editBtn &&
+            me &&
+            comment.user_id === me.id
+        ) {
+            editBtn.style.display = "";
+        }
+    });
+
+    editBtn.addEventListener("click", () => {
+
+        socialhubEditComment(editBtn);
+    });
+
     container.appendChild(commentDiv);
+}
+
+
+async function socialhubEditComment(button) {
+
+    const commentDiv =
+        button.closest(".comment");
+
+    if (!commentDiv) {
+        return;
+    }
+
+    const commentId =
+        commentDiv.dataset.commentId;
+
+    if (!commentId) {
+        return;
+    }
+
+    const textEl =
+        commentDiv.querySelector(".comment-content p");
+
+    if (!textEl) {
+        return;
+    }
+
+    const current =
+        textEl.textContent;
+
+    const editor =
+        document.createElement("div");
+
+    editor.style.cssText =
+        "display:flex;flex-direction:column;gap:8px;margin:4px 0 6px;";
+
+    const area =
+        document.createElement("textarea");
+
+    area.value = current;
+
+    area.style.cssText =
+        "width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid #d4d7dd;border-radius:8px;font-size:13px;font-family:inherit;outline:none;resize:vertical;background:#fff;color:#1c1e21;";
+
+    const row =
+        document.createElement("div");
+
+    row.style.cssText =
+        "display:flex;gap:8px;justify-content:flex-end;";
+
+    const save =
+        document.createElement("button");
+
+    save.type = "button";
+
+    save.textContent = "Save";
+
+    save.style.cssText =
+        "border:none;background:#1b74e4;color:#fff;padding:6px 16px;border-radius:16px;font-size:12.5px;font-weight:700;cursor:pointer;";
+
+    const cancel =
+        document.createElement("button");
+
+    cancel.type = "button";
+
+    cancel.textContent = "Cancel";
+
+    cancel.style.cssText =
+        "border:none;background:#e4e6eb;color:#1c1e21;padding:6px 14px;border-radius:16px;font-size:12.5px;font-weight:600;cursor:pointer;";
+
+    row.appendChild(cancel);
+
+    row.appendChild(save);
+
+    editor.appendChild(area);
+
+    editor.appendChild(row);
+
+    textEl.replaceWith(editor);
+
+    area.focus();
+
+    area.setSelectionRange(
+        area.value.length,
+        area.value.length
+    );
+
+    const cancelEdit = () => {
+
+        const p = document.createElement("p");
+
+        p.textContent = current;
+
+        editor.replaceWith(p);
+    };
+
+    cancel.addEventListener("click", cancelEdit);
+
+    save.addEventListener("click", async () => {
+
+        const content =
+            area.value.trim();
+
+        if (!content) {
+            return;
+        }
+
+        save.disabled = true;
+
+        save.textContent = "Saving...";
+
+        const { error } = await db
+            .from("comments")
+            .update({ content: content })
+            .eq("id", commentId);
+
+        if (error) {
+
+            console.error(
+                "❌ Comment edit error:",
+                error
+            );
+
+            save.disabled = false;
+
+            save.textContent = "Save";
+
+            alert(
+                "Could not edit the comment.\n\n" +
+                error.message
+            );
+
+            return;
+        }
+
+        const p = document.createElement("p");
+
+        p.textContent = content;
+
+        editor.replaceWith(p);
+    });
 }
 
 

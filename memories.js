@@ -45,6 +45,163 @@
     box-shadow: 0 3px 10px rgba(37, 117, 252, 0.35);
 }
 
+.memory-share-btn {
+    border: none;
+    background: #f0f2f5;
+    color: #1c1e21;
+    padding: 7px 14px;
+    border-radius: 18px;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.memory-share-btn:hover {
+    background: #e4e6eb;
+}
+
+body.dark-mode .memory-share-btn {
+    background: #3a3b3c;
+    color: #e4e6eb;
+}
+
+.memory-share-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.memory-share-box {
+    width: 100%;
+    max-width: 420px;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.memory-share-head {
+    padding: 14px 16px;
+    border-bottom: 1px solid #e4e6eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.memory-share-head h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.memory-share-close {
+    border: none;
+    background: #e4e6eb;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #1c1e21;
+}
+
+.memory-share-body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.memory-share-body label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #65676b;
+}
+
+.memory-share-body textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 13px;
+    border: 1px solid #d4d7dd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    resize: vertical;
+}
+
+.memory-share-preview {
+    max-width: 100%;
+    max-height: 220px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.memory-share-actions {
+    padding: 14px 16px;
+    border-top: 1px solid #e4e6eb;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.memory-share-cancel {
+    border: none;
+    background: #e4e6eb;
+    color: #1c1e21;
+    padding: 9px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.memory-share-post {
+    border: none;
+    background: #1b74e4;
+    color: #fff;
+    padding: 9px 20px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+body.dark-mode .memory-share-box {
+    background: #242526;
+}
+
+body.dark-mode .memory-share-head {
+    border-bottom-color: #3a3b3c;
+}
+
+body.dark-mode .memory-share-head h3 {
+    color: #e4e6eb;
+}
+
+body.dark-mode .memory-share-close,
+body.dark-mode .memory-share-cancel {
+    background: #3a3b3c;
+    color: #e4e6eb;
+}
+
+body.dark-mode .memory-share-body label {
+    color: #b0b3b8;
+}
+
+body.dark-mode .memory-share-body textarea {
+    background: #3a3b3c;
+    border-color: #3a3b3c;
+    color: #e4e6eb;
+}
+
 .memory-body {
     flex: 1;
     min-width: 0;
@@ -374,10 +531,22 @@ async function socialhubLoadMemories() {
                         : ""
                 }
 
+                <button class="memory-share-btn" type="button" title="Share this memory">
+                    <i class="fa-solid fa-share"></i>
+                    Share
+                </button>
+
                 <button class="memory-close" type="button" title="Hide">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             `;
+
+            card
+                .querySelector(".memory-share-btn")
+                .addEventListener("click", () => {
+
+                    socialhubMemoryShare(memory);
+                });
 
             card
                 .querySelector(".memory-close")
@@ -411,3 +580,174 @@ document.addEventListener("DOMContentLoaded", () => {
 
     socialhubLoadMemories();
 });
+
+
+// ======================================================
+// SHARE A MEMORY AS A NEW POST
+// ======================================================
+
+function socialhubMemoryShare(memory) {
+
+    const modal = document.createElement("div");
+
+    modal.className = "memory-share-modal";
+
+    modal.innerHTML = `
+        <div class="memory-share-box">
+
+            <div class="memory-share-head">
+                <h3><i class="fa-solid fa-clock-rotate-left" style="color:#9d00ff;"></i> Share a memory</h3>
+                <button class="memory-share-close" type="button">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="memory-share-body">
+
+                <label>What's on your mind?</label>
+
+                <textarea id="memoryShareText" rows="4" placeholder="Share something about this memory..."></textarea>
+
+                ${
+                    memory.image_url
+                        ? `<img class="memory-share-preview" src="${socialhubMemoriesEscape(memory.image_url)}" alt="">`
+                        : ""
+                }
+
+            </div>
+
+            <div class="memory-share-actions">
+
+                <button class="memory-share-cancel" type="button">Cancel</button>
+
+                <button class="memory-share-post" type="button">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    Post
+                </button>
+
+            </div>
+
+        </div>
+    `;
+
+    const textarea = modal.querySelector("#memoryShareText");
+
+    textarea.value =
+        "🕰️ Memory from " +
+        (memory.content || "the past") +
+        (memory.content ? "" : "");
+
+    if (memory.content) {
+
+        textarea.value =
+            "🕰️ " + memory.content;
+    }
+
+    modal.addEventListener("click", event => {
+
+        if (event.target === modal) {
+            modal.remove();
+        }
+    });
+
+    modal
+        .querySelector(".memory-share-close")
+        .addEventListener("click", () => modal.remove());
+
+    modal
+        .querySelector(".memory-share-cancel")
+        .addEventListener("click", () => modal.remove());
+
+    modal
+        .querySelector(".memory-share-post")
+        .addEventListener("click", async () => {
+
+            const content =
+                textarea.value.trim();
+
+            if (!content) {
+                return;
+            }
+
+            const btn =
+                modal.querySelector(".memory-share-post");
+
+            btn.disabled = true;
+
+            btn.textContent = "Posting...";
+
+            try {
+
+                const { data: me } = await db.auth.getUser();
+
+                const user = me && me.user;
+
+                if (!user) {
+
+                    alert("Please login first.");
+
+                    btn.disabled = false;
+
+                    btn.textContent = "Post";
+
+                    return;
+                }
+
+                const { error } = await db
+                    .from("posts")
+                    .insert({
+                        user_id: user.id,
+                        content: content,
+                        image_url: memory.image_url || null,
+                        audience: "public"
+                    });
+
+                if (error) {
+
+                    alert("Could not share memory: " + error.message);
+
+                    btn.disabled = false;
+
+                    btn.textContent = "Post";
+
+                    return;
+                }
+
+                modal.remove();
+
+                const toast = document.createElement("div");
+
+                toast.style.cssText =
+                    "position:fixed;bottom:24px;left:50%;transform:translateX(-50%);" +
+                    "background:#1c1e21;color:#fff;padding:12px 20px;border-radius:22px;" +
+                    "font-size:14px;font-weight:600;z-index:100001;box-shadow:0 6px 24px rgba(0,0,0,0.3);";
+
+                toast.textContent = "✅ Memory shared!";
+
+                document.body.appendChild(toast);
+
+                setTimeout(() => toast.remove(), 2400);
+
+                const refresh =
+                    typeof window.socialhubFeedLoad === "function"
+                        ? window.socialhubFeedLoad
+                        : (typeof loadPostsWithUserNames === "function"
+                            ? loadPostsWithUserNames
+                            : null);
+
+                if (refresh) {
+                    refresh();
+                }
+
+            } catch (err) {
+
+                console.warn("⚠️ Memory share error:", err);
+
+                btn.disabled = false;
+
+                btn.textContent = "Post";
+            }
+        });
+
+    document.body.appendChild(modal);
+}

@@ -185,6 +185,183 @@
     font-size: 52px;
     color: rgba(255, 255, 255, 0.95);
     position: relative;
+}
+
+.event-cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+}
+
+.event-cover-btn {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    border: none;
+    background: rgba(0, 0, 0, 0.65);
+    color: #fff;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.event-cover-btn:hover {
+    background: rgba(0, 0, 0, 0.85);
+}
+
+.event-invite-btn {
+    border: none;
+    background: #1877f2;
+    color: #fff;
+    padding: 9px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.event-invite-btn:hover {
+    background: #166fe5;
+}
+
+/* Invite modal */
+.event-invite-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 20px;
+}
+
+.event-invite-box {
+    background: #fff;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 430px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    max-height: 82vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.event-invite-head {
+    padding: 14px 16px;
+    border-bottom: 1px solid #e4e6eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.event-invite-head h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.event-invite-close {
+    border: none;
+    background: #e4e6eb;
+    color: #050505;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.event-invite-body {
+    padding: 12px 16px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.event-invite-person {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid #f0f2f5;
+}
+
+.event-invite-person:last-child {
+    border-bottom: none;
+}
+
+.event-invite-person img,
+.event-invite-person .group-member-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.event-invite-person .ei-name {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.event-invite-person .ei-btn {
+    border: none;
+    background: #1877f2;
+    color: #fff;
+    padding: 7px 16px;
+    border-radius: 18px;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.event-invite-person .ei-btn:disabled {
+    background: #e4e6eb;
+    color: #65676b;
+    cursor: default;
+}
+
+body.dark-mode .event-invite-box {
+    background: #242526;
+}
+
+body.dark-mode .event-invite-head {
+    border-bottom-color: #3a3b3c;
+}
+
+body.dark-mode .event-invite-head h3 {
+    color: #e4e6eb;
+}
+
+body.dark-mode .event-invite-close {
+    background: #3a3b3c;
+    color: #e4e6eb;
+}
+
+body.dark-mode .event-invite-person {
+    border-bottom-color: #3a3b3c;
+}
+
+body.dark-mode .event-invite-person .ei-name {
+    color: #e4e6eb;
+}
+
+body.dark-mode .event-invite-person .ei-btn:disabled {
+    background: #3a3b3c;
+    color: #b0b3b8;
+}
+    position: relative;
     overflow: hidden;
 }
 
@@ -1101,7 +1278,26 @@ async function socialhubEventLoad() {
     hero.innerHTML = `
 
         <div class="event-cover">
-            <i class="fa-solid fa-calendar-days"></i>
+            ${
+                event.cover_url
+                    ? `<img class="event-cover-img" src="${socialhubEventsEscape(event.cover_url)}" alt="">`
+                    : '<i class="fa-solid fa-calendar-days"></i>'
+            }
+            ${
+                isCreator
+                    ? `
+                        <button
+                            class="event-cover-btn"
+                            type="button"
+                            title="Upload cover photo"
+                            onclick="document.getElementById('eventCoverFile').click()"
+                        >
+                            <i class="fa-solid fa-camera"></i>
+                        </button>
+                        <input type="file" id="eventCoverFile" accept="image/*" hidden onchange="socialhubEventPickCover(this)">
+                    `
+                    : ""
+            }
         </div>
 
         <div class="event-hero">
@@ -1143,6 +1339,14 @@ async function socialhubEventLoad() {
                 ${
                     isCreator
                         ? `
+                            <button
+                                class="event-invite-btn"
+                                onclick="socialhubEventInviteOpen('${event.id}')"
+                            >
+                                <i class="fa-solid fa-user-plus"></i>
+                                Invite Friends
+                            </button>
+
                             <button
                                 class="socialhub-danger-btn"
                                 onclick="socialhubEventDelete('${event.id}', this)"
@@ -1352,6 +1556,253 @@ async function socialhubEventDelete(eventId, button) {
     }
 
     location.href = "events.html";
+}
+
+
+// ======================================================
+// EVENT COVER UPLOAD (creator only)
+// ======================================================
+
+function socialhubEventPickCover(input) {
+
+    if (!input.files || input.files.length === 0) {
+        return;
+    }
+
+    const file =
+        input.files[0];
+
+    if (!file.type.startsWith("image/")) {
+
+        alert("Please choose an image.");
+
+        input.value = "";
+
+        return;
+    }
+
+    const reader =
+        new FileReader();
+
+    reader.onload = async () => {
+
+        const dataUrl =
+            reader.result;
+
+        const eventId =
+            new URLSearchParams(window.location.search).get("id");
+
+        if (!eventId) {
+            return;
+        }
+
+        const { data: authData } = await db.auth.getUser();
+
+        const me = authData && authData.user;
+
+        if (!me) {
+            return;
+        }
+
+        const { error } = await db
+            .from("events")
+            .update({ cover_url: dataUrl })
+            .eq("id", eventId)
+            .eq("created_by", me.id);
+
+        if (error) {
+
+            alert("Could not upload cover: " + error.message);
+
+            input.value = "";
+
+            return;
+        }
+
+        socialhubEventsToast("✅ Cover updated!");
+
+        input.value = "";
+
+        setTimeout(() => {
+            socialhubEventLoad();
+        }, 400);
+    };
+
+    reader.onerror = () => {
+
+        alert("Could not read that file.");
+
+        input.value = "";
+    };
+
+    reader.readAsDataURL(file);
+}
+
+
+// ======================================================
+// INVITE FRIENDS TO EVENT (creator only)
+// ======================================================
+
+async function socialhubEventInviteOpen(eventId) {
+
+    const { data: authData } = await db.auth.getUser();
+
+    const me = authData && authData.user;
+
+    if (!me) {
+        return;
+    }
+
+    // People already invited / rsvp'd
+    const { data: rsvps } = await db
+        .from("event_rsvps")
+        .select("user_id")
+        .eq("event_id", eventId);
+
+    const rsvpSet =
+        new Set((rsvps || []).map(r => r.user_id));
+
+    // My accepted friends
+    const { data: f1 } = await db
+        .from("friendships")
+        .select("requester_id")
+        .eq("addressee_id", me.id)
+        .eq("status", "accepted");
+
+    const { data: f2 } = await db
+        .from("friendships")
+        .select("addressee_id")
+        .eq("requester_id", me.id)
+        .eq("status", "accepted");
+
+    const friendIds = [
+        ...new Set([
+            ...(f1 || []).map(r => r.requester_id),
+            ...(f2 || []).map(r => r.addressee_id)
+        ])
+    ].filter(id => !rsvpSet.has(id));
+
+    const modal =
+        document.createElement("div");
+
+    modal.className = "event-invite-modal";
+
+    modal.innerHTML = `
+        <div class="event-invite-box">
+
+            <div class="event-invite-head">
+                <h3><i class="fa-solid fa-user-plus" style="color:#1877f2;"></i> Invite Friends</h3>
+                <button class="event-invite-close" type="button">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="event-invite-body" id="eventInviteBody">
+                <p class="empty-message">Loading friends...</p>
+            </div>
+
+        </div>
+    `;
+
+    modal.addEventListener("click", event => {
+
+        if (event.target === modal) {
+            modal.remove();
+        }
+    });
+
+    modal
+        .querySelector(".event-invite-close")
+        .addEventListener("click", () => modal.remove());
+
+    document.body.appendChild(modal);
+
+    const body =
+        modal.querySelector("#eventInviteBody");
+
+    let profiles = [];
+
+    if (friendIds.length > 0) {
+
+        const { data: rows } = await db
+            .from("profiles")
+            .select("id, full_name, username, avatar_url")
+            .in("id", friendIds);
+
+        profiles = rows || [];
+    }
+
+    if (profiles.length === 0) {
+
+        body.innerHTML =
+            '<p class="empty-message">No friends to invite — add some friends first!</p>';
+
+        return;
+    }
+
+    body.innerHTML = "";
+
+    profiles.forEach(profile => {
+
+        const row =
+            document.createElement("div");
+
+        row.className = "event-invite-person";
+
+        row.innerHTML = `
+            ${
+                profile.avatar_url
+                    ? `<img src="${socialhubEventsEscape(profile.avatar_url)}" alt="">`
+                    : `<span class="group-member-avatar">${socialhubEventsEscape((profile.full_name || "U").charAt(0).toUpperCase())}</span>`
+            }
+            <span class="ei-name">${socialhubEventsEscape(profile.full_name || "@" + (profile.username || "user"))}</span>
+            <button class="ei-btn" type="button">Invite</button>
+        `;
+
+        row
+            .querySelector(".ei-btn")
+            .addEventListener("click", async event => {
+
+                const btn =
+                    event.currentTarget;
+
+                btn.disabled = true;
+
+                const { error } = await db
+                    .from("event_rsvps")
+                    .insert({
+                        event_id: eventId,
+                        user_id: profile.id,
+                        status: "invited"
+                    });
+
+                if (error) {
+
+                    btn.disabled = false;
+
+                    socialhubEventsToast("Could not invite: " + error.message);
+
+                    return;
+                }
+
+                btn.textContent = "Invited ✓";
+
+                if (typeof socialhubNotify === "function") {
+
+                    await socialhubNotify(
+                        profile.id,
+                        me.id,
+                        "event_invite",
+                        null,
+                        null
+                    );
+                }
+
+                socialhubEventsToast(`Invited ${socialhubEventsEscape(profile.full_name || "friend")}! 🎉`);
+            });
+
+        body.appendChild(row);
+    });
 }
 
 

@@ -399,6 +399,234 @@
     font-size: 12px;
 }
 
+.group-member .fa-user-shield {
+    color: #1877f2;
+    font-size: 12px;
+}
+
+.group-member.manageable {
+    flex-wrap: wrap;
+    row-gap: 4px;
+}
+
+.group-member-actions {
+    display: inline-flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.gm-role-btn {
+    border: none;
+    background: #e4e6eb;
+    color: #1c1e21;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    font-size: 11px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.gm-role-btn:hover {
+    background: #1877f2;
+    color: #fff;
+}
+
+.gm-role-btn.danger:hover {
+    background: #e41e3f;
+}
+
+.group-cover {
+    position: relative;
+}
+
+.group-cover-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit;
+}
+
+.group-cover-btn {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    border: none;
+    background: rgba(0, 0, 0, 0.65);
+    color: #fff;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+}
+
+.group-cover-btn:hover {
+    background: rgba(0, 0, 0, 0.85);
+}
+
+.group-invite-btn {
+    border: none;
+    background: #1877f2;
+    color: #fff;
+    padding: 9px 18px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.group-invite-btn:hover {
+    background: #166fe5;
+}
+
+body.dark-mode .gm-role-btn {
+    background: #3a3b3c;
+    color: #e4e6eb;
+}
+
+body.dark-mode .gm-role-btn:hover {
+    background: #1877f2;
+    color: #fff;
+}
+
+/* Invite modal */
+.group-invite-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 20px;
+}
+
+.group-invite-box {
+    background: #fff;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 430px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    max-height: 82vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.group-invite-head {
+    padding: 14px 16px;
+    border-bottom: 1px solid #e4e6eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.group-invite-head h3 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.group-invite-close {
+    border: none;
+    background: #e4e6eb;
+    color: #050505;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.group-invite-body {
+    padding: 12px 16px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.group-invite-person {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 0;
+    border-bottom: 1px solid #f0f2f5;
+}
+
+.group-invite-person:last-child {
+    border-bottom: none;
+}
+
+.group-invite-person .group-member-avatar,
+.group-invite-person img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.group-invite-person .gi-name {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.group-invite-person .gi-btn {
+    border: none;
+    background: #1877f2;
+    color: #fff;
+    padding: 7px 16px;
+    border-radius: 18px;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.group-invite-person .gi-btn:disabled {
+    background: #e4e6eb;
+    color: #65676b;
+    cursor: default;
+}
+
+body.dark-mode .group-invite-box {
+    background: #242526;
+}
+
+body.dark-mode .group-invite-head {
+    border-bottom-color: #3a3b3c;
+}
+
+body.dark-mode .group-invite-head h3 {
+    color: #e4e6eb;
+}
+
+body.dark-mode .group-invite-close {
+    background: #3a3b3c;
+    color: #e4e6eb;
+}
+
+body.dark-mode .group-invite-person {
+    border-bottom-color: #3a3b3c;
+}
+
+body.dark-mode .group-invite-person .gi-name {
+    color: #e4e6eb;
+}
+
+body.dark-mode .group-invite-person .gi-btn:disabled {
+    background: #3a3b3c;
+    color: #b0b3b8;
+}
+
 /* Create modal (FB style) */
 .socialhub-cr-modal {
     position: fixed;
@@ -1019,6 +1247,10 @@ async function socialhubGroupLoad() {
         .eq("user_id", me.id)
         .maybeSingle();
 
+    const isManager =
+        isCreator ||
+        (myMembership && myMembership.role === "admin");
+
     const {
         data: memberRows
     } = await db
@@ -1060,7 +1292,26 @@ async function socialhubGroupLoad() {
     hero.innerHTML = `
 
         <div class="group-cover">
-            <i class="fa-solid fa-users"></i>
+            ${
+                group.cover_url
+                    ? `<img class="group-cover-img" src="${socialhubGroupsEscape(group.cover_url)}" alt="">`
+                    : '<i class="fa-solid fa-users"></i>'
+            }
+            ${
+                isCreator
+                    ? `
+                        <button
+                            class="group-cover-btn"
+                            type="button"
+                            title="Upload cover photo"
+                            onclick="document.getElementById('groupCoverFile').click()"
+                        >
+                            <i class="fa-solid fa-camera"></i>
+                        </button>
+                        <input type="file" id="groupCoverFile" accept="image/*" hidden onchange="socialhubGroupPickCover(this)">
+                    `
+                    : ""
+            }
         </div>
 
         <div class="group-hero">
@@ -1095,6 +1346,20 @@ async function socialhubGroupLoad() {
             </p>
 
             <div class="group-hero-actions">
+
+                ${
+                    isManager
+                        ? `
+                            <button
+                                class="group-invite-btn"
+                                onclick="socialhubGroupInviteOpen('${group.id}')"
+                            >
+                                <i class="fa-solid fa-user-plus"></i>
+                                Invite Friends
+                            </button>
+                        `
+                        : ""
+                }
 
                 ${
                     isCreator
@@ -1148,15 +1413,56 @@ async function socialhubGroupLoad() {
             return;
         }
 
+        const isOwner =
+            member.user_id === group.created_by;
+
+        const roleLabel =
+            member.role === "owner"
+                ? "Owner"
+                : member.role === "admin"
+                    ? "Admin"
+                    : "";
+
         const chip =
             document.createElement("div");
 
         chip.className = "group-member";
 
+        if (isManager && !isOwner && member.user_id !== me.id) {
+
+            chip.classList.add("manageable");
+        }
+
         chip.innerHTML = `
             ${socialhubGroupsAvatarHTML(profile)}
             ${socialhubGroupsEscape(profile.full_name || "@" + profile.username || "User")}
-            ${member.role === "admin" ? '<i class="fa-solid fa-crown"></i>' : ""}
+            ${
+                isOwner
+                    ? '<i class="fa-solid fa-crown" title="Owner"></i>'
+                    : roleLabel === "Admin"
+                        ? '<i class="fa-solid fa-user-shield" title="Admin"></i>'
+                        : ""
+            }
+            ${
+                isManager && !isOwner && member.user_id !== me.id
+                    ? `
+                        <span class="group-member-actions" onclick="event.stopPropagation()">
+                            ${
+                                member.role === "admin"
+                                    ? `<button class="gm-role-btn" title="Remove admin" onclick="socialhubGroupSetRole('${group.id}', '${member.user_id}', 'member', this)">
+                                        <i class="fa-solid fa-user-minus"></i>
+                                    </button>`
+                                    : `<button class="gm-role-btn" title="Make admin" onclick="socialhubGroupSetRole('${group.id}', '${member.user_id}', 'admin', this)">
+                                        <i class="fa-solid fa-user-shield"></i>
+                                    </button>`
+                            }
+                            <button class="gm-role-btn danger" title="Remove from group" onclick="socialhubGroupRemoveMember('${group.id}', '${member.user_id}', this)">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </span>
+                    `
+                    : ""
+            }
         `;
 
         chip.addEventListener("click", () => {
@@ -1509,6 +1815,307 @@ function socialhubGroupPickImage(input) {
     };
 
     reader.readAsDataURL(file);
+}
+
+
+// ======================================================
+// GROUP COVER UPLOAD (creator only)
+// ======================================================
+
+function socialhubGroupPickCover(input) {
+
+    if (!input.files || input.files.length === 0) {
+        return;
+    }
+
+    const file =
+        input.files[0];
+
+    if (!file.type.startsWith("image/")) {
+
+        alert("Please choose an image.");
+
+        input.value = "";
+
+        return;
+    }
+
+    const reader =
+        new FileReader();
+
+    reader.onload = async () => {
+
+        const dataUrl =
+            reader.result;
+
+        const groupId =
+            new URLSearchParams(window.location.search).get("id");
+
+        if (!groupId) {
+            return;
+        }
+
+        const { data: authData } = await db.auth.getUser();
+
+        const me = authData && authData.user;
+
+        if (!me) {
+            return;
+        }
+
+        const { error } = await db
+            .from("groups")
+            .update({ cover_url: dataUrl })
+            .eq("id", groupId)
+            .eq("created_by", me.id);
+
+        if (error) {
+
+            alert("Could not upload cover: " + error.message);
+
+            input.value = "";
+
+            return;
+        }
+
+        socialhubGroupsToast("✅ Cover updated!");
+
+        input.value = "";
+
+        setTimeout(() => {
+            socialhubGroupLoad();
+        }, 400);
+    };
+
+    reader.onerror = () => {
+
+        alert("Could not read that file.");
+
+        input.value = "";
+    };
+
+    reader.readAsDataURL(file);
+}
+
+
+// ======================================================
+// INVITE FRIENDS TO GROUP (owner/admin only)
+// ======================================================
+
+async function socialhubGroupInviteOpen(groupId) {
+
+    const { data: authData } = await db.auth.getUser();
+
+    const me = authData && authData.user;
+
+    if (!me) {
+        return;
+    }
+
+    // Existing members
+    const { data: members } = await db
+        .from("group_members")
+        .select("user_id")
+        .eq("group_id", groupId);
+
+    const memberSet =
+        new Set((members || []).map(m => m.user_id));
+
+    // My accepted friends
+    const { data: f1 } = await db
+        .from("friendships")
+        .select("requester_id")
+        .eq("addressee_id", me.id)
+        .eq("status", "accepted");
+
+    const { data: f2 } = await db
+        .from("friendships")
+        .select("addressee_id")
+        .eq("requester_id", me.id)
+        .eq("status", "accepted");
+
+    const friendIds = [
+        ...new Set([
+            ...(f1 || []).map(r => r.requester_id),
+            ...(f2 || []).map(r => r.addressee_id)
+        ])
+    ].filter(id => !memberSet.has(id));
+
+    const modal =
+        document.createElement("div");
+
+    modal.className = "group-invite-modal";
+
+    modal.innerHTML = `
+        <div class="group-invite-box">
+
+            <div class="group-invite-head">
+                <h3><i class="fa-solid fa-user-plus" style="color:#1877f2;"></i> Invite Friends</h3>
+                <button class="group-invite-close" type="button">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="group-invite-body" id="groupInviteBody">
+                <p class="empty-message">Loading friends...</p>
+            </div>
+
+        </div>
+    `;
+
+    modal.addEventListener("click", event => {
+
+        if (event.target === modal) {
+            modal.remove();
+        }
+    });
+
+    modal
+        .querySelector(".group-invite-close")
+        .addEventListener("click", () => modal.remove());
+
+    document.body.appendChild(modal);
+
+    const body =
+        modal.querySelector("#groupInviteBody");
+
+    let profiles = [];
+
+    if (friendIds.length > 0) {
+
+        const { data: rows } = await db
+            .from("profiles")
+            .select("id, full_name, username, avatar_url")
+            .in("id", friendIds);
+
+        profiles = rows || [];
+    }
+
+    if (profiles.length === 0) {
+
+        body.innerHTML =
+            '<p class="empty-message">No friends to invite — add some friends first!</p>';
+
+        return;
+    }
+
+    body.innerHTML = "";
+
+    profiles.forEach(profile => {
+
+        const row =
+            document.createElement("div");
+
+        row.className = "group-invite-person";
+
+        row.innerHTML = `
+            ${
+                profile.avatar_url
+                    ? `<img src="${socialhubGroupsEscape(profile.avatar_url)}" alt="">`
+                    : `<span class="group-member-avatar">${socialhubGroupsEscape((profile.full_name || "U").charAt(0).toUpperCase())}</span>`
+            }
+            <span class="gi-name">${socialhubGroupsEscape(profile.full_name || "@" + (profile.username || "user"))}</span>
+            <button class="gi-btn" type="button">Invite</button>
+        `;
+
+        row
+            .querySelector(".gi-btn")
+            .addEventListener("click", async event => {
+
+                const btn =
+                    event.currentTarget;
+
+                btn.disabled = true;
+
+                const { error } = await db
+                    .from("group_members")
+                    .insert({
+                        group_id: groupId,
+                        user_id: profile.id,
+                        role: "member"
+                    });
+
+                if (error) {
+
+                    btn.disabled = false;
+
+                    socialhubGroupsToast("Could not invite: " + error.message);
+
+                    return;
+                }
+
+                btn.textContent = "Invited ✓";
+
+                if (typeof socialhubNotify === "function") {
+
+                    await socialhubNotify(
+                        profile.id,
+                        me.id,
+                        "group_invite",
+                        null,
+                        null
+                    );
+                }
+
+                socialhubGroupsToast(`Invited ${socialhubGroupsEscape(profile.full_name || "friend")}! 🎉`);
+            });
+
+        body.appendChild(row);
+    });
+}
+
+
+// ======================================================
+// ROLE MANAGEMENT (owner/admin only)
+// ======================================================
+
+async function socialhubGroupSetRole(groupId, userId, role, button) {
+
+    const { error } = await db
+        .from("group_members")
+        .update({ role: role })
+        .eq("group_id", groupId)
+        .eq("user_id", userId);
+
+    if (error) {
+
+        socialhubGroupsToast("Could not change role: " + error.message);
+
+        return;
+    }
+
+    socialhubGroupsToast(
+        role === "admin"
+            ? "✅ Made admin!"
+            : "ℹ️ Admin removed."
+    );
+
+    setTimeout(() => {
+        socialhubGroupLoad();
+    }, 400);
+}
+
+
+async function socialhubGroupRemoveMember(groupId, userId, button) {
+
+    const { error } = await db
+        .from("group_members")
+        .delete()
+        .eq("group_id", groupId)
+        .eq("user_id", userId);
+
+    if (error) {
+
+        socialhubGroupsToast("Could not remove member: " + error.message);
+
+        return;
+    }
+
+    socialhubGroupsToast("Member removed.");
+
+    setTimeout(() => {
+        socialhubGroupLoad();
+    }, 400);
 }
 
 

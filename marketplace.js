@@ -85,6 +85,63 @@
     gap: 8px;
     flex-wrap: wrap;
     margin-bottom: 14px;
+    align-items: center;
+}
+
+.market-toolbar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-left: auto;
+}
+
+.market-mine-chip {
+    border: 1px solid #9d00ff;
+    background: #fff;
+    color: #9d00ff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.12s;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.market-mine-chip.active {
+    background: #9d00ff;
+    color: #fff;
+}
+
+.market-price-select {
+    border: 1px solid #d4d7dd;
+    background: #fff;
+    color: #1c1e21;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    outline: none;
+}
+
+body.dark-mode .market-mine-chip {
+    background: #242526;
+}
+
+body.dark-mode .market-mine-chip.active {
+    background: #9d00ff;
+}
+
+body.dark-mode .market-price-select {
+    background: #242526;
+    border-color: #3a3b3c;
+    color: #e4e6eb;
 }
 
 .market-cat-chip {
@@ -480,7 +537,10 @@ let socialhubMarketState = {
     items: [],
     sellers: {},
     category: "All",
-    query: ""
+    query: "",
+    mine: false,
+    priceMax: null,
+    me: null
 };
 
 
@@ -599,12 +659,65 @@ function socialhubMarketRenderCats() {
     box.innerHTML =
         chips.map(cat => `
             <button
-                class="market-cat-chip ${socialhubMarketState.category === cat ? "active" : ""}"
+                class="market-cat-chip ${socialhubMarketState.category === cat && !socialhubMarketState.mine ? "active" : ""}"
                 onclick="socialhubMarketSetCat('${socialhubMarketEscape(cat).replace(/'/g, "\\'")}')"
             >
                 ${socialhubMarketEscape(cat)}
             </button>
         `).join("");
+
+    // Toolbar: My Listings toggle + price filter
+    const toolbar =
+        document.createElement("div");
+
+    toolbar.className = "market-toolbar";
+
+    toolbar.innerHTML = `
+        <button
+            type="button"
+            class="market-mine-chip ${socialhubMarketState.mine ? "active" : ""}"
+            onclick="socialhubMarketToggleMine()"
+        >
+            <i class="fa-solid fa-tag"></i>
+            My Listings
+        </button>
+
+        <select
+            class="market-price-select"
+            onchange="socialhubMarketSetPrice(this.value)"
+            aria-label="Max price"
+        >
+            <option value="">Any price</option>
+            <option value="25" ${socialhubMarketState.priceMax === 25 ? "selected" : ""}>Up to $25</option>
+            <option value="50" ${socialhubMarketState.priceMax === 50 ? "selected" : ""}>Up to $50</option>
+            <option value="100" ${socialhubMarketState.priceMax === 100 ? "selected" : ""}>Up to $100</option>
+            <option value="250" ${socialhubMarketState.priceMax === 250 ? "selected" : ""}>Up to $250</option>
+            <option value="500" ${socialhubMarketState.priceMax === 500 ? "selected" : ""}>Up to $500</option>
+            <option value="1000" ${socialhubMarketState.priceMax === 1000 ? "selected" : ""}>Up to $1000</option>
+        </select>
+    `;
+
+    box.appendChild(toolbar);
+}
+
+
+function socialhubMarketToggleMine() {
+
+    socialhubMarketState.mine =
+        !socialhubMarketState.mine;
+
+    socialhubMarketRenderCats();
+
+    socialhubMarketRenderGrid();
+}
+
+
+function socialhubMarketSetPrice(value) {
+
+    socialhubMarketState.priceMax =
+        value ? Number(value) : null;
+
+    socialhubMarketRenderGrid();
 }
 
 
@@ -649,6 +762,8 @@ async function socialhubMarketLoad() {
 
         return;
     }
+
+    socialhubMarketState.me = me.id;
 
     const {
         data: items,
@@ -700,13 +815,30 @@ async function socialhubMarketLoad() {
 
 function socialhubMarketVisibleItems() {
 
-    const { items, category, query } =
+    const { items, category, query, mine, priceMax, me } =
         socialhubMarketState;
 
     return items.filter(item => {
 
+        if (mine) {
+
+            if (!me || item.seller_id !== me) {
+                return false;
+            }
+        }
+
         if (category !== "All" && item.category !== category) {
             return false;
+        }
+
+        if (priceMax !== null) {
+
+            const price =
+                Number(item.price);
+
+            if (!isFinite(price) || price > priceMax) {
+                return false;
+            }
         }
 
         if (query) {
