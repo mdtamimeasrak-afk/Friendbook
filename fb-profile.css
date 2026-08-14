@@ -3788,3 +3788,92 @@ body:not(.dark-mode) .fb-friends-search::placeholder {
         margin-top: 16px;
     }
 }
+
+/* ---------- LUCIDE ICON SYSTEM (profile-icons.js) ---------- */
+
+.socialhub-lucide {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    vertical-align: middle;
+}
+
+.socialhub-lucide svg {
+    width: 18px;
+
+    height: 18px;
+
+    stroke-width: 2;
+}
+
+.top-icons button .socialhub-lucide svg {
+    width: 17px;
+
+    height: 17px;
+}
+
+.fb-center-nav .fb-nav-btn .socialhub-lucide svg {
+    width: 20px;
+
+    height: 20px;
+}
+
+.topbar .search-box span .socialhub-lucide svg {
+    width: 15px;
+
+    height: 15px;
+}
+
+#fbProfileHeader .fb-header-actions .socialhub-lucide svg {
+    width: 16px;
+
+    height: 16px;
+}
+
+#fbProfileHeader .fb-tabs button .socialhub-lucide svg {
+    width: 18px;
+
+    height: 18px;
+}
+
+.fb-detail .socialhub-lucide svg,
+.fb-card-row .socialhub-lucide svg {
+    width: 16px;
+
+    height: 16px;
+}
+
+.fb-composer-actions .socialhub-lucide svg,
+.fb-composer-tools .socialhub-lucide svg {
+    width: 18px;
+
+    height: 18px;
+}
+
+.fb-post-actions .socialhub-lucide svg,
+.post-actions .socialhub-lucide svg {
+    width: 20px;
+
+    height: 20px;
+}
+
+.socialhub-menu-icon .socialhub-lucide svg {
+    width: 17px;
+
+    height: 17px;
+}
+
+.fb-primary-btn .socialhub-lucide svg,
+.fb-ghost-btn .socialhub-lucide svg,
+.fb-square-btn .socialhub-lucide svg {
+    width: 16px;
+
+    height: 16px;
+}
+
+body.dark-mode .socialhub-lucide svg {
+    color: #b0b3b8;
+}
