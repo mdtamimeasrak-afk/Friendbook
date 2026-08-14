@@ -14,17 +14,17 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%231877f2'/%3E%3Ctext x='20' y='27' font-family='Arial' font-size='21' font-weight='800' fill='white' text-anchor='middle'%3ETR%3C/text%3E%3C/svg%3E">
 
 
-    <link rel="stylesheet" href="style.css?v=1786741716218">
+    <link rel="stylesheet" href="style.css?v=1786742213271">
 
-    <link rel="stylesheet" href="dashboard.css?v=1786741716218">
+    <link rel="stylesheet" href="dashboard.css?v=1786742213271">
 
-    <link rel="stylesheet" href="premium.css?v=1786741716218">
+    <link rel="stylesheet" href="premium.css?v=1786742213271">
 
-    <link rel="stylesheet" href="profile.css?v=1786741716218">
+    <link rel="stylesheet" href="profile.css?v=1786742213271">
 
-    <link rel="stylesheet" href="glass-theme.css?v=1786741716218">
+    <link rel="stylesheet" href="glass-theme.css?v=1786742213271">
 
-    <link rel="stylesheet" href="fb-profile.css?v=1786741716218">
+    <link rel="stylesheet" href="fb-profile.css?v=1786742213271">
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -32,7 +32,7 @@
 </head>
 
 
-<body>
+<body class="dark-mode">
 
 
     <!-- ========================= -->
@@ -178,165 +178,130 @@
 
 
         <!-- ========================= -->
-        <!-- PROFILE HEADER (Instagram style) -->
         <!-- ========================= -->
 
-        <section class="profile-header">
+        <section class="fb-header">
 
 
-            <!-- COVER PHOTO (hidden in Instagram mode) -->
+            <!-- COVER PHOTO -->
 
-            <div class="cover-photo fb-user-cover">
+            <div class="cover-photo" id="upCover"></div>
 
-                <div
-                    class="fb-cover-name"
-                    id="upCoverName"
-                >
+
+
+            <!-- HEADER ROW (avatar + info + actions) -->
+
+            <div class="fb-header-row">
+
+
+                <!-- AVATAR (overlaps the cover) -->
+
+                <div class="fb-avatar-wrap">
+
+                    <div
+                        class="profile-photo"
+                        id="upPhoto"
+                    >
+                        👤
+                    </div>
+
+                </div>
+
+
+
+                <!-- NAME + FRIENDS + BIO + DETAILS -->
+
+                <div class="fb-header-info">
+
                     <h1
-                        class="fb-cover-name-h"
-                        id="upCoverNameText"
+                        class="fb-header-name"
+                        id="upName"
                     >
                         User
                     </h1>
 
-                    <span
-                        class="fb-cover-username"
-                        id="upCoverUsername"
+
+                    <p
+                        class="fb-friends-line"
+                        id="upFriendsLine"
                     >
-                        @username
-                    </span>
+                        <span id="upFriendsCount">0 friends</span>
+                    </p>
+
+
+                    <p
+                        class="fb-header-bio"
+                        id="upBio"
+                    >
+                        No bio added yet.
+                    </p>
+
+
+                    <div class="fb-info-row">
+
+                        <span class="fb-info-item">
+                            📍
+                            <span id="upLocation"></span>
+                        </span>
+
+                        <span class="fb-info-item">
+                            💼
+                            <span id="upWork"></span>
+                        </span>
+
+                        <span class="fb-info-item">
+                            🎓
+                            <span id="upEducation"></span>
+                        </span>
+
+                        <span class="fb-info-item">
+                            🌐
+                            <span id="upWebsite"></span>
+                        </span>
+
+                    </div>
 
                 </div>
 
-            </div>
 
 
+                <!-- ACTION BUTTONS (friend state + Message + More) -->
 
-            <!-- PROFILE TOP -->
+                <div class="fb-header-actions">
 
-            <div class="profile-top">
+                    <div id="upFriendButton"></div>
 
+                    <div
+                        class="fb-more-wrap"
+                        id="upMoreWrap"
+                        style="display:none"
+                    >
 
-                <!-- PROFILE PHOTO (Instagram ring) -->
-
-                <div
-                    class="profile-photo"
-                    id="upPhoto"
-                >
-                    👤
-                </div>
-
-
-
-                <!-- TOP RIGHT -->
-
-                <div class="profile-top-right">
-
-
-                    <!-- USERNAME + FRIEND BUTTONS -->
-
-                    <div class="profile-identity">
-
-                        <h1
-                            class="profile-username"
-                            id="upUsername"
+                        <button
+                            type="button"
+                            class="fb-square-btn"
+                            title="More"
+                            onclick="socialhubUpToggleMore(event)"
                         >
-                            @username
-                        </h1>
-
+                            ▾
+                        </button>
 
                         <div
-                            class="profile-buttons"
-                            id="upFriendButton"
+                            class="fb-more-menu"
+                            id="upMoreMenu"
+                            style="display:none"
                         ></div>
 
-
-                        <!-- MORE (⋯) MENU -->
-
-                        <div
-                            class="fb-more-wrap"
-                            id="upMoreWrap"
-                            style="display:none"
-                        >
-
-                            <button
-                                class="fb-more-btn"
-                                title="More"
-                                onclick="socialhubUpToggleMore(event)"
-                            >
-                                ⋯
-                            </button>
-
-                            <div
-                                class="fb-more-menu"
-                                id="upMoreMenu"
-                                style="display:none"
-                            ></div>
-
-                        </div>
-
                     </div>
-
-
-
-                    <!-- STATS -->
-
-                    <div class="profile-stats">
-
-
-                        <div class="profile-stat">
-                            <span id="upStatPosts">0</span>
-                            <label>Posts</label>
-                        </div>
-
-
-                        <div class="profile-stat">
-                            <span id="upStatFriends">0</span>
-                            <label>Friends</label>
-                        </div>
-
-
-                    </div>
-
-
-
-                    <!-- BIO (name + bio) -->
-
-                    <div class="profile-bio-block">
-
-                        <strong
-                            class="profile-name"
-                            id="upName"
-                        >
-                            User
-                        </strong>
-
-
-                        <small
-                            class="profile-mutual"
-                            id="upMutual"
-                            style="
-                                display: none;
-                                color: var(--muted, #65676b);
-                                font-size: 13px;
-                            "
-                        ></small>
-
-
-                        <p
-                            class="profile-bio"
-                            id="upBio"
-                        >
-                            No bio added yet.
-                        </p>
-
-                    </div>
-
 
                 </div>
 
-
             </div>
+
+
+            <!-- DIVIDER -->
+
+            <div class="fb-header-divider"></div>
 
         </section>
 
@@ -346,7 +311,12 @@
         <!-- PROFILE CONTENT -->
         <!-- ========================= -->
 
-        <div class="profile-content">
+        <div class="fb-body">
+
+            <section class="fb-main">
+
+                <div class="fb-area">
+
 
 
             <!-- ========================= -->
@@ -392,64 +362,12 @@
 
 
 
-            <!-- ========================= -->
-            <!-- INTRO -->
-            <!-- ========================= -->
-
-            <section class="profile-card">
-
-
-                <div class="card-title">
-
-                    <h2>
-                        Intro
-                    </h2>
-
                 </div>
-
-
-                <div class="profile-details-list">
-
-
-                    <p>
-                        📍
-                        <span id="upLocation">
-                            Not added
-                        </span>
-                    </p>
-
-
-                    <p>
-                        💼
-                        <span id="upWork">
-                            Not added
-                        </span>
-                    </p>
-
-
-                    <p>
-                        🎓
-                        <span id="upEducation">
-                            Not added
-                        </span>
-                    </p>
-
-
-                    <p>
-                        🌐
-                        <span id="upWebsite">
-                            Not added
-                        </span>
-                    </p>
-
-
-                </div>
-
 
             </section>
 
-
         </div>
+
 
     </main>
 
@@ -480,29 +398,29 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="supabase.js?v=1786741716218"></script>
+    <script src="supabase.js?v=1786742213271"></script>
 
-    <script src="premium-ui.js?v=1786741716218"></script>
+    <script src="premium-ui.js?v=1786742213271"></script>
 
-    <script src="script.js?v=1786741716218"></script>
+    <script src="script.js?v=1786742213271"></script>
 
-    <script src="settings.js?v=1786741716218"></script>
+    <script src="settings.js?v=1786742213271"></script>
 
-    <script src="friends.js?v=1786741716218"></script>
+    <script src="friends.js?v=1786742213271"></script>
 
-    <script src="likes-comments.js?v=1786741716218"></script>
+    <script src="likes-comments.js?v=1786742213271"></script>
 
-    <script src="user-search.js?v=1786741716218"></script>
+    <script src="user-search.js?v=1786742213271"></script>
 
-    <script src="post-manage.js?v=1786741716218"></script>
+    <script src="post-manage.js?v=1786742213271"></script>
 
-    <script src="notifications.js?v=1786741716218"></script>
+    <script src="notifications.js?v=1786742213271"></script>
 
-    <script src="messages.js?v=1786741716218"></script>
+    <script src="messages.js?v=1786742213271"></script>
 
-    <script src="shares.js?v=1786741716218"></script>
+    <script src="shares.js?v=1786742213271"></script>
 
-    <script src="watch.js?v=1786741716218"></script>
+    <script src="watch.js?v=1786742213271"></script>
 
 
 </body>

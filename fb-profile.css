@@ -2338,3 +2338,33 @@ body:not(.dark-mode) .fb-timeline-photos-card .fb-mini-photos .empty-message {
         gap: 4px;
     }
 }
+
+/* ---------- OTHER USER PROFILE (user-profile.html) ---------- */
+
+.fb-header-actions #upFriendButton {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+.fb-header-actions .socialhub-blocked-note {
+    font-size: 14px;
+
+    font-weight: 600;
+
+    color: #b0b3b8;
+
+    background: #3a3b3c;
+
+    padding: 8px 14px;
+
+    border-radius: 8px;
+}
+
+body:not(.dark-mode) .fb-header-actions .socialhub-blocked-note {
+    color: #65676b;
+
+    background: #f0f2f5;
+}

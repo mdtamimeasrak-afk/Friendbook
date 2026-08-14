@@ -1527,7 +1527,7 @@ async function loadUserProfilePage() {
     } = await db
         .from("profiles")
         .select(
-            "id, username, full_name, bio, avatar_url, location, work, education, website"
+            "id, username, full_name, bio, avatar_url, location, work, education, website, cover_url, extra"
         )
         .eq("id", userId)
         .single();
@@ -1545,56 +1545,107 @@ async function loadUserProfilePage() {
         return;
     }
 
-    // ---------- BASIC INFO ----------
+    // ---------- BASIC INFO (name + nickname) ----------
 
-    document.getElementById("upName").innerText =
-        profile.full_name || "User";
+    const upNameEl =
+        document.getElementById("upName");
 
-    document.getElementById("upUsername").innerText =
-        `@${profile.username || "user"}`;
+    if (upNameEl) {
 
-    // ---------- COVER NAME (Facebook style) ----------
+        const nick =
+            (profile.extra || {}).other_names || "";
 
-    const upCoverNameText =
-        document.getElementById("upCoverNameText");
+        const nickHTML =
+            String(nick).trim()
+                ? `<span class="fb-name-nick">(${socialhubEscape(String(nick).trim())})</span>`
+                : "";
 
-    if (upCoverNameText) {
-
-        upCoverNameText.innerText =
-            profile.full_name || "User";
+        upNameEl.innerHTML =
+            `${socialhubEscape(profile.full_name || "User")} ${nickHTML}`;
     }
 
-    const upCoverUsername =
-        document.getElementById("upCoverUsername");
+    // ---------- BIO (hide the line when empty) ----------
 
-    if (upCoverUsername) {
+    const upBio =
+        document.getElementById("upBio");
 
-        upCoverUsername.innerText =
-            `@${profile.username || "user"}`;
+    if (upBio) {
+
+        const bio =
+            profile.bio || "";
+
+        upBio.innerText = bio;
+
+        upBio.style.display =
+            String(bio).trim() ? "" : "none";
     }
 
-    document.getElementById("upBio").innerText =
-        profile.bio || "No bio added yet.";
+    // ---------- DETAILS (hide each item when empty) ----------
 
-    document.getElementById("upLocation").innerText =
-        profile.location || "Not added";
+    const upDetails = [
+        ["upLocation", profile.location],
+        ["upWork", profile.work],
+        ["upEducation", profile.education],
+        ["upWebsite", profile.website]
+    ];
 
-    document.getElementById("upWork").innerText =
-        profile.work || "Not added";
+    upDetails.forEach(([id, value]) => {
 
-    document.getElementById("upEducation").innerText =
-        profile.education || "Not added";
+        const el =
+            document.getElementById(id);
 
-    document.getElementById("upWebsite").innerText =
-        profile.website || "Not added";
+        if (!el) {
+            return;
+        }
+
+        el.innerText = value || "";
+
+        const item =
+            el.closest(".fb-info-item");
+
+        if (item) {
+
+            item.style.display =
+                String(value || "").trim()
+                    ? ""
+                    : "none";
+        }
+    });
+
+    // ---------- COVER ----------
+
+    const upCover =
+        document.getElementById("upCover");
+
+    if (upCover) {
+
+        if (profile.cover_url) {
+
+            upCover.style.backgroundImage =
+                `url(${profile.cover_url})`;
+
+            upCover.style.backgroundSize = "cover";
+
+            upCover.style.backgroundPosition = "center";
+
+        } else {
+
+            upCover.style.backgroundImage = "";
+        }
+    }
+
+    // ---------- AVATAR ----------
 
     if (profile.avatar_url) {
 
         const photo =
             document.getElementById("upPhoto");
 
-        photo.innerHTML =
-            socialhubAvatarHTML(profile);
+        if (photo) {
+
+            photo.innerHTML =
+                socialhubAvatarHTML(profile);
+        }
     }
 
     // ---------- FRIEND BUTTON ----------
@@ -1650,7 +1701,7 @@ async function loadUserProfilePage() {
                 : state === "friends"
                     ? `
                         <button
-                            class="fb-friends-btn"
+                            class="fb-ghost-btn"
                             onclick="socialhubUnfriend(
                                 '${userId}',
                                 this
@@ -1663,6 +1714,7 @@ async function loadUserProfilePage() {
                     : state === "requested"
                         ? `
                             <button
+                                class="fb-ghost-btn"
                                 onclick="socialhubCancelFriend(
                                     '${userId}',
                                     this
@@ -1674,7 +1726,7 @@ async function loadUserProfilePage() {
                         : state === "received"
                             ? `
                                 <button
-                                    class="primary-btn"
+                                    class="fb-primary-btn"
                                     onclick="socialhubAcceptFriend(
                                         '${userId}',
                                         this
@@ -1684,6 +1736,7 @@ async function loadUserProfilePage() {
                                 </button>
 
                             <button
+                                class="fb-ghost-btn"
                                 onclick="socialhubDeclineFriend(
                                     '${userId}',
                                     this
@@ -1694,7 +1747,7 @@ async function loadUserProfilePage() {
                         `
                         : `
                             <button
-                                class="primary-btn"
+                                class="fb-primary-btn"
                                 onclick="socialhubAddFriend(
                                     '${userId}',
                                     this
@@ -1709,7 +1762,7 @@ async function loadUserProfilePage() {
             me && userId === me.id
                 ? `
                     <button
-                        class="primary-btn"
+                        class="fb-primary-btn"
                         onclick="location.href='profile.html'"
                     >
                         ✏️ Edit My Profile
@@ -1719,7 +1772,7 @@ async function loadUserProfilePage() {
                     ? ""
                     : `
                         <button
-                            class="fb-white-btn"
+                            class="fb-primary-btn"
                             onclick="socialhubOpenChatPopup('${userId}')"
                         >
                             💬 Message
@@ -1819,7 +1872,7 @@ async function loadUserProfilePage() {
     if (upFriendsCount) {
 
         upFriendsCount.innerText =
-            friendCount;
+            `${friendCount} friends`;
     }
 
     const statFriends =
