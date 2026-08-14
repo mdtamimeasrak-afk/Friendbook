@@ -78,3 +78,15 @@
 
 > Note: Phase 6 SQL (post_views, profiles.is_admin, comments edit policy, groups cover_url + owner/role policies, events cover_url + invite policy, reports admin select policy) must be run in the Supabase SQL editor (section 6.x of setup-all.sql) before the new features work.
 > Hosting moved to GitHub Pages: https://mdtamimeasrak-afk.github.io/triya-social/ (Netlify blocked — credits exhausted). Deploy = push to main; run `node bump-versions.js` before each release.
+
+## ✅ Phase 7 — Facebook-Style Feed (DONE — deployed 14 Aug 2026, token 1786707791027)
+- [x] Reaction bar (hover the Like button → 👍 ❤️ 🥰 😂 😮 😢 😡 picker, 52px emojis, pop animation, tooltips) — styled via premium.css
+- [x] FB-style action bar: Like / Comment / Share icon+label buttons, segmented row, gray hover, colored when liked
+- [x] FB-style stats row: reaction badge (colored circle + emoji + count) left, comment count right
+- [x] Comments: FB bubbles (rounded, gray), "View all N comments" collapse (first 2 shown), "View more replies" toggle, inline reply pill, Reply/Edit/Delete row
+- [x] Feed layout polish: 8px card radius, FB action divider, pill comment input on gray
+- [x] Comment input + Send pill styling
+- [x] Stories bar on feed (already existed — kept)
+- [ ] Comment reactions (like a comment) — needs likes.comment_id column (schema change, Phase 7b)
+- [ ] Share count in FB stats row (needs share count fetch on decorate)
+
