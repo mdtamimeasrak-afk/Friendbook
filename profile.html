@@ -14,19 +14,19 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%231877f2'/%3E%3Ctext x='20' y='27' font-family='Arial' font-size='21' font-weight='800' fill='white' text-anchor='middle'%3ETR%3C/text%3E%3C/svg%3E">
 
 
-    <link rel="stylesheet" href="style.css?v=1787000000009">
+    <link rel="stylesheet" href="style.css?v=1787000000010">
 
-    <link rel="stylesheet" href="dashboard.css?v=1787000000009">
+    <link rel="stylesheet" href="dashboard.css?v=1787000000010">
 
-    <link rel="stylesheet" href="premium.css?v=1787000000009">
+    <link rel="stylesheet" href="premium.css?v=1787000000010">
 
-    <link rel="stylesheet" href="profile.css?v=1787000000009">
+    <link rel="stylesheet" href="profile.css?v=1787000000010">
 
-    <link rel="stylesheet" href="highlights.css?v=1787000000009">
+    <link rel="stylesheet" href="highlights.css?v=1787000000010">
 
-    <link rel="stylesheet" href="glass-theme.css?v=1787000000009">
+    <link rel="stylesheet" href="glass-theme.css?v=1787000000010">
 
-    <link rel="stylesheet" href="fb-profile.css?v=1787000000009">
+    <link rel="stylesheet" href="fb-profile.css?v=1787000000010">
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -179,8 +179,11 @@
 
                 <h1 class="fb-header-name" id="coverName">
                     User
-                    <span class="fb-name-nick" id="headerNickname" style="display:none"></span>
                 </h1>
+
+                <p class="fb-name-nick-line">
+                    <span class="fb-name-nick" id="headerNickname" style="display:none"></span>
+                </p>
 
                 <p class="fb-friends-line" id="fbFriendSummary">
                     <span>0 friends</span>
@@ -244,7 +247,7 @@
                 <div class="fb-more-wrap">
 
                     <button type="button" class="fb-square-btn" title="More" onclick="socialhubProfileToggleMore(event)">
-                        ▾
+                        •••
                     </button>
 
                     <div class="fb-more-menu" style="display:none">
@@ -397,43 +400,9 @@
                     </div>
 
                     <div class="about-row">
-                        <i class="fa-solid fa-globe"></i>
-                        <span class="profile-sociallinks"></span>
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <span class="profile-education"></span>
                     </div>
-
-                </div>
-
-            </section>
-
-            <!-- HIGHLIGHTS CARD -->
-
-            <section class="profile-card fb-side-card fb-highlights-card">
-
-                <div class="fb-side-title">
-
-                    <h2>Highlights</h2>
-
-                    <a href="javascript:void(0)" onclick="socialhubOpenHighlightCreate()">
-                        + New
-                    </a>
-
-                </div>
-
-                <div class="fb-highlights-bar" id="highlightsBar"></div>
-
-            </section>
-
-            <!-- EDUCATION CARD -->
-
-            <section class="profile-card fb-side-card" id="fbEducationCard">
-
-                <div class="fb-side-title">
-
-                    <h2>Education</h2>
-
-                </div>
-
-                <div class="fb-intro-details">
 
                     <div class="about-row">
                         <i class="fa-solid fa-briefcase"></i>
@@ -441,65 +410,32 @@
                     </div>
 
                     <div class="about-row">
-                        <i class="fa-solid fa-school"></i>
-                        <span class="profile-highschool"></span>
+                        <i class="fa-solid fa-globe"></i>
+                        <span class="profile-website"></span>
                     </div>
 
                     <div class="about-row">
-                        <i class="fa-solid fa-graduation-cap"></i>
-                        <span class="profile-education"></span>
+                        <i class="fa-brands fa-instagram"></i>
+                        <span class="profile-sociallinks"></span>
                     </div>
 
                 </div>
 
-            </section>
+                <!-- HIGHLIGHTS (inside intro card) -->
 
-            <!-- INTERESTS CARD -->
+                <div class="fb-highlights-inside">
 
-            <section class="profile-card fb-side-card" id="fbInterestsCard">
+                    <div class="fb-side-title">
 
-                <div class="fb-side-title">
+                        <h2>Highlights</h2>
 
-                    <h2>Interests</h2>
+                        <a href="javascript:void(0)" onclick="socialhubOpenHighlightCreate()">
+                            + New
+                        </a>
 
-                </div>
-
-                <div class="fb-intro-details">
-
-                    <div class="about-row">
-                        <i class="fa-solid fa-heart"></i>
-                        <span class="profile-hobbies"></span>
                     </div>
 
-                    <div class="about-row">
-                        <i class="fa-solid fa-futbol"></i>
-                        <span class="profile-sports"></span>
-                    </div>
-
-                    <div class="about-row">
-                        <i class="fa-solid fa-gamepad"></i>
-                        <span class="profile-games"></span>
-                    </div>
-
-                    <div class="about-row">
-                        <i class="fa-solid fa-film"></i>
-                        <span class="profile-movies"></span>
-                    </div>
-
-                    <div class="about-row">
-                        <i class="fa-solid fa-tv"></i>
-                        <span class="profile-tvshows"></span>
-                    </div>
-
-                    <div class="about-row">
-                        <i class="fa-solid fa-music"></i>
-                        <span class="profile-artists"></span>
-                    </div>
-
-                    <div class="about-row">
-                        <i class="fa-solid fa-quote-left"></i>
-                        <span class="profile-quotes"></span>
-                    </div>
+                    <div class="fb-highlights-bar" id="highlightsBar"></div>
 
                 </div>
 
@@ -548,6 +484,72 @@
                     <p class="empty-message">
                         Loading friends...
                     </p>
+
+                </div>
+
+            </section>
+
+            <!-- OTHER INFO CARD (education + interests merged) -->
+
+            <section class="profile-card fb-side-card" id="fbOtherInfoCard">
+
+                <div class="fb-side-title">
+
+                    <h2>Other Info</h2>
+
+                </div>
+
+                <div class="fb-intro-details">
+
+                    <div class="about-row">
+                        <i class="fa-solid fa-briefcase"></i>
+                        <span class="profile-work"></span>
+                    </div>
+
+                    <div class="about-row">
+                        <i class="fa-solid fa-school"></i>
+                        <span class="profile-highschool"></span>
+                    </div>
+
+                    <div class="about-row">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <span class="profile-education"></span>
+                    </div>
+
+                    <div class="about-row">
+                        <i class="fa-solid fa-heart"></i>
+                        <span class="profile-hobbies"></span>
+                    </div>
+
+                    <div class="about-row">
+                        <i class="fa-solid fa-futbol"></i>
+                        <span class="profile-sports"></span>
+                    </div>
+
+                    <div class="about-row">
+                        <i class="fa-solid fa-gamepad"></i>
+                        <span class="profile-games"></span>
+                    </div>
+
+                    <div class="about-row">
+                        <i class="fa-solid fa-film"></i>
+                        <span class="profile-movies"></span>
+                    </div>
+
+                    <div class="about-row">
+                        <i class="fa-solid fa-tv"></i>
+                        <span class="profile-tvshows"></span>
+                    </div>
+
+                    <div class="about-row">
+                        <i class="fa-solid fa-music"></i>
+                        <span class="profile-artists"></span>
+                    </div>
+
+                    <div class="about-row">
+                        <i class="fa-solid fa-quote-left"></i>
+                        <span class="profile-quotes"></span>
+                    </div>
 
                 </div>
 
@@ -675,6 +677,38 @@
                         <h2>About</h2>
 
                     </div>
+
+                    <div class="about-layout">
+
+                        <nav class="about-sidebar">
+
+                            <button type="button" class="active" data-about-block="0">
+                                Overview
+                            </button>
+
+                            <button type="button" data-about-block="1">
+                                Work &amp; Education
+                            </button>
+
+                            <button type="button" data-about-block="2">
+                                Places Lived
+                            </button>
+
+                            <button type="button" data-about-block="3">
+                                Contact &amp; Basic Info
+                            </button>
+
+                            <button type="button" data-about-block="4">
+                                Family &amp; Relationships
+                            </button>
+
+                            <button type="button" data-about-block="5">
+                                Details About You
+                            </button>
+
+                        </nav>
+
+                        <div class="about-content">
 
                     <div class="about-block">
 
@@ -885,6 +919,10 @@
 
                     </div>
 
+                        </div>
+
+                    </div>
+
                 </section>
 
             </div>
@@ -997,6 +1035,8 @@
                         </a>
 
                     </div>
+
+                    <input type="search" class="fb-friends-search" placeholder="Search friends">
 
                     <div class="friends-grid" id="profileFriends">
 
@@ -1929,39 +1969,39 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="supabase.js?v=1787000000009"></script>
+    <script src="supabase.js?v=1787000000010"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
 
-    <script src="premium-ui.js?v=1787000000009"></script>
+    <script src="premium-ui.js?v=1787000000010"></script>
 
-    <script src="script.js?v=1787000000009"></script>
+    <script src="script.js?v=1787000000010"></script>
 
-    <script src="image-upload.js?v=1787000000009"></script>
+    <script src="image-upload.js?v=1787000000010"></script>
 
-    <script src="post-manage.js?v=1787000000009"></script>
+    <script src="post-manage.js?v=1787000000010"></script>
 
-    <script src="friends.js?v=1787000000009"></script>
+    <script src="friends.js?v=1787000000010"></script>
 
-    <script src="likes-comments.js?v=1787000000009"></script>
+    <script src="likes-comments.js?v=1787000000010"></script>
 
-    <script src="shares.js?v=1787000000009"></script>
+    <script src="shares.js?v=1787000000010"></script>
 
-    <script src="profile-page.js?v=1787000000009"></script>
+    <script src="profile-page.js?v=1787000000010"></script>
 
-    <script src="user-search.js?v=1787000000009"></script>
+    <script src="user-search.js?v=1787000000010"></script>
 
-    <script src="notifications.js?v=1787000000009"></script>
+    <script src="notifications.js?v=1787000000010"></script>
 
-    <script src="settings.js?v=1787000000009"></script>
+    <script src="settings.js?v=1787000000010"></script>
 
-    <script src="messages.js?v=1787000000009"></script>
+    <script src="messages.js?v=1787000000010"></script>
 
-    <script src="stories.js?v=1787000000009"></script>
+    <script src="stories.js?v=1787000000010"></script>
 
-    <script src="watch.js?v=1787000000009"></script>
+    <script src="watch.js?v=1787000000010"></script>
 
-    <script src="highlights.js?v=1787000000009"></script>
+    <script src="highlights.js?v=1787000000010"></script>
 
 
 </body>

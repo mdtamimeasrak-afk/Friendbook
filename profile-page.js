@@ -1880,7 +1880,7 @@ async function socialhubFillProfileHeader() {
         if (String(nick).trim()) {
 
             nickEl.textContent =
-                `(${String(nick).trim()})`;
+                String(nick).trim();
 
             nickEl.style.display = "";
         } else {
@@ -2101,6 +2101,71 @@ document.addEventListener("DOMContentLoaded", () => {
     socialhubFillProfileHeader();
 
     socialhubSetupProfileTabs();
+
+    // ---------- About two-column section switcher (visual) ----------
+
+    const aboutBlocks =
+        [...document.querySelectorAll("#aboutSection .about-block")];
+
+    const aboutSidebar =
+        document.querySelector(".about-sidebar");
+
+    if (aboutSidebar && aboutBlocks.length) {
+
+        const aboutButtons =
+            [...aboutSidebar.querySelectorAll("button")];
+
+        aboutButtons.forEach(btn => {
+
+            btn.addEventListener("click", () => {
+
+                aboutButtons.forEach(b => b.classList.remove("active"));
+
+                btn.classList.add("active");
+
+                aboutBlocks.forEach((block, index) => {
+
+                    block.style.display =
+                        (index === Number(btn.dataset.aboutBlock)) ? "" : "none";
+                });
+            });
+        });
+
+        aboutBlocks.forEach((block, index) => {
+
+            block.style.display =
+                (index === 0) ? "" : "none";
+        });
+
+        // Hide empty sidebar categories after the row-trim pass
+
+        const syncAboutSidebar = () => {
+
+            aboutButtons.forEach(btn => {
+
+                const block =
+                    aboutBlocks[Number(btn.dataset.aboutBlock)];
+
+                if (!block) {
+                    return;
+                }
+
+                const rows =
+                    [...block.querySelectorAll(".about-row")];
+
+                const empty =
+                    rows.length &&
+                    rows.every(row => row.style.display === "none");
+
+                btn.style.display =
+                    empty ? "none" : "";
+            });
+        };
+
+        setTimeout(syncAboutSidebar, 1600);
+
+        setTimeout(syncAboutSidebar, 4500);
+    }
 
     // ---------- Post filters (Recents / Photos / Videos) ----------
 

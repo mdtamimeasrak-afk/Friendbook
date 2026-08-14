@@ -3171,3 +3171,201 @@ body.dark-mode .socialhub-reposition-cancel {
 
     pointer-events: none;
 }
+
+/* ====================================================== */
+/* PROFILE LAYOUT POLISH (complete layout structure)      */
+/* ====================================================== */
+
+/* ---- Nickname as its own secondary line ---- */
+
+.fb-name-nick-line {
+    margin: 2px 0 4px;
+}
+
+.fb-name-nick {
+    display: block;
+
+    font-size: 15px;
+
+    font-weight: 500;
+
+    color: #a8b3bf;
+}
+
+body:not(.dark-mode) .fb-name-nick {
+    color: #65676b;
+}
+
+/* ---- Intro card: highlights section inside ---- */
+
+.fb-highlights-inside {
+    margin-top: 14px;
+
+    padding-top: 12px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+body:not(.dark-mode) .fb-highlights-inside {
+    border-top-color: #ced0d4;
+}
+
+/* ---- About: two-column layout ---- */
+
+.about-layout {
+    display: flex;
+
+    gap: 28px;
+
+    align-items: flex-start;
+}
+
+.about-sidebar {
+    width: 230px;
+
+    flex: 0 0 230px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+    position: sticky;
+
+    top: 84px;
+}
+
+.about-sidebar button {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    width: 100%;
+
+    padding: 10px 14px;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: inherit;
+
+    font-size: 15px;
+
+    text-align: left;
+
+    cursor: pointer;
+}
+
+.about-sidebar button:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.about-sidebar button.active {
+    background: #1877f2;
+
+    color: #ffffff;
+
+    font-weight: 600;
+}
+
+body:not(.dark-mode) .about-sidebar button:hover {
+    background: #e4e6eb;
+}
+
+.about-content {
+    flex: 1;
+
+    min-width: 0;
+}
+
+.about-content .about-block {
+    margin-bottom: 24px;
+}
+
+/* ---- Friends tab: search box ---- */
+
+.fb-friends-search {
+    width: 100%;
+
+    margin: 4px 0 18px;
+
+    padding: 10px 14px 10px 38px;
+
+    border: 1px solid transparent;
+
+    border-radius: 50px;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    color: inherit;
+
+    font-size: 14px;
+
+    outline: none;
+}
+
+.fb-friends-search::placeholder {
+    color: #a8b3bf;
+}
+
+body:not(.dark-mode) .fb-friends-search {
+    background: #f0f2f5;
+
+    color: #050505;
+}
+
+body:not(.dark-mode) .fb-friends-search::placeholder {
+    color: #65676b;
+}
+
+/* ---- Reels: portrait thumbnails ---- */
+
+#profileVideos .profile-photo-item {
+    aspect-ratio: 3 / 4;
+}
+
+#profileVideos .profile-photo-item img,
+#profileVideos .profile-photo-item video {
+    object-fit: cover;
+}
+
+/* ---- Mobile: About + Friends ---- */
+
+@media (max-width: 700px) {
+
+    .about-layout {
+        flex-direction: column;
+
+        gap: 16px;
+    }
+
+    .about-sidebar {
+        width: 100%;
+
+        flex: none;
+
+        flex-direction: row;
+
+        overflow-x: auto;
+
+        position: static;
+
+        padding-bottom: 6px;
+    }
+
+    .about-sidebar button {
+        width: auto;
+
+        white-space: nowrap;
+    }
+
+    .fb-friends-search {
+        margin-bottom: 12px;
+    }
+}
