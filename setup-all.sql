@@ -1097,9 +1097,13 @@ create table if not exists public.campuses (
   created_at timestamptz not null default now()
 );
 alter table public.campuses enable row level security;
+drop policy if exists campuses_select on public.campuses;
 create policy campuses_select on public.campuses for select to authenticated using (true);
+drop policy if exists campuses_insert on public.campuses;
 create policy campuses_insert on public.campuses for insert to authenticated with check (true);
+drop policy if exists campuses_update on public.campuses;
 create policy campuses_update on public.campuses for update to authenticated using (created_by = auth.uid());
+drop policy if exists campuses_delete on public.campuses;
 create policy campuses_delete on public.campuses for delete to authenticated using (created_by = auth.uid());
 
 -- 7.2 CAMPUS_MEMBERS table (who joined which campus; unique = no double join)
@@ -1112,9 +1116,13 @@ create table if not exists public.campus_members (
   unique (campus_id, user_id)
 );
 alter table public.campus_members enable row level security;
+drop policy if exists campus_members_select on public.campus_members;
 create policy campus_members_select on public.campus_members for select to authenticated using (true);
+drop policy if exists campus_members_insert on public.campus_members;
 create policy campus_members_insert on public.campus_members for insert to authenticated with check (auth.uid() = user_id);
+drop policy if exists campus_members_update on public.campus_members;
 create policy campus_members_update on public.campus_members for update to authenticated using (auth.uid() = user_id);
+drop policy if exists campus_members_delete on public.campus_members;
 create policy campus_members_delete on public.campus_members for delete to authenticated using (auth.uid() = user_id);
 
 -- 7.3 Seed: Bogra Polytechnic Institute (logo/cover/verified)
@@ -1133,7 +1141,9 @@ create table if not exists public.campus_posts (
   created_at timestamptz not null default now()
 );
 alter table public.campus_posts enable row level security;
+drop policy if exists campus_posts_select on public.campus_posts;
 create policy campus_posts_select on public.campus_posts for select to authenticated using (true);
+drop policy if exists campus_posts_insert on public.campus_posts;
 create policy campus_posts_insert on public.campus_posts for insert to authenticated with check (
   auth.uid() = user_id
   and exists (
@@ -1142,7 +1152,9 @@ create policy campus_posts_insert on public.campus_posts for insert to authentic
       and cm.user_id = auth.uid()
   )
 );
+drop policy if exists campus_posts_update on public.campus_posts;
 create policy campus_posts_update on public.campus_posts for update to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id);
+drop policy if exists campus_posts_delete on public.campus_posts;
 create policy campus_posts_delete on public.campus_posts for delete to authenticated using (
   auth.uid() = user_id
   or exists (
@@ -1163,9 +1175,13 @@ create table if not exists public.campus_post_likes (
   unique (campus_post_id, user_id)
 );
 alter table public.campus_post_likes enable row level security;
+drop policy if exists campus_post_likes_select on public.campus_post_likes;
 create policy campus_post_likes_select on public.campus_post_likes for select to authenticated using (true);
+drop policy if exists campus_post_likes_insert on public.campus_post_likes;
 create policy campus_post_likes_insert on public.campus_post_likes for insert to authenticated with check (auth.uid() = user_id);
+drop policy if exists campus_post_likes_update on public.campus_post_likes;
 create policy campus_post_likes_update on public.campus_post_likes for update to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id);
+drop policy if exists campus_post_likes_delete on public.campus_post_likes;
 create policy campus_post_likes_delete on public.campus_post_likes for delete to authenticated using (auth.uid() = user_id);
 
 -- 8.3 CAMPUS_POST_COMMENTS
@@ -1177,8 +1193,11 @@ create table if not exists public.campus_post_comments (
   created_at timestamptz not null default now()
 );
 alter table public.campus_post_comments enable row level security;
+drop policy if exists campus_post_comments_select on public.campus_post_comments;
 create policy campus_post_comments_select on public.campus_post_comments for select to authenticated using (true);
+drop policy if exists campus_post_comments_insert on public.campus_post_comments;
 create policy campus_post_comments_insert on public.campus_post_comments for insert to authenticated with check (auth.uid() = user_id);
+drop policy if exists campus_post_comments_delete on public.campus_post_comments;
 create policy campus_post_comments_delete on public.campus_post_comments for delete to authenticated using (auth.uid() = user_id);
 
 -- 9.0 CAMPUS COMMUNITY (Step 5: profile fields for students - department, semester, batch)
@@ -1199,7 +1218,9 @@ create table if not exists public.campus_groups (
   created_at timestamptz not null default now()
 );
 alter table public.campus_groups enable row level security;
+drop policy if exists campus_groups_select on public.campus_groups;
 create policy campus_groups_select on public.campus_groups for select to authenticated using (true);
+drop policy if exists campus_groups_insert on public.campus_groups;
 create policy campus_groups_insert on public.campus_groups for insert to authenticated with check (
   auth.uid() = created_by
   and exists (
@@ -1208,7 +1229,9 @@ create policy campus_groups_insert on public.campus_groups for insert to authent
       and cm.user_id = auth.uid()
   )
 );
+drop policy if exists campus_groups_update on public.campus_groups;
 create policy campus_groups_update on public.campus_groups for update to authenticated using (created_by = auth.uid()) with check (created_by = auth.uid());
+drop policy if exists campus_groups_delete on public.campus_groups;
 create policy campus_groups_delete on public.campus_groups for delete to authenticated using (created_by = auth.uid());
 
 -- 10.2 CAMPUS_GROUP_MEMBERS: join/leave; unique = no double join
@@ -1221,7 +1244,9 @@ create table if not exists public.campus_group_members (
   unique (group_id, user_id)
 );
 alter table public.campus_group_members enable row level security;
+drop policy if exists campus_group_members_select on public.campus_group_members;
 create policy campus_group_members_select on public.campus_group_members for select to authenticated using (true);
+drop policy if exists campus_group_members_insert on public.campus_group_members;
 create policy campus_group_members_insert on public.campus_group_members for insert to authenticated with check (
   auth.uid() = user_id
   and exists (
@@ -1231,7 +1256,9 @@ create policy campus_group_members_insert on public.campus_group_members for ins
       and cm.user_id = auth.uid()
   )
 );
+drop policy if exists campus_group_members_update on public.campus_group_members;
 create policy campus_group_members_update on public.campus_group_members for update to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id);
+drop policy if exists campus_group_members_delete on public.campus_group_members;
 create policy campus_group_members_delete on public.campus_group_members for delete to authenticated using (
   auth.uid() = user_id
   or exists (
@@ -1267,6 +1294,9 @@ create table if not exists public.campus_post_shares (
   created_at timestamptz not null default now()
 );
 alter table public.campus_post_shares enable row level security;
+drop policy if exists campus_post_shares_select on public.campus_post_shares;
 create policy campus_post_shares_select on public.campus_post_shares for select to authenticated using (true);
+drop policy if exists campus_post_shares_insert on public.campus_post_shares;
 create policy campus_post_shares_insert on public.campus_post_shares for insert to authenticated with check (auth.uid() = user_id);
+drop policy if exists campus_post_shares_delete on public.campus_post_shares;
 create policy campus_post_shares_delete on public.campus_post_shares for delete to authenticated using (auth.uid() = user_id);
