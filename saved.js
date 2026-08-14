@@ -271,7 +271,7 @@ async function socialhubSavedLoad() {
             ordered.map(p => p.user_id).filter(Boolean)
         )];
 
-    const profileMap = {};
+    const profileMap = new Map();
 
     if (userIds.length > 0) {
 
@@ -284,7 +284,7 @@ async function socialhubSavedLoad() {
 
         (profiles || []).forEach(p => {
 
-            profileMap[p.id] = p;
+            profileMap.set(p.id, p);
         });
     }
 
