@@ -16,15 +16,15 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%231877f2'/%3E%3Ctext x='20' y='27' font-family='Arial' font-size='21' font-weight='800' fill='white' text-anchor='middle'%3ETR%3C/text%3E%3C/svg%3E">
 
 
-    <link rel="stylesheet" href="style.css?v=1786731713250">
+    <link rel="stylesheet" href="style.css?v=1786732667336">
 
-    <link rel="stylesheet" href="dashboard.css?v=1786731713250">
+    <link rel="stylesheet" href="dashboard.css?v=1786732667336">
 
-    <link rel="stylesheet" href="premium.css?v=1786731713250">
+    <link rel="stylesheet" href="premium.css?v=1786732667336">
 
-    <link rel="stylesheet" href="glass-theme.css?v=1786731713250">
+    <link rel="stylesheet" href="glass-theme.css?v=1786732667336">
 
-    <link rel="stylesheet" href="campus.css?v=1786731713250">
+    <link rel="stylesheet" href="campus.css?v=1786732667336">
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -287,44 +287,114 @@
                         👤
                     </div>
 
-                    <div class="campus-composer-body">
+                        <div class="campus-composer-body">
 
-                        <textarea
-                            id="campusPostInput"
-                            rows="2"
-                            placeholder="Share something with your campus..."
-                        ></textarea>
+                            <textarea
+                                id="campusPostInput"
+                                rows="2"
+                                placeholder="Share something with your campus..."
+                            ></textarea>
 
-                        <div class="campus-composer-tools">
-
-                            <label class="campus-composer-photo">
-                                <i class="fa-solid fa-image"></i>
-                                Photo
-                                <input
-                                    type="file"
-                                    id="campusPostImage"
-                                    accept="image/*"
-                                    hidden
-                                >
-                            </label>
-
-                            <span
-                                class="campus-image-name"
-                                id="campusImageName"
+                            <!-- PHOTO PREVIEW (Facebook style) -->
+                            <div
+                                class="campus-composer-preview"
+                                id="campusImagePreview"
                                 style="display:none"
-                            ></span>
-
-                            <button
-                                class="campus-post-btn"
-                                id="campusPostBtn"
-                                type="button"
                             >
-                                Post
-                            </button>
+                                <img
+                                    id="campusImagePreviewImg"
+                                    alt="Preview"
+                                >
+                                <button
+                                    type="button"
+                                    class="campus-preview-remove"
+                                    id="campusImageRemove"
+                                    title="Remove photo"
+                                >
+                                    ✕
+                                </button>
+                            </div>
+
+                            <div class="campus-composer-tools">
+
+                                <label class="campus-composer-photo">
+                                    <i class="fa-solid fa-image"></i>
+                                    Photo
+                                    <input
+                                        type="file"
+                                        id="campusPostImage"
+                                        accept="image/*"
+                                        hidden
+                                    >
+                                </label>
+
+                                <!-- AUDIENCE SELECTOR -->
+                                <button
+                                    type="button"
+                                    class="campus-audience-btn"
+                                    id="campusAudienceBtn"
+                                    onclick="socialhubCampusToggleAudience(event)"
+                                >
+                                    <span id="campusAudienceLabel">🌎 Public</span>
+                                    <span>▾</span>
+                                </button>
+
+                                <div
+                                    class="campus-audience-menu"
+                                    id="campusAudienceMenu"
+                                    style="display:none"
+                                >
+                                    <button
+                                        type="button"
+                                        class="campus-audience-option selected"
+                                        data-audience="public"
+                                        onclick="socialhubCampusSetAudience('public')"
+                                    >
+                                        🌎 Public
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="campus-audience-option"
+                                        data-audience="friends"
+                                        onclick="socialhubCampusSetAudience('friends')"
+                                    >
+                                        👥 Friends
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="campus-audience-option"
+                                        data-audience="friends_of_friends"
+                                        onclick="socialhubCampusSetAudience('friends_of_friends')"
+                                    >
+                                        🤝 Friends of Friends
+                                    </button>
+                                    <button
+                                        type="button"
+                                        class="campus-audience-option"
+                                        data-audience="only_me"
+                                        onclick="socialhubCampusSetAudience('only_me')"
+                                    >
+                                        🔒 Only Me
+                                    </button>
+                                </div>
+
+                                <span
+                                    class="campus-image-name"
+                                    id="campusImageName"
+                                    style="display:none"
+                                ></span>
+
+                                <button
+                                    class="campus-post-btn"
+                                    id="campusPostBtn"
+                                    type="button"
+                                >
+                                    Post
+                                </button>
+
+                            </div>
 
                         </div>
-
-                    </div>
 
                 </div>
 
@@ -544,17 +614,17 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="supabase.js?v=1786731713250"></script>
+    <script src="supabase.js?v=1786732667336"></script>
 
-    <script src="premium-ui.js?v=1786731713250"></script>
+    <script src="premium-ui.js?v=1786732667336"></script>
 
-    <script src="script.js?v=1786731713250"></script>
+    <script src="script.js?v=1786732667336"></script>
 
-    <script src="likes-comments.js?v=1786731713250"></script>
+    <script src="likes-comments.js?v=1786732667336"></script>
 
-    <script src="shares.js?v=1786731713250"></script>
+    <script src="shares.js?v=1786732667336"></script>
 
-    <script src="campus.js?v=1786731713250"></script>
+    <script src="campus.js?v=1786732667336"></script>
 
 </body>
 

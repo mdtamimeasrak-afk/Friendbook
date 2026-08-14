@@ -672,15 +672,7 @@ function socialhubCampusBindComposer() {
 
                 socialhubCampusComposer.image = file;
 
-                const name =
-                    document.getElementById("campusImageName");
-
-                if (name) {
-
-                    name.textContent = "📷 " + file.name;
-
-                    name.style.display = "inline";
-                }
+                socialhubCampusShowImagePreview(file);
 
                 socialhubToast(
                     "Image attached.",
@@ -689,7 +681,200 @@ function socialhubCampusBindComposer() {
             }
         );
     }
+
+    const removeBtn =
+        document.getElementById("campusImageRemove");
+
+    if (removeBtn) {
+
+        removeBtn.addEventListener(
+            "click",
+            () => {
+
+                socialhubCampusClearComposerImage();
+            }
+        );
+    }
+
+    socialhubCampusInitAudience();
 }
+
+
+function socialhubCampusShowImagePreview(file) {
+
+    const preview =
+        document.getElementById("campusImagePreview");
+
+    const img =
+        document.getElementById("campusImagePreviewImg");
+
+    if (!preview || !img) {
+        return;
+    }
+
+    img.src =
+        URL.createObjectURL(file);
+
+    preview.style.display = "flex";
+
+    const name =
+        document.getElementById("campusImageName");
+
+    if (name) {
+
+        name.textContent = "📷 " + file.name;
+
+        name.style.display = "inline";
+    }
+}
+
+
+function socialhubCampusClearComposerImage() {
+
+    const preview =
+        document.getElementById("campusImagePreview");
+
+    if (preview) {
+
+        preview.style.display = "none";
+
+        const img =
+            document.getElementById("campusImagePreviewImg");
+
+        if (img) {
+
+            img.src = "";
+        }
+    }
+
+    const name =
+        document.getElementById("campusImageName");
+
+    if (name) {
+
+        name.style.display = "none";
+    }
+
+    const fileInput =
+        document.getElementById("campusPostImage");
+
+    if (fileInput) {
+
+        fileInput.value = "";
+    }
+
+    socialhubCampusComposer.image = null;
+}
+
+
+function socialhubCampusInitAudience() {
+
+    const saved =
+        localStorage.getItem(
+            "socialhubCampusAudience"
+        );
+
+    if (saved) {
+
+        socialhubCampusSetAudience(saved);
+    }
+}
+
+
+function socialhubCampusGetAudience() {
+
+    const saved =
+        localStorage.getItem(
+            "socialhubCampusAudience"
+        );
+
+    return saved || "public";
+}
+
+
+function socialhubCampusToggleAudience(event) {
+
+    if (event) {
+        event.stopPropagation();
+    }
+
+    const menu =
+        document.getElementById("campusAudienceMenu");
+
+    if (!menu) {
+        return;
+    }
+
+    menu.style.display =
+        menu.style.display === "none"
+            ? "flex"
+            : "none";
+}
+
+
+function socialhubCampusSetAudience(value) {
+
+    if (!value) {
+        return;
+    }
+
+    localStorage.setItem(
+        "socialhubCampusAudience",
+        value
+    );
+
+    const label =
+        document.getElementById("campusAudienceLabel");
+
+    if (label) {
+
+        label.textContent =
+            SOCIALHUB_AUDIENCE_LABELS[value] ||
+            "🌎 Public";
+    }
+
+    const menu =
+        document.getElementById("campusAudienceMenu");
+
+    if (menu) {
+
+        menu.style.display = "none";
+    }
+
+    document
+        .querySelectorAll(
+            ".campus-audience-option"
+        )
+        .forEach(option => {
+
+            option.classList.toggle(
+                "selected",
+                option.dataset.audience === value
+            );
+        });
+}
+
+
+document.addEventListener(
+    "click",
+    event => {
+
+        const menu =
+            document.getElementById("campusAudienceMenu");
+
+        if (
+            menu &&
+            menu.style.display !== "none" &&
+            !menu.contains(event.target) &&
+            !document
+                .getElementById("campusAudienceBtn")
+                ?.contains(event.target)
+        ) {
+
+            menu.style.display = "none";
+        }
+    }
+);
 
 
 async function socialhubCampusCreatePost() {
@@ -819,7 +1004,8 @@ async function socialhubCampusCreatePost() {
                 campus_id: campus.id,
                 user_id: user.id,
                 content: content,
-                image_url: imageUrl
+                image_url: imageUrl,
+                audience: socialhubCampusGetAudience()
             });
 
     if (error) {
@@ -836,21 +1022,7 @@ async function socialhubCampusCreatePost() {
         input.value = "";
     }
 
-    socialhubCampusComposer.image = null;
-
-    const fileInput =
-        document.getElementById("campusPostImage");
-
-    if (fileInput) {
-        fileInput.value = "";
-    }
-
-    const name =
-        document.getElementById("campusImageName");
-
-    if (name) {
-        name.style.display = "none";
-    }
+    socialhubCampusClearComposerImage();
 
     socialhubToast(
         "Posted to campus! 🎉",
@@ -896,6 +1068,7 @@ async function socialhubCampusLoadPosts() {
                 user_id,
                 content,
                 image_url,
+                audience,
                 created_at,
                 profiles (
                     id,
@@ -920,7 +1093,7 @@ async function socialhubCampusLoadPosts() {
         return;
     }
 
-    const ids =
+const ids =
         (posts || []).map(post => post.id);
 
     let likes = [];
@@ -966,6 +1139,52 @@ async function socialhubCampusLoadPosts() {
         comments = commentsResult.data || [];
     }
 
+    // ---------- SHARES (Facebook-style "X shared Y's post") ----------
+
+    const {
+        data: shares,
+        error: sharesError
+    } =
+        await supabaseClient
+            .from("campus_post_shares")
+            .select(`
+                id,
+                user_id,
+                thought,
+                created_at,
+                profiles (
+                    id,
+                    full_name,
+                    username,
+                    avatar_url
+                ),
+                campus_posts (
+                    id,
+                    campus_id,
+                    user_id,
+                    content,
+                    image_url,
+                    created_at,
+                    profiles (
+                        id,
+                        full_name,
+                        username,
+                        avatar_url
+                    )
+                )
+            `)
+            .eq("campus_posts.campus_id", campus.id)
+            .order("created_at", { ascending: false })
+            .limit(30);
+
+    if (sharesError) {
+
+        console.error(
+            "❌ Campus shares error:",
+            sharesError
+        );
+    }
+
     let me = null;
 
     try {
@@ -1005,7 +1224,10 @@ async function socialhubCampusLoadPosts() {
             (commentCounts[comment.campus_post_id] || 0) + 1;
     });
 
-    if (!posts || posts.length === 0) {
+if (
+        (!posts || posts.length === 0) &&
+        (!shares || shares.length === 0)
+    ) {
 
         feed.innerHTML = `
             <div class="campus-empty-card">
@@ -1024,12 +1246,63 @@ async function socialhubCampusLoadPosts() {
 
     feed.innerHTML = "";
 
-    posts.forEach(post => {
+    const items = [];
+
+    (posts || []).forEach(post => {
+
+        items.push({
+            type: "post",
+            created_at: post.created_at,
+            post: post,
+            profile: post.profiles || {}
+        });
+    });
+
+    (shares || []).forEach(share => {
+
+        const original =
+            share.campus_posts;
+
+        if (!original) {
+            return;
+        }
+
+        items.push({
+            type: "share",
+            created_at: share.created_at,
+            share: share,
+            sharer: share.profiles || {},
+            original: original,
+            author: original.profiles || {}
+        });
+    });
+
+    items.sort((a, b) =>
+        new Date(b.created_at) - new Date(a.created_at)
+    );
+
+    items.forEach(item => {
+
+        if (item.type === "share") {
+
+            feed.appendChild(
+                socialhubCampusShareCardHTML(
+                    item.share,
+                    item.sharer,
+                    item.original,
+                    item.author
+                )
+            );
+
+            return;
+        }
+
+        const post = item.post;
 
         const article =
             socialhubCampusPostHTML(
                 post,
-                post.profiles || {},
+                item.profile,
                 likeCounts[post.id] || 0,
                 myLikes[post.id] || null,
                 comments.filter(
@@ -1041,6 +1314,168 @@ async function socialhubCampusLoadPosts() {
 
         feed.appendChild(article);
     });
+}
+
+
+function socialhubCampusShareCardHTML(
+    share,
+    sharer,
+    original,
+    author
+) {
+
+    const article =
+        document.createElement("article");
+
+    article.className = "post";
+
+    article.dataset.postId = share.id;
+
+    const sharerName =
+        sharer.full_name ||
+        sharer.username ||
+        "Student";
+
+    const sharerAvatar =
+        sharer.avatar_url || "";
+
+    const sharerAvatarHTML =
+        sharerAvatar
+            ? `
+                <img
+                    src="${socialhubCampusEscape(sharerAvatar)}"
+                    alt="${socialhubCampusEscape(sharerName)}"
+                    style="
+                        width:100%;
+                        height:100%;
+                        object-fit:cover;
+                        border-radius:50%;
+                    "
+                >
+            `
+            : "👤";
+
+    const authorName =
+        author.full_name ||
+        author.username ||
+        "Student";
+
+    const authorAvatar =
+        author.avatar_url || "";
+
+    const authorAvatarHTML =
+        authorAvatar
+            ? `
+                <img
+                    src="${socialhubCampusEscape(authorAvatar)}"
+                    alt="${socialhubCampusEscape(authorName)}"
+                    style="
+                        width:100%;
+                        height:100%;
+                        object-fit:cover;
+                        border-radius:50%;
+                    "
+                >
+            `
+            : "👤";
+
+    article.innerHTML = `
+
+<div class="post-header">
+
+    <div class="avatar">
+        ${sharerAvatarHTML}
+    </div>
+
+    <div>
+
+        <h3 class="post-user-name">
+            ${socialhubCampusEscape(sharerName)}
+        </h3>
+
+        <small>
+            @${socialhubCampusEscape(sharer.username || "")}
+            ·
+            ${socialhubCampusTime(share.created_at)}
+            · shared ${socialhubCampusEscape(authorName)}'s post
+        </small>
+
+    </div>
+
+</div>
+
+${
+    share.thought
+        ? `
+            <p
+                class="post-text"
+                style="
+                    margin: 0;
+                    line-height: 1.6;
+                    white-space: pre-wrap;
+                    overflow-wrap: break-word;
+                    padding: 0;
+                    text-align: left;
+                    font-size: 16px;
+                    font-weight: 400;
+                "
+            >${socialhubCampusEscape(share.thought)}</p>
+        `
+        : ""
+}
+
+<div class="campus-share-embedded">
+
+    <div class="post-header">
+
+        <div class="avatar">
+            ${authorAvatarHTML}
+        </div>
+
+        <div>
+
+            <h3 class="post-user-name">
+                ${socialhubCampusEscape(authorName)}
+            </h3>
+
+            <small>
+                @${socialhubCampusEscape(author.username || "")}
+                ·
+                ${socialhubCampusTime(original.created_at)}
+            </small>
+
+        </div>
+
+    </div>
+
+    ${
+        original.content
+            ? `
+                <p class="campus-share-text">
+                    ${socialhubCampusEscape(original.content)}
+                </p>
+            `
+            : ""
+    }
+
+    ${
+        original.image_url
+            ? `
+                <img
+                    class="campus-post-img"
+                    src="${socialhubCampusEscape(original.image_url)}"
+                    alt="Post photo"
+                    loading="lazy"
+                >
+            `
+            : ""
+    }
+
+</div>
+
+`;
+
+    return article;
 }
 
 
@@ -1133,6 +1568,7 @@ function socialhubCampusPostHTML(
             @${socialhubCampusEscape(username)}
             ·
             ${socialhubCampusTime(post.created_at)}
+            · ${socialhubAudienceIcon(post.audience)}
         </small>
 
     </div>
@@ -1209,6 +1645,15 @@ ${imageHTML}
     >
         <i class="fa-regular fa-comment"></i>
         <span class="fb-action-label">Comment</span>
+    </button>
+
+    <button
+        type="button"
+        class="fb-action-btn"
+        onclick="socialhubCampusShareDialog('${post.id}')"
+    >
+        <i class="fa-solid fa-share-from-square"></i>
+        <span class="fb-action-label">Share</span>
     </button>
 
 </div>
@@ -2902,4 +3347,251 @@ async function socialhubCampusMe() {
     }
 
     return null;
+}
+
+
+// ======================================================
+// CAMPUS POST SHARE DIALOG (Facebook style)
+// ======================================================
+
+async function socialhubCampusShareDialog(postId) {
+
+    const me =
+        await socialhubCampusMe();
+
+    if (!me) {
+
+        socialhubToast(
+            "Please login first.",
+            "error"
+        );
+
+        return;
+    }
+
+    const {
+        data: post,
+        error
+    } =
+        await supabaseClient
+            .from("campus_posts")
+            .select(`
+                id,
+                user_id,
+                content,
+                image_url,
+                created_at,
+                profiles (
+                    id,
+                    full_name,
+                    username,
+                    avatar_url
+                )
+            `)
+            .eq("id", postId)
+            .single();
+
+    if (error || !post) {
+
+        socialhubToast(
+            "Could not load this post.",
+            "error"
+        );
+
+        return;
+    }
+
+    const author =
+        post.profiles || {};
+
+    const authorName =
+        author.full_name ||
+        author.username ||
+        "Student";
+
+    const avatarHTML =
+        author.avatar_url
+            ? `
+                <img
+                    src="${socialhubCampusEscape(author.avatar_url)}"
+                    alt="${socialhubCampusEscape(authorName)}"
+                    style="
+                        width:100%;
+                        height:100%;
+                        object-fit:cover;
+                        border-radius:50%;
+                    "
+                >
+            `
+            : "👤";
+
+    const overlay =
+        document.createElement("div");
+
+    overlay.className = "campus-modal";
+
+    overlay.innerHTML = `
+
+<div class="campus-modal-box campus-share-box">
+
+    <button
+        type="button"
+        class="campus-modal-close campus-share-close"
+    >
+        ✕
+    </button>
+
+    <h3>Share</h3>
+
+    <div class="campus-share-top">
+
+        <div class="avatar">
+            👤
+        </div>
+
+        <textarea
+            id="campusShareThought"
+            rows="3"
+            maxlength="300"
+            placeholder="Say something about this..."
+        ></textarea>
+
+    </div>
+
+    <div class="campus-share-original">
+
+        <div class="post-header">
+
+            <div class="avatar">
+                ${avatarHTML}
+            </div>
+
+            <div>
+
+                <h3 class="post-user-name">
+                    ${socialhubCampusEscape(authorName)}
+                </h3>
+
+                <small>
+                    @${socialhubCampusEscape(author.username || "")}
+                    ·
+                    ${socialhubCampusTime(post.created_at)}
+                </small>
+
+            </div>
+
+        </div>
+
+        ${
+            post.content
+                ? `
+                    <p class="campus-share-text">
+                        ${socialhubCampusEscape(post.content)}
+                    </p>
+                `
+                : ""
+        }
+
+        ${
+            post.image_url
+                ? `
+                    <img
+                        class="campus-post-img"
+                        src="${socialhubCampusEscape(post.image_url)}"
+                        alt="Post photo"
+                        loading="lazy"
+                    >
+                `
+                : ""
+        }
+
+    </div>
+
+    <div class="campus-share-actions">
+
+        <button
+            type="button"
+            class="campus-share-cancel"
+        >
+            Cancel
+        </button>
+
+        <button
+            type="button"
+            class="campus-share-go"
+        >
+            <i class="fa-solid fa-share-from-square"></i>
+            Share
+        </button>
+
+    </div>
+
+</div>
+
+`;
+
+    document.body.appendChild(overlay);
+
+    overlay
+        .querySelector(".campus-share-close")
+        .addEventListener("click", () => overlay.remove());
+
+    overlay.addEventListener("click", event => {
+
+        if (event.target === overlay) {
+            overlay.remove();
+        }
+    });
+
+    overlay
+        .querySelector(".campus-share-cancel")
+        .addEventListener("click", () => overlay.remove());
+
+    overlay
+        .querySelector(".campus-share-go")
+        .addEventListener("click", async () => {
+
+            const thought =
+                document.getElementById("campusShareThought")
+                    ?.value.trim() || "";
+
+            const button =
+                overlay.querySelector(".campus-share-go");
+
+            button.disabled = true;
+
+            button.innerText = "Sharing...";
+
+            const { error: insertError } =
+                await supabaseClient
+                    .from("campus_post_shares")
+                    .insert({
+                        campus_post_id: postId,
+                        user_id: me.id,
+                        thought: thought
+                    });
+
+            if (insertError) {
+
+                button.disabled = false;
+
+                button.innerText = "Share";
+
+                socialhubToast(
+                    "Could not share the post.",
+                    "error"
+                );
+
+                return;
+            }
+
+            overlay.remove();
+
+            socialhubToast(
+                "Shared to your campus! 🎉",
+                "success"
+            );
+
+            await socialhubCampusLoadPosts();
+        });
 }

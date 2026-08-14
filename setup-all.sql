@@ -1251,3 +1251,22 @@ from public.campuses c order by c.created_at limit 1 on conflict do nothing;
 insert into public.campus_groups (campus_id, name, description, created_by)
 select c.id, 'Cultural Club', 'Music, drama, debates and annual campus events.', 'b0432f86-5982-44d4-954c-e2fcac39168a'
 from public.campuses c order by c.created_at limit 1 on conflict do nothing;
+
+
+-- 11.0 CAMPUS COMMUNITY (Facebook-style upgrade: share + audience)
+-- 11.1 post_shares gets an audience (who can see the share)
+alter table public.post_shares add column if not exists audience text not null default 'public';
+-- 11.2 campus_posts gets an audience (who can see the campus post)
+alter table public.campus_posts add column if not exists audience text not null default 'public';
+-- 11.3 CAMPUS_POST_SHARES: "X shared Y's campus post" with an optional thought
+create table if not exists public.campus_post_shares (
+  id uuid primary key default gen_random_uuid(),
+  campus_post_id uuid not null references public.campus_posts (id) on delete cascade,
+  user_id uuid not null references public.profiles (id) on delete cascade,
+  thought text not null default '',
+  created_at timestamptz not null default now()
+);
+alter table public.campus_post_shares enable row level security;
+create policy campus_post_shares_select on public.campus_post_shares for select to authenticated using (true);
+create policy campus_post_shares_insert on public.campus_post_shares for insert to authenticated with check (auth.uid() = user_id);
+create policy campus_post_shares_delete on public.campus_post_shares for delete to authenticated using (auth.uid() = user_id);

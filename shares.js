@@ -279,6 +279,77 @@ function socialhubSharesInjectStyles() {
     cursor: default;
 }
 
+.socialhub-share-audience {
+    position: relative;
+    padding: 0 14px 10px;
+}
+
+.socialhub-share-audience-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #e4e6eb;
+    border: none;
+    border-radius: 16px;
+    padding: 6px 12px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #050505;
+    cursor: pointer;
+}
+
+.socialhub-share-audience-btn:hover {
+    background: #d8dadf;
+}
+
+.socialhub-share-audience-menu {
+    position: absolute;
+    left: 14px;
+    top: 34px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    padding: 6px;
+    z-index: 60;
+    min-width: 210px;
+}
+
+.socialhub-share-audience-menu button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #050505;
+    cursor: pointer;
+}
+
+.socialhub-share-audience-menu button:hover {
+    background: #f0f2f5;
+}
+
+body.dark-mode .socialhub-share-audience-btn {
+    background: #3a3b3c;
+    color: #e4e6eb;
+}
+
+body.dark-mode .socialhub-share-audience-menu {
+    background: #242526;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+body.dark-mode .socialhub-share-audience-menu button {
+    color: #e4e6eb;
+}
+
+body.dark-mode .socialhub-share-audience-menu button:hover {
+    background: #3a3b3c;
+}
+
 body.dark-mode .socialhub-share-dialog {
     background: #242526;
     color: #e4e6eb;
@@ -396,6 +467,19 @@ async function socialhubShareDialog(postId) {
                 <textarea class="socialhub-share-thought" maxlength="300" placeholder="Say something about this..."></textarea>
             </div>
 
+            <div class="socialhub-share-audience">
+                <button type="button" class="socialhub-share-audience-btn">
+                    <span class="socialhub-share-audience-label">🌎 Public</span>
+                    <span>▾</span>
+                </button>
+                <div class="socialhub-share-audience-menu" style="display:none">
+                    <button type="button" data-audience="public">🌎 Public</button>
+                    <button type="button" data-audience="friends">👥 Friends</button>
+                    <button type="button" data-audience="friends_of_friends">🤝 Friends of Friends</button>
+                    <button type="button" data-audience="only_me">🔒 Only Me</button>
+                </div>
+            </div>
+
             <div class="socialhub-share-preview">
 
                 <div class="socialhub-share-preview-body">
@@ -438,6 +522,58 @@ async function socialhubShareDialog(postId) {
             overlay.remove();
         }
     });
+
+    let shareAudience =
+        window.socialhubAudience ||
+        "public";
+
+    const audienceBtn =
+        overlay.querySelector(".socialhub-share-audience-btn");
+
+    const audienceMenu =
+        overlay.querySelector(".socialhub-share-audience-menu");
+
+    const audienceLabel =
+        overlay.querySelector(".socialhub-share-audience-label");
+
+    if (audienceBtn && audienceMenu) {
+
+        audienceBtn.addEventListener("click", event => {
+
+            event.stopPropagation();
+
+            audienceMenu.style.display =
+                audienceMenu.style.display === "none"
+                    ? "block"
+                    : "none";
+        });
+
+        audienceMenu
+            .querySelectorAll("button")
+            .forEach(option => {
+
+                option.addEventListener("click", () => {
+
+                    shareAudience =
+                        option.dataset.audience;
+
+                    if (audienceLabel) {
+
+                        audienceLabel.textContent =
+                            SOCIALHUB_AUDIENCE_LABELS[
+                                shareAudience
+                            ] || "🌎 Public";
+                    }
+
+                    audienceMenu.style.display = "none";
+                });
+            });
+
+        overlay.addEventListener("click", () => {
+
+            audienceMenu.style.display = "none";
+        });
+    }
 
     overlay
         .querySelector(".socialhub-share-copybtn")
@@ -492,7 +628,8 @@ async function socialhubShareDialog(postId) {
                     .insert({
                         post_id: postId,
                         user_id: me.id,
-                        thought: thought
+                        thought: thought,
+                        audience: shareAudience
                     });
 
                 if (insertError) {
