@@ -1554,17 +1554,23 @@ body.dark-mode .card-title a:hover {
 .fb-header {
     position: relative;
 
+    height: auto;
+
     background: #242526;
 
     border-radius: 8px;
 
-    overflow: hidden;
+    overflow: visible;
 
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+
+    padding-bottom: 16px;
+
+    margin-bottom: 0;
 }
 
 .fb-header .cover-photo {
-    height: 340px;
+    height: 348px;
 
     background-color: #3a3b3c;
 
@@ -1656,7 +1662,7 @@ body.dark-mode .card-title a:hover {
 
     gap: 16px;
 
-    margin-top: -90px;
+    margin-top: -84px;
 
     padding: 0 24px;
 }
@@ -1676,15 +1682,19 @@ body.dark-mode .card-title a:hover {
 }
 
 .fb-avatar-wrap .profile-photo {
-    width: 180px;
+    width: 168px;
 
-    height: 180px;
+    height: 168px;
+
+    margin-top: 0;
 
     border-radius: 50%;
 
     background: #3a3b3c;
 
-    box-shadow: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+
+    overflow: hidden;
 }
 
 .fb-avatar-wrap .profile-photo > * {
@@ -1708,7 +1718,7 @@ body.dark-mode .card-title a:hover {
 
     min-width: 0;
 
-    padding-top: 8px;
+    padding-top: 100px;
 }
 
 .fb-header-name {
@@ -1784,13 +1794,13 @@ body.dark-mode .card-title a:hover {
 .fb-header-actions {
     display: flex;
 
-    align-items: center;
+    align-items: flex-start;
 
     gap: 10px;
 
     margin-left: auto;
 
-    padding-top: 16px;
+    padding-top: 100px;
 }
 
 .fb-primary-btn {
@@ -2271,12 +2281,20 @@ body:not(.dark-mode) .fb-avatar-wrap .profile-photo {
         height: 140px;
     }
 
-    .fb-header-row {
+.fb-header-row {
         margin-top: -70px;
 
         gap: 12px;
 
         padding: 0 16px;
+    }
+
+    .fb-header-info {
+        padding-top: 78px;
+    }
+
+    .fb-header-actions {
+        padding-top: 78px;
     }
 
     .fb-share-thought {
@@ -2348,12 +2366,14 @@ body:not(.dark-mode) .fb-avatar-wrap .profile-photo {
         flex: 0 0 auto;
     }
 
-    .fb-header-info {
+.fb-header-info {
         flex: 1 1 0%;
 
         width: auto;
 
         min-width: 0;
+
+        padding-top: 64px;
     }
 
     .fb-header-name {
@@ -2364,12 +2384,12 @@ body:not(.dark-mode) .fb-avatar-wrap .profile-photo {
         font-size: 16px;
     }
 
-    .fb-header-actions {
+.fb-header-actions {
         width: 100%;
 
         margin-left: 0;
 
-        padding: 4px 0 0;
+        padding: 8px 0 0;
     }
 
     .fb-primary-btn {
