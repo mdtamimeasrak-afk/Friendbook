@@ -1106,7 +1106,7 @@ function socialhubCampusPostHTML(
             : "";
 
     const commentRows =
-        socialhubCampusCommentsHTML(comments);
+        socialhubCampusCommentsHTML(comments, meId);
 
     const commentsCount =
         comments.length;
@@ -1245,7 +1245,7 @@ ${imageHTML}
 }
 
 
-function socialhubCampusCommentsHTML(comments) {
+function socialhubCampusCommentsHTML(comments, meId) {
 
     if (!comments.length) {
         return "";
@@ -1277,6 +1277,9 @@ function socialhubCampusCommentsHTML(comments) {
                 `
                 : "👤";
 
+        const mine =
+            meId && comment.user_id === meId;
+
         html += `
             <div
                 class="comment"
@@ -1294,6 +1297,22 @@ function socialhubCampusCommentsHTML(comments) {
                         )}
                     </strong>
                     <p>${socialhubCampusEscape(comment.content)}</p>
+                    ${
+                        mine
+                            ? `
+                                <button
+                                    type="button"
+                                    class="campus-comment-del"
+                                    onclick="socialhubCampusDeleteComment(
+                                        '${comment.id}',
+                                        this
+                                    )"
+                                >
+                                    Delete
+                                </button>
+                            `
+                            : ""
+                    }
                 </div>
             </div>
         `;
@@ -1611,6 +1630,16 @@ async function socialhubCampusSendComment(input) {
                     <div class="comment-content">
                         <strong>${socialhubCampusEscape(displayName)}</strong>
                         <p>${socialhubCampusEscape(content)}</p>
+                        <button
+                            type="button"
+                            class="campus-comment-del"
+                            onclick="socialhubCampusDeleteComment(
+                                '${data.id}',
+                                this
+                            )"
+                        >
+                            Delete
+                        </button>
                     </div>
                 </div>
             `
@@ -1658,6 +1687,103 @@ async function socialhubCampusSendComment(input) {
 
 // ======================================================
 // 15. DELETE POST (owner only)
+// ======================================================
+// 15. DELETE COMMENT (owner only)
+// ======================================================
+
+async function socialhubCampusDeleteComment(commentId, button) {
+
+    const sure =
+        confirm("Delete this comment?");
+
+    if (!sure) {
+        return;
+    }
+
+    const { error } =
+        await supabaseClient
+            .from("campus_post_comments")
+            .delete()
+            .eq("id", commentId);
+
+    if (error) {
+
+        socialhubToast(
+            "Could not delete the comment.",
+            "error"
+        );
+
+        return;
+    }
+
+    const row =
+        button.closest(".comment");
+
+    if (row) {
+        row.remove();
+    }
+
+    const post =
+        button.closest(".post");
+
+    if (post) {
+
+        const stats =
+            post.querySelector(".fb-stats-comments");
+
+        if (stats) {
+
+            const match =
+                stats.textContent.match(/\d+/);
+
+            const count =
+                match ? parseInt(match[0]) || 0 : 0;
+
+            const next =
+                Math.max(0, count - 1);
+
+            stats.innerHTML =
+                '<i class="fa-solid fa-comment"></i> ' +
+                next +
+                " Comment" + (next === 1 ? "" : "s");
+        }
+
+        const list =
+            post.querySelector(".campus-comments");
+
+        if (list) {
+
+            const toggle =
+                list.querySelector(".fb-comments-toggle");
+
+            if (toggle) {
+
+                const match =
+                    toggle.textContent.match(/\d+/);
+
+                const total =
+                    match ? parseInt(match[0]) || 0 : 0;
+
+                toggle.textContent =
+                    "View all " + Math.max(0, total - 1) +
+                    " comments";
+
+                if (total - 1 <= 2) {
+                    toggle.remove();
+                }
+            }
+        }
+    }
+
+    socialhubToast(
+        "Comment deleted.",
+        "success"
+    );
+}
+
+
+// ======================================================
+// 16. DELETE POST (owner only)
 // ======================================================
 
 async function socialhubCampusDeletePost(postId, button) {

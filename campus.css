@@ -660,6 +660,34 @@
 }
 
 
+.campus-comment-del {
+    border: none;
+
+    background: transparent;
+
+    color: var(--muted, #65676b);
+
+    font-size: 12px;
+
+    font-weight: 700;
+
+    font-family: inherit;
+
+    cursor: pointer;
+
+    padding: 0;
+
+    margin-top: 4px;
+}
+
+
+.campus-comment-del:hover {
+    color: #e41e3f;
+
+    text-decoration: underline;
+}
+
+
 /* ---------- CAMPUS POSTS (FB style, reuses .post) ---------- */
 
 #campusFeed .post {
