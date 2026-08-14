@@ -3178,26 +3178,6 @@ body.dark-mode .socialhub-reposition-cancel {
 /* PROFILE LAYOUT POLISH (complete layout structure)      */
 /* ====================================================== */
 
-/* ---- Nickname as its own secondary line ---- */
-
-.fb-name-nick-line {
-    margin: 2px 0 4px;
-}
-
-.fb-name-nick {
-    display: block;
-
-    font-size: 15px;
-
-    font-weight: 500;
-
-    color: #a8b3bf;
-}
-
-body:not(.dark-mode) .fb-name-nick {
-    color: #65676b;
-}
-
 /* ---- Intro card: highlights section inside ---- */
 
 .fb-highlights-inside {

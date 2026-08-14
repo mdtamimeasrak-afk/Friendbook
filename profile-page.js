@@ -1880,7 +1880,7 @@ async function socialhubFillProfileHeader() {
         if (String(nick).trim()) {
 
             nickEl.textContent =
-                String(nick).trim();
+                `(${String(nick).trim()})`;
 
             nickEl.style.display = "";
         } else {
