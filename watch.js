@@ -334,6 +334,7 @@ body.dark-mode .watch-player-next {
 // ======================================================
 
 let socialhubWatchList = [];
+let socialhubWatchProfiles = new Map();
 let socialhubWatchOffset = 0;
 let socialhubWatchLimit = 12;
 let socialhubWatchLoading = false;
@@ -439,6 +440,7 @@ async function socialhubWatchLoad(reset) {
     if (reset) {
 
         socialhubWatchList = [];
+        socialhubWatchProfiles = new Map();
         socialhubWatchOffset = 0;
         grid.innerHTML = `
             <p class="empty-message">
@@ -453,8 +455,7 @@ async function socialhubWatchLoad(reset) {
     } = await db
         .from("posts")
         .select(
-            "id, user_id, content, video_url, created_at, " +
-            "profiles(full_name, username, avatar_url)"
+            "id, user_id, content, video_url, created_at"
         )
         .not("video_url", "is", null)
         .order("created_at", { ascending: false })
@@ -497,6 +498,30 @@ async function socialhubWatchLoad(reset) {
         return;
     }
 
+    const userIds =
+        [...new Set(
+            posts.map(p => p.user_id)
+        )];
+
+    const {
+        data: profiles
+    } = await db
+        .from("profiles")
+        .select("id, full_name, username, avatar_url")
+        .in("id", userIds);
+
+    const profileMap = new Map();
+
+    (profiles || []).forEach(profile => {
+
+        profileMap.set(profile.id, profile);
+
+        socialhubWatchProfiles.set(
+            profile.id,
+            profile
+        );
+    });
+
     if (reset) {
 
         grid.innerHTML = "";
@@ -507,7 +532,10 @@ async function socialhubWatchLoad(reset) {
         socialhubWatchList.push(post);
 
         grid.appendChild(
-            socialhubWatchCard(post)
+            socialhubWatchCard(
+                post,
+                profileMap.get(post.user_id)
+            )
         );
     });
 
@@ -520,10 +548,10 @@ async function socialhubWatchLoad(reset) {
 }
 
 
-function socialhubWatchCard(post) {
+function socialhubWatchCard(post, profile) {
 
-    const profile =
-        post.profiles || {};
+    profile =
+        profile || {};
 
     const card =
         document.createElement("div");
@@ -599,8 +627,7 @@ async function socialhubWatchOpen(postId, index) {
         } = await db
             .from("posts")
             .select(
-                "id, user_id, content, video_url, created_at, " +
-                "profiles(full_name, username, avatar_url)"
+                "id, user_id, content, video_url, created_at"
             )
             .eq("id", postId)
             .single();
@@ -614,6 +641,22 @@ async function socialhubWatchOpen(postId, index) {
 
         post = data;
 
+        const {
+            data: profileRows
+        } = await db
+            .from("profiles")
+            .select("id, full_name, username, avatar_url")
+            .eq("id", post.user_id)
+            .maybeSingle();
+
+        if (profileRows) {
+
+            socialhubWatchProfiles.set(
+                post.user_id,
+                profileRows
+            );
+        }
+
         socialhubWatchCurrentIndex =
             socialhubWatchList.findIndex(p => p.id === postId);
     }
@@ -622,7 +665,7 @@ async function socialhubWatchOpen(postId, index) {
         document.getElementById("watchPlayer");
 
     const profile =
-        post.profiles || {};
+        socialhubWatchProfiles.get(post.user_id) || {};
 
     player.innerHTML = `
 
