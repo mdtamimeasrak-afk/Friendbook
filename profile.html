@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -14,19 +14,19 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%231877f2'/%3E%3Ctext x='20' y='27' font-family='Arial' font-size='21' font-weight='800' fill='white' text-anchor='middle'%3ETR%3C/text%3E%3C/svg%3E">
 
 
-    <link rel="stylesheet" href="style.css?v=1787000000004">
+    <link rel="stylesheet" href="style.css?v=1787000000005">
 
-    <link rel="stylesheet" href="dashboard.css?v=1787000000004">
+    <link rel="stylesheet" href="dashboard.css?v=1787000000005">
 
-    <link rel="stylesheet" href="premium.css?v=1787000000004">
+    <link rel="stylesheet" href="premium.css?v=1787000000005">
 
-    <link rel="stylesheet" href="profile.css?v=1787000000004">
+    <link rel="stylesheet" href="profile.css?v=1787000000005">
 
-    <link rel="stylesheet" href="highlights.css?v=1787000000004">
+    <link rel="stylesheet" href="highlights.css?v=1787000000005">
 
-    <link rel="stylesheet" href="glass-theme.css?v=1787000000004">
+    <link rel="stylesheet" href="glass-theme.css?v=1787000000005">
 
-    <link rel="stylesheet" href="fb-profile.css?v=1787000000004">
+    <link rel="stylesheet" href="fb-profile.css?v=1787000000005">
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -57,7 +57,7 @@
         <div class="search-box">
 
             <span>
-                🔍
+                ðŸ”
             </span>
 
             <input
@@ -120,25 +120,25 @@
         <div class="top-icons">
 
             <button title="Messages">
-                💬
+                ðŸ’¬
             </button>
 
             <button title="Notifications">
-                🔔
+                ðŸ””
             </button>
 
             <button
                 onclick="toggleDarkMode()"
                 title="Dark Mode"
             >
-                🌙
+                ðŸŒ™
             </button>
 
             <button
                 onclick="location.href='settings.html'"
                 title="Settings"
             >
-                ⚙️
+                âš™ï¸
             </button>
 
             <button
@@ -146,7 +146,7 @@
                 class="profile-mini side-avatar"
                 title="Profile"
             >
-                👤
+                ðŸ‘¤
             </button>
 
         </div>
@@ -155,181 +155,111 @@
 
 
 
-    <!-- ========================= -->
-    <!-- PROFILE HEADER (Step 1) -->
-    <!-- ========================= -->
+    <!-- ================================= -->
+    <!-- PROFILE BODY (Step 2: All / About / Friends / Photos / Reels) -->
+    <!-- ================================= -->
 
     <main class="profile-container">
 
+    <section class="fb-header">
 
-        <section class="fb-header">
+        <!-- COVER PHOTO -->
 
+        <div class="cover-photo" id="coverPhoto"></div>
 
-            <!-- COVER PHOTO -->
-            <!-- (Edit cover photo button is added automatically
-                 by setupProfileCoverUpload — menu: Upload /
-                 Select from photos / Reposition / Remove) -->
+        <!-- HEADER ROW -->
 
-            <div class="cover-photo" id="coverPhoto"></div>
+        <div class="fb-header-row">
 
+            <div class="fb-avatar-wrap">
+                <div class="profile-photo">ðŸ‘¤</div>
+            </div>
 
-            <!-- HEADER ROW (avatar + info + actions) -->
+            <div class="fb-header-info">
 
-            <div class="fb-header-row">
+                <h1 class="fb-header-name" id="coverName">
+                    User
+                    <span class="fb-name-nick" id="headerNickname" style="display:none"></span>
+                </h1>
 
+                <p class="fb-friends-line" id="fbFriendSummary">
+                    <span>0 friends</span>
+                </p>
 
-                <!-- PROFILE PICTURE (overlaps the cover;
-                     own profile gets the camera menu, handled
-                     by setupProfilePhotoUpload) -->
+                <p class="fb-header-bio profile-bio">
+                    Add a bio to tell people about yourself.
+                </p>
 
-                <div class="fb-avatar-wrap">
+                <div class="fb-info-row">
 
-                    <div class="profile-photo">
-                        👤
-                    </div>
+                    <span class="fb-info-item">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span class="profile-location"></span>
+                    </span>
 
-                </div>
+                    <span class="fb-info-item">
+                        <i class="fa-solid fa-school"></i>
+                        <span class="profile-highschool"></span>
+                    </span>
 
+                    <span class="fb-info-item">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <span class="profile-education"></span>
+                    </span>
 
-                <!-- NAME + FRIENDS + BIO + DETAILS -->
+                    <span class="fb-info-item">
+                        <i class="fa-solid fa-briefcase"></i>
+                        <span class="profile-work"></span>
+                    </span>
 
-                <div class="fb-header-info">
+                    <span class="fb-info-item">
+                        <i class="fa-solid fa-heart"></i>
+                        <span class="profile-relationship"></span>
+                    </span>
 
+                    <span class="fb-info-item">
+                        <i class="fa-solid fa-globe"></i>
+                        <span class="profile-website"></span>
+                    </span>
 
-                    <h1
-                        class="fb-header-name"
-                        id="coverName"
-                    >
-                        User
-
-                        <span
-                            class="fb-name-nick"
-                            id="headerNickname"
-                            style="display:none"
-                        ></span>
-                    </h1>
-
-
-                    <p
-                        class="fb-friends-line"
-                        id="fbFriendSummary"
-                    >
-                        <span>0 friends</span>
-                    </p>
-
-
-                    <p class="fb-header-bio profile-bio">
-                        Add a bio to tell people about yourself.
-                    </p>
-
-
-                    <!-- USER DETAILS (only filled fields stay
-                         visible — socialhubTrimInfoRow hides
-                         the rest) -->
-
-                    <div class="fb-info-row">
-
-                        <span class="fb-info-item">
-                            <i class="fa-solid fa-location-dot"></i>
-                            <span class="profile-location"></span>
-                        </span>
-
-                        <span class="fb-info-item">
-                            <i class="fa-solid fa-school"></i>
-                            <span class="profile-highschool"></span>
-                        </span>
-
-                        <span class="fb-info-item">
-                            <i class="fa-solid fa-graduation-cap"></i>
-                            <span class="profile-education"></span>
-                        </span>
-
-                        <span class="fb-info-item">
-                            <i class="fa-solid fa-briefcase"></i>
-                            <span class="profile-work"></span>
-                        </span>
-
-                        <span class="fb-info-item">
-                            <i class="fa-solid fa-heart"></i>
-                            <span class="profile-relationship"></span>
-                        </span>
-
-                        <span class="fb-info-item">
-                            <i class="fa-solid fa-globe"></i>
-                            <span class="profile-website"></span>
-                        </span>
-
-                        <span class="fb-info-item">
-                            <i class="fa-brands fa-instagram"></i>
-                            <span class="profile-sociallinks"></span>
-                        </span>
-
-                    </div>
+                    <span class="fb-info-item">
+                        <i class="fa-brands fa-instagram"></i>
+                        <span class="profile-sociallinks"></span>
+                    </span>
 
                 </div>
 
+            </div>
 
-                <!-- OWN PROFILE ACTION BUTTONS -->
+            <div class="fb-header-actions">
 
-                <div class="fb-header-actions">
+                <button type="button" class="fb-primary-btn" onclick="socialhubOpenStoryCreator()">
+                    âž• Add to story
+                </button>
 
+                <button type="button" class="fb-ghost-btn" onclick="openEditProfile()">
+                    âœŽ Edit profile
+                </button>
 
-                    <button
-                        type="button"
-                        class="fb-primary-btn"
-                        onclick="socialhubOpenStoryCreator()"
-                    >
-                        ➕ Add to story
+                <div class="fb-more-wrap">
+
+                    <button type="button" class="fb-square-btn" title="More" onclick="socialhubProfileToggleMore(event)">
+                        â–¾
                     </button>
 
+                    <div class="fb-more-menu" style="display:none">
 
-                    <button
-                        type="button"
-                        class="fb-ghost-btn"
-                        onclick="openEditProfile()"
-                    >
-                        ✎ Edit profile
-                    </button>
-
-
-                    <div class="fb-more-wrap">
-
-                        <button
-                            type="button"
-                            class="fb-square-btn"
-                            title="More"
-                            onclick="socialhubProfileToggleMore(event)"
-                        >
-                            ▾
+                        <button type="button" onclick="document.querySelector('.search-box input')?.focus()">
+                            ðŸ” Search SocialHub
                         </button>
 
-                        <div
-                            class="fb-more-menu"
-                            style="display:none"
-                        >
+                        <button type="button" onclick="location.href='settings.html'">
+                            âš™ï¸ Profile Settings
+                        </button>
 
-                            <button
-                                type="button"
-                                onclick="document.querySelector('.search-box input')?.focus()"
-                            >
-                                🔍 Search SocialHub
-                            </button>
-
-                            <button
-                                type="button"
-                                onclick="location.href='settings.html'"
-                            >
-                                ⚙️ Profile Settings
-                            </button>
-
-                            <button
-                                type="button"
-                                onclick="logoutUser()"
-                            >
-                                🚪 Logout
-                            </button>
-
-                        </div>
+                        <button type="button" onclick="logoutUser()">
+                            ðŸšª Logout
+                        </button>
 
                     </div>
 
@@ -337,15 +267,922 @@
 
             </div>
 
+        </div>
+
+        <!-- DIVIDER -->
+
+        <div class="fb-header-divider"></div>
+
+        <!-- PROFILE TABS (Step 2) -->
+
+        <nav class="fb-tabs-bar">
+
+            <button class="active" data-fb-tab="posts">
+                <i class="fa-solid fa-table-cells-large"></i>
+                All
+            </button>
+
+            <button data-fb-tab="about">
+                <i class="fa-solid fa-circle-info"></i>
+                About
+            </button>
+
+            <button data-fb-tab="friends">
+                <i class="fa-solid fa-user-group"></i>
+                Friends
+            </button>
+
+            <button data-fb-tab="photos">
+                <i class="fa-solid fa-images"></i>
+                Photos
+            </button>
+
+            <button data-fb-tab="videos">
+                <i class="fa-solid fa-video"></i>
+                Reels
+            </button>
+
+            <div class="fb-more-wrap fb-tabs-more-wrap">
+
+                <button type="button" class="fb-tab-more" onclick="socialhubProfileToggleMore(event)">
+                    More
+                    <i class="fa-solid fa-caret-down"></i>
+                </button>
+
+                <div class="fb-more-menu" id="fbTabsMoreMenu" style="display:none">
+
+                    <button type="button" onclick="socialhubToast('Saved coming soon!', 'info')">
+                        ðŸ”– Saved
+                    </button>
+
+                    <button type="button" onclick="socialhubToast('Events coming soon!', 'info')">
+                        ðŸ“… Events
+                    </button>
+
+                    <button type="button" onclick="socialhubToast('Groups coming soon!', 'info')">
+                        ðŸ‘¥ Groups
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="fb-more-wrap fb-tabs-dots-wrap">
+
+                <button type="button" class="fb-tabs-dots" title="More options" onclick="socialhubProfileToggleMore(event)">
+                    â€¢â€¢â€¢
+                </button>
+
+                <div class="fb-more-menu" style="display:none">
+
+                    <button type="button" onclick="location.href='settings.html'">
+                        âš™ï¸ Settings
+                    </button>
+
+                    <button type="button" onclick="logoutUser()">
+                        ðŸšª Logout
+                    </button>
+
+                </div>
+
+            </div>
+
+        </nav>
+
+    </section>
+
+
+
+    <!-- ========================= -->
+    <!-- PROFILE BODY (two-column) -->
+    <!-- ========================= -->
+
+    <div class="fb-body">
+
+        <!-- ========================= -->
+        <!-- LEFT COLUMN -->
+        <!-- ========================= -->
+
+        <aside class="fb-left">
+
+            <!-- INTRO CARD -->
+
+            <section class="profile-card fb-intro-card">
+
+                <div class="fb-intro-top">
+
+                    <div class="fb-intro-avatar"></div>
+
+                    <div class="fb-intro-id">
+
+                        <strong>User</strong>
+
+                        <div class="profile-username">@username</div>
+
+                    </div>
+
+                </div>
+
+                <p class="fb-intro-bio">
+                    No bio added yet.
+                </p>
+
+                <div class="fb-intro-divider"></div>
+
+                <div class="fb-intro-details">
+
+                    <div class="about-row">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span class="profile-location"></span>
+                    </div>
+
+                    <div class="about-row">
+                        <i class="fa-solid fa-globe"></i>
+                        <span class="profile-sociallinks"></span>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- HIGHLIGHTS CARD -->
+
+            <section class="profile-card fb-side-card fb-highlights-card">
+
+                <div class="fb-side-title">
+
+                    <h2>Highlights</h2>
+
+                    <a href="javascript:void(0)" onclick="socialhubOpenHighlightCreate()">
+                        + New
+                    </a>
+
+                </div>
+
+                <div class="fb-highlights-bar" id="highlightsBar"></div>
+
+            </section>
+
+            <!-- EDUCATION CARD -->
+
+            <section class="profile-card fb-side-card" id="fbEducationCard">
+
+                <div class="fb-side-title">
+
+                    <h2>Education</h2>
+
+                </div>
+
+                <div class="fb-intro-details">
+
+                    <div class="about-row">
+                        <i class="fa-solid fa-briefcase"></i>
+                        <span class="profile-work"></span>
+                    </div>
+
+                    <div class="about-row">
+                        <i class="fa-solid fa-school"></i>
+                        <span class="profile-highschool"></span>
+                    </div>
+
+                    <div class="about-row">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <span class="profile-education"></span>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- INTERESTS CARD -->
+
+            <section class="profile-card fb-side-card" id="fbInterestsCard">
+
+                <div class="fb-side-title">
+
+                    <h2>Interests</h2>
+
+                </div>
+
+                <div class="fb-intro-details">
+
+                    <div class="about-row">
+                        <i class="fa-solid fa-heart"></i>
+                        <span class="profile-hobbies"></span>
+                    </div>
+
+                    <div class="about-row">
+                        <i class="fa-solid fa-futbol"></i>
+                        <span class="profile-sports"></span>
+                    </div>
+
+                    <div class="about-row">
+                        <i class="fa-solid fa-gamepad"></i>
+                        <span class="profile-games"></span>
+                    </div>
+
+                    <div class="about-row">
+                        <i class="fa-solid fa-film"></i>
+                        <span class="profile-movies"></span>
+                    </div>
+
+                    <div class="about-row">
+                        <i class="fa-solid fa-tv"></i>
+                        <span class="profile-tvshows"></span>
+                    </div>
+
+                    <div class="about-row">
+                        <i class="fa-solid fa-music"></i>
+                        <span class="profile-artists"></span>
+                    </div>
+
+                    <div class="about-row">
+                        <i class="fa-solid fa-quote-left"></i>
+                        <span class="profile-quotes"></span>
+                    </div>
+
+                </div>
+
+            </section>
+
+            <!-- PHOTOS CARD -->
+
+            <section class="profile-card fb-side-card">
+
+                <div class="fb-side-title">
+
+                    <h2>Photos</h2>
+
+                    <a href="albums.html">
+                        See all photos
+                    </a>
+
+                </div>
+
+                <div class="fb-mini-photos" id="fbMiniPhotosLeft">
+
+                    <p class="empty-message" style="grid-column:1/-1;">
+                        Loading photos...
+                    </p>
+
+                </div>
+
+            </section>
+
+            <!-- FRIENDS CARD -->
+
+            <section class="profile-card fb-side-card">
+
+                <div class="fb-side-title">
+
+                    <h2>Friends</h2>
+
+                    <a href="javascript:void(0)" onclick="socialhubSwitchFbTab('friends')">
+                        See all friends
+                    </a>
+
+                </div>
+
+                <div class="fb-mini-friends" id="fbMiniFriendsLeft">
+
+                    <p class="empty-message">
+                        Loading friends...
+                    </p>
+
+                </div>
+
+            </section>
+
+        </aside>
+
+
+
+        <!-- ========================= -->
+        <!-- MAIN COLUMN -->
+        <!-- ========================= -->
+
+        <section class="fb-main">
+
+            <!-- ========================= -->
+            <!-- ALL TAB (posts feed) -->
+            <!-- ========================= -->
+
+            <div class="fb-area" id="fbAreaPosts">
+
+                <!-- COMPOSER -->
+
+                <section class="profile-card fb-profile-composer" id="profileComposerBox">
+
+                    <div class="fb-composer-top-row">
+
+                        <div class="avatar">ðŸ‘¤</div>
+
+                        <button type="button" class="fb-composer-open" onclick="socialhubProfileOpenComposer()">
+                            What's on your mind?
+                        </button>
+
+                    </div>
+
+                    <div class="fb-composer-actions">
+
+                        <button type="button" onclick="socialhubToast('Live video coming soon!', 'info')">
+                            <i class="fa-solid fa-video" style="color:#f02849"></i>
+                            Live video
+                        </button>
+
+                        <button type="button" onclick="socialhubProfilePickPhoto()">
+                            <i class="fa-solid fa-images" style="color:#45bd62"></i>
+                            Photo/video
+                        </button>
+
+                        <button type="button" onclick="socialhubToast('Feeling/activity coming soon!', 'info')">
+                            <i class="fa-solid fa-face-smile" style="color:#f7b928"></i>
+                            Feeling/activity
+                        </button>
+
+                    </div>
+
+                </section>
+
+                <!-- POST FILTERS + POSTS -->
+
+                <section class="profile-card" id="profilePostsSection">
+
+                    <div class="fb-post-filters" id="fbPostFilters">
+
+                        <button type="button" class="active" data-filter="all">
+                            Recents
+                        </button>
+
+                        <button type="button" data-filter="photos">
+                            Photos
+                        </button>
+
+                        <button type="button" data-filter="videos">
+                            Videos
+                        </button>
+
+                    </div>
+
+                    <div id="profilePosts" class="profile-posts-grid">
+
+                        <p class="empty-message">
+                            Loading your posts...
+                        </p>
+
+                    </div>
+
+                </section>
+
+                <!-- TIMELINE PHOTOS CARD -->
+
+                <section class="profile-card fb-timeline-photos-card">
+
+                    <div class="card-title fb-timeline-photos-title">
+
+                        <h2>Photos</h2>
+
+                        <a href="albums.html">
+                            See all photos
+                        </a>
+
+                    </div>
+
+                    <div class="fb-mini-photos" id="fbMiniPhotos">
+
+                        <p class="empty-message" style="grid-column:1/-1;">
+                            Loading photos...
+                        </p>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+
+            <!-- ========================= -->
+            <!-- ABOUT TAB -->
+            <!-- ========================= -->
+
+            <div class="fb-area" id="fbAreaAbout" style="display:none;">
+
+                <section class="profile-card about-card" id="aboutSection">
+
+                    <div class="card-title">
+
+                        <h2>About</h2>
+
+                    </div>
+
+                    <div class="about-block">
+
+                        <h3>
+                            <i class="fa-solid fa-circle-info"></i>
+                            Overview
+                        </h3>
+
+                        <p class="about-row" data-field="bio">
+                            <span class="about-label">Bio</span>
+                            <span class="profile-bio">Add a bio to tell people about yourself.</span>
+                        </p>
+
+                        <p class="about-row" data-field="work">
+                            <span class="about-label">Work</span>
+                            <span class="profile-work">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="education">
+                            <span class="about-label">Education</span>
+                            <span class="profile-education">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="location">
+                            <span class="about-label">Current City</span>
+                            <span class="profile-location">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="hometown">
+                            <span class="about-label">Hometown</span>
+                            <span class="profile-hometown">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="relationship">
+                            <span class="about-label">Relationship</span>
+                            <span class="profile-relationship">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="joined">
+                            <span class="about-label">Joined SocialHub</span>
+                            <span class="profile-joined">Not added</span>
+                        </p>
+
+                    </div>
+
+                    <div class="about-block">
+
+                        <h3>
+                            <i class="fa-solid fa-briefcase"></i>
+                            Work &amp; Education
+                        </h3>
+
+                        <p class="about-row" data-field="work2">
+                            <span class="about-label">Workplace</span>
+                            <span class="profile-work">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="education2">
+                            <span class="about-label">College / Institute</span>
+                            <span class="profile-education">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="highschool">
+                            <span class="about-label">High School</span>
+                            <span class="profile-highschool">Not added</span>
+                        </p>
+
+                    </div>
+
+                    <div class="about-block">
+
+                        <h3>
+                            <i class="fa-solid fa-location-dot"></i>
+                            Places Lived
+                        </h3>
+
+                        <p class="about-row" data-field="location2">
+                            <span class="about-label">Current City</span>
+                            <span class="profile-location">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="hometown2">
+                            <span class="about-label">Hometown</span>
+                            <span class="profile-hometown">Not added</span>
+                        </p>
+
+                    </div>
+
+                    <div class="about-block">
+
+                        <h3>
+                            <i class="fa-solid fa-address-book"></i>
+                            Contact &amp; Basic Info
+                        </h3>
+
+                        <p class="about-row" data-field="email">
+                            <span class="about-label">Email</span>
+                            <span class="profile-email">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="phone">
+                            <span class="about-label">Phone</span>
+                            <span class="profile-phone">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="website">
+                            <span class="about-label">Website</span>
+                            <a class="profile-website" href="#">Not added</a>
+                        </p>
+
+                        <p class="about-row" data-field="birthday">
+                            <span class="about-label">Birthday</span>
+                            <span class="profile-birthday">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="sociallinks">
+                            <span class="about-label">Social Links</span>
+                            <span class="profile-sociallinks">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="languages">
+                            <span class="about-label">Languages</span>
+                            <span class="profile-languages">Not added</span>
+                        </p>
+
+                    </div>
+
+                    <div class="about-block">
+
+                        <h3>
+                            <i class="fa-solid fa-heart"></i>
+                            Family &amp; Relationships
+                        </h3>
+
+                        <p class="about-row" data-field="relationship2">
+                            <span class="about-label">Relationship Status</span>
+                            <span class="profile-relationship">Not added</span>
+                        </p>
+
+                    </div>
+
+                    <div class="about-block">
+
+                        <h3>
+                            <i class="fa-solid fa-star"></i>
+                            Details About You
+                        </h3>
+
+                        <p class="about-row" data-field="othernames">
+                            <span class="about-label">Other Names</span>
+                            <span class="profile-othernames">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="hobbies">
+                            <span class="about-label">Hobbies</span>
+                            <span class="profile-hobbies">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="sports">
+                            <span class="about-label">Sports</span>
+                            <span class="profile-sports">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="teams">
+                            <span class="about-label">Favorite Teams</span>
+                            <span class="profile-teams">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="athletes">
+                            <span class="about-label">Favorite Athletes</span>
+                            <span class="profile-athletes">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="artists">
+                            <span class="about-label">Favorite Artists</span>
+                            <span class="profile-artists">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="tvshows">
+                            <span class="about-label">Favorite TV Shows</span>
+                            <span class="profile-tvshows">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="movies">
+                            <span class="about-label">Favorite Movies</span>
+                            <span class="profile-movies">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="games">
+                            <span class="about-label">Favorite Games</span>
+                            <span class="profile-games">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="quotes">
+                            <span class="about-label">Favorite Quotes</span>
+                            <span class="profile-quotes">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="religion">
+                            <span class="about-label">Religious Views</span>
+                            <span class="profile-religion">Not added</span>
+                        </p>
+
+                        <p class="about-row" data-field="politics">
+                            <span class="about-label">Political Views</span>
+                            <span class="profile-politics">Not added</span>
+                        </p>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+
+            <!-- ========================= -->
+            <!-- PHOTOS TAB -->
+            <!-- ========================= -->
+
+            <div class="fb-area" id="fbAreaPhotos" style="display:none;">
+
+                <section class="profile-card" id="photosCard">
+
+                    <div class="card-title">
+
+                        <h2>Photos</h2>
+
+                        <a href="albums.html">
+                            Albums
+                        </a>
+
+                        <a href="albums.html?new=1">
+                            + Create Album
+                        </a>
+
+                    </div>
+
+                    <div class="fb-photo-chips" id="fbPhotoChips">
+
+                        <button type="button" class="active" data-photo-filter="all">
+                            All Photos
+                        </button>
+
+                        <button type="button" data-photo-filter="profile">
+                            Profile Pictures
+                        </button>
+
+                        <button type="button" data-photo-filter="cover">
+                            Cover Photos
+                        </button>
+
+                    </div>
+
+                    <div class="photo-grid" id="profilePhotos">
+
+                        <p class="empty-message">
+                            Loading photos...
+                        </p>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+
+            <!-- ========================= -->
+            <!-- REELS TAB -->
+            <!-- ========================= -->
+
+            <div class="fb-area" id="fbAreaVideos" style="display:none;">
+
+                <section class="profile-card" id="videosCard">
+
+                    <div class="card-title">
+
+                        <h2>Reels</h2>
+
+                    </div>
+
+                    <div class="photo-grid" id="profileVideos">
+
+                        <p class="empty-message">
+                            Loading videos...
+                        </p>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+
+            <!-- ========================= -->
+            <!-- FRIENDS TAB -->
+            <!-- ========================= -->
+
+            <div class="fb-area" id="fbAreaFriends" style="display:none;">
+
+                <section class="profile-card" id="friendsCard">
+
+                    <div class="card-title">
+
+                        <div>
+
+                            <h2>Friends</h2>
+
+                            <p>
+                                <span class="friends-count">0</span>
+                                friends
+                            </p>
+
+                        </div>
+
+                        <a href="#">
+                            See All Friends
+                        </a>
+
+                    </div>
+
+                    <div class="friends-grid" id="profileFriends">
+
+                        <p class="empty-message">
+                            Loading friends...
+                        </p>
+
+                    </div>
+
+                </section>
+
+            </div>
+
         </section>
+
+    </div>
 
     </main>
 
 
 
     <!-- ================================= -->
-    <!-- EDIT PROFILE MODAL (existing system) -->
+    <!-- PROFILE POST COMPOSER MODAL -->
     <!-- ================================= -->
+
+    <div class="fb-composer-modal" id="profileComposerModal" style="display:none">
+
+        <div class="fb-composer-box">
+
+            <div class="fb-composer-head">
+
+                <strong>Create Post</strong>
+
+                <button type="button" class="fb-composer-close" onclick="socialhubProfileCloseComposer()">
+                    âœ•
+                </button>
+
+            </div>
+
+            <div class="fb-composer-top">
+
+                <div class="avatar">ðŸ‘¤</div>
+
+                <textarea id="profilePostInput" rows="4" maxlength="5000" placeholder="What's on your mind?"></textarea>
+
+            </div>
+
+            <div class="fb-composer-preview" id="profilePostPreview" style="display:none">
+
+                <img id="profilePostPreviewImg" alt="Preview">
+
+                <button type="button" class="fb-preview-remove" onclick="socialhubProfileComposerRemovePhoto()">
+                    âœ•
+                </button>
+
+            </div>
+
+            <div class="fb-composer-tools">
+
+                <button type="button" class="fb-composer-photo-btn" onclick="socialhubProfilePickPhoto()">
+                    <i class="fa-solid fa-image"></i>
+                    Photo
+                </button>
+
+                <div class="fb-composer-audience-wrap">
+
+                    <button type="button" class="fb-composer-audience-btn" id="profileAudienceBtn" onclick="socialhubProfileToggleAudience(event)">
+                        <span id="profileAudienceLabel">ðŸŒŽ Public</span>
+                        <span>â–¾</span>
+                    </button>
+
+                    <div class="fb-composer-audience-menu" id="profileAudienceMenu" style="display:none">
+
+                        <button type="button" data-audience="public">
+                            ðŸŒŽ Public
+                        </button>
+
+                        <button type="button" data-audience="friends">
+                            ðŸ‘¥ Friends
+                        </button>
+
+                        <button type="button" data-audience="friends_of_friends">
+                            ðŸ¤ Friends of Friends
+                        </button>
+
+                        <button type="button" data-audience="only_me">
+                            ðŸ”’ Only Me
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <button type="button" class="fb-composer-post" id="profileComposerPostBtn" onclick="socialhubProfileSubmitPost()">
+                Post
+            </button>
+
+        </div>
+
+    </div>
+
+    <input type="file" id="profilePostFile" accept="image/*" style="display:none">
+
+
+
+    <!-- ================================= -->
+    <!-- POST LIGHTBOX (photo viewer) -->
+    <!-- ================================= -->
+
+    <div id="postLightbox" class="post-lightbox" onclick="socialhubClosePostLightbox(event)">
+
+        <div class="post-lightbox-box" id="postLightboxBox"></div>
+
+    </div>
+
+
+
+    <!-- ================================= -->
+    <!-- HIGHLIGHT CREATE / EDIT MODAL -->
+    <!-- ================================= -->
+
+    <div id="highlightCreateModal" class="highlight-create-modal">
+
+        <div class="highlight-create-box">
+
+            <div class="highlight-create-header">
+
+                <h2 id="highlightCreateTitle">New Highlight</h2>
+
+                <button onclick="socialhubCloseHighlightCreate()" class="close-modal">
+                    âœ•
+                </button>
+
+            </div>
+
+            <div class="highlight-create-body">
+
+                <label>Name</label>
+
+                <input type="text" id="highlightNameInput" maxlength="20" placeholder="Highlight name">
+
+                <label>Choose posts</label>
+
+                <p class="highlight-create-hint">
+                    Tap posts to select them. The first selected photo becomes the cover.
+                </p>
+
+                <div class="highlight-posts-grid" id="highlightPostsGrid"></div>
+
+            </div>
+
+            <div class="highlight-create-actions">
+
+                <button type="button" class="highlight-delete-btn" id="highlightDeleteBtn" onclick="socialhubDeleteHighlight()" style="display:none;">
+                    Delete Highlight
+                </button>
+
+                <div class="highlight-create-spacer"></div>
+
+                <button type="button" onclick="socialhubCloseHighlightCreate()">
+                    Cancel
+                </button>
+
+                <button type="button" class="primary-btn" onclick="socialhubSaveHighlight()">
+                    Save
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ================================= -->
+    <!-- HIGHLIGHT VIEWER -->
+    <!-- ================================= -->
+
+    <div id="highlightViewer" class="highlight-viewer" onclick="socialhubCloseHighlightViewer(event)">
+
+        <div class="highlight-viewer-stage" id="highlightViewerStage"></div>
+
+    </div>
 
     <div
         id="editProfileModal"
@@ -369,7 +1206,7 @@
                     onclick="closeEditProfile()"
                     class="close-modal"
                 >
-                    ✕
+                    âœ•
                 </button>
 
             </div>
@@ -1080,39 +1917,39 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="supabase.js?v=1787000000004"></script>
+    <script src="supabase.js?v=1787000000005"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
 
-    <script src="premium-ui.js?v=1787000000004"></script>
+    <script src="premium-ui.js?v=1787000000005"></script>
 
-    <script src="script.js?v=1787000000004"></script>
+    <script src="script.js?v=1787000000005"></script>
 
-    <script src="image-upload.js?v=1787000000004"></script>
+    <script src="image-upload.js?v=1787000000005"></script>
 
-    <script src="post-manage.js?v=1787000000004"></script>
+    <script src="post-manage.js?v=1787000000005"></script>
 
-    <script src="friends.js?v=1787000000004"></script>
+    <script src="friends.js?v=1787000000005"></script>
 
-    <script src="likes-comments.js?v=1787000000004"></script>
+    <script src="likes-comments.js?v=1787000000005"></script>
 
-    <script src="shares.js?v=1787000000004"></script>
+    <script src="shares.js?v=1787000000005"></script>
 
-    <script src="profile-page.js?v=1787000000004"></script>
+    <script src="profile-page.js?v=1787000000005"></script>
 
-    <script src="user-search.js?v=1787000000004"></script>
+    <script src="user-search.js?v=1787000000005"></script>
 
-    <script src="notifications.js?v=1787000000004"></script>
+    <script src="notifications.js?v=1787000000005"></script>
 
-    <script src="settings.js?v=1787000000004"></script>
+    <script src="settings.js?v=1787000000005"></script>
 
-    <script src="messages.js?v=1787000000004"></script>
+    <script src="messages.js?v=1787000000005"></script>
 
-    <script src="stories.js?v=1787000000004"></script>
+    <script src="stories.js?v=1787000000005"></script>
 
-    <script src="watch.js?v=1787000000004"></script>
+    <script src="watch.js?v=1787000000005"></script>
 
-    <script src="highlights.js?v=1787000000004"></script>
+    <script src="highlights.js?v=1787000000005"></script>
 
 
 </body>
