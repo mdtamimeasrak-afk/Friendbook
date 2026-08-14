@@ -747,6 +747,97 @@ async function socialhubLoadMyPhotos() {
 
 
 // ======================================================
+// 3b. MY VIDEOS (from my posts with video_url)
+// ======================================================
+
+async function socialhubLoadMyVideos() {
+
+    const grid =
+        document.getElementById("profileVideos");
+
+    if (!grid) {
+        return;
+    }
+
+    const me =
+        await socialhubGetMe();
+
+    if (!me) {
+        return;
+    }
+
+    const {
+        data: posts,
+        error
+    } = await db
+        .from("posts")
+        .select("id, image_url, video_url")
+        .eq("user_id", me.id)
+        .not("video_url", "is", null)
+        .order("created_at", {
+            ascending: false
+        })
+        .limit(30);
+
+    if (error) {
+        return;
+    }
+
+    grid.innerHTML = "";
+
+    if (!posts || posts.length === 0) {
+
+        grid.innerHTML = `
+            <p class="empty-message" style="grid-column:1/-1;">
+                No videos yet. Post a video to see it here!
+            </p>
+        `;
+
+        return;
+    }
+
+    posts.forEach(post => {
+
+        const tile =
+            document.createElement("div");
+
+        tile.className = "profile-photo-item";
+
+        tile.style.cursor = "pointer";
+
+        tile.innerHTML = `
+            <video
+                src="${socialhubEscape(post.video_url)}"
+                muted
+                playsinline
+                preload="metadata"
+            ></video>
+
+            <span class="profile-photo-video-badge">🎥</span>
+        `;
+
+        tile.addEventListener("click", () => {
+
+            if (
+                typeof socialhubWatchOpen ===
+                "function"
+            ) {
+
+                socialhubWatchOpen(post.id);
+
+            } else {
+
+                location.href =
+                    `watch.html?video=${post.id}`;
+            }
+        });
+
+        grid.appendChild(tile);
+    });
+}
+
+
+// ======================================================
 // 4. MY FRIENDS GRID
 // ======================================================
 
@@ -945,6 +1036,8 @@ const socialhubFbAreas = {
 
     photos: "fbAreaPhotos",
 
+    videos: "fbAreaVideos",
+
     friends: "fbAreaFriends"
 
 };
@@ -978,6 +1071,11 @@ function socialhubSwitchFbTab(name) {
                 key === name ? "" : "none";
 
         }
+    }
+
+    if (name === "videos") {
+
+        socialhubLoadMyVideos();
     }
 }
 

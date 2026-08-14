@@ -224,6 +224,44 @@ body.dark-mode .socialhub-btn-soft {
     color: #e4e6eb;
 }
 
+/* Posts / Videos tabs on user profile */
+.up-posts-tabs {
+    display: flex;
+    gap: 8px;
+    padding: 0 16px 10px;
+    border-bottom: 1px solid #e4e6eb;
+}
+
+.up-posts-tab {
+    border: none;
+    background: #e4e6eb;
+    color: #1c1e21;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.up-posts-tab.active {
+    background: #1877f2;
+    color: #fff;
+}
+
+body.dark-mode .up-posts-tabs {
+    border-bottom-color: #3a3b3c;
+}
+
+body.dark-mode .up-posts-tab {
+    background: #3a3b3c;
+    color: #e4e6eb;
+}
+
+body.dark-mode .up-posts-tab.active {
+    background: #1877f2;
+    color: #fff;
+}
+
 /* Block button on user profile */
 .socialhub-block-btn {
     border: 1.5px solid #d4d7dd;
@@ -1887,6 +1925,47 @@ async function loadUserProfilePosts(userId) {
 
 
 // ======================================================
+// 7c. USER PROFILE POSTS / VIDEOS TAB SWITCH
+// ======================================================
+
+let socialhubUpCurrentTab = "all";
+
+
+function socialhubSwitchUpTab(name) {
+
+    socialhubUpCurrentTab = name;
+
+    document
+        .querySelectorAll(".up-posts-tab")
+        .forEach(tab => {
+
+            tab.classList.toggle(
+                "active",
+                tab.dataset.upTab === name
+            );
+        });
+
+    const userId =
+        new URLSearchParams(
+            window.location.search
+        ).get("user");
+
+    if (!userId) {
+        return;
+    }
+
+    if (name === "videos") {
+
+        socialhubLoadUserVideos(userId);
+
+    } else {
+
+        loadUserProfilePosts(userId);
+    }
+}
+
+
+// ======================================================
 // 7b. USER PROFILE POST TILES + LIGHTBOX (Instagram)
 // ======================================================
 
@@ -1894,6 +1973,71 @@ let socialhubUpPostsCache = {
     posts: [],
     profile: null
 };
+
+
+async function socialhubLoadUserVideos(userId) {
+
+    const postsContainer =
+        document.getElementById("upPosts");
+
+    if (!postsContainer) {
+        return;
+    }
+
+    const {
+        data: posts,
+        error
+    } = await db
+        .from("posts")
+        .select("*")
+        .eq("user_id", userId)
+        .not("video_url", "is", null)
+        .order("created_at", {
+            ascending: false
+        });
+
+    if (error) {
+
+        console.error(
+            "❌ User videos error:",
+            error
+        );
+
+        return;
+    }
+
+    if (!posts || posts.length === 0) {
+
+        postsContainer.innerHTML = `
+            <p
+                class="empty-message"
+                style="grid-column:1/-1;"
+            >
+                No videos yet.
+            </p>
+        `;
+
+        return;
+    }
+
+    const statPosts =
+        document.getElementById("upStatPosts");
+
+    if (statPosts) {
+
+        statPosts.innerText =
+            String(posts.length);
+    }
+
+    postsContainer.innerHTML = "";
+
+    posts.forEach(post => {
+
+        postsContainer.appendChild(
+            socialhubCreateUpTile(post)
+        );
+    });
+}
 
 
 function socialhubCreateUpTile(post) {
@@ -1941,6 +2085,12 @@ function socialhubCreateUpTile(post) {
             ${media}
         </div>
 
+        ${
+            post.video_url
+                ? `<span class="profile-photo-video-badge">🎥</span>`
+                : ""
+        }
+
         <div class="tile-overlay">
             <span>
                 <i class="fa-solid fa-heart"></i>
@@ -1952,6 +2102,24 @@ function socialhubCreateUpTile(post) {
     `;
 
     tile.addEventListener("click", () => {
+
+        if (post.video_url) {
+
+            if (
+                typeof socialhubWatchOpen ===
+                "function"
+            ) {
+
+                socialhubWatchOpen(post.id);
+
+                return;
+            }
+
+            location.href =
+                `watch.html?video=${post.id}`;
+
+            return;
+        }
 
         socialhubOpenUpPostLightbox(post.id);
     });

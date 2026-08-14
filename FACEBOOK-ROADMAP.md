@@ -38,10 +38,11 @@
 - [ ] Activity log (who saw your post, etc.) — later
 
 ## 🔲 Phase 3 — Video
-- [ ] Watch page (video feed)
-- [ ] Video player page (auto-play, full screen)
-- [ ] Video tab on profile
-- [ ] Video like/comment/share/reaction
+- [x] Watch page (watch.html — video grid, load more)
+- [x] Video player page/modal (auto-play, fullscreen, next video, deep link ?video=ID)
+- [x] Video tab on profile (profile.html Videos tab + user-profile All Posts/Videos switch)
+- [x] Video like/comment/share/reaction (player reuses feed interaction system)
+- [ ] Live video (experimental) — Phase 5 backlog
 
 ## 🔲 Phase 4 — Communities
 - [ ] Groups: create / join / group feed / members

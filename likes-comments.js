@@ -468,7 +468,8 @@ async function socialhubLoadInteractions() {
     const articles =
         document.querySelectorAll(
             "#posts .post, #upPosts .post, " +
-            "#profilePosts .post, #postLightbox .post"
+            "#profilePosts .post, #postLightbox .post, " +
+            "#watchPlayer .post"
         );
 
     const posts = [];
