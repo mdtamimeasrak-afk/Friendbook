@@ -73,6 +73,31 @@ function socialhubCampusSwitchTab(tabName) {
 // 3. JOIN BUTTON (UI only - Step 3 wires Supabase)
 // ======================================================
 
+function socialhubCampusSetLogo(url) {
+
+    const img =
+        document.getElementById("campusLogoImg");
+
+    const emoji =
+        document.getElementById("campusLogoEmoji");
+
+    if (!img || !url) {
+        return;
+    }
+
+    img.onload = () => {
+
+        img.style.display = "block";
+
+        if (emoji) {
+            emoji.style.display = "none";
+        }
+    };
+
+    img.src = url;
+}
+
+
 function socialhubCampusJoinClick() {
 
     const btn =
