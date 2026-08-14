@@ -2058,6 +2058,10 @@ async function socialhubGroupInviteOpen(groupId) {
                 }
 
                 socialhubGroupsToast(`Invited ${socialhubGroupsEscape(profile.full_name || "friend")}! 🎉`);
+
+                setTimeout(() => {
+                    socialhubGroupLoad();
+                }, 600);
             });
 
         body.appendChild(row);

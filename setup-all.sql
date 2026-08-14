@@ -942,6 +942,17 @@ drop policy if exists "post_views_insert" on public.post_views;
 create policy "post_views_insert" on public.post_views
   for insert with check (auth.uid() = viewer_id);
 
+drop policy if exists "post_views_delete" on public.post_views;
+create policy "post_views_delete" on public.post_views
+  for delete using (
+    auth.uid() = post_views.viewer_id
+    or exists (
+      select 1 from public.profiles p
+      where p.id = auth.uid() and p.is_admin = true
+    )
+  );
+
+
 -- 6.2 ADMIN FLAG
 alter table public.profiles
   add column if not exists is_admin boolean not null default false;
@@ -990,6 +1001,7 @@ create policy "group_members_insert" on public.group_members
 -- 6.5 EVENTS: cover image + invite friends
 alter table public.events
   add column if not exists cover_url text;
+
 
 -- Event creator may invite others (status 'invited')
 drop policy if exists "event_rsvps_insert" on public.event_rsvps;
@@ -1054,3 +1066,17 @@ create policy "profiles_update" on public.profiles
 update public.profiles
   set is_admin = true
   where id = '20e7c3e4-e1b9-4a85-a8d2-73d1381d1fc8';
+
+
+-- 6.8 GROUPS: owner/admin may remove members (old policy was self-leave only)
+drop policy if exists "group_members_delete" on public.group_members;
+create policy "group_members_delete" on public.group_members
+  for delete using (
+    auth.uid() = user_id
+    or exists (
+      select 1 from public.group_members gm
+      where gm.group_id = group_members.group_id
+        and gm.user_id = auth.uid()
+        and gm.role in ('owner', 'admin')
+    )
+  );
