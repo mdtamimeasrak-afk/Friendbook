@@ -976,6 +976,14 @@ function socialhubRenderComment(container, comment, profileMap, isReply) {
                     Edit
                 </button>
 
+                <button
+                    type="button"
+                    class="comment-copy-btn"
+                    title="Copy comment text"
+                >
+                    Copy
+                </button>
+
             </div>
 
             <div class="comment-reply-row">
@@ -1072,6 +1080,34 @@ function socialhubRenderComment(container, comment, profileMap, isReply) {
 
         socialhubEditComment(editBtn);
     });
+
+    // Copy comment text
+    const copyBtn =
+        commentDiv.querySelector(".comment-copy-btn");
+
+    if (copyBtn) {
+
+        copyBtn.addEventListener("click", async () => {
+
+            try {
+
+                await navigator.clipboard.writeText(
+                    comment.content || ""
+                );
+
+                copyBtn.textContent = "✓ Copied";
+
+                setTimeout(() => {
+
+                    copyBtn.textContent = "Copy";
+                }, 1500);
+            }
+            catch (err) {
+
+                copyBtn.textContent = "Copy";
+            }
+        });
+    }
 
     container.appendChild(commentDiv);
 }
