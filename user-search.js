@@ -102,6 +102,51 @@ var db = window.db || supabaseClient;
     margin-bottom: 18px;
 }
 
+.search-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.search-tab {
+    border: none;
+    background: var(--card-bg, #ffffff);
+    color: var(--text, #1c1e21);
+    padding: 9px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    transition: 0.12s;
+}
+
+.search-tab:hover {
+    background: var(--hover, #f2f3f5);
+}
+
+.search-tab.active {
+    background: #1877f2;
+    color: #fff;
+}
+
+.search-section-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin: 18px 0 10px;
+    color: var(--muted, #65676b);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-section-title i {
+    color: #1877f2;
+}
+
 .search-results {
     display: flex;
     flex-direction: column;
@@ -111,6 +156,85 @@ var db = window.db || supabaseClient;
 .search-results .socialhub-user-row {
     background: var(--card-bg, #ffffff);
     box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.socialhub-post-result {
+    background: var(--card-bg, #ffffff);
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: 0.12s;
+}
+
+.socialhub-post-result:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+}
+
+.socialhub-post-result .pr-img {
+    width: 64px;
+    height: 64px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--hover, #f2f3f5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted, #65676b);
+    font-size: 22px;
+}
+
+.socialhub-post-result .pr-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.socialhub-post-result .pr-author {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.socialhub-post-result .pr-author img,
+.socialhub-post-result .pr-author .pr-avatar {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #1877f2;
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.socialhub-post-result .pr-author small {
+    color: var(--muted, #65676b);
+    font-weight: 400;
+}
+
+.socialhub-post-result .pr-text {
+    margin: 3px 0 0;
+    font-size: 13.5px;
+    color: var(--text, #1c1e21);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.socialhub-post-result .pr-text em {
+    color: #1877f2;
+    font-style: normal;
+    font-weight: 700;
 }
 `;
 
@@ -263,6 +387,230 @@ async function socialhubSearchUsers(query, limit) {
 
 
 // ======================================================
+// 3b. SEARCH POSTS
+// ======================================================
+
+async function socialhubSearchPosts(query, limit) {
+
+    const clean =
+        socialhubCleanSearchQuery(query);
+
+    if (clean === "") {
+
+        return [];
+    }
+
+    const {
+        data,
+        error
+    } = await db
+        .from("posts")
+        .select("*")
+        .ilike("content", `%${clean}%`)
+        .order("created_at", { ascending: false })
+        .limit(limit || 6);
+
+    if (error) {
+
+        console.error(
+            "❌ Post search error:",
+            error
+        );
+
+        return [];
+    }
+
+    const visible = [];
+
+    for (const post of (data || [])) {
+
+        // Skip posts by deactivated users (graceful)
+        if (post.user_id) {
+
+            try {
+
+                const hidden =
+                    await db
+                        .from("profiles")
+                        .select("id")
+                        .eq("id", post.user_id)
+                        .eq("deactivated", true)
+                        .maybeSingle();
+
+                if (
+                    hidden.data &&
+                    !hidden.error
+                ) {
+                    continue;
+                }
+
+            } catch (deactError) {
+
+                // Column missing - ignore
+            }
+        }
+
+        visible.push(post);
+
+        if (visible.length >= (limit || 6)) {
+            break;
+        }
+    }
+
+    return visible;
+}
+
+
+async function socialhubPostResultMeta(posts) {
+
+    const userIds =
+        [...new Set(
+            posts
+                .map(p => p.user_id)
+                .filter(Boolean)
+        )];
+
+    const pageIds =
+        [...new Set(
+            posts
+                .map(p => p.page_id)
+                .filter(Boolean)
+        )];
+
+    const profileMap = {};
+
+    const pageMap = {};
+
+    if (userIds.length > 0) {
+
+        const {
+            data
+        } = await db
+            .from("profiles")
+            .select("id, full_name, avatar_url")
+            .in("id", userIds);
+
+        (data || []).forEach(p => {
+
+            profileMap[p.id] = p;
+        });
+    }
+
+    if (pageIds.length > 0) {
+
+        const {
+            data
+        } = await db
+            .from("pages")
+            .select("id, name")
+            .in("id", pageIds);
+
+        (data || []).forEach(p => {
+
+            pageMap[p.id] = p;
+        });
+    }
+
+    return { profileMap, pageMap };
+}
+
+
+function socialhubPostResultHTML(post, profileMap, pageMap, query) {
+
+    const profile =
+        profileMap[post.user_id] || {};
+
+    const page =
+        pageMap[post.page_id] || null;
+
+    const name =
+        page
+            ? page.name
+            : profile.full_name || "@" + profile.username || "Someone";
+
+    const isPagePost =
+        Boolean(page);
+
+    const avatar =
+        isPagePost
+            ? `<span class="pr-avatar">${(name || "P").charAt(0).toUpperCase()}</span>`
+            : profile.avatar_url
+                ? `<img src="${socialhubEscape(profile.avatar_url)}" alt="">`
+                : `<span class="pr-avatar">${(name || "U").charAt(0).toUpperCase()}</span>`;
+
+    const time =
+        new Date(post.created_at).toLocaleString();
+
+    let text =
+        post.content || "";
+
+    const cleanQuery =
+        socialhubCleanSearchQuery(query);
+
+    if (cleanQuery && text.toLowerCase().includes(cleanQuery.toLowerCase())) {
+
+        const lower =
+            text.toLowerCase();
+
+        const idx =
+            lower.indexOf(cleanQuery.toLowerCase());
+
+        if (idx >= 0) {
+
+            text =
+                text.slice(0, idx) +
+                "<em>" +
+                socialhubEscape(
+                    text.slice(idx, idx + cleanQuery.length)
+                ) +
+                "</em>" +
+                socialhubEscape(
+                    text.slice(idx + cleanQuery.length)
+                );
+        }
+
+    } else {
+
+        text =
+            socialhubEscape(text);
+    }
+
+    const thumb =
+        post.image_url
+            ? `<img class="pr-img" src="${socialhubEscape(post.image_url)}" alt="">`
+            : post.video_url
+                ? `<div class="pr-img"><i class="fa-solid fa-play"></i></div>`
+                : `<div class="pr-img"><i class="fa-solid fa-file-lines"></i></div>`;
+
+    const target =
+        isPagePost
+            ? `page.html?id=${post.page_id}`
+            : `user-profile.html?user=${post.user_id}`;
+
+    return `
+        <div
+            class="socialhub-post-result"
+            onclick="location.href='${target}'"
+        >
+            ${thumb}
+
+            <div class="pr-body">
+
+                <div class="pr-author">
+                    ${avatar}
+                    ${socialhubEscape(name)}
+                    <small>· ${time}</small>
+                </div>
+
+                <p class="pr-text">${text || "(Photo post)"}</p>
+
+            </div>
+        </div>
+    `;
+}
+
+
+// ======================================================
 // 4. LIVE SEARCH DROPDOWN
 // ======================================================
 
@@ -314,12 +662,16 @@ function setupLiveSearch() {
         socialhubSearchDebounceTimer =
             setTimeout(async () => {
 
-                const users =
-                    await socialhubSearchUsers(value, 6);
+                const [users, posts] =
+                    await Promise.all([
+                        socialhubSearchUsers(value, 5),
+                        socialhubSearchPosts(value, 3)
+                    ]);
 
                 socialhubRenderDropdown(
                     dropdown,
                     users,
+                    posts,
                     value
                 );
 
@@ -382,13 +734,13 @@ function setupLiveSearch() {
 }
 
 
-function socialhubRenderDropdown(dropdown, users, query) {
+async function socialhubRenderDropdown(dropdown, users, posts, query) {
 
-    if (users.length === 0) {
+    if ((users.length + posts.length) === 0) {
 
         dropdown.innerHTML = `
             <div class="socialhub-search-empty">
-                No users found for "${socialhubEscape(query)}"
+                No results for "${socialhubEscape(query)}"
             </div>
         `;
 
@@ -399,40 +751,139 @@ function socialhubRenderDropdown(dropdown, users, query) {
 
     dropdown.innerHTML = "";
 
-    users.forEach(user => {
+    const { profileMap, pageMap } =
+        await socialhubPostResultMeta(posts || []);
 
-        const result =
+    // Posts first (content matches)
+    if (posts && posts.length > 0) {
+
+        const postTitle =
             document.createElement("div");
 
-        result.className = "socialhub-search-result";
+        postTitle.className = "socialhub-search-empty";
 
-        result.dataset.userId = user.id;
+        postTitle.style.cssText =
+            "text-align:left;font-weight:700;font-size:12px;color:#1877f2;padding:10px 12px 4px;";
 
-        result.innerHTML = `
+        postTitle.textContent = "POSTS";
 
-            <div class="avatar">
-                ${socialhubAvatarHTML(user)}
-            </div>
+        dropdown.appendChild(postTitle);
 
-            <div>
-                <strong>
-                    ${socialhubEscape(user.full_name || "User")}
-                </strong>
+        posts.forEach(post => {
 
-                <small>
-                    @${socialhubEscape(user.username || "user")}
-                </small>
-            </div>
-        `;
+            const div =
+                document.createElement("div");
 
-        result.addEventListener("click", () => {
+            div.className = "socialhub-search-result";
 
-            window.location.href =
-                `user-profile.html?user=${user.id}`;
+            div.innerHTML = `
+
+                <div class="avatar">
+                    ${
+                        post.image_url
+                            ? `<img src="${socialhubEscape(post.image_url)}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:10px;">`
+                            : '<i class="fa-solid fa-file-lines" style="color:#65676b;font-size:16px;"></i>'
+                    }
+                </div>
+
+                <div>
+                    <strong>
+                        ${
+                            socialhubEscape(
+                                (post.page_id ? (pageMap[post.page_id]?.name || "Page") : (profileMap[post.user_id]?.full_name || "Someone"))
+                            )
+                        }
+                    </strong>
+
+                    <small>
+                        ${socialhubEscape((post.content || "(Photo post)").slice(0, 60))}
+                    </small>
+                </div>
+            `;
+
+            const target =
+                post.page_id
+                    ? `page.html?id=${post.page_id}`
+                    : `user-profile.html?user=${post.user_id}`;
+
+            div.addEventListener("click", () => {
+
+                window.location.href = target;
+            });
+
+            dropdown.appendChild(div);
         });
+    }
 
-        dropdown.appendChild(result);
+    // Users
+    if (users.length > 0) {
+
+        const userTitle =
+            document.createElement("div");
+
+        userTitle.className = "socialhub-search-empty";
+
+        userTitle.style.cssText =
+            "text-align:left;font-weight:700;font-size:12px;color:#1877f2;padding:10px 12px 4px;";
+
+        userTitle.textContent = "PEOPLE";
+
+        dropdown.appendChild(userTitle);
+
+        users.forEach(user => {
+
+            const result =
+                document.createElement("div");
+
+            result.className = "socialhub-search-result";
+
+            result.dataset.userId = user.id;
+
+            result.innerHTML = `
+
+                <div class="avatar">
+                    ${socialhubAvatarHTML(user)}
+                </div>
+
+                <div>
+                    <strong>
+                        ${socialhubEscape(user.full_name || "User")}
+                    </strong>
+
+                    <small>
+                        @${socialhubEscape(user.username || "user")}
+                    </small>
+                </div>
+            `;
+
+            result.addEventListener("click", () => {
+
+                window.location.href =
+                    `user-profile.html?user=${user.id}`;
+            });
+
+            dropdown.appendChild(result);
+        });
+    }
+
+    // See all
+    const allLink =
+        document.createElement("div");
+
+    allLink.className = "socialhub-search-empty";
+
+    allLink.style.cssText =
+        "cursor:pointer;font-weight:700;color:#1877f2;padding:10px;border-top:1px solid var(--hover,#f2f3f5);";
+
+    allLink.textContent = `See all results for "${socialhubEscape(query)}"`;
+
+    allLink.addEventListener("click", () => {
+
+        window.location.href =
+            `search.html?q=${encodeURIComponent(query)}`;
     });
+
+    dropdown.appendChild(allLink);
 
     dropdown.style.display = "block";
 }
@@ -460,6 +911,18 @@ async function loadSearchResultsPage() {
         return;
     }
 
+    window.socialhubSearchState =
+        window.socialhubSearchState || {
+            tab: "all",
+            query: "",
+            users: [],
+            posts: [],
+            profileMap: {},
+            pageMap: {}
+        };
+
+    window.socialhubSearchState.query = query;
+
     const input =
         document.getElementById("searchInput");
 
@@ -475,7 +938,7 @@ async function loadSearchResultsPage() {
 
         title.innerText =
             query === ""
-                ? "Search SocialHub"
+                ? "Search TRIYA"
                 : `Results for "${query}"`;
     }
 
@@ -490,7 +953,7 @@ async function loadSearchResultsPage() {
 
         container.innerHTML = `
             <div class="socialhub-search-empty">
-                Type a name in the search box above.
+                Type a name or keyword in the search box above.
             </div>
         `;
 
@@ -503,28 +966,141 @@ async function loadSearchResultsPage() {
         </div>
     `;
 
-    const users =
-        await socialhubSearchUsers(query, 30);
+    const [users, posts] =
+        await Promise.all([
+            socialhubSearchUsers(query, 30),
+            socialhubSearchPosts(query, 30)
+        ]);
 
-    if (users.length === 0) {
+    window.socialhubSearchState.users = users;
+
+    window.socialhubSearchState.posts = posts;
+
+    const { profileMap, pageMap } =
+        await socialhubPostResultMeta(posts);
+
+    window.socialhubSearchState.profileMap = profileMap;
+
+    window.socialhubSearchState.pageMap = pageMap;
+
+    socialhubSearchRenderResults();
+}
+
+
+function socialhubSearchSetTab(tab) {
+
+    if (!window.socialhubSearchState) {
+        return;
+    }
+
+    window.socialhubSearchState.tab = tab;
+
+    document
+        .querySelectorAll(".search-tab")
+        .forEach(btn => {
+
+            btn.classList.toggle(
+                "active",
+                btn.dataset.tab === tab
+            );
+        });
+
+    socialhubSearchRenderResults();
+}
+
+
+function socialhubSearchRenderResults() {
+
+    const container =
+        document.getElementById("searchResults");
+
+    if (!container) {
+        return;
+    }
+
+    const state =
+        window.socialhubSearchState;
+
+    const { users, posts, profileMap, pageMap } =
+        state;
+
+    if (users.length === 0 && posts.length === 0) {
 
         container.innerHTML = `
             <div class="socialhub-search-empty">
-                No users found.
+                No results found.
             </div>
         `;
 
         return;
     }
 
-    // Friend relation info (for the buttons)
+    const showUsers =
+        state.tab === "all" || state.tab === "people";
+
+    const showPosts =
+        state.tab === "all" || state.tab === "posts";
+
+    container.innerHTML = "";
+
+    // ---------- PEOPLE ----------
+    if (showUsers && users.length > 0) {
+
+        const sectionTitle =
+            document.createElement("div");
+
+        sectionTitle.className = "search-section-title";
+
+        sectionTitle.innerHTML =
+            '<i class="fa-solid fa-user-group"></i> People';
+
+        container.appendChild(sectionTitle);
+
+        socialhubRenderUserRows(container, users);
+    }
+
+    // ---------- POSTS ----------
+    if (showPosts && posts.length > 0) {
+
+        const sectionTitle =
+            document.createElement("div");
+
+        sectionTitle.className = "search-section-title";
+
+        sectionTitle.innerHTML =
+            '<i class="fa-solid fa-newspaper"></i> Posts';
+
+        container.appendChild(sectionTitle);
+
+        posts.forEach(post => {
+
+            const div =
+                document.createElement("div");
+
+            div.innerHTML =
+                socialhubPostResultHTML(
+                    post,
+                    profileMap,
+                    pageMap,
+                    socialhubSearchState.query || ""
+                );
+
+            container.appendChild(div.firstElementChild);
+        });
+    }
+}
+
+
+async function socialhubRenderUserRows(container, users) {
+
+    const me =
+        await socialhubGetMe();
+
     const {
         related,
         requestedByMe,
         incomingSet
     } = await socialhubGetFriendRelationInfo();
-
-    container.innerHTML = "";
 
     users.forEach(user => {
 

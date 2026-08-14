@@ -51,14 +51,27 @@
 - [x] Main feed excludes group & page posts (posts.group_id / posts.page_id columns)
 
 ## 🔲 Phase 5 — Extra Facebook Features
-- [ ] Marketplace (buy/sell listing)
-- [ ] Memories ("On this day")
-- [ ] Post search + filters
-- [ ] Profile tabs (Posts / Photos / Videos / About)
-- [ ] Photo albums
-- [ ] Message: online status, typing..., seen receipts
-- [ ] Birthdays calendar
-- [ ] Report + moderation
-- [ ] Saved posts list page
-- [ ] Friend suggestions widget on feed
-- [ ] Live video (experimental)
+- [x] Marketplace (buy/sell listing, category filter, search, sold/delete, message seller)
+- [x] Memories ("On this day" widget on feed — own + friends' posts, dismissible)
+- [x] Post search + filters (search tabs: All / People / Posts, highlighted matches, live dropdown)
+- [x] Profile tabs (Posts / Photos / Videos / About — existing, Albums links added)
+- [x] Photo albums (create album, upload photos, lightbox, delete photo/album, owner+friends view)
+- [x] Message: online status, typing..., seen receipts (read ticks, presence dots, last_seen heartbeat)
+- [x] Birthdays calendar (birthdays today + this month, wish button opens chat)
+- [x] Report + moderation (report menu on every post, reason modal, reports table)
+- [x] Saved posts list page (saved.html — bookmark manager with remove)
+- [x] Friend suggestions widget on feed (right sidebar "People You May Know" — already live)
+- [x] Live video (experimental — live directory, Go Live camera preview, viewer counts, end stream)
+
+> Note: Phase 5 SQL (marketplace_items, albums, album_photos, reports, messages.read_at, profiles.last_seen, live_sessions) must be run in the Supabase SQL editor before the new features work.
+
+## 🔲 Phase 6 — More Facebook Features (backlog)
+- [ ] Activity log (who saw your post, etc.)
+- [ ] Edit / delete comment (edit part)
+- [ ] Video calls (WebRTC)
+- [ ] Groups: invite members, group roles, cover image
+- [ ] Events: cover image, event invites, reminders
+- [ ] Marketplace: categories sidebar, my listings page, price filter
+- [ ] Memories: share memory as post
+- [ ] Notifications: friend request list page
+- [ ] Admin/moderation dashboard (view reports)

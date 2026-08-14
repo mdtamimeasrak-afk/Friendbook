@@ -265,7 +265,11 @@
         "📺": '<i class="fa-solid fa-tv"></i>',
         "🎞️": '<i class="fa-solid fa-film"></i>',
         "📅": '<i class="fa-solid fa-calendar-days"></i>',
-        "🏢": '<i class="fa-solid fa-building"></i>'
+        "🏢": '<i class="fa-solid fa-building"></i>',
+        "🛒": '<i class="fa-solid fa-store"></i>',
+        "🔖": '<i class="fa-solid fa-bookmark"></i>',
+        "📡": '<i class="fa-solid fa-tower-broadcast"></i>',
+        "🎂": '<i class="fa-solid fa-cake-candles"></i>'
     };
 
 

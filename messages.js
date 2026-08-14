@@ -1306,9 +1306,12 @@ async function socialhubOpenChat(userId) {
         data: profile
     } = await db
         .from("profiles")
-        .select("id, full_name, username, avatar_url")
+        .select("id, full_name, username, avatar_url, last_seen")
         .eq("id", userId)
         .single();
+
+    window.socialhubMsgLastSeenLabel =
+        socialhubLastSeenLabel(profile?.last_seen);
 
     const {
         data: messages
@@ -1345,10 +1348,9 @@ async function socialhubOpenChat(userId) {
                     ${socialhubEscape(profile?.full_name || "User")}
                 </div>
 
-                <div class="socialhub-msg-chat-status">
-                    Active recently
+                <div class="socialhub-msg-chat-status" id="socialhubMsgChatStatus">
+                    ${socialhubLastSeenLabel(profile?.last_seen)}
                 </div>
-
                 <div class="socialhub-msg-typing">
                     typing<span class="socialhub-msg-typing-dots">…</span>
                 </div>
@@ -1983,6 +1985,34 @@ function socialhubSetupPresence(me) {
         return;
     }
 
+    // Last-seen heartbeat (FB-style "last active" fallback)
+    const beat = async () => {
+
+        try {
+
+            await db
+                .from("profiles")
+                .update({ last_seen: new Date().toISOString() })
+                .eq("id", me.id);
+
+        } catch (beatError) {
+
+            // Column missing - ignore
+        }
+    };
+
+    beat();
+
+    const heartbeat = setInterval(beat, 30000);
+
+    if (typeof window.addEventListener === "function") {
+
+        window.addEventListener("pagehide", () => {
+
+            clearInterval(heartbeat);
+        });
+    }
+
     socialhubPresenceChannel =
         db.channel("socialhub-online-live");
 
@@ -2036,6 +2066,49 @@ function socialhubRefreshOnlineUsers() {
 
         socialhubRefreshFriendsDots();
     }
+}
+
+
+function socialhubLastSeenLabel(lastSeen) {
+
+    if (!lastSeen) {
+
+        return "Active recently";
+    }
+
+    const diff =
+        Date.now() - new Date(lastSeen).getTime();
+
+    if (diff < 60000) {
+
+        return "Active now";
+    }
+
+    const mins =
+        Math.floor(diff / 60000);
+
+    if (mins < 60) {
+
+        return `Last active ${mins}m ago`;
+    }
+
+    const hours =
+        Math.floor(mins / 60);
+
+    if (hours < 24) {
+
+        return `Last active ${hours}h ago`;
+    }
+
+    const days =
+        Math.floor(hours / 24);
+
+    if (days === 1) {
+
+        return "Last active yesterday";
+    }
+
+    return `Last active ${days}d ago`;
 }
 
 
@@ -2094,7 +2167,9 @@ function socialhubRefreshOnlineDots() {
             );
 
         statusEl.textContent =
-            isOnline ? "Active now" : "Active recently";
+            isOnline
+                ? "Active now"
+                : (window.socialhubMsgLastSeenLabel || "Active recently");
 
         statusEl.classList.toggle(
             "online",

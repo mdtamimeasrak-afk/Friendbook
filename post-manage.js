@@ -369,6 +369,10 @@ async function socialhubMaybeAddMenu(post) {
         await socialhubGetMe();
 
     if (!me || owner !== me.id) {
+
+        // Not the owner -> report-only menu
+        socialhubInjectReportMenu(post, postId);
+
         return;
     }
 
@@ -406,11 +410,13 @@ function socialhubInjectMenu(post, postId) {
     menu.innerHTML = `
 
         <button type="button" data-action="edit">
-            ✏️ Edit Post
+            <i class="fa-solid fa-pen"></i>
+            Edit Post
         </button>
 
         <button type="button" data-action="delete">
-            🗑️ Delete Post
+            <i class="fa-solid fa-trash-can"></i>
+            Delete Post
         </button>
     `;
 
@@ -466,6 +472,238 @@ function socialhubInjectMenu(post, postId) {
             menu.classList.remove("open");
         }
     });
+}
+
+
+// ======================================================
+// 3b. REPORT POST (moderation)
+// ======================================================
+
+function socialhubInjectReportMenu(post, postId) {
+
+    const header =
+        post.querySelector(".post-header");
+
+    if (!header) {
+        return;
+    }
+
+    const button =
+        document.createElement("button");
+
+    button.type = "button";
+
+    button.className = "socialhub-post-menu-btn";
+
+    button.title = "Post options";
+
+    button.innerText = "⋯";
+
+    header.appendChild(button);
+
+    const menu =
+        document.createElement("div");
+
+    menu.className = "socialhub-post-menu";
+
+    menu.innerHTML = `
+
+        <button type="button" data-action="report">
+            <i class="fa-solid fa-flag"></i>
+            Report Post
+        </button>
+    `;
+
+    document.body.appendChild(menu);
+
+    const openMenu = event => {
+
+        event.stopPropagation();
+
+        document
+            .querySelectorAll(".socialhub-post-menu.open")
+            .forEach(item => item.classList.remove("open"));
+
+        menu.classList.add("open");
+
+        const rect =
+            button.getBoundingClientRect();
+
+        menu.style.top =
+            `${rect.bottom + 4}px`;
+
+        menu.style.left =
+            `${rect.right}px`;
+    };
+
+    button.addEventListener("click", openMenu);
+
+    menu
+        .querySelector('[data-action="report"]')
+        .addEventListener("click", () => {
+
+            menu.classList.remove("open");
+
+            socialhubOpenReportModal(postId);
+        });
+
+    document.addEventListener("click", event => {
+
+        if (
+            event.target !== button &&
+            !menu.contains(event.target)
+        ) {
+
+            menu.classList.remove("open");
+        }
+    });
+}
+
+
+const socialhubReportReasons = [
+    "Spam or scam",
+    "Harassment or bullying",
+    "Hate speech",
+    "Violence or dangerous behavior",
+    "Nudity or sexual content",
+    "False information",
+    "Something else"
+];
+
+
+function socialhubOpenReportModal(postId) {
+
+    const existing =
+        document.querySelector(".socialhub-report-modal");
+
+    if (existing) {
+        existing.remove();
+    }
+
+    const modal =
+        document.createElement("div");
+
+    modal.className = "socialhub-report-modal";
+
+    modal.style.cssText =
+        "position:fixed;inset:0;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;z-index:10000;padding:20px;";
+
+    modal.innerHTML = `
+
+        <div class="socialhub-cr-box" style="background:#fff;border-radius:10px;width:100%;max-width:440px;box-shadow:0 12px 40px rgba(0,0,0,0.25);overflow:hidden;">
+
+            <div class="cr-head" style="padding:16px 18px;border-bottom:1px solid #e4e6eb;display:flex;align-items:center;justify-content:space-between;">
+
+                <h2 style="margin:0;font-size:18px;display:flex;align-items:center;gap:8px;">
+                    <i class="fa-solid fa-flag" style="color:#e41e3f;"></i>
+                    Report Post
+                </h2>
+
+                <button class="cr-close" type="button" title="Close" style="border:none;background:#e4e6eb;width:32px;height:32px;border-radius:50%;cursor:pointer;">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+            </div>
+
+            <div class="cr-body" style="padding:16px 18px;">
+
+                <label>Why are you reporting this post?</label>
+
+                <select id="reportReason" style="width:100%;box-sizing:border-box;padding:11px 13px;border:1px solid #d4d7dd;border-radius:8px;font-size:14px;font-family:inherit;outline:none;background:#fff;">
+                    ${socialhubReportReasons.map(r => `<option>${r}</option>`).join("")}
+                </select>
+
+                <label>Details (optional)</label>
+
+                <textarea id="reportDetails" rows="3" placeholder="Tell us more..."></textarea>
+
+            </div>
+
+            <div class="cr-actions" style="padding:14px 18px;border-top:1px solid #e4e6eb;display:flex;gap:10px;justify-content:flex-end;">
+
+                <button class="socialhub-cr-cancel" type="button">Cancel</button>
+
+                <button class="socialhub-create-btn" type="button" style="background:#e41e3f;">
+                    <i class="fa-solid fa-flag"></i>
+                    Submit Report
+                </button>
+
+            </div>
+
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    modal
+        .querySelector(".cr-close")
+        .addEventListener("click", () => modal.remove());
+
+    modal
+        .querySelector(".socialhub-cr-cancel")
+        .addEventListener("click", () => modal.remove());
+
+    modal.addEventListener("click", event => {
+
+        if (event.target === modal) {
+            modal.remove();
+        }
+    });
+
+    modal
+        .querySelector(".socialhub-create-btn")
+        .addEventListener("click", async () => {
+
+            const reason =
+                modal.querySelector("#reportReason").value;
+
+            const details =
+                modal.querySelector("#reportDetails").value.trim();
+
+            const me =
+                await socialhubGetMe();
+
+            if (!me) {
+                return;
+            }
+
+            const content =
+                details
+                    ? reason + " — " + details
+                    : reason;
+
+            const { error } =
+                await db
+                    .from("reports")
+                    .insert({
+                        reporter_id: me.id,
+                        post_id: postId,
+                        reason: content
+                    });
+
+            if (error) {
+
+                alert("Could not submit report: " + error.message);
+
+                return;
+            }
+
+            modal.remove();
+
+            const toast =
+                document.createElement("div");
+
+            toast.style.cssText =
+                "position:fixed;bottom:24px;left:50%;transform:translateX(-50%);" +
+                "background:#1c1e21;color:#fff;padding:12px 20px;border-radius:22px;" +
+                "font-size:14px;font-weight:600;z-index:100001;box-shadow:0 6px 24px rgba(0,0,0,0.3);";
+
+            toast.textContent = "✅ Thanks — your report has been submitted.";
+
+            document.body.appendChild(toast);
+
+            setTimeout(() => toast.remove(), 2600);
+        });
 }
 
 

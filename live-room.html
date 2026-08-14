@@ -11,7 +11,7 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>TRIYA - Watch</title>
+    <title>TRIYA - Live</title>
 
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%231877f2'/%3E%3Ctext x='20' y='27' font-family='Arial' font-size='21' font-weight='800' fill='white' text-anchor='middle'%3ETR%3C/text%3E%3C/svg%3E">
 
@@ -31,13 +31,11 @@
 
 
     <!-- ========================= -->
-    <!-- TOP NAVIGATION (home page style) -->
+    <!-- TOP NAVIGATION -->
     <!-- ========================= -->
 
     <header class="topbar">
 
-
-        <!-- LOGO (Facebook-style "f") -->
 
         <div
             class="logo"
@@ -46,8 +44,6 @@
         ></div>
 
 
-
-        <!-- SEARCH -->
 
         <div class="search-box">
 
@@ -64,8 +60,6 @@
 
 
 
-        <!-- CENTER NAV (Facebook tabs) -->
-
         <nav class="fb-center-nav">
 
             <button
@@ -76,15 +70,13 @@
                 <i class="fa-solid fa-house"></i>
             </button>
 
-
             <button
-                class="fb-nav-btn active"
+                class="fb-nav-btn"
                 onclick="location.href='watch.html'"
                 title="Watch"
             >
                 <i class="fa-solid fa-tv"></i>
             </button>
-
 
             <button
                 class="fb-nav-btn"
@@ -94,6 +86,13 @@
                 <i class="fa-solid fa-clapperboard"></i>
             </button>
 
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='groups.html'"
+                title="Groups"
+            >
+                <i class="fa-solid fa-users"></i>
+            </button>
 
             <button
                 class="fb-nav-btn"
@@ -103,23 +102,11 @@
                 <i class="fa-solid fa-comment-dots"></i>
             </button>
 
-
-            <button
-                class="fb-nav-btn"
-                onclick="location.href='index.html'"
-                title="Notifications"
-            >
-                <i class="fa-solid fa-bell"></i>
-            </button>
-
         </nav>
 
 
 
-        <!-- TOP ICONS (Facebook gray circles) -->
-
         <div class="top-icons">
-
 
             <button
                 onclick="location.href='messages.html'"
@@ -128,14 +115,12 @@
                 💬
             </button>
 
-
             <button
                 onclick="location.href='index.html'"
                 title="Notifications"
             >
                 🔔
             </button>
-
 
         </div>
 
@@ -148,59 +133,18 @@
     <!-- MAIN CONTENT -->
     <!-- ========================= -->
 
-    <main class="watch-main">
-
-
-        <div class="watch-header">
-
-            <h1><i class="fa-solid fa-tv"></i> Watch</h1>
-
-            <p>All videos from your friends and the TRIYA community.</p>
-
-            <button
-                class="socialhub-create-btn"
-                onclick="location.href='live.html'"
-                style="background:#e41e3f;margin-top:10px;"
-            >
-                <i class="fa-solid fa-circle-dot"></i>
-                Go Live
-            </button>
-
-        </div>
+    <main class="live-room-main">
 
         <div
-            class="watch-grid"
-            id="watchGrid"
+            class="live-room"
+            id="liveRoom"
         >
 
-            <p class="empty-message">
-                Loading videos...
-            </p>
+            <p class="empty-message">Loading live stream...</p>
 
         </div>
 
-
-        <button
-            class="watch-load-more"
-            id="watchLoadMore"
-            style="display:none;"
-        >
-            Load More Videos
-        </button>
-
-
     </main>
-
-
-    <!-- ========================= -->
-    <!-- VIDEO PLAYER MODAL -->
-    <!-- ========================= -->
-
-    <div
-        id="watchPlayer"
-        class="watch-player"
-        style="display:none;"
-    ></div>
 
 
 
@@ -214,13 +158,7 @@
 
     <script src="premium-ui.js?v=6"></script>
 
-    <script src="script.js?v=22"></script>
-
-    <script src="likes-comments.js?v=9"></script>
-
-    <script src="shares.js?v=2"></script>
-
-    <script src="watch.js?v=1"></script>
+    <script src="live.js?v=1"></script>
 
 </body>
 

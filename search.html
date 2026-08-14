@@ -178,6 +178,40 @@
         </h2>
 
         <div
+            class="search-tabs"
+            id="searchTabs"
+        >
+
+            <button
+                class="search-tab active"
+                data-tab="all"
+                onclick="socialhubSearchSetTab('all')"
+            >
+                <i class="fa-solid fa-layer-group"></i>
+                All
+            </button>
+
+            <button
+                class="search-tab"
+                data-tab="people"
+                onclick="socialhubSearchSetTab('people')"
+            >
+                <i class="fa-solid fa-user-group"></i>
+                People
+            </button>
+
+            <button
+                class="search-tab"
+                data-tab="posts"
+                onclick="socialhubSearchSetTab('posts')"
+            >
+                <i class="fa-solid fa-newspaper"></i>
+                Posts
+            </button>
+
+        </div>
+
+        <div
             class="search-results"
             id="searchResults"
         ></div>
@@ -194,7 +228,7 @@
 
     <script src="supabase.js?v=4"></script>
 
-    <script src="premium-ui.js?v=5"></script>
+    <script src="premium-ui.js?v=6"></script>
 
     <script src="script.js?v=19"></script>
 
@@ -202,11 +236,11 @@
 
     <script src="friends.js?v=5"></script>
 
-    <script src="user-search.js?v=4"></script>
+    <script src="user-search.js?v=6"></script>
 
     <script src="notifications.js?v=5"></script>
 
-    <script src="messages.js?v=10"></script>
+    <script src="messages.js?v=11"></script>
 
 
 </body>

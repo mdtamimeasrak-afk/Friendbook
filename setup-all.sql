@@ -709,3 +709,206 @@ alter table public.posts
 
 alter table public.posts
   add column if not exists page_id uuid references public.pages (id) on delete cascade;
+
+
+-- ======================================================
+-- PHASE 5 - EXTRA FACEBOOK FEATURES
+-- ======================================================
+
+-- 5.1 MARKETPLACE
+create table if not exists public.marketplace_items (
+  id uuid primary key default gen_random_uuid(),
+  seller_id uuid not null references public.profiles (id) on delete cascade,
+  title text not null,
+  description text default '',
+  price numeric not null default 0,
+  category text default 'Other',
+  condition text default 'New',
+  image_url text,
+  sold boolean not null default false,
+  created_at timestamptz not null default now()
+);
+
+alter table public.marketplace_items enable row level security;
+
+drop policy if exists "marketplace_items_select" on public.marketplace_items;
+create policy "marketplace_items_select" on public.marketplace_items
+  for select using (auth.uid() is not null);
+
+drop policy if exists "marketplace_items_insert" on public.marketplace_items;
+create policy "marketplace_items_insert" on public.marketplace_items
+  for insert with check (auth.uid() = seller_id);
+
+drop policy if exists "marketplace_items_update" on public.marketplace_items;
+create policy "marketplace_items_update" on public.marketplace_items
+  for update using (auth.uid() = seller_id);
+
+drop policy if exists "marketplace_items_delete" on public.marketplace_items;
+create policy "marketplace_items_delete" on public.marketplace_items
+  for delete using (auth.uid() = seller_id);
+
+do $$
+begin
+  alter publication supabase_realtime add table public.marketplace_items;
+exception
+  when duplicate_object then null;
+end $$;
+
+
+-- 5.2 PHOTO ALBUMS
+create table if not exists public.albums (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references public.profiles (id) on delete cascade,
+  name text not null,
+  description text default '',
+  cover_url text,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists public.album_photos (
+  id uuid primary key default gen_random_uuid(),
+  album_id uuid not null references public.albums (id) on delete cascade,
+  image_url text not null,
+  caption text default '',
+  created_at timestamptz not null default now()
+);
+
+alter table public.albums enable row level security;
+alter table public.album_photos enable row level security;
+
+-- Albums: owner or accepted friends can view; owner manages
+drop policy if exists "albums_select" on public.albums;
+create policy "albums_select" on public.albums
+  for select using (
+    auth.uid() = user_id
+    or exists (
+      select 1 from public.friendships f
+      where f.status = 'accepted'
+        and (
+          (f.requester_id = auth.uid() and f.addressee_id = albums.user_id)
+          or (f.addressee_id = auth.uid() and f.requester_id = albums.user_id)
+        )
+    )
+  );
+
+drop policy if exists "albums_insert" on public.albums;
+create policy "albums_insert" on public.albums
+  for insert with check (auth.uid() = user_id);
+
+drop policy if exists "albums_update" on public.albums;
+create policy "albums_update" on public.albums
+  for update using (auth.uid() = user_id);
+
+drop policy if exists "albums_delete" on public.albums;
+create policy "albums_delete" on public.albums
+  for delete using (auth.uid() = user_id);
+
+drop policy if exists "album_photos_select" on public.album_photos;
+create policy "album_photos_select" on public.album_photos
+  for select using (
+    exists (
+      select 1 from public.albums a
+      where a.id = album_photos.album_id
+        and (
+          a.user_id = auth.uid()
+          or exists (
+            select 1 from public.friendships f
+            where f.status = 'accepted'
+              and (
+                (f.requester_id = auth.uid() and f.addressee_id = a.user_id)
+                or (f.addressee_id = auth.uid() and f.requester_id = a.user_id)
+              )
+          )
+        )
+    )
+  );
+
+drop policy if exists "album_photos_insert" on public.album_photos;
+create policy "album_photos_insert" on public.album_photos
+  for insert with check (
+    exists (
+      select 1 from public.albums a
+      where a.id = album_photos.album_id and a.user_id = auth.uid()
+    )
+  );
+
+drop policy if exists "album_photos_update" on public.album_photos;
+create policy "album_photos_update" on public.album_photos
+  for update using (
+    exists (
+      select 1 from public.albums a
+      where a.id = album_photos.album_id and a.user_id = auth.uid()
+    )
+  );
+
+drop policy if exists "album_photos_delete" on public.album_photos;
+create policy "album_photos_delete" on public.album_photos
+  for delete using (
+    exists (
+      select 1 from public.albums a
+      where a.id = album_photos.album_id and a.user_id = auth.uid()
+    )
+  );
+
+
+-- 5.3 REPORTS (moderation)
+create table if not exists public.reports (
+  id uuid primary key default gen_random_uuid(),
+  reporter_id uuid not null references public.profiles (id) on delete cascade,
+  post_id uuid references public.posts (id) on delete cascade,
+  reason text not null,
+  created_at timestamptz not null default now()
+);
+
+alter table public.reports enable row level security;
+
+drop policy if exists "reports_insert" on public.reports;
+create policy "reports_insert" on public.reports
+  for insert with check (auth.uid() = reporter_id);
+
+drop policy if exists "reports_select" on public.reports;
+create policy "reports_select" on public.reports
+  for select using (auth.uid() = reporter_id);
+
+
+-- 5.4 MESSAGE STATUSES (seen receipts + online)
+alter table public.messages
+  add column if not exists read_at timestamptz;
+
+alter table public.profiles
+  add column if not exists last_seen timestamptz;
+
+
+-- 5.5 LIVE VIDEO (experimental)
+create table if not exists public.live_sessions (
+  id uuid primary key default gen_random_uuid(),
+  host_id uuid not null references public.profiles (id) on delete cascade,
+  title text not null default 'Live',
+  started_at timestamptz not null default now(),
+  ended_at timestamptz
+);
+
+alter table public.live_sessions enable row level security;
+
+drop policy if exists "live_sessions_select" on public.live_sessions;
+create policy "live_sessions_select" on public.live_sessions
+  for select using (auth.uid() is not null);
+
+drop policy if exists "live_sessions_insert" on public.live_sessions;
+create policy "live_sessions_insert" on public.live_sessions
+  for insert with check (auth.uid() = host_id);
+
+drop policy if exists "live_sessions_update" on public.live_sessions;
+create policy "live_sessions_update" on public.live_sessions
+  for update using (auth.uid() = host_id);
+
+drop policy if exists "live_sessions_delete" on public.live_sessions;
+create policy "live_sessions_delete" on public.live_sessions
+  for delete using (auth.uid() = host_id);
+
+do $$
+begin
+  alter publication supabase_realtime add table public.live_sessions;
+exception
+  when duplicate_object then null;
+end $$;
