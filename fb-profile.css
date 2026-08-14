@@ -1627,6 +1627,20 @@ body.dark-mode .card-title a:hover {
     padding: 0 24px;
 }
 
+.fb-header {
+    margin-bottom: 0;
+}
+
+.fb-header .fb-avatar-wrap {
+    position: static;
+
+    left: auto;
+
+    bottom: auto;
+
+    z-index: auto;
+}
+
 .fb-avatar-wrap .profile-photo {
     width: 180px;
 
