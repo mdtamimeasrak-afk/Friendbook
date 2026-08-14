@@ -857,85 +857,6 @@ body {
 }
 
 
-.socialhub-reactions {
-    position: absolute;
-
-    bottom: calc(100% + 8px);
-
-    left: 50%;
-
-    transform: translateX(-50%) scale(0.6);
-
-    transform-origin: bottom center;
-
-    background: #fff;
-
-    border: 1px solid rgba(0, 0, 0, 0.08);
-
-    border-radius: 40px;
-
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-
-    padding: 6px 10px;
-
-    display: flex;
-
-    gap: 2px;
-
-    opacity: 0;
-
-    pointer-events: none;
-
-    transition:
-        opacity 0.15s ease,
-        transform 0.15s ease;
-
-    z-index: 100;
-
-    white-space: nowrap;
-}
-
-
-.socialhub-like-btn:hover .socialhub-reactions {
-    opacity: 1;
-
-    pointer-events: auto;
-
-    transform: translateX(-50%) scale(1);
-}
-
-
-.socialhub-reactions button {
-    background: none;
-
-    border: none;
-
-    font-size: 26px;
-
-    line-height: 1;
-
-    padding: 4px 3px;
-
-    cursor: pointer;
-
-    border-radius: 50%;
-
-    transition: transform 0.15s ease;
-
-    position: relative;
-}
-
-
-.socialhub-reactions button:hover {
-    transform: translateY(-4px) scale(1.15);
-}
-
-
-.socialhub-reaction-label {
-    display: none;
-}
-
-
 .comment-content {
     background: var(--hover, #f0f2f5);
 
@@ -1023,14 +944,6 @@ body {
 
 [data-hidden] {
     display: none !important;
-}
-
-
-.dark .socialhub-reactions,
-.dark-theme .socialhub-reactions {
-    background: #242526;
-
-    border-color: rgba(255, 255, 255, 0.1);
 }
 
 
