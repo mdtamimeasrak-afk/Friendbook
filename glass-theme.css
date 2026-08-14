@@ -1,185 +1,59 @@
 /* ======================================================
-   TRIYA - iOS 26 LIQUID GLASS THEME
+   TRIYA - FACEBOOK-FLAT THEME (Phase 7)
    ======================================================
-   Apple iOS 26 "Liquid Glass" look: translucent layered
-   surfaces, strong blur + saturation, glossy specular
-   sheen, light edge highlights, squircle corners and a
-   vibrant animated wallpaper behind everything.
-   Applied on top of every page. Loaded LAST.
+   Flat Facebook look: light gray page (#f0f2f5), solid
+   white cards, 8px radius, soft 1px shadow, no blur,
+   no wallpaper, no glass sheen. Applied on every page.
+   Loaded LAST so it wins over the old liquid-glass and
+   base styles. Variable names kept (--glass-*) so other
+   files that reference them keep working.
    ====================================================== */
 
 
-/* ---------- LIQUID GLASS COLORS ---------- */
+/* ---------- FACEBOOK-FLAT COLORS ---------- */
 
 :root {
-    --glass-bg: rgba(255, 255, 255, 0.42);
-    --glass-bg-strong: rgba(255, 255, 255, 0.66);
-    --glass-bg-soft: rgba(255, 255, 255, 0.22);
-    --glass-border: rgba(255, 255, 255, 0.45);
-    --glass-border-soft: rgba(255, 255, 255, 0.28);
-    --glass-edge: rgba(255, 255, 255, 0.55);
-    --glass-sheen:
-        linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.5) 0%,
-            rgba(255, 255, 255, 0.08) 32%,
-            rgba(255, 255, 255, 0) 62%
-        );
-    --glass-shadow: 0 12px 40px rgba(31, 38, 135, 0.16);
-    --glass-shadow-soft: 0 6px 20px rgba(31, 38, 135, 0.11);
-    --glass-blur: 24px;
-    --glass-radius: 18px;
-    --glass-radius-sm: 14px;
+    --glass-bg: #ffffff;
+    --glass-bg-strong: #ffffff;
+    --glass-bg-soft: #f0f2f5;
+    --glass-border: #ced0d4;
+    --glass-border-soft: #e4e6eb;
+    --glass-edge: rgba(0, 0, 0, 0.03);
+    --glass-sheen: none;
+    --glass-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+    --glass-shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --glass-blur: 0px;
+    --glass-radius: 8px;
+    --glass-radius-sm: 8px;
 }
 
 
 body.dark-mode {
-    --glass-bg: rgba(22, 24, 34, 0.58);
-    --glass-bg-strong: rgba(22, 24, 34, 0.74);
-    --glass-bg-soft: rgba(22, 24, 34, 0.3);
-    --glass-border: rgba(255, 255, 255, 0.14);
-    --glass-border-soft: rgba(255, 255, 255, 0.09);
-    --glass-edge: rgba(255, 255, 255, 0.12);
-    --glass-sheen:
-        linear-gradient(
-            135deg,
-            rgba(255, 255, 255, 0.14) 0%,
-            rgba(255, 255, 255, 0.04) 32%,
-            rgba(255, 255, 255, 0) 62%
-        );
-    --glass-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
-    --glass-shadow-soft: 0 6px 20px rgba(0, 0, 0, 0.4);
+    --glass-bg: #242526;
+    --glass-bg-strong: #3a3b3c;
+    --glass-bg-soft: #3a3b3c;
+    --glass-border: #3e4042;
+    --glass-border-soft: rgba(255, 255, 255, 0.08);
+    --glass-edge: rgba(255, 255, 255, 0.05);
+    --glass-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --glass-shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
 
-/* ---------- IOS 26 WALLPAPER BACKGROUND ---------- */
+/* ---------- FLAT PAGE BACKGROUND (no wallpaper) ---------- */
 
 html {
-    background: #eef1ff;
+    background: #f0f2f5;
 }
 
 
 body {
-    background: transparent;
+    background: #f0f2f5;
 }
 
 
-body::before {
-    content: "";
-
-    position: fixed;
-
-    inset: 0;
-
-    z-index: -1;
-
-    pointer-events: none;
-
-    background:
-        linear-gradient(
-            115deg,
-            #c7d2fe 0%,
-            #fbcfe8 22%,
-            #bae6fd 45%,
-            #ddd6fe 68%,
-            #fecdd3 88%,
-            #c7d2fe 100%
-        );
-
-    background-size: 400% 400%;
-
-    animation: socialhubGlassBgShift 26s ease-in-out infinite;
-}
-
-
-body::after {
-    content: "";
-
-    position: fixed;
-
-    z-index: -1;
-
-    pointer-events: none;
-
-    width: 72vmax;
-
-    height: 72vmax;
-
-    top: -30vmax;
-
-    right: -24vmax;
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle at 30% 30%,
-            rgba(129, 140, 248, 0.5),
-            rgba(217, 70, 239, 0.25) 45%,
-            transparent 70%
-        );
-
-    box-shadow:
-        -34vmax 24vmax 60vmax -12vmax rgba(34, 211, 238, 0.5),
-        -10vmax 40vmax 70vmax -16vmax rgba(244, 114, 182, 0.35);
-
-    filter: blur(26px);
-
-    animation: socialhubGlassBlob 30s ease-in-out infinite alternate;
-}
-
-
-@keyframes socialhubGlassBgShift {
-    0%, 100% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-}
-
-
-@keyframes socialhubGlassBlob {
-    0% {
-        transform: translate(0, 0) scale(1) rotate(0deg);
-    }
-
-    50% {
-        transform: translate(-16vmax, 10vmax) scale(1.2) rotate(12deg);
-    }
-
-    100% {
-        transform: translate(-8vmax, 18vmax) scale(0.9) rotate(-8deg);
-    }
-}
-
-
-body.dark-mode::before {
-    background:
-        linear-gradient(
-            115deg,
-            #141430 0%,
-            #2a1b4e 25%,
-            #101f3d 50%,
-            #3b0f3a 75%,
-            #0c2233 100%
-        );
-}
-
-
-body.dark-mode::after {
-    background:
-        radial-gradient(
-            circle at 30% 30%,
-            rgba(99, 102, 241, 0.45),
-            rgba(217, 70, 239, 0.2) 45%,
-            transparent 70%
-        );
-
-    box-shadow:
-        -34vmax 24vmax 60vmax -12vmax rgba(14, 165, 233, 0.35),
-        -10vmax 40vmax 70vmax -16vmax rgba(217, 70, 239, 0.25);
+body.dark-mode {
+    background: #18191a;
 }
 
 
@@ -195,26 +69,31 @@ body.dark-mode::after {
 }
 
 
-/* ---------- TOPBAR (LIQUID SHELF) ---------- */
+/* ---------- TOPBAR (flat white shelf) ---------- */
 
 .topbar {
-    background-color: var(--glass-bg);
+    background-color: #ffffff;
 
-    background-image: var(--glass-sheen);
+    background-image: none;
 
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(190%);
+    -webkit-backdrop-filter: none;
 
-    backdrop-filter: blur(var(--glass-blur)) saturate(190%);
+    backdrop-filter: none;
 
-    border-bottom: 1px solid var(--glass-border);
+    border-bottom: 1px solid #ced0d4;
 
-    box-shadow:
-        var(--glass-shadow-soft),
-        inset 0 1px 0 var(--glass-edge);
+    box-shadow: none;
 }
 
 
-/* ---------- CORE LIQUID GLASS PANELS ---------- */
+body.dark-mode .topbar {
+    background-color: #242526;
+
+    border-bottom-color: #3e4042;
+}
+
+
+/* ---------- CORE PANELS (flat cards) ---------- */
 
 .sidebar-profile,
 .sidebar-menu,
@@ -240,28 +119,35 @@ body.dark-mode::after {
 .settings-panel {
     background-color: var(--glass-bg);
 
-    background-image: var(--glass-sheen);
+    background-image: none;
 
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(190%);
+    -webkit-backdrop-filter: none;
 
-    backdrop-filter: blur(var(--glass-blur)) saturate(190%);
+    backdrop-filter: none;
 
-    border: 1px solid var(--glass-border);
+    border: 1px solid var(--glass-border-soft);
 
     border-radius: var(--glass-radius);
 
-    box-shadow:
-        var(--glass-shadow),
-        inset 0 1px 0 var(--glass-edge),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.03);
+    box-shadow: var(--glass-shadow-soft);
 }
 
 
 .sidebar-profile,
-.sidebar-menu,
-.socialhub-user-row,
-.socialhub-chat-card {
-    border-radius: var(--glass-radius-sm);
+.sidebar-menu {
+    background-color: transparent;
+
+    background-image: none;
+
+    -webkit-backdrop-filter: none;
+
+    backdrop-filter: none;
+
+    border: none;
+
+    border-radius: 0;
+
+    box-shadow: none;
 }
 
 
@@ -270,19 +156,17 @@ body.dark-mode::after {
 .socialhub-stories {
     background-color: var(--glass-bg);
 
-    background-image: var(--glass-sheen);
+    background-image: none;
 
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(190%);
+    -webkit-backdrop-filter: none;
 
-    backdrop-filter: blur(var(--glass-blur)) saturate(190%);
+    backdrop-filter: none;
 
-    border: 1px solid var(--glass-border);
+    border: none;
 
     border-radius: var(--glass-radius);
 
-    box-shadow:
-        var(--glass-shadow-soft),
-        inset 0 1px 0 var(--glass-edge);
+    box-shadow: var(--glass-shadow-soft);
 }
 
 
@@ -294,20 +178,30 @@ body.dark-mode::after {
 
 
 .feed > .socialhub-stories .socialhub-story-ring {
-    background: rgba(255, 255, 255, 0.35) !important;
+    background: #ffffff !important;
 }
 
 
 .feed > .socialhub-stories .socialhub-story-ring::after {
-    background: rgba(255, 255, 255, 0.4);
+    background: #ffffff;
 
-    -webkit-backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: none;
 
-    backdrop-filter: blur(4px);
+    backdrop-filter: none;
 }
 
 
-/* ---------- FROSTED SUB-ELEMENTS ---------- */
+body.dark-mode .feed > .socialhub-stories .socialhub-story-ring {
+    background: #242526 !important;
+}
+
+
+body.dark-mode .feed > .socialhub-stories .socialhub-story-ring::after {
+    background: #242526;
+}
+
+
+/* ---------- FLAT SUB-ELEMENTS ---------- */
 
 .search-box,
 .top-icons button,
@@ -315,28 +209,26 @@ body.dark-mode::after {
 .profile-tabs button:hover {
     background: var(--glass-bg-soft);
 
-    -webkit-backdrop-filter: blur(14px) saturate(180%);
+    -webkit-backdrop-filter: none;
 
-    backdrop-filter: blur(14px) saturate(180%);
+    backdrop-filter: none;
 
-    border: 1px solid var(--glass-border-soft);
+    border: none;
 
-    box-shadow:
-        inset 0 1px 0 var(--glass-edge),
-        0 2px 10px rgba(31, 38, 135, 0.08);
+    box-shadow: none;
 }
 
 
 .profile-buttons button:not(.primary-btn) {
-    background: var(--glass-bg-strong);
+    background: var(--glass-bg-soft);
 
-    -webkit-backdrop-filter: blur(14px) saturate(180%);
+    -webkit-backdrop-filter: none;
 
-    backdrop-filter: blur(14px) saturate(180%);
+    backdrop-filter: none;
 
-    border: 1px solid var(--glass-border);
+    border: 1px solid var(--glass-border-soft);
 
-    box-shadow: inset 0 1px 0 var(--glass-edge);
+    box-shadow: none;
 }
 
 
@@ -346,12 +238,12 @@ body.dark-mode::after {
 .friend-mini-avatar {
     background: var(--glass-bg-soft);
 
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    box-shadow: none;
 }
 
 
 .profile-photo > * {
-    border-color: rgba(255, 255, 255, 0.6);
+    border-color: #ffffff;
 }
 
 
@@ -373,13 +265,13 @@ body.dark-mode::after {
 .settings-field textarea {
     background: var(--glass-bg-soft);
 
-    -webkit-backdrop-filter: blur(12px) saturate(170%);
+    -webkit-backdrop-filter: none;
 
-    backdrop-filter: blur(12px) saturate(170%);
+    backdrop-filter: none;
 
-    border: 1px solid var(--glass-border-soft);
+    border: none;
 
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    box-shadow: none;
 }
 
 
@@ -387,28 +279,52 @@ body.dark-mode::after {
 
 .edit-profile-modal,
 .post-lightbox {
-    background: rgba(255, 255, 255, 0.18);
+    background: #ffffff;
 
-    -webkit-backdrop-filter: blur(16px) saturate(170%);
+    -webkit-backdrop-filter: none;
 
-    backdrop-filter: blur(16px) saturate(170%);
+    backdrop-filter: none;
 }
 
 
-/* ---------- HOVER GLOW ---------- */
+.premium-emoji-picker {
+    background: #ffffff;
+
+    -webkit-backdrop-filter: none;
+
+    backdrop-filter: none;
+
+    border-color: var(--glass-border-soft);
+}
+
+
+body.dark-mode .edit-profile-modal,
+body.dark-mode .post-lightbox {
+    background: #242526;
+}
+
+
+/* ---------- HOVER ---------- */
 
 .post:hover {
-    box-shadow:
-        var(--glass-shadow),
-        inset 0 1px 0 var(--glass-edge);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 
 /* ---------- DARK MODE RE-ASSERTS ---------- */
 
-body.dark-mode .topbar,
 body.dark-mode .sidebar-profile,
-body.dark-mode .sidebar-menu,
+body.dark-mode .sidebar-menu {
+    background-color: transparent;
+
+    background-image: none;
+
+    border: none;
+
+    box-shadow: none;
+}
+
+
 body.dark-mode .create-post,
 body.dark-mode .post,
 body.dark-mode .profile-card:not(#profilePostsSection),
@@ -427,19 +343,15 @@ body.dark-mode .side-card,
 body.dark-mode .post-lightbox-box,
 body.dark-mode .edit-profile-box,
 body.dark-mode .auth-card,
-body.dark-mode .socialhub-stories,
 body.dark-mode .settings-sidebar,
 body.dark-mode .settings-panel {
     background-color: var(--glass-bg);
 
-    background-image: var(--glass-sheen);
+    background-image: none;
 
-    border-color: var(--glass-border);
+    border-color: var(--glass-border-soft);
 
-    box-shadow:
-        var(--glass-shadow),
-        inset 0 1px 0 var(--glass-edge),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: var(--glass-shadow-soft);
 }
 
 
@@ -449,9 +361,9 @@ body.dark-mode .fb-nav-btn:hover,
 body.dark-mode .profile-tabs button:hover {
     background: var(--glass-bg-soft);
 
-    border-color: var(--glass-border-soft);
+    border: none;
 
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    box-shadow: none;
 }
 
 
@@ -459,14 +371,14 @@ body.dark-mode .settings-field input,
 body.dark-mode .settings-field textarea {
     background: var(--glass-bg-soft);
 
-    border-color: var(--glass-border-soft);
+    border: none;
 
     box-shadow: none;
 }
 
 
 body.dark-mode .profile-buttons button:not(.primary-btn) {
-    background: var(--glass-bg-strong);
+    background: var(--glass-bg-soft);
 }
 
 
@@ -477,33 +389,17 @@ body.dark-mode .friend-mini-avatar,
 body.dark-mode .socialhub-story-avatar {
     background: var(--glass-bg-soft);
 
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
-}
-
-
-body.dark-mode .feed > .socialhub-stories .socialhub-story-ring {
-    background: rgba(255, 255, 255, 0.12) !important;
-}
-
-
-body.dark-mode .feed > .socialhub-stories .socialhub-story-ring::after {
-    background: rgba(255, 255, 255, 0.15);
+    box-shadow: none;
 }
 
 
 body.dark-mode .profile-photo > * {
-    border-color: rgba(255, 255, 255, 0.18);
+    border-color: #3e4042;
 }
 
 
 body.dark-mode .profile-tabs {
     border-top-color: var(--glass-border-soft);
-}
-
-
-body.dark-mode .edit-profile-modal,
-body.dark-mode .post-lightbox {
-    background: rgba(0, 0, 0, 0.45);
 }
 
 
@@ -513,7 +409,7 @@ body.dark-mode .post-lightbox {
 
     body::before,
     body::after {
-        animation: none;
+        display: none;
     }
 
 }
@@ -522,7 +418,6 @@ body.dark-mode .post-lightbox {
 /* ======================================================
    FACEBOOK-STYLE FEED CARDS (Phase 7)
    Flat white cards, no border, soft shadow - like FB.
-   Loaded LAST so it wins over the liquid glass panels.
    ====================================================== */
 
 .create-post,
@@ -588,5 +483,3 @@ body.dark-mode .socialhub-stories {
 body.dark-mode .post:hover {
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
-
-
