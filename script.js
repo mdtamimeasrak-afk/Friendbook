@@ -396,6 +396,11 @@ async function showCurrentUserData() {
                 image.alt =
                     profile.full_name || "Profile";
 
+                image.onerror = () => {
+
+                    element.innerHTML = "👤";
+                };
+
                 image.style.width = "100%";
                 image.style.height = "100%";
                 image.style.objectFit = "cover";
@@ -420,6 +425,11 @@ async function showCurrentUserData() {
 
                 image.alt =
                     profile.full_name || "Profile";
+
+                image.onerror = () => {
+
+                    element.innerHTML = "👤";
+                };
 
                 image.style.width = "100%";
                 image.style.height = "100%";

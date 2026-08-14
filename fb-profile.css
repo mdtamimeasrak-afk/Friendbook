@@ -1689,6 +1689,8 @@ body.dark-mode .card-title a:hover {
 
 .fb-avatar-wrap .profile-photo > * {
     border: 4px solid #ffffff;
+
+    box-sizing: border-box;
 }
 
 .fb-avatar-wrap .socialhub-avatar-overlay {
