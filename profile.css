@@ -4097,8 +4097,30 @@ body.dark-mode .fb-friend-summary {
 
 /* ---------- Cover buttons (Facebook style) ---------- */
 
+.fb-header {
+    position: relative;
+
+    height: 300px;
+
+    margin-bottom: 84px;
+}
+
+.fb-header .cover-photo {
+    height: 300px;
+}
+
 .fb-header .fb-avatar-wrap {
-    margin-left: 28px;
+    position: absolute;
+
+    left: 28px;
+
+    bottom: -84px;
+
+    z-index: 4;
+}
+
+.fb-avatar-wrap .profile-photo {
+    margin: 0;
 }
 
 .fb-cover-buttons {
@@ -4196,7 +4218,7 @@ body.dark-mode .fb-friend-summary {
     }
 
     .fb-header .fb-avatar-wrap {
-        margin-left: 20px;
+        left: 20px;
     }
 }
 
