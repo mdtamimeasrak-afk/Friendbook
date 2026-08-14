@@ -16,15 +16,15 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%231877f2'/%3E%3Ctext x='20' y='27' font-family='Arial' font-size='21' font-weight='800' fill='white' text-anchor='middle'%3ETR%3C/text%3E%3C/svg%3E">
 
 
-    <link rel="stylesheet" href="style.css?v=1786731318298">
+    <link rel="stylesheet" href="style.css?v=1786731713250">
 
-    <link rel="stylesheet" href="dashboard.css?v=1786731318298">
+    <link rel="stylesheet" href="dashboard.css?v=1786731713250">
 
-    <link rel="stylesheet" href="premium.css?v=1786731318298">
+    <link rel="stylesheet" href="premium.css?v=1786731713250">
 
-    <link rel="stylesheet" href="glass-theme.css?v=1786731318298">
+    <link rel="stylesheet" href="glass-theme.css?v=1786731713250">
 
-    <link rel="stylesheet" href="campus.css?v=1786731318298">
+    <link rel="stylesheet" href="campus.css?v=1786731713250">
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -385,17 +385,33 @@
                 id="campusPane-groups"
             >
 
-                <div class="campus-empty-card">
-                    <div class="campus-empty-icon">
+                <!-- GROUPS TOOLBAR -->
+                <div class="campus-groups-toolbar">
+
+                    <div class="campus-groups-title">
                         <i class="fa-solid fa-users"></i>
+                        Campus Groups
                     </div>
-                    <h3>Campus Groups</h3>
-                    <p>
-                        CSE clubs, programming groups, blood donors and more —
-                        join groups inside your campus.
-                    </p>
-                    <span class="campus-coming">Coming in Step 6</span>
+
+                    <button
+                        class="campus-groups-create-btn"
+                        id="campusGroupCreateBtn"
+                        type="button"
+                        onclick="socialhubCampusOpenCreateGroup()"
+                        style="display:none"
+                    >
+                        <i class="fa-solid fa-plus"></i>
+                        Create Group
+                    </button>
+
                 </div>
+
+
+                <!-- GROUP CARDS -->
+                <div
+                    class="campus-groups-grid"
+                    id="campusGroupsList"
+                ></div>
 
             </div>
 
@@ -466,22 +482,79 @@
 
 
     <!-- ========================= -->
+    <!-- CREATE GROUP MODAL -->
+    <!-- ========================= -->
+
+    <div
+        class="campus-modal"
+        id="campusGroupModal"
+        style="display:none"
+    >
+
+        <div class="campus-modal-box">
+
+            <button
+                type="button"
+                class="campus-modal-close"
+                onclick="socialhubCampusCloseCreateGroup()"
+            >
+                ✕
+            </button>
+
+            <h3>Create Campus Group</h3>
+
+            <input
+                type="text"
+                id="campusGroupName"
+                placeholder="Group name (e.g. Programming Club)"
+                maxlength="60"
+            >
+
+            <textarea
+                id="campusGroupDesc"
+                rows="3"
+                placeholder="What is this group about?"
+                maxlength="300"
+            ></textarea>
+
+            <input
+                type="text"
+                id="campusGroupImage"
+                placeholder="Image URL (optional)"
+            >
+
+            <button
+                type="button"
+                class="campus-post-btn campus-group-submit"
+                id="campusGroupSubmit"
+                onclick="socialhubCampusCreateGroup()"
+            >
+                Create Group
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ========================= -->
     <!-- SCRIPTS -->
     <!-- ========================= -->
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="supabase.js?v=1786731318298"></script>
+    <script src="supabase.js?v=1786731713250"></script>
 
-    <script src="premium-ui.js?v=1786731318298"></script>
+    <script src="premium-ui.js?v=1786731713250"></script>
 
-    <script src="script.js?v=1786731318298"></script>
+    <script src="script.js?v=1786731713250"></script>
 
-    <script src="likes-comments.js?v=1786731318298"></script>
+    <script src="likes-comments.js?v=1786731713250"></script>
 
-    <script src="shares.js?v=1786731318298"></script>
+    <script src="shares.js?v=1786731713250"></script>
 
-    <script src="campus.js?v=1786731318298"></script>
+    <script src="campus.js?v=1786731713250"></script>
 
 </body>
 

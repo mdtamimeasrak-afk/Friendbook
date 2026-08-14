@@ -1185,3 +1185,69 @@ create policy campus_post_comments_delete on public.campus_post_comments for del
 alter table public.profiles add column if not exists department text;
 alter table public.profiles add column if not exists semester text;
 alter table public.profiles add column if not exists batch text;
+
+
+-- 10.0 CAMPUS COMMUNITY (Step 6: campus groups + group members)
+-- 10.1 CAMPUS_GROUPS: name/image/description; creator becomes admin; only campus members may create
+create table if not exists public.campus_groups (
+  id uuid primary key default gen_random_uuid(),
+  campus_id uuid not null references public.campuses (id) on delete cascade,
+  name text not null,
+  description text,
+  image_url text,
+  created_by uuid not null references public.profiles (id) on delete cascade,
+  created_at timestamptz not null default now()
+);
+alter table public.campus_groups enable row level security;
+create policy campus_groups_select on public.campus_groups for select to authenticated using (true);
+create policy campus_groups_insert on public.campus_groups for insert to authenticated with check (
+  auth.uid() = created_by
+  and exists (
+    select 1 from public.campus_members cm
+    where cm.campus_id = campus_groups.campus_id
+      and cm.user_id = auth.uid()
+  )
+);
+create policy campus_groups_update on public.campus_groups for update to authenticated using (created_by = auth.uid()) with check (created_by = auth.uid());
+create policy campus_groups_delete on public.campus_groups for delete to authenticated using (created_by = auth.uid());
+
+-- 10.2 CAMPUS_GROUP_MEMBERS: join/leave; unique = no double join
+create table if not exists public.campus_group_members (
+  id uuid primary key default gen_random_uuid(),
+  group_id uuid not null references public.campus_groups (id) on delete cascade,
+  user_id uuid not null references public.profiles (id) on delete cascade,
+  role text not null default 'member',
+  joined_at timestamptz not null default now(),
+  unique (group_id, user_id)
+);
+alter table public.campus_group_members enable row level security;
+create policy campus_group_members_select on public.campus_group_members for select to authenticated using (true);
+create policy campus_group_members_insert on public.campus_group_members for insert to authenticated with check (
+  auth.uid() = user_id
+  and exists (
+    select 1 from public.campus_groups cg
+    join public.campus_members cm on cm.campus_id = cg.campus_id
+    where cg.id = campus_group_members.group_id
+      and cm.user_id = auth.uid()
+  )
+);
+create policy campus_group_members_update on public.campus_group_members for update to authenticated using (auth.uid() = user_id) with check (auth.uid() = user_id);
+create policy campus_group_members_delete on public.campus_group_members for delete to authenticated using (
+  auth.uid() = user_id
+  or exists (
+    select 1 from public.campus_groups cg
+    where cg.id = campus_group_members.group_id
+      and cg.created_by = auth.uid()
+  )
+);
+
+-- 10.3 Seed: starter groups for the first campus (creator = Tamim Easrak)
+insert into public.campus_groups (campus_id, name, description, created_by)
+select c.id, 'Programming Club', 'Code, hackathons and tech workshops for campus students.', 'b0432f86-5982-44d4-954c-e2fcac39168a'
+from public.campuses c order by c.created_at limit 1 on conflict do nothing;
+insert into public.campus_groups (campus_id, name, description, created_by)
+select c.id, 'Sports Club', 'Football, cricket, badminton and campus tournaments.', 'b0432f86-5982-44d4-954c-e2fcac39168a'
+from public.campuses c order by c.created_at limit 1 on conflict do nothing;
+insert into public.campus_groups (campus_id, name, description, created_by)
+select c.id, 'Cultural Club', 'Music, drama, debates and annual campus events.', 'b0432f86-5982-44d4-954c-e2fcac39168a'
+from public.campuses c order by c.created_at limit 1 on conflict do nothing;

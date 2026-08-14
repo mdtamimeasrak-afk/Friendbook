@@ -173,6 +173,8 @@ async function socialhubCampusLoad() {
         await socialhubCampusLoadPosts();
 
         await socialhubCampusLoadStudents();
+
+        await socialhubCampusLoadGroups();
     }
     catch (err) {
 
@@ -2347,4 +2349,557 @@ async function socialhubCampusAccept(userId, button) {
         "You are now friends! 🎉",
         "success"
     );
+}
+
+
+// ======================================================
+// STEP 6: CAMPUS GROUPS
+// ======================================================
+
+const socialhubCampusGroups = {
+    list: [],
+    myIds: new Set(),
+    counts: {},
+    creators: {}
+};
+
+
+const SOCIALHUB_CAMPUS_GROUP_EMOJIS = [
+    "💻", "⚽", "🎭", "📚", "🎨", "🎵",
+    "🧪", "🩺", "🌱", "📷", "♟️", "🛠️"
+];
+
+
+function socialhubCampusGroupEmoji(name) {
+
+    const text =
+        (name || "Group")
+            .toLowerCase()
+            .replace(/\s+/g, "");
+
+    const maps = [
+        ["program", "💻"],
+        ["coding", "💻"],
+        ["developer", "💻"],
+        ["it", "💻"],
+        ["football", "⚽"],
+        ["sports", "⚽"],
+        ["cricket", "🏏"],
+        ["badminton", "🏸"],
+        ["cultural", "🎭"],
+        ["drama", "🎭"],
+        ["music", "🎵"],
+        ["singing", "🎵"],
+        ["book", "📚"],
+        ["library", "📚"],
+        ["art", "🎨"],
+        ["design", "🎨"],
+        ["science", "🧪"],
+        ["lab", "🧪"],
+        ["medical", "🩺"],
+        ["health", "🩺"],
+        ["blood", "🩸"],
+        ["donor", "🩸"],
+        ["photo", "📷"],
+        ["photography", "📷"],
+        ["chess", "♟️"],
+        ["game", "🎮"],
+        ["gaming", "🎮"]
+    ];
+
+    for (const [key, emoji] of maps) {
+
+        if (text.includes(key)) {
+            return emoji;
+        }
+    }
+
+    let hash = 0;
+
+    for (let i = 0; i < text.length; i++) {
+        hash = (hash * 31 + text.charCodeAt(i)) >>> 0;
+    }
+
+    return SOCIALHUB_CAMPUS_GROUP_EMOJIS[
+        hash % SOCIALHUB_CAMPUS_GROUP_EMOJIS.length
+    ];
+}
+
+
+async function socialhubCampusLoadGroups() {
+
+    const list =
+        document.getElementById("campusGroupsList");
+
+    if (!list) {
+        return;
+    }
+
+    const campus =
+        socialhubCampusState.campus;
+
+    if (!campus) {
+        return;
+    }
+
+    list.innerHTML =
+        '<div class="campus-feed-loading">Loading groups...</div>';
+
+    let me = null;
+
+    try {
+
+        const { data: sessionData } =
+            await supabaseClient.auth.getSession();
+
+        if (sessionData && sessionData.session) {
+            me = sessionData.session.user;
+        }
+    }
+    catch (err) {
+        me = null;
+    }
+
+    const {
+        data: groups,
+        error
+    } =
+        await supabaseClient
+            .from("campus_groups")
+            .select(
+                "id, campus_id, name, description, image_url, created_by, created_at"
+            )
+            .eq("campus_id", campus.id)
+            .order("created_at", { ascending: false });
+
+    if (error) {
+
+        list.innerHTML = "";
+
+        socialhubToast(
+            "Could not load groups.",
+            "error"
+        );
+
+        return;
+    }
+
+    const all = groups || [];
+
+    const {
+        data: memberRows
+    } =
+        await supabaseClient
+            .from("campus_group_members")
+            .select("group_id, user_id");
+
+    const counts = {};
+
+    const myIds = new Set();
+
+    (memberRows || []).forEach(row => {
+
+        counts[row.group_id] =
+            (counts[row.group_id] || 0) + 1;
+
+        if (me && row.user_id === me.id) {
+
+            myIds.add(row.group_id);
+        }
+    });
+
+    const creatorIds = [
+        ...new Set(all.map(g => g.created_by).filter(Boolean))
+    ];
+
+    const creators = {};
+
+    if (creatorIds.length > 0) {
+
+        const {
+            data: profiles
+        } =
+            await supabaseClient
+                .from("profiles")
+                .select("id, full_name, username")
+                .in("id", creatorIds);
+
+        (profiles || []).forEach(profile => {
+
+            creators[profile.id] = profile;
+        });
+    }
+
+    socialhubCampusGroups.list = all;
+
+    socialhubCampusGroups.counts = counts;
+
+    socialhubCampusGroups.myIds = myIds;
+
+    socialhubCampusGroups.creators = creators;
+
+    socialhubCampusRenderGroups();
+}
+
+
+function socialhubCampusRenderGroups() {
+
+    const list =
+        document.getElementById("campusGroupsList");
+
+    if (!list) {
+        return;
+    }
+
+    const joined =
+        socialhubCampusState.joined;
+
+    const createBtn =
+        document.getElementById("campusGroupCreateBtn");
+
+    if (createBtn) {
+
+        createBtn.style.display =
+            joined ? "inline-flex" : "none";
+    }
+
+    if (socialhubCampusGroups.list.length === 0) {
+
+        list.innerHTML =
+            '<div class="campus-empty-card">' +
+                '<div class="campus-empty-icon">' +
+                    '<i class="fa-solid fa-users"></i>' +
+                "</div>" +
+                "<h3>No Groups Yet</h3>" +
+                "<p>" +
+                    "Be the first to create a group " +
+                    "inside your campus." +
+                "</p>" +
+            "</div>";
+
+        return;
+    }
+
+    list.innerHTML = "";
+
+    socialhubCampusGroups.list.forEach(group => {
+
+        const count =
+            socialhubCampusGroups.counts[group.id] || 0;
+
+        const mine =
+            socialhubCampusGroups.myIds.has(group.id);
+
+        const creator =
+            socialhubCampusGroups.creators[group.created_by];
+
+        const creatorName =
+            creator?.full_name ||
+            creator?.username ||
+            "Someone";
+
+        const emoji =
+            socialhubCampusGroupEmoji(group.name);
+
+        const cover = group.image_url
+            ? '<img src="' + socialhubCampusEscape(group.image_url) + '" alt="Group photo">'
+            : emoji;
+
+        let buttonHTML = "";
+
+        if (joined) {
+
+            buttonHTML = mine
+                ? '<button type="button" class="campus-group-join joined" ' +
+                        'onclick="socialhubCampusLeaveGroup(\'' + group.id + '\', this)">' +
+                        "Joined ✓</button>"
+                : '<button type="button" class="campus-group-join" ' +
+                        'onclick="socialhubCampusJoinGroup(\'' + group.id + '\', this)">' +
+                        "Join Group</button>";
+
+        } else {
+
+            buttonHTML =
+                '<button type="button" class="campus-group-join" disabled ' +
+                    'title="Join the campus first">' +
+                    "Join Campus First</button>";
+        }
+
+        const card =
+            document.createElement("div");
+
+        card.className = "campus-group-card";
+
+        card.innerHTML =
+            '<div class="campus-group-cover">' +
+                cover +
+            "</div>" +
+            '<div class="campus-group-body">' +
+                '<div class="campus-group-name">' +
+                    socialhubCampusEscape(group.name) +
+                    (group.created_by && mine
+                        ? '<span class="campus-group-admin">Admin</span>'
+                        : "") +
+                "</div>" +
+                (group.description
+                    ? '<p class="campus-group-desc">' +
+                        socialhubCampusEscape(group.description) +
+                        "</p>"
+                    : "") +
+                '<div class="campus-group-meta">' +
+                    "👥 " + count + " member" +
+                    (count === 1 ? "" : "s") +
+                    " · by " + socialhubCampusEscape(creatorName) +
+                "</div>" +
+                '<div class="campus-group-actions">' +
+                    buttonHTML +
+                "</div>" +
+            "</div>";
+
+        list.appendChild(card);
+    });
+}
+
+
+function socialhubCampusOpenCreateGroup() {
+
+    if (!socialhubCampusState.joined) {
+
+        socialhubToast(
+            "Join the campus first to create a group.",
+            "error"
+        );
+
+        return;
+    }
+
+    document.getElementById("campusGroupName").value = "";
+
+    document.getElementById("campusGroupDesc").value = "";
+
+    document.getElementById("campusGroupImage").value = "";
+
+    document.getElementById("campusGroupModal").style.display =
+        "flex";
+}
+
+
+function socialhubCampusCloseCreateGroup() {
+
+    document.getElementById("campusGroupModal").style.display =
+        "none";
+}
+
+
+async function socialhubCampusCreateGroup() {
+
+    let me = null;
+
+    try {
+
+        const { data: sessionData } =
+            await supabaseClient.auth.getSession();
+
+        if (sessionData && sessionData.session) {
+            me = sessionData.session.user;
+        }
+    }
+    catch (err) {
+        me = null;
+    }
+
+    if (!me) {
+
+        socialhubToast(
+            "Please login first.",
+            "error"
+        );
+
+        return;
+    }
+
+    const nameInput =
+        document.getElementById("campusGroupName");
+
+    const descInput =
+        document.getElementById("campusGroupDesc");
+
+    const imageInput =
+        document.getElementById("campusGroupImage");
+
+    const name =
+        (nameInput.value || "").trim();
+
+    if (!name) {
+
+        socialhubToast(
+            "Please write a group name.",
+            "error"
+        );
+
+        nameInput.focus();
+
+        return;
+    }
+
+    const button =
+        document.getElementById("campusGroupSubmit");
+
+    button.disabled = true;
+
+    button.innerText = "Creating...";
+
+    const {
+        data: group,
+        error
+    } =
+        await supabaseClient
+            .from("campus_groups")
+            .insert({
+                campus_id: socialhubCampusState.campus.id,
+                name: name,
+                description:
+                    (descInput.value || "").trim() || null,
+                image_url:
+                    (imageInput.value || "").trim() || null,
+                created_by: me.id
+            })
+            .select()
+            .single();
+
+    if (error) {
+
+        button.disabled = false;
+
+        button.innerText = "Create Group";
+
+        socialhubToast(
+            "Could not create the group.",
+            "error"
+        );
+
+        return;
+    }
+
+    await supabaseClient
+        .from("campus_group_members")
+        .insert({
+            group_id: group.id,
+            user_id: me.id,
+            role: "admin"
+        });
+
+    socialhubCampusCloseCreateGroup();
+
+    button.disabled = false;
+
+    button.innerText = "Create Group";
+
+    socialhubToast(
+        "Group created! 🎉",
+        "success"
+    );
+
+    await socialhubCampusLoadGroups();
+}
+
+
+async function socialhubCampusJoinGroup(groupId, button) {
+
+    if (!window.confirm(
+        "Join this campus group?"
+    )) {
+        return;
+    }
+
+    button.disabled = true;
+
+    const { error } =
+        await supabaseClient
+            .from("campus_group_members")
+            .insert({
+                group_id: groupId,
+                user_id:
+                    (await socialhubCampusMe())?.id
+            });
+
+    if (error) {
+
+        button.disabled = false;
+
+        socialhubToast(
+            "Could not join the group.",
+            "error"
+        );
+
+        return;
+    }
+
+    socialhubToast(
+        "You joined the group! 🎉",
+        "success"
+    );
+
+    await socialhubCampusLoadGroups();
+}
+
+
+async function socialhubCampusLeaveGroup(groupId, button) {
+
+    if (!window.confirm(
+        "Leave this campus group?"
+    )) {
+        return;
+    }
+
+    button.disabled = true;
+
+    const { error } =
+        await supabaseClient
+            .from("campus_group_members")
+            .delete()
+            .eq("group_id", groupId)
+            .eq(
+                "user_id",
+                (await socialhubCampusMe())?.id
+            );
+
+    if (error) {
+
+        button.disabled = false;
+
+        socialhubToast(
+            "Could not leave the group.",
+            "error"
+        );
+
+        return;
+    }
+
+    socialhubToast(
+        "You left the group.",
+        "success"
+    );
+
+    await socialhubCampusLoadGroups();
+}
+
+
+async function socialhubCampusMe() {
+
+    try {
+
+        const { data: sessionData } =
+            await supabaseClient.auth.getSession();
+
+        if (sessionData && sessionData.session) {
+
+            return sessionData.session.user;
+        }
+    }
+    catch (err) {
+        return null;
+    }
+
+    return null;
 }

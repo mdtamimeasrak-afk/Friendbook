@@ -1180,6 +1180,445 @@ body.dark-mode .campus-empty-card p {
 }
 
 
+/* ===================================================== */
+/* STEP 6: CAMPUS GROUPS
+/* ===================================================== */
+
+.campus-groups-toolbar {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-bottom: 18px;
+
+    flex-wrap: wrap;
+}
+
+
+.campus-groups-title {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    font-size: 17px;
+
+    font-weight: 800;
+
+    color: var(--text, #050505);
+}
+
+
+.campus-groups-title i {
+    color: #1877f2;
+}
+
+
+.campus-groups-create-btn {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    background: #1877f2;
+
+    color: #fff;
+
+    border: none;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    padding: 9px 18px;
+
+    border-radius: 22px;
+
+    cursor: pointer;
+
+    transition: background 0.2s;
+}
+
+
+.campus-groups-create-btn:hover {
+    background: #166fe5;
+}
+
+
+.campus-groups-grid {
+    display: grid;
+
+    grid-template-columns: repeat(
+        auto-fill,
+        minmax(260px, 1fr)
+    );
+
+    gap: 16px;
+}
+
+
+.campus-group-card {
+    background: #fff;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+
+    border: 1px solid #dddfe2;
+
+    display: flex;
+
+    flex-direction: column;
+
+    transition: transform 0.15s, box-shadow 0.15s;
+}
+
+
+.campus-group-card:hover {
+    transform: translateY(-2px);
+
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+
+.campus-group-cover {
+    height: 110px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 46px;
+
+    background: linear-gradient(
+        135deg,
+        #1877f2,
+        #5b8ff5
+    );
+}
+
+
+.campus-group-cover img {
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+}
+
+
+.campus-group-body {
+    padding: 14px 16px 16px;
+
+    flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+
+.campus-group-name {
+    font-size: 16px;
+
+    font-weight: 800;
+
+    color: var(--text, #050505);
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.campus-group-admin {
+    font-size: 11px;
+
+    font-weight: 700;
+
+    color: #1877f2;
+
+    background: rgba(24, 119, 242, 0.12);
+
+    padding: 2px 8px;
+
+    border-radius: 10px;
+}
+
+
+.campus-group-desc {
+    font-size: 13px;
+
+    color: #65676b;
+
+    line-height: 1.5;
+
+    display: -webkit-box;
+
+    -webkit-line-clamp: 2;
+
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+}
+
+
+.campus-group-meta {
+    font-size: 13px;
+
+    font-weight: 600;
+
+    color: #65676b;
+}
+
+
+.campus-group-actions {
+    margin-top: auto;
+
+    padding-top: 4px;
+}
+
+
+.campus-group-join {
+    width: 100%;
+
+    border: none;
+
+    border-radius: 8px;
+
+    padding: 9px;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: background 0.2s, color 0.2s;
+}
+
+
+.campus-group-join:not(.joined) {
+    background: #e7f3ff;
+
+    color: #1877f2;
+}
+
+
+.campus-group-join:not(.joined):hover {
+    background: #d5e9ff;
+}
+
+
+.campus-group-join.joined {
+    background: #e4e6eb;
+
+    color: #65676b;
+}
+
+
+.campus-group-join.joined:hover {
+    background: #d8dadf;
+}
+
+
+.campus-group-join:disabled {
+    cursor: default;
+
+    opacity: 0.8;
+}
+
+
+/* ---------- CREATE GROUP MODAL ---------- */
+
+.campus-modal {
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    z-index: 9999;
+
+    padding: 16px;
+}
+
+
+.campus-modal-box {
+    background: #fff;
+
+    border-radius: 16px;
+
+    padding: 24px;
+
+    width: 100%;
+
+    max-width: 420px;
+
+    position: relative;
+
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+}
+
+
+.campus-modal-close {
+    position: absolute;
+
+    top: 12px;
+
+    right: 12px;
+
+    background: #e4e6eb;
+
+    border: none;
+
+    width: 32px;
+
+    height: 32px;
+
+    border-radius: 50%;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    color: #050505;
+}
+
+
+.campus-modal-box h3 {
+    margin: 0 0 16px;
+
+    font-size: 18px;
+
+    color: var(--text, #050505);
+}
+
+
+.campus-modal-box input,
+.campus-modal-box textarea {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    border: 1px solid #dddfe2;
+
+    border-radius: 10px;
+
+    padding: 11px 13px;
+
+    font-size: 14px;
+
+    font-family: inherit;
+
+    margin-bottom: 12px;
+
+    background: #f5f6f7;
+
+    color: #050505;
+
+    resize: none;
+}
+
+
+.campus-modal-box input:focus,
+.campus-modal-box textarea:focus {
+    outline: none;
+
+    border-color: #1877f2;
+
+    background: #fff;
+}
+
+
+.campus-group-submit {
+    width: 100%;
+
+    border: none;
+}
+
+
+body.dark-mode .campus-groups-title {
+    color: #e4e6eb;
+}
+
+
+body.dark-mode .campus-group-card {
+    background: #242526;
+
+    border-color: #3e4042;
+}
+
+
+body.dark-mode .campus-group-name {
+    color: #e4e6eb;
+}
+
+
+body.dark-mode .campus-group-desc {
+    color: #b0b3b8;
+}
+
+
+body.dark-mode .campus-group-meta {
+    color: #b0b3b8;
+}
+
+
+body.dark-mode .campus-group-join.joined {
+    background: #3a3b3c;
+
+    color: #b0b3b8;
+}
+
+
+body.dark-mode .campus-modal-box {
+    background: #242526;
+}
+
+
+body.dark-mode .campus-modal-box h3 {
+    color: #e4e6eb;
+}
+
+
+body.dark-mode .campus-modal-box input,
+body.dark-mode .campus-modal-box textarea {
+    background: #3a3b3c;
+
+    border-color: #3e4042;
+
+    color: #e4e6eb;
+}
+
+
+body.dark-mode .campus-modal-close {
+    background: #3a3b3c;
+
+    color: #e4e6eb;
+}
+
+
 /* ---------- RESPONSIVE ---------- */
 
 @media (max-width: 600px) {
