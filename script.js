@@ -473,20 +473,6 @@ async function showCurrentUserData() {
 
 
     // ------------------------------------------
-    // CREATE POST USER NAME
-    // ------------------------------------------
-
-    document
-        .querySelectorAll(".post-user-name")
-        .forEach(element => {
-
-            element.innerText =
-                profile.full_name || "User";
-
-        });
-
-
-    // ------------------------------------------
     // FILL EDIT PROFILE FORM
     // ------------------------------------------
 
@@ -2736,17 +2722,8 @@ async function loadPostsFromSupabase() {
 
 
 // Load posts after page loads
-document.addEventListener(
-    "DOMContentLoaded",
-    function() {
-
-        setTimeout(
-            loadPostsFromSupabase,
-            700
-        );
-
-    }
-);
+// (legacy auto-load removed: the Step 10.31
+//  loader renders the feed with real names)
 // ==========================================
 // SocialHub - Step 10.30
 // Save Background Post to Supabase
@@ -2888,11 +2865,11 @@ async function createPremiumPostInSupabase(event) {
 
         // Reload feed
         if (
-            typeof loadPostsFromSupabase ===
+            typeof loadPostsWithUserNames ===
             "function"
         ) {
 
-            await loadPostsFromSupabase();
+            await loadPostsWithUserNames();
 
         }
 
@@ -3034,7 +3011,6 @@ async function loadPostsWithUserNames() {
             .select("*", { count: "exact" })
             .is("group_id", null)
             .is("page_id", null)
-            .is("campus_id", null)
             .order("created_at", {
                 ascending: false
             })
@@ -3560,7 +3536,6 @@ function socialhubMaybeShowLoadMore() {
             .select("*")
             .is("group_id", null)
             .is("page_id", null)
-            .is("campus_id", null)
             .order("created_at", {
                 ascending: false
             })
