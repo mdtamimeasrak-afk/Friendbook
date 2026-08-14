@@ -549,6 +549,16 @@ function socialhubProfileSetAudience(value) {
             "🌎 Public";
     }
 
+    const label2 =
+        document.getElementById("profileAudienceLabel2");
+
+    if (label2) {
+
+        label2.textContent =
+            SOCIALHUB_AUDIENCE_LABELS[value] ||
+            "🌎 Public";
+    }
+
     document.getElementById("profileAudienceMenu").style.display =
         "none";
 }
@@ -1940,6 +1950,30 @@ async function socialhubFillProfileHeader() {
 
             headerBio.style.display = "none";
         }
+    }
+
+    // ---------- COMPOSER MODAL (avatar + name) ----------
+
+    const composerAvatar =
+        document.querySelector(
+            "#profileComposerModal .fb-composer-top .avatar"
+        );
+
+    if (composerAvatar) {
+
+        composerAvatar.innerHTML =
+            socialhubAvatarHTML(profile);
+    }
+
+    const composerName =
+        document.querySelector(
+            ".fb-composer-name"
+        );
+
+    if (composerName) {
+
+        composerName.textContent =
+            profile.full_name || "User";
     }
 
     // ---------- JOINED SOCIALHUB (About → Overview) ----------
