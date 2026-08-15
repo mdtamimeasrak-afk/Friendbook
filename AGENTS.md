@@ -37,8 +37,8 @@ Supabase-backed social media app. Vanilla HTML/CSS/JS (no framework, no build st
 
 ## Deploy targets
 
-- **GitHub Pages (primary, auto)**: push to `main` → https://mdtamimeasrak-afk.github.io/Friendbook/
-- **Cloudflare Pages (secondary, manual)**: https://friendbook-78z.pages.dev/ — deploy AFTER GitHub push using `npx.cmd wrangler pages deploy <temp-copy-without-.git> --project-name friendbook --branch main`. Use `npx.cmd`, NOT `npx` (PowerShell execution policy blocks the .ps1 shim). Cloudflare auto-redirects `x.html` → `x` (308) — browsers follow it, so HTML refs keep working.
+- **GitHub repo (source of truth)**: push to `main` → https://github.com/mdtamimeasrak-afk/Friendbook — files only, NOT live (GitHub Pages was deleted by user choice; single live site policy).
+- **Cloudflare Pages (THE live site)**: https://friendbook-78z.pages.dev/ — deploy AFTER every GitHub push using `npx.cmd wrangler pages deploy <temp-copy-without-.git> --project-name friendbook --branch main`. Use `npx.cmd`, NOT `npx` (PowerShell execution policy blocks the .ps1 shim). Cloudflare auto-redirects `x.html` → `x` (308) — browsers follow it, so HTML refs keep working.
 
 ## Key flows
 
