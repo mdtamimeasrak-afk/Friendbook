@@ -7915,3 +7915,413 @@ body.dark-mode .fb-left-edit-btn:hover {
     background: #4e4f52;
 }
 
+/* ======================================================
+   CHANGE PROFILE PICTURE — MODAL MENU (Facebook style)
+   ====================================================== */
+
+.socialhub-avatar-modal {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 450;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.6);
+
+    padding: 20px;
+}
+
+.socialhub-avatar-modal-box {
+    width: 100%;
+
+    max-width: 440px;
+
+    max-height: 90vh;
+
+    display: flex;
+
+    flex-direction: column;
+
+    background: #ffffff;
+
+    border-radius: 14px;
+
+    overflow: hidden;
+
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.socialhub-avatar-modal-head {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 16px 20px;
+
+    border-bottom: 1px solid #e4e6eb;
+}
+
+.socialhub-avatar-modal-head strong {
+    font-size: 18px;
+
+    font-weight: 700;
+
+    color: #050505;
+}
+
+.socialhub-avatar-modal-close {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 34px;
+
+    height: 34px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #e4e6eb;
+
+    color: #050505;
+
+    cursor: pointer;
+
+    transition: background 0.15s;
+}
+
+.socialhub-avatar-modal-close:hover {
+    background: #d8dadf;
+}
+
+.socialhub-avatar-modal-close i {
+    width: 16px;
+
+    height: 16px;
+}
+
+.socialhub-avatar-modal-body {
+    padding: 20px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 18px;
+
+    overflow-y: auto;
+}
+
+.socialhub-avatar-modal-preview {
+    width: 128px;
+
+    height: 128px;
+
+    border-radius: 50%;
+
+    overflow: hidden;
+
+    flex-shrink: 0;
+
+    background: #f0f2f5;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+.socialhub-avatar-modal-preview img {
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+}
+
+.socialhub-avatar-modal-placeholder {
+    display: flex;
+
+    color: #b0b3b8;
+}
+
+.socialhub-avatar-modal-placeholder i {
+    width: 64px;
+
+    height: 64px;
+}
+
+.socialhub-avatar-modal-rows {
+    width: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+}
+
+.socialhub-avatar-modal-row {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    width: 100%;
+
+    padding: 10px 12px;
+
+    border: none;
+
+    border-radius: 10px;
+
+    background: transparent;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition: background 0.15s;
+}
+
+.socialhub-avatar-modal-row:hover {
+    background: #f0f2f5;
+}
+
+.socialhub-avatar-modal-row-icon {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 40px;
+
+    height: 40px;
+
+    border-radius: 50%;
+
+    background: #e4e6eb;
+
+    color: #050505;
+
+    flex-shrink: 0;
+}
+
+.socialhub-avatar-modal-row-icon i {
+    width: 18px;
+
+    height: 18px;
+}
+
+.socialhub-avatar-modal-row-text {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+
+    min-width: 0;
+}
+
+.socialhub-avatar-modal-row-text strong {
+    font-size: 14.5px;
+
+    font-weight: 600;
+
+    color: #050505;
+}
+
+.socialhub-avatar-modal-row-text small {
+    font-size: 12.5px;
+
+    color: #65676b;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.socialhub-avatar-modal-foot {
+    padding: 12px 20px;
+
+    border-top: 1px solid #e4e6eb;
+
+    display: flex;
+
+    justify-content: flex-end;
+}
+
+.socialhub-avatar-modal-cancel {
+    height: 36px;
+
+    padding: 0 22px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #e4e6eb;
+
+    color: #050505;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    font-family: inherit;
+
+    cursor: pointer;
+
+    transition: background 0.15s;
+}
+
+.socialhub-avatar-modal-cancel:hover {
+    background: #d8dadf;
+}
+
+body.dark-mode .socialhub-avatar-modal-box {
+    background: #242526;
+}
+
+body.dark-mode .socialhub-avatar-modal-head {
+    border-bottom-color: #3a3b3c;
+}
+
+body.dark-mode .socialhub-avatar-modal-head strong {
+    color: #e4e6eb;
+}
+
+body.dark-mode .socialhub-avatar-modal-close {
+    background: #3a3b3c;
+
+    color: #e4e6eb;
+}
+
+body.dark-mode .socialhub-avatar-modal-close:hover {
+    background: #4e4f52;
+}
+
+body.dark-mode .socialhub-avatar-modal-preview {
+    background: #3a3b3c;
+}
+
+body.dark-mode .socialhub-avatar-modal-placeholder {
+    color: #65676b;
+}
+
+body.dark-mode .socialhub-avatar-modal-row:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+body.dark-mode .socialhub-avatar-modal-row-icon {
+    background: #3a3b3c;
+
+    color: #e4e6eb;
+}
+
+body.dark-mode .socialhub-avatar-modal-row-text strong {
+    color: #e4e6eb;
+}
+
+body.dark-mode .socialhub-avatar-modal-row-text small {
+    color: #b0b3b8;
+}
+
+body.dark-mode .socialhub-avatar-modal-foot {
+    border-top-color: #3a3b3c;
+}
+
+body.dark-mode .socialhub-avatar-modal-cancel {
+    background: #3a3b3c;
+
+    color: #e4e6eb;
+}
+
+body.dark-mode .socialhub-avatar-modal-cancel:hover {
+    background: #4e4f52;
+}
+
+/* ======================================================
+   AVATAR CROP EDITOR — ROTATE BUTTONS
+   ====================================================== */
+
+.socialhub-crop-close i {
+    width: 16px;
+
+    height: 16px;
+}
+
+.socialhub-crop-rotates {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    margin: 10px 0 2px;
+}
+
+.socialhub-crop-rotates button {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    width: 42px;
+
+    height: 42px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #e4e6eb;
+
+    color: #050505;
+
+    cursor: pointer;
+
+    transition: background 0.15s;
+}
+
+.socialhub-crop-rotates button:hover {
+    background: #d8dadf;
+}
+
+.socialhub-crop-rotates button i {
+    width: 18px;
+
+    height: 18px;
+}
+
+body.dark-mode .socialhub-crop-rotates button {
+    background: #3a3b3c;
+
+    color: #e4e6eb;
+}
+
+body.dark-mode .socialhub-crop-rotates button:hover {
+    background: #4e4f52;
+}
+

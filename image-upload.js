@@ -245,11 +245,11 @@ function socialhubViewFullImage(src) {
 }
 
 
-// Profile photo menu (own: update/view/remove, other: view only)
+// Profile photo modal menu (Facebook-style "Change Profile
+// Picture" dialog). Own profile: upload / edit / view /
+// remove. Other users: view only.
 
 function socialhubOpenAvatarMenu(photo, anchor) {
-
-    socialhubClosePhotoMenus();
 
     const isOwnProfile =
         window.location.pathname
@@ -259,69 +259,228 @@ function socialhubOpenAvatarMenu(photo, anchor) {
     const image =
         photo.querySelector("img");
 
-    const menu =
+    const modal =
         document.createElement("div");
 
-    menu.className =
-        "socialhub-photo-menu socialhub-avatar-menu";
+    modal.className = "socialhub-avatar-modal";
 
-    if (image) {
+    const rows =
+        [];
 
-        menu.appendChild(
-            socialhubPhotoMenuItem(
-                "🖼️",
-                "View picture",
-                "Open the full profile picture",
-                () => socialhubViewFullImage(image.src)
-            )
-        );
-    }
+    const close =
+        () => modal.remove();
 
     if (isOwnProfile) {
 
-        menu.appendChild(
-            socialhubPhotoMenuItem(
-                "📷",
-                "Update profile picture",
-                "Upload a photo from your device",
+        rows.push(
+            socialhubAvatarModalRow(
+                "image-plus",
+                "Upload New Photo",
+                "Choose a photo from your device",
                 () => {
 
-                    if (!avatarFileInput) {
-                        return;
+                    close();
+
+                    if (avatarFileInput) {
+                        avatarFileInput.click();
                     }
-
-                    avatarFileInput.click();
                 }
-            )
-        );
-
-        menu.appendChild(
-            socialhubPhotoMenuItem(
-                "🖼️",
-                "Select from photos",
-                "Pick one of your posted photos",
-                () => socialhubOpenAvatarPicker()
             )
         );
 
         if (image) {
 
-            menu.appendChild(
-                socialhubPhotoMenuItem(
-                    "🗑️",
-                    "Remove picture",
-                    "Remove your profile picture",
-                    handleAvatarRemove
+            rows.push(
+                socialhubAvatarModalRow(
+                    "pencil",
+                    "Edit Current Photo",
+                    "Crop / Zoom / Rotate",
+                    () => {
+
+                        close();
+
+                        socialhubEditCurrentAvatar(
+                            image.src
+                        );
+                    }
+                )
+            );
+
+            rows.push(
+                socialhubAvatarModalRow(
+                    "eye",
+                    "View Profile Photo",
+                    "Open the current profile picture",
+                    () => {
+
+                        close();
+
+                        socialhubViewFullImage(image.src);
+                    }
+                )
+            );
+
+            rows.push(
+                socialhubAvatarModalRow(
+                    "trash-2",
+                    "Remove Photo",
+                    "Remove your current profile picture",
+                    () => {
+
+                        close();
+
+                        handleAvatarRemove();
+                    }
                 )
             );
         }
+
+    } else if (image) {
+
+        rows.push(
+            socialhubAvatarModalRow(
+                "eye",
+                "View Profile Photo",
+                "Open the full profile picture",
+                () => {
+
+                    close();
+
+                    socialhubViewFullImage(image.src);
+                }
+            )
+        );
     }
 
-    if (!menu.children.length) {
+    if (!rows.length) {
         return;
     }
 
-    (anchor || photo).after(menu);
+    const previewHTML =
+        image
+            ? `<img src="${socialhubEscape(image.src)}" alt="Profile picture">`
+            : '<span class="socialhub-avatar-modal-placeholder"><i data-lucide="circle-user"></i></span>';
+
+    modal.innerHTML =
+        `
+            <div class="socialhub-avatar-modal-box">
+
+                <div class="socialhub-avatar-modal-head">
+
+                    <strong>Change Profile Picture</strong>
+
+                    <button type="button" class="socialhub-avatar-modal-close" aria-label="Close">
+                        <i data-lucide="x"></i>
+                    </button>
+
+                </div>
+
+                <div class="socialhub-avatar-modal-body">
+
+                    <div class="socialhub-avatar-modal-preview">
+                        ${previewHTML}
+                    </div>
+
+                    <div class="socialhub-avatar-modal-rows">
+                        ${rows.join("")}
+                    </div>
+
+                </div>
+
+                <div class="socialhub-avatar-modal-foot">
+
+                    <button type="button" class="socialhub-avatar-modal-cancel">
+                        Cancel
+                    </button>
+
+                </div>
+
+            </div>
+        `;
+
+    modal
+        .querySelector(".socialhub-avatar-modal-close")
+        .addEventListener("click", close);
+
+    modal
+        .querySelector(".socialhub-avatar-modal-cancel")
+        .addEventListener("click", close);
+
+    modal.addEventListener("click", (event) => {
+
+        if (event.target === modal) {
+            close();
+        }
+    });
+
+    document.body.appendChild(modal);
+
+    document.body.style.overflow = "hidden";
+
+    if (
+        window.lucide &&
+        typeof window.lucide.createIcons === "function"
+    ) {
+        window.lucide.createIcons();
+    }
+}
+
+
+function socialhubAvatarModalRow(icon, label, subtext, action) {
+
+    return `
+        <button type="button" class="socialhub-avatar-modal-row">
+            <span class="socialhub-avatar-modal-row-icon">
+                <i data-lucide="${icon}"></i>
+            </span>
+            <span class="socialhub-avatar-modal-row-text">
+                <strong>${label}</strong>
+                ${subtext ? `<small>${subtext}</small>` : ""}
+            </span>
+        </button>
+    `;
+}
+
+
+// Edit the CURRENT profile picture (fetch -> editor)
+
+async function socialhubEditCurrentAvatar(src) {
+
+    if (!src) {
+        return;
+    }
+
+    try {
+
+        const response =
+            await fetch(src);
+
+        if (!response.ok) {
+            throw new Error("Could not load the photo.");
+        }
+
+        const blob =
+            await response.blob();
+
+        const file =
+            new File([blob], "avatar.jpg", {
+                type: blob.type || "image/jpeg"
+            });
+
+        openAvatarCropModal(file);
+
+    } catch (error) {
+
+        console.error(
+            "❌ Edit avatar error:",
+            error
+        );
+
+        alert(
+            "Could not load the photo for editing.\n\n" +
+            error.message
+        );
+    }
 }
 
 
@@ -365,7 +524,8 @@ function setupProfilePhotoUpload() {
         button.className =
             "socialhub-avatar-overlay socialhub-photo-trigger";
 
-        button.textContent = "📷";
+        button.innerHTML =
+            '<i data-lucide="camera"></i>';
 
         button.setAttribute(
             "aria-label",
@@ -380,6 +540,13 @@ function setupProfilePhotoUpload() {
         });
 
         photo.appendChild(button);
+
+        if (
+            window.lucide &&
+            typeof window.lucide.createIcons === "function"
+        ) {
+            window.lucide.createIcons();
+        }
     }
 
     photo.addEventListener("click", () => {
@@ -452,7 +619,7 @@ function openAvatarCropModal(file) {
 
     pendingAvatarFile = file;
 
-    avatarCropState = { dx: 0, dy: 0, zoom: 1 };
+    avatarCropState = { dx: 0, dy: 0, zoom: 1, rot: 0 };
 
     const overlay =
         document.createElement("div");
@@ -463,7 +630,7 @@ function openAvatarCropModal(file) {
         <div class="socialhub-crop-dialog">
             <div class="socialhub-crop-head">
                 <strong>Update profile picture</strong>
-                <button type="button" class="socialhub-crop-close">✕</button>
+                <button type="button" class="socialhub-crop-close" aria-label="Close"><i data-lucide="x"></i></button>
             </div>
             <div class="socialhub-crop-body">
                 <div class="socialhub-crop-preview">
@@ -472,6 +639,14 @@ function openAvatarCropModal(file) {
                 <div class="socialhub-crop-side">
                     <label>Zoom</label>
                     <input type="range" min="1" max="4" step="0.01" value="1">
+                    <div class="socialhub-crop-rotates">
+                        <button type="button" class="socialhub-crop-rotate-left" title="Rotate left">
+                            <i data-lucide="rotate-ccw"></i>
+                        </button>
+                        <button type="button" class="socialhub-crop-rotate-right" title="Rotate right">
+                            <i data-lucide="rotate-cw"></i>
+                        </button>
+                    </div>
                     <p>Drag the photo to position it</p>
                 </div>
             </div>
@@ -519,6 +694,42 @@ function openAvatarCropModal(file) {
 
         socialhubApplyAvatarCrop();
     });
+
+    const rotateBtn =
+        (selector, delta) => {
+
+            const btn =
+                overlay.querySelector(selector);
+
+            if (!btn) {
+                return;
+            }
+
+            btn.addEventListener("click", () => {
+
+                avatarCropState.rot =
+                    (avatarCropState.rot + delta) % 360;
+
+                socialhubApplyAvatarCrop();
+            });
+        };
+
+    rotateBtn(
+        ".socialhub-crop-rotate-left",
+        -90
+    );
+
+    rotateBtn(
+        ".socialhub-crop-rotate-right",
+        90
+    );
+
+    if (
+        window.lucide &&
+        typeof window.lucide.createIcons === "function"
+    ) {
+        window.lucide.createIcons();
+    }
 
     let dragging = false;
 
@@ -692,7 +903,8 @@ function socialhubApplyAvatarCrop() {
     img.style.marginTop = `${-h / 2}px`;
 
     img.style.transform =
-        `translate(${avatarCropState.dx}px, ${avatarCropState.dy}px)`;
+        `translate(${avatarCropState.dx}px, ${avatarCropState.dy}px) ` +
+        `rotate(${avatarCropState.rot}deg)`;
 }
 
 
@@ -730,6 +942,18 @@ function socialhubCropAvatarToBlob(previewSize) {
 
     const ctx =
         canvas.getContext("2d");
+
+    const rot =
+        avatarCropState.rot || 0;
+
+    if (rot) {
+
+        ctx.translate(300, 300);
+
+        ctx.rotate((rot * Math.PI) / 180);
+
+        ctx.translate(-300, -300);
+    }
 
     ctx.drawImage(
         img,
@@ -833,7 +1057,19 @@ async function socialhubUploadAvatarBlob(blob) {
             throw updateError;
         }
 
-        alert("Profile photo updated! 🎉");
+        if (
+            typeof socialhubToast === "function"
+        ) {
+
+            socialhubToast(
+                "Profile picture updated",
+                "success"
+            );
+
+        } else {
+
+            alert("Profile photo updated! 🎉");
+        }
 
         if (
             typeof showCurrentUserData ===
