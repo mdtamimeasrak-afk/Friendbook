@@ -622,6 +622,63 @@ async function socialhubLoadStories() {
         bar.appendChild(hint);
     }
 
+    const head =
+        document.createElement("div");
+
+    head.className = "socialhub-stories-head";
+
+    const title =
+        document.createElement("div");
+
+    title.className = "socialhub-stories-title";
+
+    title.textContent = "Stories";
+
+    const seeAll =
+        document.createElement("button");
+
+    seeAll.type = "button";
+
+    seeAll.className = "socialhub-stories-seeall";
+
+    seeAll.textContent = "See all";
+
+    seeAll.addEventListener("click", () => {
+
+        const first =
+            storyUsers[0];
+
+        if (first) {
+
+            const [userId, story] =
+                first;
+
+            socialhubOpenStoryViewer(
+                story,
+                byUser.get(userId) ? [story] : [],
+                profileMap
+            );
+
+        } else if (myStory) {
+
+            socialhubOpenStoryViewer(
+                myStory,
+                [myStory],
+                profileMap
+            );
+
+        } else {
+
+            socialhubOpenStoryCreator();
+        }
+    });
+
+    head.appendChild(title);
+
+    head.appendChild(seeAll);
+
+    bar.insertBefore(head, bar.firstChild);
+
     feed.insertBefore(bar, feed.firstChild);
 }
 

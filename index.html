@@ -10,17 +10,19 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>TRIYA - Home</title>
+    <title>SocialHub - Home</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%231877f2'/%3E%3Ctext x='20' y='27' font-family='Arial' font-size='21' font-weight='800' fill='white' text-anchor='middle'%3ETR%3C/text%3E%3C/svg%3E">
 
 
-    <link rel="stylesheet" href="style.css?v=1787000000023">
+    <link rel="stylesheet" href="style.css?v=1787000000024">
 
-    <link rel="stylesheet" href="premium.css?v=1787000000023">
+    <link rel="stylesheet" href="premium.css?v=1787000000024">
 
-    <link rel="stylesheet" href="dashboard.css?v=1787000000023">
+    <link rel="stylesheet" href="dashboard.css?v=1787000000024">
 
-    <link rel="stylesheet" href="glass-theme.css?v=1787000000023">
+    <link rel="stylesheet" href="glass-theme.css?v=1787000000024">
+
+    <link rel="stylesheet" href="home-theme.css?v=1787000000024">
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -39,145 +41,129 @@
 
     <header class="topbar">
 
+        <div class="topbar-left">
 
-        <!-- LOGO (Facebook-style "f") -->
+            <a class="logo" href="index.html" title="SocialHub">
+                <span class="logo-mark"><i data-lucide="hexagon"></i></span>
+                <span class="logo-text">SocialHub</span>
+            </a>
 
-        <div
-            class="logo"
-            onclick="location.href='index.html'"
-            title="TRIYA"
-        ></div>
-
-
-
-        <!-- SEARCH -->
-
-        <div class="search-box">
-
-            <span>
-                🔍
-            </span>
-
-            <input
-                type="text"
-                placeholder="Search TRIYA"
-            >
+            <button type="button" class="home-search-btn" onclick="socialhubHomeSearchOpen()" title="Search SocialHub">
+                <i data-lucide="search"></i>
+                <span>Search SocialHub</span>
+            </button>
 
         </div>
 
-
-
-        <!-- CENTER NAV (Facebook tabs) -->
+        <!-- CENTER NAV -->
 
         <nav class="fb-center-nav">
 
-            <button
-                class="fb-nav-btn active"
-                onclick="location.href='index.html'"
-                title="Home"
-            >
-                <i class="fa-solid fa-house"></i>
+            <button type="button" class="fb-nav-btn active" data-home-nav="home" onclick="location.href='index.html'" title="Home">
+                <i data-lucide="house"></i>
             </button>
 
-            <button
-                class="fb-nav-btn"
-                onclick="location.href='reels.html'"
-                title="Reels"
-            >
-                <i class="fa-solid fa-clapperboard"></i>
+            <button type="button" class="fb-nav-btn" data-home-nav="reels" onclick="location.href='reels.html'" title="Reels">
+                <i data-lucide="clapperboard"></i>
             </button>
 
-
-            <button
-                class="fb-nav-btn"
-                onclick="location.href='watch.html'"
-                title="Watch"
-            >
-                <i class="fa-solid fa-tv"></i>
+            <button type="button" class="fb-nav-btn" data-home-nav="friends" onclick="socialhubOpenFriendsModal()" title="Friends">
+                <i data-lucide="users"></i>
             </button>
 
-
-            <button
-                class="fb-nav-btn"
-                onclick="socialhubOpenFriendsModal()"
-                title="Friends"
-            >
-                <i class="fa-solid fa-user-group"></i>
+            <button type="button" class="fb-nav-btn" data-home-nav="groups" onclick="location.href='groups.html'" title="Groups">
+                <i data-lucide="users-round"></i>
             </button>
 
-
-            <button
-                class="fb-nav-btn"
-                onclick="location.href='messages.html'"
-                title="Messages"
-            >
-                <i class="fa-solid fa-comment-dots"></i>
-            </button>
-
-
-            <button
-                class="fb-nav-btn"
-                onclick="document.querySelector('.top-icons button[title=&quot;Notifications&quot;]')?.click()"
-                title="Notifications"
-            >
-                <i class="fa-solid fa-bell"></i>
+            <button type="button" class="fb-nav-btn" data-home-nav="marketplace" onclick="location.href='marketplace.html'" title="Marketplace">
+                <i data-lucide="store"></i>
             </button>
 
         </nav>
 
-
-
-        <!-- TOP ICONS (Facebook gray circles) -->
+        <!-- TOP ICONS -->
 
         <div class="top-icons">
 
-
-            <button
-                title="Messages"
-            >
-                💬
+            <button type="button" class="top-icon-btn" title="Messages">
+                <i data-lucide="message-circle"></i>
             </button>
 
-
-            <button
-                title="Notifications"
-            >
-                🔔
+            <button type="button" class="top-icon-btn" title="Notifications">
+                <i data-lucide="bell"></i>
             </button>
 
-
-            <button
-                onclick="toggleDarkMode()"
-                title="Dark Mode"
-            >
-                🌙
+            <button type="button" class="top-icon-btn" title="Menu" onclick="socialhubHomeMenuToggle(event)">
+                <i data-lucide="grid-3x3"></i>
             </button>
 
-
-            <button
-                onclick="location.href='campus.html'"
-                title="Campus Community"
-            >
-                🎓
+            <button type="button" class="top-icon-btn profile-mini side-avatar" title="Profile" onclick="location.href='profile.html'">
+                <i data-lucide="circle-user"></i>
             </button>
 
+            <div class="home-menu-dropdown" id="homeMenuDropdown" style="display:none">
 
-            <button
-                onclick="location.href='settings.html'"
-                title="Settings"
-            >
-                ⚙️
-            </button>
+                <button type="button" onclick="location.href='watch.html'">
+                    <i data-lucide="tv"></i>
+                    Watch
+                </button>
 
+                <button type="button" onclick="location.href='events.html'">
+                    <i data-lucide="calendar-days"></i>
+                    Events
+                </button>
 
-            <button
-                onclick="location.href='profile.html'"
-                class="profile-mini side-avatar"
-                title="Profile"
-            >
-                👤
-            </button>
+                <button type="button" onclick="location.href='saved.html'">
+                    <i data-lucide="bookmark"></i>
+                    Saved
+                </button>
 
+                <button type="button" onclick="location.href='live.html'">
+                    <i data-lucide="radio"></i>
+                    Live
+                </button>
+
+                <button type="button" onclick="location.href='campus.html'">
+                    <i data-lucide="graduation-cap"></i>
+                    Campus Community
+                </button>
+
+                <button type="button" onclick="location.href='birthdays.html'">
+                    <i data-lucide="cake"></i>
+                    Birthdays
+                </button>
+
+                <button type="button" onclick="location.href='friend-requests.html'">
+                    <i data-lucide="user-plus"></i>
+                    Friend Requests
+                </button>
+
+                <button type="button" onclick="location.href='settings.html'">
+                    <i data-lucide="settings"></i>
+                    Settings
+                </button>
+
+                <div class="home-menu-divider"></div>
+
+                <button type="button" class="home-menu-dark" onclick="toggleDarkMode(); socialhubHomeMenuRefreshDark()">
+                    <span class="home-menu-dark-label">
+                        <i data-lucide="moon"></i>
+                        Dark mode
+                    </span>
+                    <span class="home-dark-switch" id="homeDarkSwitch"></span>
+                </button>
+
+                <button type="button" onclick="socialhubHomeHelpOpen()">
+                    <i data-lucide="circle-help"></i>
+                    Help
+                </button>
+
+                <button type="button" class="home-menu-logout" onclick="logoutUser()">
+                    <i data-lucide="log-out"></i>
+                    Logout
+                </button>
+
+            </div>
 
         </div>
 
@@ -198,18 +184,11 @@
 
         <aside class="sidebar left-sidebar">
 
-
-            <!-- USER PROFILE -->
-
-            <div
-                class="sidebar-profile"
-                onclick="location.href='profile.html'"
-            >
+            <a class="sidebar-profile" href="profile.html">
 
                 <div class="sidebar-avatar">
-                    👤
+                    <i data-lucide="circle-user"></i>
                 </div>
-
 
                 <div>
 
@@ -217,201 +196,125 @@
                         User
                     </strong>
 
-
                     <small class="profile-username">
                         @username
                     </small>
 
                 </div>
 
-            </div>
-
-
-
-            <!-- MENU -->
+            </a>
 
             <nav class="sidebar-menu">
 
-
-                <button
-                    onclick="location.href='profile.html'"
-                >
-                    👤
-                    <span>
-                        Profile
-                    </span>
+                <button type="button" onclick="location.href='index.html'">
+                    <i data-lucide="house"></i>
+                    <span>Home</span>
                 </button>
 
-
-                <button
-                    onclick="location.href='search.html'"
-                >
-                    🔍
-                    <span>
-                        Search
-                    </span>
+                <button type="button">
+                    <i data-lucide="users"></i>
+                    <span>Friends</span>
                 </button>
 
-
-                <button>
-                    👥
-                    <span>
-                        Friends
-                    </span>
+                <button type="button" onclick="location.href='memories.html'">
+                    <i data-lucide="clock-3"></i>
+                    <span>Memories</span>
                 </button>
 
-
-                <button>
-                    💬
-                    <span>
-                        Messages
-                    </span>
+                <button type="button" onclick="location.href='saved.html'">
+                    <i data-lucide="bookmark"></i>
+                    <span>Saved</span>
                 </button>
 
-
-                <button
-                    onclick="location.href='watch.html'"
-                >
-                    📺
-                    <span>
-                        Watch
-                    </span>
+                <button type="button" onclick="location.href='groups.html'">
+                    <i data-lucide="users-round"></i>
+                    <span>Groups</span>
                 </button>
 
-
-                <button
-                    onclick="location.href='reels.html'"
-                >
-                    🎞️
-                    <span>
-                        Reels
-                    </span>
+                <button type="button" onclick="location.href='reels.html'">
+                    <i data-lucide="clapperboard"></i>
+                    <span>Reels</span>
                 </button>
 
-
-                <button
-                    onclick="location.href='groups.html'"
-                >
-                    👥
-                    <span>
-                        Groups
-                    </span>
+                <button type="button" onclick="location.href='marketplace.html'">
+                    <i data-lucide="store"></i>
+                    <span>Marketplace</span>
                 </button>
 
-
-                <button
-                    onclick="location.href='events.html'"
-                >
-                    📅
-                    <span>
-                        Events
-                    </span>
+                <button type="button" onclick="location.href='events.html'">
+                    <i data-lucide="calendar-days"></i>
+                    <span>Events</span>
                 </button>
 
-
-                <button
-                    onclick="location.href='pages.html'"
-                >
-                    🏢
-                    <span>
-                        Pages
-                    </span>
+                <button type="button" class="sidebar-see-more" onclick="socialhubHomeSidebarMore()">
+                    <i data-lucide="ellipsis"></i>
+                    <span>See more</span>
                 </button>
 
+                <div class="sidebar-extra" style="display:none">
 
-                <button
-                    onclick="location.href='marketplace.html'"
-                >
-                    🛒
-                    <span>
-                        Marketplace
-                    </span>
-                </button>
+                    <button type="button" onclick="location.href='watch.html'">
+                        <i data-lucide="tv"></i>
+                        <span>Watch</span>
+                    </button>
 
+                    <button type="button" onclick="location.href='pages.html'">
+                        <i data-lucide="panels-top-left"></i>
+                        <span>Pages</span>
+                    </button>
 
-                <button
-                    onclick="location.href='saved.html'"
-                >
-                    🔖
-                    <span>
-                        Saved
-                    </span>
-                </button>
+                    <button type="button" onclick="location.href='live.html'">
+                        <i data-lucide="radio"></i>
+                        <span>Live</span>
+                    </button>
 
+                    <button type="button" onclick="location.href='campus.html'">
+                        <i data-lucide="graduation-cap"></i>
+                        <span>Campus Community</span>
+                    </button>
 
-                <button
-                    onclick="location.href='live.html'"
-                >
-                    📡
-                    <span>
-                        Live
-                    </span>
-                </button>
+                    <button type="button" onclick="location.href='birthdays.html'">
+                        <i data-lucide="cake"></i>
+                        <span>Birthdays</span>
+                    </button>
 
+                    <button type="button" onclick="location.href='friend-requests.html'">
+                        <i data-lucide="user-plus"></i>
+                        <span>Friend Requests</span>
+                    </button>
 
-                <button
-                    onclick="location.href='birthdays.html'"
-                >
-                    🎂
-                    <span>
-                        Birthdays
-                    </span>
-                </button>
+                    <button type="button">
+                        <i data-lucide="message-circle"></i>
+                        <span>Messages</span>
+                    </button>
 
+                    <button type="button">
+                        <i data-lucide="bell"></i>
+                        <span>Notifications</span>
+                    </button>
 
-                <button
-                    onclick="location.href='friend-requests.html'"
-                >
-                    🤝
-                    <span>
-                        Friend Requests
-                    </span>
-                </button>
-
-
-                <button>
-                    🔔
-                    <span>
-                        Notifications
-                    </span>
-                </button>
-
-
-                <button
-                    onclick="location.href='settings.html'"
-                >
-                    ⚙️
-                    <span>
-                        Settings
-                    </span>
-                </button>
-
-
-                <button
-                    onclick="location.href='campus.html'"
-                >
-                    🎓
-                    <span>
-                        Campus Community
-                    </span>
-                </button>
-
+                </div>
 
             </nav>
 
+            <div class="sidebar-footer">
 
-            <!-- LOGOUT -->
+                <button type="button" onclick="location.href='settings.html'">
+                    <i data-lucide="settings"></i>
+                    <span>Settings</span>
+                </button>
 
-            <button
-                onclick="logoutUser()"
-                class="sidebar-logout"
-            >
-                🚪
-                <span>
-                    Logout
-                </span>
-            </button>
+                <button type="button" onclick="socialhubHomeHelpOpen()">
+                    <i data-lucide="circle-help"></i>
+                    <span>Help</span>
+                </button>
 
+                <button type="button" class="sidebar-logout" onclick="logoutUser()">
+                    <i data-lucide="log-out"></i>
+                    <span>Logout</span>
+                </button>
+
+            </div>
 
         </aside>
 
@@ -435,28 +338,21 @@
                     New Post
                 </div>
 
-
                 <section class="create-post">
-
 
                     <div class="create-post-top">
 
-
                         <div class="avatar">
-                            👤
+                            <i data-lucide="circle-user"></i>
                         </div>
 
+                        <button type="button" class="post-composer-trigger" onclick="socialhubHomeComposerOpen()">
+                            What's happening, <span class="composer-name">friend</span>?
+                        </button>
 
-                        <input
-                            type="text"
-                            id="postInput"
-                            placeholder="What's on your mind?"
-                        >
-
+                        <input type="text" id="postInput" placeholder="What's on your mind?" style="display:none" />
 
                     </div>
-
-
 
                     <div class="create-post-audience">
 
@@ -511,45 +407,38 @@
 
                     </div>
 
-
-
                     <div class="create-post-actions">
 
-
-                        <button>
-                            <span class="cp-emoji">🖼️</span>
-                            <span>
-                                Photo/video
-                            </span>
+                        <button type="button" title="Photo/video">
+                            <i data-lucide="image"></i>
+                            <span>Photo/video</span>
                         </button>
 
-
-                        <button>
-                            <span class="cp-emoji">🎥</span>
-                            <span>
-                                Live video
-                            </span>
+                        <button type="button" title="Video">
+                            <i data-lucide="video"></i>
+                            <span>Video</span>
                         </button>
 
-
-                        <button>
-                            <span class="cp-emoji">😊</span>
-                            <span>
-                                Feeling/activity
-                            </span>
+                        <button type="button" onclick="socialhubHomeFeelingOpen(event)">
+                            <i data-lucide="smile"></i>
+                            <span>Feeling</span>
                         </button>
 
+                        <button type="button" onclick="socialhubHomeLocationOpen(event)">
+                            <i data-lucide="map-pin"></i>
+                            <span>Location</span>
+                        </button>
 
                         <button
+                            type="button"
                             onclick="createPost()"
                             class="post-btn"
                         >
-                            Post
+                            <i data-lucide="send"></i>
+                            <span>Post</span>
                         </button>
 
-
                     </div>
-
 
                 </section>
 
@@ -713,15 +602,29 @@
 
         <aside class="sidebar right-sidebar">
 
+            <!-- BIRTHDAYS -->
 
-            <!-- CONTACTS (Facebook style) -->
+            <div class="home-widget" id="homeBirthdaysWidget">
 
-            <div class="socialhub-contacts">
-
-                <div class="dash-label">
-                    Contacts
+                <div class="home-widget-head">
+                    <i data-lucide="cake"></i>
+                    <span>Birthdays</span>
                 </div>
 
+                <div class="home-birthdays-list" id="homeBirthdaysList">
+                    <p class="home-widget-empty">No birthdays today.</p>
+                </div>
+
+            </div>
+
+            <!-- CONTACTS -->
+
+            <div class="home-widget socialhub-contacts">
+
+                <div class="home-widget-head">
+                    <i data-lucide="users"></i>
+                    <span>Contacts</span>
+                </div>
 
                 <div class="socialhub-friends-widget">
 
@@ -733,16 +636,14 @@
 
             </div>
 
-
-
             <!-- LAST CHATS -->
 
-            <div class="socialhub-chats-widget">
+            <div class="home-widget socialhub-chats-widget">
 
-                <div class="dash-label">
-                    Last Chats
+                <div class="home-widget-head">
+                    <i data-lucide="message-circle"></i>
+                    <span>Last Chats</span>
                 </div>
-
 
                 <div class="socialhub-chat-list">
 
@@ -754,54 +655,15 @@
 
             </div>
 
+            <!-- PEOPLE YOU MAY KNOW -->
 
+            <div class="side-card home-widget">
 
-            <!-- BOT ASSISTANT -->
-
-            <div class="socialhub-bot-card">
-
-                <div class="socialhub-bot-head">
-
-                    <div class="socialhub-bot-icon">
-                        🤖
-                    </div>
-
-                    <div>
-
-                        <strong>
-                            Bot assistant
-                        </strong>
-
-                        <span>
-                            online · just now
-                        </span>
-
-                    </div>
-
+                <div class="side-card-title">
+                    <h3>People You May Know</h3>
                 </div>
 
-
-                <svg
-                    class="socialhub-bot-chart"
-                    viewBox="0 0 260 52"
-                    preserveAspectRatio="none"
-                >
-
-                    <polyline
-                        points="0,38 40,30 80,34 120,18 160,26 200,10 260,16"
-                        fill="none"
-                        stroke="#1877f2"
-                        stroke-width="2.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    />
-
-                    <circle cx="200" cy="10" r="3.5" fill="#4a9bff" />
-
-                </svg>
-
             </div>
-
 
         </aside>
 
@@ -814,44 +676,246 @@
 
 
     <!-- ========================= -->
+    <!-- SEARCH OVERLAY -->
+    <!-- ========================= -->
+
+    <div class="home-search-overlay" id="homeSearchOverlay" style="display:none">
+
+        <div class="home-search-box">
+
+            <div class="home-search-head">
+
+                <button type="button" class="home-search-back" onclick="socialhubHomeSearchClose()" title="Back">
+                    <i data-lucide="arrow-left"></i>
+                </button>
+
+                <input type="text" id="homeSearchInput" placeholder="Search SocialHub" autocomplete="off" />
+
+                <button type="button" class="home-search-clear" id="homeSearchClear" onclick="socialhubHomeSearchClear()" title="Clear">
+                    <i data-lucide="x"></i>
+                </button>
+
+            </div>
+
+            <div class="home-search-body">
+
+                <div id="homeSearchRecents"></div>
+
+                <div id="homeSearchResults" style="display:none"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- CREATE POST MODAL -->
+    <!-- ========================= -->
+
+    <div class="home-modal-backdrop" id="homePostModal" style="display:none">
+
+        <div class="home-modal home-post-modal">
+
+            <div class="home-modal-head">
+
+                <h3>Create post</h3>
+
+                <button type="button" class="home-modal-x" onclick="socialhubHomeComposerClose()" title="Close">
+                    <i data-lucide="x"></i>
+                </button>
+
+            </div>
+
+            <div class="home-post-user">
+
+                <div class="avatar side-avatar">
+                    <i data-lucide="circle-user"></i>
+                </div>
+
+                <div class="home-post-user-info">
+
+                    <strong class="home-post-user-name">User</strong>
+
+                    <button type="button" class="audience-btn" id="homePostAudienceBtn" onclick="socialhubHomeAudienceToggle(event)">
+                        <span id="homePostAudienceLabel">🌎 Public</span>
+                        <span class="audience-arrow">▾</span>
+                    </button>
+
+                </div>
+
+                <div id="homePostAudienceMenu" class="audience-menu" style="display:none">
+                    <button type="button" class="audience-option" data-home-audience="public" onclick="socialhubHomeAudienceSet('public')">🌎 Public</button>
+                    <button type="button" class="audience-option" data-home-audience="friends" onclick="socialhubHomeAudienceSet('friends')">👥 Friends</button>
+                    <button type="button" class="audience-option" data-home-audience="friends_of_friends" onclick="socialhubHomeAudienceSet('friends_of_friends')">🤝 Friends of Friends</button>
+                    <button type="button" class="audience-option" data-home-audience="only_me" onclick="socialhubHomeAudienceSet('only_me')">🔒 Only me</button>
+                </div>
+
+            </div>
+
+            <textarea id="homePostText" placeholder="What's on your mind?" maxlength="2000"></textarea>
+
+            <div class="home-post-bg-picker" id="homePostBgPicker"></div>
+
+            <div class="home-post-feelings" id="homePostFeelings" style="display:none"></div>
+
+            <div class="home-post-emoji" id="homePostEmoji"></div>
+
+            <div class="home-post-tools">
+
+                <button type="button" onclick="socialhubHomeModalPhoto()">
+                    <i data-lucide="image"></i>
+                    <span>Photo</span>
+                </button>
+
+                <button type="button" onclick="socialhubHomeModalVideo()">
+                    <i data-lucide="video"></i>
+                    <span>Video</span>
+                </button>
+
+                <button type="button" onclick="socialhubHomeModalFeeling()">
+                    <i data-lucide="smile"></i>
+                    <span>Feeling</span>
+                </button>
+
+                <button type="button" onclick="socialhubHomeModalLocation()">
+                    <i data-lucide="map-pin"></i>
+                    <span>Location</span>
+                </button>
+
+            </div>
+
+            <div class="home-post-modal-foot">
+
+                <button type="button" class="home-btn-ghost" onclick="socialhubHomeComposerClose()">Cancel</button>
+
+                <button type="button" class="home-btn-primary" id="homePostSubmit" onclick="socialhubHomeComposerSubmit()">Post</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- HELP MODAL -->
+    <!-- ========================= -->
+
+    <div class="home-modal-backdrop" id="homeHelpModal" style="display:none">
+
+        <div class="home-modal home-help-modal">
+
+            <div class="home-modal-head">
+
+                <h3>Help & support</h3>
+
+                <button type="button" class="home-modal-x" onclick="socialhubHomeHelpClose()" title="Close">
+                    <i data-lucide="x"></i>
+                </button>
+
+            </div>
+
+            <div class="home-help-body">
+
+                <p>Everything you need to get the most out of SocialHub.</p>
+
+                <button type="button" class="home-help-row" onclick="socialhubToast('Help center is coming soon.', 'info')">
+                    <i data-lucide="book-open"></i>
+                    Help Center
+                </button>
+
+                <button type="button" class="home-help-row" onclick="socialhubToast('Report sent to our team.', 'success')">
+                    <i data-lucide="flag"></i>
+                    Report a problem
+                </button>
+
+                <button type="button" class="home-help-row" onclick="socialhubToast('SocialHub v1.0 — Supabase powered.', 'info')">
+                    <i data-lucide="info"></i>
+                    About SocialHub
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- MOBILE BOTTOM NAV -->
+    <!-- ========================= -->
+
+    <nav class="home-bottom-nav" id="homeBottomNav">
+
+        <button type="button" class="active" onclick="location.href='index.html'" title="Home">
+            <i data-lucide="house"></i>
+            <span>Home</span>
+        </button>
+
+        <button type="button" onclick="location.href='reels.html'" title="Reels">
+            <i data-lucide="clapperboard"></i>
+            <span>Reels</span>
+        </button>
+
+        <button type="button" onclick="socialhubOpenFriendsModal()" title="Friends">
+            <i data-lucide="users"></i>
+            <span>Friends</span>
+        </button>
+
+        <button type="button" onclick="socialhubOpenChatPopup()" title="Messages">
+            <i data-lucide="message-circle"></i>
+            <span>Messages</span>
+        </button>
+
+        <button type="button" onclick="location.href='profile.html'" title="Profile">
+            <i data-lucide="circle-user"></i>
+            <span>Profile</span>
+        </button>
+
+    </nav>
+
+    <!-- ========================= -->
     <!-- SCRIPTS -->
     <!-- ========================= -->
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="supabase.js?v=1787000000023"></script>
+    <script src="supabase.js?v=1787000000024"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
 
-    <script src="premium-ui.js?v=1787000000023"></script>
+    <script src="premium-ui.js?v=1787000000024"></script>
 
-    <script src="script.js?v=1787000000023"></script>
+    <script src="script.js?v=1787000000024"></script>
 
-    <script src="memories.js?v=1787000000023"></script>
+    <script src="memories.js?v=1787000000024"></script>
 
-    <script src="likes-comments.js?v=1787000000023"></script>
+    <script src="likes-comments.js?v=1787000000024"></script>
 
-    <script src="shares.js?v=1787000000023"></script>
+    <script src="shares.js?v=1787000000024"></script>
 
-    <script src="image-upload.js?v=1787000000023"></script>
+    <script src="image-upload.js?v=1787000000024"></script>
 
-    <script src="post-manage.js?v=1787000000023"></script>
+    <script src="post-manage.js?v=1787000000024"></script>
 
-    <script src="friends.js?v=1787000000023"></script>
+    <script src="friends.js?v=1787000000024"></script>
 
-    <script src="user-search.js?v=1787000000023"></script>
+    <script src="user-search.js?v=1787000000024"></script>
 
-    <script src="notifications.js?v=1787000000023"></script>
+    <script src="notifications.js?v=1787000000024"></script>
 
-    <script src="activity.js?v=1787000000023"></script>
+    <script src="activity.js?v=1787000000024"></script>
 
-    <script src="settings.js?v=1787000000023"></script>
+    <script src="settings.js?v=1787000000024"></script>
 
-    <script src="messages.js?v=1787000000023"></script>
+    <script src="messages.js?v=1787000000024"></script>
 
-    <script src="stories.js?v=1787000000023"></script>
+    <script src="stories.js?v=1787000000024"></script>
 
-    <script src="realtime.js?v=1787000000023"></script>
+    <script src="realtime.js?v=1787000000024"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <script src="home-theme.js?v=1787000000024"></script>
 
 <!-- ==========================================
      SocialHub - Step 10.28
