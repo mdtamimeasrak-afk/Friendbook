@@ -51,6 +51,10 @@ alter table public.posts
 alter table public.posts
   add column if not exists archived boolean not null default false;
 
+-- Pinned posts (Profile -> Pin to top)
+alter table public.posts
+  add column if not exists is_pinned boolean not null default false;
+
 create table if not exists public.likes (
   id uuid primary key default gen_random_uuid(),
   post_id uuid not null references public.posts (id) on delete cascade,

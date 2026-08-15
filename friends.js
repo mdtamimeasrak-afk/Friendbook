@@ -1963,6 +1963,69 @@ async function loadUserProfilePage() {
         }
     }
 
+    // ---------- LEFT PANEL + ABOUT PANES ----------
+
+    const upIntroMap = [
+        ["upLeftBio", profile.bio, "No bio added yet."],
+        ["upLeftWork", profile.work, "Not added"],
+        ["upLeftEducation", profile.education, "Not added"],
+        ["upLeftLocation", profile.location, "Not added"],
+        ["upLeftWebsite", profile.website, "Not added"],
+        ["upAboutBio", profile.bio, "No bio added yet."],
+        ["upAboutWork", profile.work, "Not added"],
+        ["upAboutWork2", profile.work, "Not added"],
+        ["upAboutEducation", profile.education, "Not added"],
+        ["upAboutEducation2", profile.education, "Not added"],
+        ["upAboutLocation", profile.location, "Not added"],
+        ["upAboutWebsite", profile.website, "Not added"],
+        ["upAboutWebsite2", profile.website, "Not added"]
+    ];
+
+    upIntroMap.forEach(([id, value, fallback]) => {
+
+        const el =
+            document.getElementById(id);
+
+        if (!el) {
+            return;
+        }
+
+        el.innerText =
+            String(value || "").trim() || fallback;
+    });
+
+    // ---------- HERO SKELETONS ----------
+
+    [
+        "upCoverSkeleton",
+        "upAvatarSkeleton",
+        "upNameSkeleton"
+    ].forEach(id => {
+
+        const el =
+            document.getElementById(id);
+
+        if (el) {
+            el.style.display = "none";
+        }
+    });
+
+    // ---------- PANE GRIDS ----------
+
+    socialhubLoadUpLeftPhotos(userId);
+
+    socialhubLoadUpLeftFriends(userId);
+
+    socialhubLoadUpFriends(userId);
+
+    socialhubLoadUpPhotos(userId);
+
+    socialhubLoadUpReels(userId);
+
+    socialhubLoadUpLikes(userId);
+
+    socialhubWireUpAboutBlocks();
+
     // ---------- THEIR POSTS ----------
 
     await loadUserProfilePosts(userId);
@@ -2011,6 +2074,17 @@ async function loadUserProfilePosts(userId) {
 
         return;
     }
+
+    posts =
+        posts.slice().sort((a, b) => {
+
+            if (!!a.is_pinned !== !!b.is_pinned) {
+
+                return a.is_pinned ? -1 : 1;
+            }
+
+            return 0;
+        });
 
     const { data: upProfile, error: profileError } =
         await db
@@ -2069,6 +2143,10 @@ async function loadUserProfilePosts(userId) {
             )
         );
     });
+
+    socialhubUpFillPostStats(
+        [...postsContainer.querySelectorAll(".post")]
+    );
 }
 
 
@@ -2169,6 +2247,609 @@ function socialhubSwitchUpTab(name) {
 
         loadUserProfilePosts(userId);
     }
+}
+
+
+// ======================================================
+// 7d. USER PROFILE MASTER TABS (pane switching)
+// ======================================================
+
+function socialhubSwitchUpPane(name) {
+
+    const map = {
+
+        posts: "#upPostsPane",
+
+        about: "#upAboutPane",
+
+        friends: "#upFriendsPane",
+
+        photos: "#upPhotosPane",
+
+        videos: "#upReelsPane",
+
+        reels: "#upReelsPane",
+
+        more: "#upMorePane"
+    };
+
+    document
+        .querySelectorAll(".up-tabs-bar button")
+        .forEach(button => {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.fbTab === name
+            );
+        });
+
+    const paneId =
+        map[name] || "#upPostsPane";
+
+    document
+        .querySelectorAll(".fb-pane")
+        .forEach(pane => {
+
+            pane.classList.toggle(
+                "active",
+                pane.id === paneId.slice(1)
+            );
+        });
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+function socialhubWireUpAboutBlocks() {
+
+    const aboutSidebar =
+        document.querySelector(
+            "#upAboutSection .fb-about-side"
+        );
+
+    const aboutBlocks =
+        [
+            ...document.querySelectorAll(
+                "#upAboutSection .fb-about-block"
+            )
+        ];
+
+    if (
+        !aboutSidebar ||
+        !aboutBlocks.length ||
+        aboutSidebar.dataset.socialhubWired
+    ) {
+        return;
+    }
+
+    aboutSidebar.dataset.socialhubWired = "1";
+
+    const aboutButtons =
+        [...aboutSidebar.querySelectorAll("button")];
+
+    aboutButtons.forEach(btn => {
+
+        btn.addEventListener("click", () => {
+
+            aboutButtons.forEach(b =>
+                b.classList.remove("active")
+            );
+
+            btn.classList.add("active");
+
+            aboutBlocks.forEach(block => {
+
+                block.classList.toggle(
+                    "active",
+                    block.dataset.aboutIndex ===
+                        btn.dataset.aboutBlock
+                );
+            });
+        });
+    });
+}
+
+
+// ======================================================
+// 7e. USER PROFILE PANE GRID LOADERS
+// ======================================================
+
+async function socialhubLoadUpLeftPhotos(userId) {
+
+    const grid =
+        document.getElementById(
+            "upLeftPhotoGrid"
+        );
+
+    if (!grid) {
+        return;
+    }
+
+    const {
+        data: posts,
+        error
+    } = await db
+        .from("posts")
+        .select("id, image_url")
+        .eq("user_id", userId)
+        .not("image_url", "is", null)
+        .order("created_at", {
+            ascending: false
+        })
+        .limit(6);
+
+    if (error) {
+        return;
+    }
+
+    grid.innerHTML = "";
+
+    if (!posts || !posts.length) {
+
+        grid.innerHTML =
+            '<p class="fb-left-empty">No photos yet.</p>';
+
+        return;
+    }
+
+    posts.forEach(post => {
+
+        const tile =
+            document.createElement("div");
+
+        tile.className = "fb-left-photo-tile";
+
+        tile.innerHTML =
+            '<img src="' +
+            socialhubEscape(post.image_url) +
+            '" alt="Photo" loading="lazy">';
+
+        tile.addEventListener(
+            "click",
+            () => socialhubOpenUpPostLightbox(post.id)
+        );
+
+        grid.appendChild(tile);
+    });
+}
+
+
+async function socialhubLoadUpLeftFriends(userId) {
+
+    const grid =
+        document.getElementById(
+            "upLeftFriendsGrid"
+        );
+
+    const countEl =
+        document.getElementById(
+            "upLeftFriendsCount"
+        );
+
+    if (!grid) {
+        return;
+    }
+
+    const {
+        data: friendships,
+        error
+    } = await db
+        .from("friendships")
+        .select("requester_id, addressee_id")
+        .eq("status", "accepted")
+        .or(
+            `requester_id.eq.${userId},` +
+            `addressee_id.eq.${userId}`
+        );
+
+    if (error) {
+        return;
+    }
+
+    grid.innerHTML = "";
+
+    if (!friendships || !friendships.length) {
+
+        if (countEl) {
+            countEl.innerText = "0 friends";
+        }
+
+        grid.innerHTML =
+            '<p class="fb-left-empty">No friends yet.</p>';
+
+        return;
+    }
+
+    const friendIds =
+        friendships.map(f =>
+            f.requester_id === userId
+                ? f.addressee_id
+                : f.requester_id
+        );
+
+    if (countEl) {
+        countEl.innerText =
+            friendIds.length + " friends";
+    }
+
+    const {
+        data: profiles
+    } = await db
+        .from("profiles")
+        .select("id, full_name, username, avatar_url")
+        .in("id", friendIds);
+
+    (profiles || [])
+        .slice(0, 6)
+        .forEach(friend => {
+
+            const item =
+                document.createElement("button");
+
+            item.type = "button";
+
+            item.className = "fb-left-friend";
+
+            item.innerHTML =
+                '<span class="fb-left-friend-avatar">' +
+                socialhubAvatarHTML(friend) +
+                '</span>' +
+                '<span class="fb-left-friend-name">' +
+                socialhubEscape(friend.full_name || "User") +
+                '</span>';
+
+            item.addEventListener(
+                "click",
+                () => {
+
+                    window.location.href =
+                        `user-profile.html?user=${friend.id}`;
+                }
+            );
+
+            grid.appendChild(item);
+        });
+}
+
+
+async function socialhubLoadUpFriends(userId) {
+
+    const grid =
+        document.getElementById(
+            "upFriendsGrid"
+        );
+
+    const countEl =
+        document.getElementById(
+            "upPaneFriendsCount"
+        );
+
+    if (!grid) {
+        return;
+    }
+
+    const {
+        data: friendships,
+        error
+    } = await db
+        .from("friendships")
+        .select("requester_id, addressee_id")
+        .eq("status", "accepted")
+        .or(
+            `requester_id.eq.${userId},` +
+            `addressee_id.eq.${userId}`
+        );
+
+    if (error) {
+        return;
+    }
+
+    grid.innerHTML = "";
+
+    if (!friendships || !friendships.length) {
+
+        if (countEl) {
+            countEl.innerText = "0 friends";
+        }
+
+        grid.innerHTML =
+            '<p class="empty-message" style="grid-column:1/-1;">' +
+            "No friends yet." +
+            "</p>";
+
+        return;
+    }
+
+    const friendIds =
+        friendships.map(f =>
+            f.requester_id === userId
+                ? f.addressee_id
+                : f.requester_id
+        );
+
+    if (countEl) {
+        countEl.innerText =
+            friendIds.length + " friends";
+    }
+
+    const {
+        data: profiles
+    } = await db
+        .from("profiles")
+        .select("id, full_name, username, avatar_url")
+        .in("id", friendIds);
+
+    (profiles || []).forEach(friend => {
+
+        const item =
+            document.createElement("div");
+
+        item.className = "friend-mini";
+
+        item.innerHTML = `
+
+            <div class="friend-mini-avatar">
+                ${socialhubAvatarHTML(friend)}
+            </div>
+
+            <span>
+                ${socialhubEscape(friend.full_name || "User")}
+            </span>
+        `;
+
+        item.addEventListener("click", () => {
+
+            window.location.href =
+                `user-profile.html?user=${friend.id}`;
+        });
+
+        grid.appendChild(item);
+    });
+}
+
+
+async function socialhubLoadUpPhotos(userId) {
+
+    const grid =
+        document.getElementById(
+            "upPhotosGrid"
+        );
+
+    if (!grid) {
+        return;
+    }
+
+    const {
+        data: posts,
+        error
+    } = await db
+        .from("posts")
+        .select("*")
+        .eq("user_id", userId)
+        .not("image_url", "is", null)
+        .order("created_at", {
+            ascending: false
+        })
+        .limit(60);
+
+    if (error) {
+        return;
+    }
+
+    grid.innerHTML = "";
+
+    if (!posts || !posts.length) {
+
+        grid.innerHTML =
+            '<p class="empty-message" style="grid-column:1/-1;">' +
+            "No photos yet." +
+            "</p>";
+
+        return;
+    }
+
+    posts.forEach(post => {
+
+        grid.appendChild(
+            socialhubCreateUpTile(post)
+        );
+    });
+}
+
+
+async function socialhubLoadUpReels(userId) {
+
+    const grid =
+        document.getElementById(
+            "upReelsGrid"
+        );
+
+    if (!grid) {
+        return;
+    }
+
+    const {
+        data: posts,
+        error
+    } = await db
+        .from("posts")
+        .select("*")
+        .eq("user_id", userId)
+        .not("video_url", "is", null)
+        .order("created_at", {
+            ascending: false
+        })
+        .limit(60);
+
+    if (error) {
+        return;
+    }
+
+    grid.innerHTML = "";
+
+    if (!posts || !posts.length) {
+
+        grid.innerHTML =
+            '<p class="empty-message" style="grid-column:1/-1;">' +
+            "No videos yet." +
+            "</p>";
+
+        return;
+    }
+
+    posts.forEach(post => {
+
+        grid.appendChild(
+            socialhubCreateUpTile(post)
+        );
+    });
+}
+
+
+async function socialhubLoadUpLikes(userId) {
+
+    const grid =
+        document.getElementById(
+            "upLikesGrid"
+        );
+
+    if (!grid) {
+        return;
+    }
+
+    const {
+        data: likes,
+        error
+    } = await db
+        .from("likes")
+        .select("post_id")
+        .eq("user_id", userId)
+        .order("created_at", {
+            ascending: false
+        })
+        .limit(24);
+
+    if (error) {
+        return;
+    }
+
+    grid.innerHTML = "";
+
+    if (!likes || !likes.length) {
+
+        grid.innerHTML =
+            '<p class="empty-message" style="grid-column:1/-1;">' +
+            "No liked posts yet." +
+            "</p>";
+
+        return;
+    }
+
+    const {
+        data: posts
+    } = await db
+        .from("posts")
+        .select("*")
+        .in(
+            "id",
+            likes.map(l => l.post_id)
+        );
+
+    if (!posts || !posts.length) {
+
+        grid.innerHTML =
+            '<p class="empty-message" style="grid-column:1/-1;">' +
+            "No liked posts found." +
+            "</p>";
+
+        return;
+    }
+
+    posts.forEach(post => {
+
+        grid.appendChild(
+            socialhubCreateUpTile(post)
+        );
+    });
+}
+
+
+// ======================================================
+// 7f. USER PROFILE POST STATS (real counts)
+// ======================================================
+
+async function socialhubUpFillPostStats(articles) {
+
+    if (!articles || !articles.length) {
+        return;
+    }
+
+    const postIds =
+        articles
+            .map(a => a.dataset.postId)
+            .filter(Boolean);
+
+    if (!postIds.length) {
+        return;
+    }
+
+    const [likesRes, commentsRes] =
+        await Promise.all([
+
+            db
+                .from("likes")
+                .select("post_id")
+                .in("post_id", postIds),
+
+            db
+                .from("comments")
+                .select("post_id")
+                .in("post_id", postIds)
+        ]);
+
+    const likeCounts =
+        {};
+
+    (likesRes.data || []).forEach(l => {
+
+        likeCounts[l.post_id] =
+            (likeCounts[l.post_id] || 0) + 1;
+    });
+
+    const commentCounts =
+        {};
+
+    (commentsRes.data || []).forEach(c => {
+
+        commentCounts[c.post_id] =
+            (commentCounts[c.post_id] || 0) + 1;
+    });
+
+    articles.forEach(article => {
+
+        const id =
+            article.dataset.postId;
+
+        const spans =
+            article.querySelectorAll(
+                ".post-stats span"
+            );
+
+        if (spans[0]) {
+
+            spans[0].textContent =
+                `❤️ ${likeCounts[id] || 0} Likes`;
+        }
+
+        if (spans[1]) {
+
+            spans[1].textContent =
+                `💬 ${commentCounts[id] || 0} Comments`;
+        }
+    });
 }
 
 
@@ -2337,17 +3018,46 @@ function socialhubCreateUpTile(post) {
 }
 
 
-function socialhubOpenUpPostLightbox(postId) {
+async function socialhubOpenUpPostLightbox(postId) {
 
     const cache =
         socialhubUpPostsCache;
 
-    const post =
+    let post =
         (cache?.posts || [])
             .find(item => item.id === postId);
 
+    let profile =
+        cache?.profile || null;
+
+    if (!post) {
+
+        const {
+            data: fetched
+        } = await db
+            .from("posts")
+            .select("*")
+            .eq("id", postId)
+            .maybeSingle();
+
+        post = fetched || null;
+    }
+
     if (!post) {
         return;
+    }
+
+    if (!profile) {
+
+        const {
+            data: fetched
+        } = await db
+            .from("profiles")
+            .select("id, full_name, username, avatar_url")
+            .eq("id", post.user_id)
+            .maybeSingle();
+
+        profile = fetched || null;
     }
 
     const modal =
@@ -2379,7 +3089,7 @@ function socialhubOpenUpPostLightbox(postId) {
     const article =
         socialhubBuildUserPostArticle(
             post,
-            cache.profile
+            profile
         );
 
     article.style.margin = "0";

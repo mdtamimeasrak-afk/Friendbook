@@ -11,9 +11,12 @@
     var PAGE =
         window.location.pathname
             .split("/")
-            .pop() === "profile.html";
+            .pop();
 
-    if (!PAGE) {
+    if (
+        PAGE !== "profile.html" &&
+        PAGE !== "user-profile.html"
+    ) {
         return;
     }
 
@@ -60,6 +63,9 @@
         "fa-tower-broadcast": "radio-tower",
         "fa-palette": "palette",
         "fa-pen": "pen",
+        "fa-pencil": "pencil",
+        "fa-pin": "pin",
+        "fa-share-from-square": "share-2",
         "fa-trash-can": "trash-2",
         "fa-xmark": "x",
         "fa-eye-slash": "eye-off",

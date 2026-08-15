@@ -7156,3 +7156,451 @@ body.dark-mode .fb-more-cancel:hover {
     background: #4e4f52;
 }
 
+/* ===================================================== */
+/* MASTER TAB PANES (profile.html + user-profile.html)   */
+/* ===================================================== */
+
+.fb-pane {
+    display: none;
+}
+
+.fb-pane.active {
+    display: block;
+}
+
+.fb-pane > .profile-card {
+    margin-bottom: 16px;
+}
+
+#profileLikes,
+#upLikesGrid {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 6px;
+}
+
+/* ---------- Posts pane: two-column master layout ---------- */
+
+.fb-posts-layout {
+    display: block;
+
+    max-width: 1150px;
+
+    margin: 0 auto;
+}
+
+@media (min-width: 901px) {
+
+    .fb-posts-layout {
+        display: grid;
+
+        grid-template-columns: 360px 1fr;
+
+        gap: 16px;
+
+        align-items: start;
+    }
+}
+
+@media (max-width: 900px) {
+
+    .fb-posts-layout .fb-left {
+        display: none;
+    }
+}
+
+.fb-posts-layout .fb-left {
+    position: sticky;
+
+    top: 76px;
+
+    display: grid;
+
+    gap: 16px;
+}
+
+/* ---------- Left panel cards ---------- */
+
+.fb-left-card {
+    padding: 16px;
+}
+
+.fb-left-card-head {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    margin-bottom: 12px;
+}
+
+.fb-left-card-head h2 {
+    margin: 0;
+
+    font-size: 20px;
+
+    font-weight: 700;
+}
+
+.fb-left-seeall {
+    background: none;
+
+    border: none;
+
+    color: #1877f2;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    padding: 4px 8px;
+
+    border-radius: 6px;
+
+    transition: background 0.15s;
+}
+
+.fb-left-seeall:hover {
+    background: rgba(24, 119, 242, 0.15);
+}
+
+.fb-left-bio {
+    margin: 0;
+
+    font-size: 15px;
+
+    line-height: 1.5;
+}
+
+.fb-left-divider {
+    height: 1px;
+
+    background: rgba(255, 255, 255, 0.12);
+
+    margin: 14px 0;
+}
+
+.fb-left-card .about-row {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 6px 0;
+
+    font-size: 15px;
+
+    line-height: 1.4;
+}
+
+.fb-left-card .about-row i {
+    width: 18px;
+
+    text-align: center;
+
+    flex-shrink: 0;
+}
+
+.fb-left-card .about-row .about-label {
+    margin-left: auto;
+
+    flex-shrink: 0;
+}
+
+.fb-left-empty {
+    font-size: 14px;
+
+    color: #65676b;
+
+    margin: 4px 0;
+
+    line-height: 1.4;
+}
+
+/* ---------- Left panel: photos ---------- */
+
+.fb-left-photo-grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 4px;
+}
+
+.fb-left-photo-tile {
+    aspect-ratio: 1 / 1;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+
+    cursor: pointer;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    transition: filter 0.15s;
+}
+
+.fb-left-photo-tile:hover {
+    filter: brightness(1.15);
+}
+
+.fb-left-photo-tile img {
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+}
+
+/* ---------- Left panel: friends ---------- */
+
+.fb-left-friends-count {
+    margin: 0 0 12px;
+
+    font-size: 15px;
+
+    font-weight: 600;
+
+    color: #1877f2;
+}
+
+.fb-left-friends-grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 10px;
+}
+
+.fb-left-friend {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap: 6px;
+
+    background: none;
+
+    border: none;
+
+    cursor: pointer;
+
+    padding: 6px;
+
+    border-radius: 10px;
+
+    transition: background 0.15s;
+}
+
+.fb-left-friend:hover {
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.fb-left-friend-avatar {
+    width: 68px;
+
+    height: 68px;
+
+    border-radius: 50%;
+
+    overflow: hidden;
+}
+
+.fb-left-friend-avatar img {
+    width: 100%;
+
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+}
+
+.fb-left-friend-name {
+    font-size: 13px;
+
+    line-height: 1.3;
+
+    text-align: center;
+}
+
+/* ---------- Pinned chip ---------- */
+
+.fb-pinned-chip {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    margin: 10px 0 8px;
+
+    padding: 5px 12px;
+
+    border-radius: 50px;
+
+    background: rgba(24, 119, 242, 0.16);
+
+    color: #1877f2;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+.fb-pinned-chip i {
+    font-size: 12px;
+}
+
+/* ---------- Hero + post skeletons ---------- */
+
+.fb-skeleton {
+    position: relative;
+
+    overflow: hidden;
+
+    background: rgba(255, 255, 255, 0.09);
+
+    border-radius: 8px;
+}
+
+.fb-skeleton::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent
+    );
+
+    transform: translateX(-100%);
+
+    animation: fbSkeletonShimmer 1.4s infinite;
+}
+
+@keyframes fbSkeletonShimmer {
+
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+.fb-cover-skeleton {
+    position: absolute;
+
+    inset: 0;
+
+    border-radius: 0;
+
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.fb-avatar-skeleton {
+    width: 168px;
+
+    height: 168px;
+
+    border-radius: 50%;
+
+    margin-top: 0;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.fb-name-skeleton {
+    width: 220px;
+
+    height: 30px;
+
+    border-radius: 6px;
+
+    margin-bottom: 8px;
+}
+
+#fbProfileHeader .fb-avatar-skeleton {
+    width: 180px;
+
+    height: 180px;
+}
+
+.fb-post-skeleton {
+    height: 240px;
+
+    border-radius: 12px;
+
+    margin-bottom: 16px;
+}
+
+/* ---------- More pane: likes + check-ins cards ---------- */
+
+#likesCard {
+    margin-top: 16px;
+}
+
+#checkinsCard {
+    margin-top: 16px;
+}
+
+#upReelsGrid .profile-photo-item {
+    aspect-ratio: 3 / 4;
+}
+
+.fb-stack-empty {
+    padding: 24px 0;
+}
+
+/* ---------- Light mode overrides ---------- */
+
+body:not(.dark-mode) .fb-left-divider {
+    background: #e4e6eb;
+}
+
+body:not(.dark-mode) .fb-left-card .about-row {
+    color: #050505;
+}
+
+body:not(.dark-mode) .fb-left-card .about-row i {
+    color: #65676b;
+}
+
+body:not(.dark-mode) .fb-left-friend:hover {
+    background: #e7f3ff;
+}
+
+body:not(.dark-mode) .fb-skeleton {
+    background: #e4e6eb;
+}
+
+body:not(.dark-mode) .fb-skeleton::after {
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.7),
+        transparent
+    );
+}
+
+body:not(.dark-mode) .fb-cover-skeleton {
+    background: #d8dade;
+}
+

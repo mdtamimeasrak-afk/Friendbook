@@ -185,6 +185,17 @@ function socialhubCreatePostArticle(post, profile) {
 
         </div>
 
+        ${
+            post.is_pinned
+                ? `
+                    <div class="fb-pinned-chip">
+                        <i class="fa-solid fa-pin"></i>
+                        Pinned post
+                    </div>
+                `
+                : ""
+        }
+
         <p
             class="post-text"
             style="${textStyle}"
@@ -230,6 +241,14 @@ function socialhubCreatePostArticle(post, profile) {
             >
                 <i class="fa-solid fa-share-from-square"></i>
                 <span class="fb-action-label">Share</span>
+            </button>
+
+            <button
+                class="fb-action-btn"
+                onclick="socialhubProfileToggleSave(this, '${post.id}')"
+            >
+                <i class="fa-regular fa-bookmark"></i>
+                <span class="fb-action-label">Save</span>
             </button>
 
         </div>
@@ -423,6 +442,17 @@ function socialhubRenderMyPosts() {
             posts.filter(post => post.video_url);
     }
 
+    posts =
+        posts.slice().sort((a, b) => {
+
+            if (!!a.is_pinned !== !!b.is_pinned) {
+
+                return a.is_pinned ? -1 : 1;
+            }
+
+            return 0;
+        });
+
     container.innerHTML = "";
 
     if (!posts.length) {
@@ -451,6 +481,10 @@ function socialhubRenderMyPosts() {
             )
         );
     });
+
+    socialhubProfileFillPostStats(
+        [...container.querySelectorAll(".post")]
+    );
 }
 
 
@@ -1761,31 +1795,71 @@ const socialhubFbScrollTargets = {
 };
 
 
+const socialhubFbPaneMap = {
+
+    posts: "#fbPostsPane",
+
+    about: "#fbAboutPane",
+
+    friends: "#fbFriendsPane",
+
+    photos: "#fbPhotosPane",
+
+    videos: "#fbReelsPane",
+
+    reels: "#fbReelsPane",
+
+    events: "#fbMorePane",
+
+    groups: "#fbMorePane",
+
+    more: "#fbMorePane"
+
+};
+
+
 function socialhubSwitchFbTab(name) {
 
     document
         .querySelectorAll(".fb-tabs-bar button")
         .forEach(button => {
 
+            if (!button.dataset.fbTab) {
+                return;
+            }
+
             button.classList.toggle(
                 "active",
                 button.dataset.fbTab === name
             );
-
         });
 
-    const target =
-        document.querySelector(
-            socialhubFbScrollTargets[name] || ""
+    const paneId =
+        socialhubFbPaneMap[name] || "#fbPostsPane";
+
+    document
+        .querySelectorAll(".fb-pane")
+        .forEach(pane => {
+
+            pane.classList.toggle(
+                "active",
+                pane.id === paneId.slice(1)
+            );
+        });
+
+    const moreMenu =
+        document.getElementById(
+            "fbTabsMoreMenu"
         );
 
-    if (target) {
-
-        target.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
+    if (moreMenu) {
+        moreMenu.style.display = "none";
     }
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 }
 
 
@@ -2444,7 +2518,539 @@ document.addEventListener("DOMContentLoaded", () => {
 
     socialhubLoadMyPosts();
 
+    // ---------- Master layout: posts stack into main column ----------
+
+    const postsStack =
+        document.getElementById("fbPostsStack");
+
+    const postsMain =
+        document.getElementById("fbPostsMain");
+
+    if (postsStack && postsMain) {
+
+        postsMain.appendChild(
+            postsStack
+        );
+    }
+
+    socialhubLoadLeftPhotos();
+
+    socialhubLoadLeftFriends();
+
+    socialhubLoadMyLikes();
+
+    socialhubProfileWatchHero();
+
     console.log(
         "✅ My Profile Page activated!"
     );
 });
+
+
+
+// ======================================================
+// MASTER LAYOUT — LEFT PANEL LOADERS
+// ======================================================
+
+async function socialhubLoadLeftPhotos() {
+
+    const grid =
+        document.getElementById(
+            "fbLeftPhotoGrid"
+        );
+
+    if (!grid) {
+        return;
+    }
+
+    const me =
+        await socialhubGetMe();
+
+    if (!me) {
+        return;
+    }
+
+    const {
+        data: posts,
+        error
+    } = await db
+        .from("posts")
+        .select("id, image_url")
+        .eq("user_id", me.id)
+        .not("image_url", "is", null)
+        .order("created_at", {
+            ascending: false
+        })
+        .limit(6);
+
+    if (error) {
+        return;
+    }
+
+    grid.innerHTML = "";
+
+    if (!posts || !posts.length) {
+
+        grid.innerHTML =
+            '<p class="fb-left-empty">No photos yet. Post a photo to see it here.</p>';
+
+        return;
+    }
+
+    posts.forEach(post => {
+
+        const tile =
+            document.createElement("div");
+
+        tile.className =
+            "fb-left-photo-tile";
+
+        tile.innerHTML =
+            '<img src="' +
+            socialhubEscape(post.image_url) +
+            '" alt="Photo" loading="lazy">';
+
+        tile.addEventListener(
+            "click",
+            () => socialhubOpenPostLightbox(post.id)
+        );
+
+        grid.appendChild(tile);
+    });
+}
+
+
+async function socialhubLoadLeftFriends() {
+
+    const grid =
+        document.getElementById(
+            "fbLeftFriendsGrid"
+        );
+
+    const countEl =
+        document.getElementById(
+            "fbLeftFriendsCount"
+        );
+
+    if (!grid) {
+        return;
+    }
+
+    const me =
+        await socialhubGetMe();
+
+    if (!me) {
+        return;
+    }
+
+    const {
+        data: friendships,
+        error
+    } = await db
+        .from("friendships")
+        .select("requester_id, addressee_id")
+        .eq("status", "accepted")
+        .or(
+            `requester_id.eq.${me.id},` +
+            `addressee_id.eq.${me.id}`
+        );
+
+    if (error) {
+        return;
+    }
+
+    grid.innerHTML = "";
+
+    if (!friendships || !friendships.length) {
+
+        if (countEl) {
+            countEl.textContent = "0 friends";
+        }
+
+        grid.innerHTML =
+            '<p class="fb-left-empty">No friends yet.</p>';
+
+        return;
+    }
+
+    const friendIds =
+        friendships.map(f =>
+            f.requester_id === me.id
+                ? f.addressee_id
+                : f.requester_id
+        );
+
+    if (countEl) {
+        countEl.textContent =
+            friendIds.length + " friends";
+    }
+
+    const {
+        data: profiles
+    } = await db
+        .from("profiles")
+        .select("id, full_name, username, avatar_url")
+        .in("id", friendIds);
+
+    (profiles || [])
+        .slice(0, 6)
+        .forEach(friend => {
+
+            const item =
+                document.createElement("button");
+
+            item.type =
+                "button";
+
+            item.className =
+                "fb-left-friend";
+
+            item.innerHTML =
+                '<span class="fb-left-friend-avatar">' +
+                socialhubAvatarHTML(friend) +
+                '</span>' +
+                '<span class="fb-left-friend-name">' +
+                socialhubEscape(friend.full_name || "User") +
+                '</span>';
+
+            item.addEventListener(
+                "click",
+                () => {
+
+                    window.location.href =
+                        `user-profile.html?user=${friend.id}`;
+                }
+            );
+
+            grid.appendChild(item);
+        });
+}
+
+
+// ======================================================
+// MORE TAB — LIKED POSTS
+// ======================================================
+
+async function socialhubLoadMyLikes() {
+
+    const grid =
+        document.getElementById(
+            "profileLikes"
+        );
+
+    if (!grid) {
+        return;
+    }
+
+    const me =
+        await socialhubGetMe();
+
+    if (!me) {
+        return;
+    }
+
+    const {
+        data: likes,
+        error
+    } = await db
+        .from("likes")
+        .select("post_id")
+        .eq("user_id", me.id)
+        .order("created_at", {
+            ascending: false
+        })
+        .limit(24);
+
+    if (error) {
+        return;
+    }
+
+    grid.innerHTML = "";
+
+    if (!likes || !likes.length) {
+
+        grid.innerHTML =
+            '<p class="empty-message" style="grid-column:1/-1;">' +
+            "No liked posts yet. Tap the like button on posts you enjoy." +
+            "</p>";
+
+        return;
+    }
+
+    const {
+        data: posts
+    } = await db
+        .from("posts")
+        .select("*")
+        .in(
+            "id",
+            likes.map(l => l.post_id)
+        );
+
+    if (!posts || !posts.length) {
+
+        grid.innerHTML =
+            '<p class="empty-message" style="grid-column:1/-1;">' +
+            "No liked posts found." +
+            "</p>";
+
+        return;
+    }
+
+    posts.forEach(post => {
+
+        grid.appendChild(
+            socialhubCreateProfileTile(post)
+        );
+    });
+}
+
+
+// ======================================================
+// POST STATS — REAL REACTION + COMMENT COUNTS
+// ======================================================
+
+async function socialhubProfileFillPostStats(articles) {
+
+    if (!articles || !articles.length) {
+        return;
+    }
+
+    const postIds =
+        articles
+            .map(a => a.dataset.postId)
+            .filter(Boolean);
+
+    if (!postIds.length) {
+        return;
+    }
+
+    const [likesRes, commentsRes] =
+        await Promise.all([
+
+            db
+                .from("likes")
+                .select("post_id")
+                .in("post_id", postIds),
+
+            db
+                .from("comments")
+                .select("post_id")
+                .in("post_id", postIds)
+        ]);
+
+    const likeCounts =
+        {};
+
+    (likesRes.data || []).forEach(l => {
+
+        likeCounts[l.post_id] =
+            (likeCounts[l.post_id] || 0) + 1;
+    });
+
+    const commentCounts =
+        {};
+
+    (commentsRes.data || []).forEach(c => {
+
+        commentCounts[c.post_id] =
+            (commentCounts[c.post_id] || 0) + 1;
+    });
+
+    articles.forEach(article => {
+
+        const id =
+            article.dataset.postId;
+
+        const spans =
+            article.querySelectorAll(
+                ".post-stats span"
+            );
+
+        if (spans[0]) {
+
+            spans[0].textContent =
+                `❤️ ${likeCounts[id] || 0} reactions`;
+        }
+
+        if (spans[1]) {
+
+            spans[1].textContent =
+                `💬 ${commentCounts[id] || 0} comments`;
+        }
+    });
+}
+
+
+// ======================================================
+// POST SAVE TOGGLE (profile post card)
+// ======================================================
+
+async function socialhubProfileToggleSave(button, postId) {
+
+    if (!button || !postId) {
+        return;
+    }
+
+    const me =
+        await socialhubGetMe();
+
+    if (!me) {
+        return;
+    }
+
+    const saved =
+        button.classList.contains("saved");
+
+    if (saved) {
+
+        const {
+            error
+        } = await db
+            .from("saved_posts")
+            .delete()
+            .eq("user_id", me.id)
+            .eq("post_id", postId);
+
+        if (!error) {
+
+            button.classList.remove("saved");
+
+            button.innerHTML =
+                '<i class="fa-regular fa-bookmark"></i>' +
+                '<span class="fb-action-label">Save</span>';
+        }
+
+    } else {
+
+        const {
+            error
+        } = await db
+            .from("saved_posts")
+            .insert({
+                user_id: me.id,
+                post_id: postId
+            });
+
+        if (!error) {
+
+            button.classList.add("saved");
+
+            button.innerHTML =
+                '<i class="fa-solid fa-bookmark"></i>' +
+                '<span class="fb-action-label">Saved</span>';
+        }
+    }
+}
+
+
+// ======================================================
+// HERO SKELETON WATCHER
+// ======================================================
+
+function socialhubProfileWatchHero() {
+
+    const cover =
+        document.getElementById(
+            "coverPhoto"
+        );
+
+    const nameEl =
+        document.getElementById(
+            "coverName"
+        );
+
+    const hide =
+        () => {
+
+            const coverSkel =
+                document.getElementById(
+                    "fbCoverSkeleton"
+                );
+
+            const avatarSkel =
+                document.getElementById(
+                    "fbAvatarSkeleton"
+                );
+
+            const nameSkel =
+                document.getElementById(
+                    "fbNameSkeleton"
+                );
+
+            if (coverSkel) {
+                coverSkel.style.display = "none";
+            }
+
+            if (avatarSkel) {
+                avatarSkel.style.display = "none";
+            }
+
+            if (nameSkel) {
+                nameSkel.style.display = "none";
+            }
+        };
+
+    const tryHide =
+        () => {
+
+            const loaded =
+                cover &&
+                cover.style.backgroundImage;
+
+            const named =
+                nameEl &&
+                nameEl.textContent.trim() !== "User";
+
+            if (loaded && named) {
+
+                hide();
+
+                return true;
+            }
+
+            return false;
+        };
+
+    if (tryHide()) {
+        return;
+    }
+
+    const observer =
+        new MutationObserver(() => {
+
+            if (tryHide()) {
+                observer.disconnect();
+            }
+        });
+
+    if (cover) {
+
+        observer.observe(
+            cover,
+            {
+                attributes: true,
+                attributeFilter: ["style"]
+            }
+        );
+    }
+
+    if (nameEl) {
+
+        observer.observe(
+            nameEl,
+            {
+                childList: true,
+                subtree: true,
+                characterData: true
+            }
+        );
+    }
+
+    setTimeout(() => {
+
+        hide();
+
+        observer.disconnect();
+    }, 6000);
+}

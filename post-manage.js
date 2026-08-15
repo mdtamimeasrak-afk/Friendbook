@@ -522,6 +522,11 @@ function socialhubInjectMenu(post, postId) {
             Edit Privacy
         </button>
 
+        <button type="button" data-action="pin">
+            <i class="fa-solid fa-pin"></i>
+            Pin to top
+        </button>
+
         <button type="button" data-action="copy-link">
             <i class="fa-solid fa-link"></i>
             Copy Link
@@ -646,6 +651,62 @@ function socialhubInjectMenu(post, postId) {
             }
 
             refreshSaveState();
+        });
+
+    menu
+        .querySelector('[data-action="pin"]')
+        .addEventListener("click", async () => {
+
+            menu.classList.remove("open");
+
+            const {
+                data: row,
+                error: rowError
+            } = await db
+                .from("posts")
+                .select("is_pinned")
+                .eq("id", postId)
+                .single();
+
+            if (rowError || !row) {
+                return;
+            }
+
+            const next =
+                !row.is_pinned;
+
+            const {
+                error: upError
+            } = await db
+                .from("posts")
+                .update({ is_pinned: next })
+                .eq("id", postId);
+
+            if (upError) {
+                return;
+            }
+
+            socialhubToast(
+                next
+                    ? "Post pinned to top. 📌"
+                    : "Post unpinned.",
+                "success"
+            );
+
+            const container =
+                post.closest("#profilePosts");
+
+            if (container) {
+
+                if (typeof socialhubLoadMyPosts === "function") {
+
+                    socialhubLoadMyPosts();
+                }
+
+            } else if (typeof socialhubReloadFeed === "function") {
+
+                socialhubReloadFeed();
+            }
         });
 
     menu
