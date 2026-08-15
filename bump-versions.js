@@ -1,4 +1,4 @@
-// Universal version bump + preconnect injection for TRIYA static deploy.
+// Universal version bump + preconnect injection for Friendbook static deploy.
 // Usage: node bump-versions.js [token]
 // - Replaces ?v=N on EVERY relative .js/.css reference in all .html files
 // - Adds ?v=token to relative .js/.css refs that have no query string

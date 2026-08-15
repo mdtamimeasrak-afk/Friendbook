@@ -148,7 +148,7 @@ async function socialhubPrependNewPost(post) {
     }
 
     const userName =
-        profile.full_name || "SocialHub User";
+        profile.full_name || "Friendbook User";
 
     const username =
         profile.username || "user";

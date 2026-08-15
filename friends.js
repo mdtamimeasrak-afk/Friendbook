@@ -1016,7 +1016,7 @@ async function socialhubRenderFriendsTab(status, modal) {
             profileMap.get(otherId);
 
         const name =
-            profile?.full_name || "SocialHub User";
+            profile?.full_name || "Friendbook User";
 
         const username =
             profile?.username || "user";

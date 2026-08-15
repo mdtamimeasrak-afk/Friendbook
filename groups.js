@@ -1233,7 +1233,7 @@ async function socialhubGroupLoad() {
 
     socialhubGroupCache = group;
 
-    document.title = group.name + " - TRIYA";
+    document.title = group.name + " - Friendbook";
 
     const isCreator =
         group.created_by === me.id;

@@ -2089,7 +2089,7 @@ async function testDB() {
 testDB();
 
 // ==========================================
-// SocialHub - Step 10.18
+// Friendbook - Step 10.18
 // Sync Profile Name with Auth Metadata
 // ==========================================
 
@@ -2180,7 +2180,7 @@ document.addEventListener(
 );
 
 // ==========================================
-// SocialHub - Step 10.19
+// Friendbook - Step 10.19
 // Sync Edited Name with Auth Metadata
 // ==========================================
 
@@ -2248,7 +2248,7 @@ async function syncEditedNameWithAuth() {
     }
 }
 // ==========================================
-// SocialHub - Step 10.20
+// Friendbook - Step 10.20
 // Run Auth Sync After Profile Save
 // ==========================================
 
@@ -2279,11 +2279,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 // ==========================================
-// SocialHub - Step 10.21
+// Friendbook - Step 10.21
 // Profile Session Refresh
 // ==========================================
 
-async function refreshSocialHubProfile() {
+async function refreshFriendbookProfile() {
 
     try {
 
@@ -2314,7 +2314,7 @@ async function refreshSocialHubProfile() {
         await showCurrentUserData();
 
         console.log(
-            "✅ SocialHub profile refreshed!"
+            "✅ Friendbook profile refreshed!"
         );
 
     } catch (error) {
@@ -2339,7 +2339,7 @@ document.addEventListener(
         ) {
 
             setTimeout(
-                refreshSocialHubProfile,
+                refreshFriendbookProfile,
                 500
             );
 
@@ -2459,7 +2459,7 @@ document.addEventListener(
     }
 );
 // ==========================================
-// SocialHub - Step 10.24
+// Friendbook - Step 10.24
 // Create Post -> Supabase
 // ==========================================
 
@@ -2550,7 +2550,7 @@ async function createPostInSupabase(event) {
     }
 }
 // ==========================================
-// SocialHub - Step 10.25
+// Friendbook - Step 10.25
 // Connect Create Post to Supabase
 // ==========================================
 
@@ -2582,7 +2582,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 });
 // ==========================================
-// SocialHub - Step 10.26
+// Friendbook - Step 10.26
 // Load Posts From Supabase
 // ==========================================
 
@@ -2745,7 +2745,7 @@ async function loadPostsFromSupabase() {
 // (legacy auto-load removed: the Step 10.31
 //  loader renders the feed with real names)
 // ==========================================
-// SocialHub - Step 10.30
+// Friendbook - Step 10.30
 // Save Background Post to Supabase
 // ==========================================
 
@@ -2938,7 +2938,7 @@ document.addEventListener(
     }
 );
 // ==========================================
-// SocialHub - Step 10.30 FIX
+// Friendbook - Step 10.30 FIX
 // Prevent duplicate post creation
 // ==========================================
 
@@ -2975,7 +2975,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 // ==========================================
-// SocialHub - Step 10.31
+// Friendbook - Step 10.31
 // Final Post Loader
 // ==========================================
 
@@ -2996,7 +2996,7 @@ document.addEventListener(
     }
 );
 // ======================================================
-// SocialHub - Step 10.31 FINAL
+// Friendbook - Step 10.31 FINAL
 // Real User Name + Clean Text + Background
 // ======================================================
 
@@ -3276,7 +3276,7 @@ function socialhubBuildPostArticle(post, profileMap) {
 
             const userName =
                 profile?.full_name ||
-                "SocialHub User";
+                "Friendbook User";
 
             const username =
                 profile?.username ||
@@ -3712,7 +3712,7 @@ document.addEventListener(
     }
 );
 // ======================================================
-// SocialHub - Step 10.31.1
+// Friendbook - Step 10.31.1
 // Premium Feed Loading
 // ======================================================
 
@@ -3763,7 +3763,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ======================================================
-// SocialHub - POST AUDIENCE
+// Friendbook - POST AUDIENCE
 // Public / Friends / Friends of Friends / Only Me
 // ======================================================
 
@@ -4122,7 +4122,7 @@ async function socialhubFilterVisiblePosts(posts) {
 }
 
 // ======================================================
-// SocialHub - HEIC / HEIF → JPEG CONVERSION
+// Friendbook - HEIC / HEIF → JPEG CONVERSION
 // (iPhone photos don't display in most browsers)
 // ======================================================
 

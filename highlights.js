@@ -1,5 +1,5 @@
 // ======================================================
-// TRIYA - HIGHLIGHTS (Instagram-style)
+// Friendbook - HIGHLIGHTS (Instagram-style)
 // ======================================================
 // Create / edit / view profile highlights. Stories-like
 // full-screen viewer with auto-advance + progress bars.

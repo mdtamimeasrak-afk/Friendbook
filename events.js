@@ -1223,7 +1223,7 @@ async function socialhubEventLoad() {
         return;
     }
 
-    document.title = event.title + " - TRIYA";
+    document.title = event.title + " - Friendbook";
 
     const isCreator =
         event.created_by === me.id;

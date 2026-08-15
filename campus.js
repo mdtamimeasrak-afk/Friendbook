@@ -1,5 +1,5 @@
 // ======================================================
-// TRIYA - CAMPUS COMMUNITY (Step 3)
+// Friendbook - CAMPUS COMMUNITY (Step 3)
 // Campus data from Supabase + functional Join/Leave.
 // ======================================================
 

@@ -676,7 +676,7 @@ async function socialhubAlbumLoad() {
 
     socialhubAlbumState.album = album;
 
-    document.title = album.name + " - TRIYA";
+    document.title = album.name + " - Friendbook";
 
     const isMine =
         album.user_id === me.id;

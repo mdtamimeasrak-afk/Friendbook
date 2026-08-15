@@ -671,7 +671,7 @@ function socialhubPagesOpenCreateModal() {
 
             <div class="cr-body">
                 <label>Page name</label>
-                <input type="text" id="pgName" placeholder="e.g. TRIYA Official" maxlength="60">
+                <input type="text" id="pgName" placeholder="e.g. Friendbook Official" maxlength="60">
 
                 <label>Description</label>
                 <textarea id="pgDesc" rows="3" placeholder="What is this page about?"></textarea>
@@ -1053,7 +1053,7 @@ async function socialhubPageLoad() {
         return;
     }
 
-    document.title = page.name + " - TRIYA";
+    document.title = page.name + " - Friendbook";
 
     const isCreator =
         page.created_by === me.id;

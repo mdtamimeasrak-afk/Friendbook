@@ -1,5 +1,5 @@
 // ======================================================
-// HOME THEME — SocialHub homepage (index.html)
+// HOME THEME — Friendbook homepage (index.html)
 // Dark premium UI: search overlay, create post modal,
 // help modal, menu dropdown, birthdays widget, bottom nav
 // ======================================================
