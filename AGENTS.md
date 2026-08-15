@@ -5,10 +5,11 @@ Supabase-backed social media app. Vanilla HTML/CSS/JS (no framework, no build st
 ## How to work on this project
 
 - Every JS file is self-contained: injects its own `<style>` block, guards with `if (!x) return;`, and wires everything inside a final `document.addEventListener("DOMContentLoaded", ...)`.
+- **NEW FILES go in their feature folder — NEVER at the repo root.** A new file belongs to the group it serves: shared/system → `core/`, profile stuff → `profile/`, messages → `messages/`, a brand-new feature → create its own folder (with its own `index.html`). Only `index.html` (root redirect), `bump-versions.js`, `setup-all.sql`, and docs live at root.
 - Files follow the pattern: `var db = window.db || supabaseClient;` at the top. Never redefine `db` elsewhere.
 - All shared functions use the `socialhub` prefix (e.g. `socialhubGetMe`, `socialhubEscape`). Reuse them instead of re-writing.
 - `socialhubGetMe()` returns the Supabase auth user, NOT the profiles row. Fetch the profile row separately when needed.
-- After editing any `.js` file, verify with: `node --check <file.js>` (run in R:\my-social-app). Never skip this.
+- After editing any `.js` file, verify with: `node --check <subfolder>/<file.js>` (run in R:\my-social-app). Never skip this.
 - After editing HTML/CSS/JS, the user's browser may show stale files: bump the `?v=N` query version on the changed files in the HTML `<script>`/`<link>` tags (currently `?v=3`). This is critical — the user hits cache issues otherwise.
 - User communicates in Bangla (romanized) — answer in Bangla when they do.
 - Keep the user's own code style: indentation-heavy blocks, `const`/`let` (no `var` except the `db` alias), double quotes, template literals with wide spacing.
