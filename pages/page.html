@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Friendbook - Page</title>
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%231877f2'/%3E%3Ctext x='20' y='27' font-family='Arial' font-size='21' font-weight='800' fill='white' text-anchor='middle'%3ETR%3C/text%3E%3C/svg%3E">
+
+
+    <link rel="stylesheet" href="../core/style.css?v=1787000000033">
+
+    <link rel="stylesheet" href="../core/dashboard.css?v=1787000000033">
+
+    <link rel="stylesheet" href="../core/premium.css?v=1787000000033">
+
+    <link rel="stylesheet" href="../core/glass-theme.css?v=1787000000033">
+
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://vtazrwksizpeyezwctko.supabase.co">
+</head>
+
+
+<body>
+
+
+    <!-- ========================= -->
+    <!-- TOP NAVIGATION -->
+    <!-- ========================= -->
+
+    <header class="topbar">
+
+
+        <div
+            class="logo"
+            onclick="location.href='index.html'"
+            title="Friendbook"
+        ></div>
+
+
+
+        <div class="search-box">
+
+            <span>
+                🔍
+            </span>
+
+            <input
+                type="text"
+                placeholder="Search Friendbook"
+            >
+
+        </div>
+
+
+
+        <nav class="fb-center-nav">
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='index.html'"
+                title="Home"
+            >
+                <i class="fa-solid fa-house"></i>
+            </button>
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='watch.html'"
+                title="Watch"
+            >
+                <i class="fa-solid fa-tv"></i>
+            </button>
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='reels.html'"
+                title="Reels"
+            >
+                <i class="fa-solid fa-clapperboard"></i>
+            </button>
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='groups.html'"
+                title="Groups"
+            >
+                <i class="fa-solid fa-users"></i>
+            </button>
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='messages.html'"
+                title="Messages"
+            >
+                <i class="fa-solid fa-comment-dots"></i>
+            </button>
+
+        </nav>
+
+
+
+        <div class="top-icons">
+
+            <button
+                onclick="location.href='messages.html'"
+                title="Messages"
+            >
+                💬
+            </button>
+
+            <button
+                onclick="location.href='index.html'"
+                title="Notifications"
+            >
+                🔔
+            </button>
+
+        </div>
+
+
+    </header>
+
+
+
+    <!-- ========================= -->
+    <!-- MAIN CONTENT -->
+    <!-- ========================= -->
+
+    <main class="page-page">
+
+
+        <div
+            class="page-hero"
+            id="pageHero"
+        >
+            <p class="empty-message">Loading page...</p>
+        </div>
+
+
+        <div
+            class="page-composer"
+            id="pageComposer"
+        >
+
+            <div class="page-composer-as">
+                <span class="as-logo" id="pageAsLogo">P</span>
+                <span>Posting as this page</span>
+            </div>
+
+            <textarea
+                placeholder="Write something to your followers..."
+            ></textarea>
+
+            <div class="page-composer-row">
+
+                <label>
+                    <i class="fa-solid fa-image"></i>
+                    Add Photo
+                    <input
+                        type="file"
+                        accept="image/*"
+                        style="display:none;"
+                        onchange="socialhubPagePickImage(this)"
+                    >
+                </label>
+
+                <button
+                    class="socialhub-create-btn"
+                    style="margin-left:auto;"
+                    onclick="socialhubPagePost(this)"
+                >
+                    <i class="fa-solid fa-paper-plane"></i>
+                    Post
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <h3 class="page-feed-title">
+            <i class="fa-solid fa-newspaper"></i>
+            Page Posts
+        </h3>
+
+
+        <div
+            id="pagePosts"
+        >
+
+            <p class="empty-message">Loading posts...</p>
+
+        </div>
+
+
+    </main>
+
+
+
+    <!-- ========================= -->
+    <!-- SCRIPTS -->
+    <!-- ========================= -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="../core/supabase.js?v=1787000000033"></script>
+
+    <script src="../core/premium-ui.js?v=1787000000033"></script>
+
+    <script src="../core/script.js?v=1787000000033"></script>
+
+    <script src="../core/likes-comments.js?v=1787000000033"></script>
+
+    <script src="../core/shares.js?v=1787000000033"></script>
+
+    <script src="pages.js?v=1787000000033"></script>
+
+</body>
+
+</html>

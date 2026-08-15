@@ -1,0 +1,2998 @@
+function socialhubPageId() {
+    const segs =
+        window.location.pathname
+            .replace(/\/+$/, "")
+            .split("/")
+            .filter(Boolean);
+    const last =
+        segs[segs.length - 1] || "";
+    const folder =
+        segs.length >= 2 ? segs[segs.length - 2] : "";
+    if (last && last.endsWith(".html") && last !== "index.html") {
+        return folder + "/" + last;
+    }
+    return (last && last !== "index.html" ? last : folder) + "/index.html";
+}
+
+
+// ======================================================
+// SOCIALHUB - IMAGE UPLOAD (STEP 12)
+// ======================================================
+// This is a NEW file. Old code is untouched.
+//
+// What it does:
+//   1. Profile page: camera button on the profile
+//      photo -> uploads to the "avatars" bucket and
+//      saves the public URL in profiles.avatar_url.
+//   2. Home page: the "📷 Photo" button opens a file
+//      picker, shows a preview, and when the user
+//      clicks Post the image is uploaded to the
+//      "post-images" bucket and saved in posts.image_url.
+//   3. Every post that has an image_url gets its
+//      photo shown in the feed automatically.
+//
+// Setup:
+//   - Run the SQL below once in the Supabase SQL Editor:
+//
+//     insert into storage.buckets (id, name, public)
+//     values ('avatars', 'avatars', true),
+//            ('post-images', 'post-images', true)
+//     on conflict (id) do nothing;
+//
+//     alter table public.posts
+//       add column if not exists image_url text;
+//
+//     create policy "avatars_public_read"
+//       on storage.objects for select
+//       using (bucket_id = 'avatars');
+//
+//     create policy "avatars_insert"
+//       on storage.objects for insert
+//       with check (bucket_id = 'avatars' and auth.uid() = owner);
+//
+//     create policy "avatars_update"
+//       on storage.objects for update
+//       using (bucket_id = 'avatars' and auth.uid() = owner);
+//
+//     create policy "avatars_delete"
+//       on storage.objects for delete
+//       using (bucket_id = 'avatars' and auth.uid() = owner);
+//
+//     create policy "post_images_public_read"
+//       on storage.objects for select
+//       using (bucket_id = 'post-images');
+//
+//     create policy "post_images_insert"
+//       on storage.objects for insert
+//       with check (bucket_id = 'post-images' and auth.uid() = owner);
+//
+//     create policy "post_images_update"
+//       on storage.objects for update
+//       using (bucket_id = 'post-images' and auth.uid() = owner);
+//
+//     create policy "post_images_delete"
+//       on storage.objects for delete
+//       using (bucket_id = 'post-images' and auth.uid() = owner);
+//
+//   - Add this script in index.html AND profile.html
+//     AFTER likes-comments.js (or after script.js):
+//
+//     <script src="image-upload.js"></script>
+// ======================================================
+
+var db = window.db || supabaseClient;
+
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+
+
+// ======================================================
+// 1. HELPERS
+// ======================================================
+
+function socialhubEscape(text) {
+
+    const div =
+        document.createElement("div");
+
+    div.innerText =
+        text || "";
+
+    return div.innerHTML;
+}
+
+
+async function socialhubGetMe() {
+
+    const {
+        data,
+        error
+    } = await db.auth.getUser();
+
+    if (error || !data.user) {
+
+        return null;
+    }
+
+    return data.user;
+}
+
+
+function socialhubFileExtension(file) {
+
+    const name =
+        file.name || "image.png";
+
+    const parts =
+        name.split(".");
+
+    const ext =
+        parts.length > 1
+            ? parts.pop().toLowerCase()
+            : "png";
+
+    return ext;
+}
+
+
+function socialhubValidateImage(file) {
+
+    if (!file.type.startsWith("image/")) {
+
+        alert("Please choose an image file.");
+
+        return false;
+    }
+
+    if (file.size > MAX_IMAGE_SIZE) {
+
+        alert(
+            "Image is too big. Maximum size is 5MB."
+        );
+
+        return false;
+    }
+
+    return true;
+}
+
+
+// ======================================================
+// 2. PROFILE PHOTO UPLOAD (PROFILE PAGE)
+// ======================================================
+
+let avatarFileInput = null;
+
+
+function socialhubClosePhotoMenus() {
+
+    document
+        .querySelectorAll(".socialhub-photo-menu")
+        .forEach(menu => menu.remove());
+}
+
+
+document.addEventListener("click", (event) => {
+
+    if (
+        !event.target.closest(".socialhub-photo-trigger") &&
+        !event.target.closest(".socialhub-photo-menu")
+    ) {
+
+        socialhubClosePhotoMenus();
+    }
+});
+
+
+function socialhubPhotoMenuItem(icon, label, subtext, action) {
+
+    const item =
+        document.createElement("div");
+
+    item.className = "socialhub-menu-item";
+
+    const iconEl =
+        document.createElement("span");
+
+    iconEl.className = "socialhub-menu-icon";
+
+    iconEl.textContent = icon;
+
+    const textEl =
+        document.createElement("span");
+
+    textEl.className = "socialhub-menu-text";
+
+    const title =
+        document.createElement("strong");
+
+    title.textContent = label;
+
+    textEl.appendChild(title);
+
+    if (subtext) {
+
+        const detail =
+            document.createElement("small");
+
+        detail.textContent = subtext;
+
+        textEl.appendChild(detail);
+    }
+
+    item.appendChild(iconEl);
+
+    item.appendChild(textEl);
+
+    item.addEventListener("click", (event) => {
+
+        event.stopPropagation();
+
+        socialhubClosePhotoMenus();
+
+        action();
+    });
+
+    return item;
+}
+
+
+// Fullscreen photo viewer (avatar / cover preview)
+
+function socialhubViewFullImage(src) {
+
+    if (!src) {
+        return;
+    }
+
+    const overlay =
+        document.createElement("div");
+
+    overlay.className = "socialhub-photo-viewer";
+
+    overlay.innerHTML =
+        '<img src="' + src + '" alt="Picture">' +
+        '<button type="button" class="socialhub-photo-viewer-close">✕</button>';
+
+    overlay.addEventListener("click", () => {
+
+        overlay.remove();
+    });
+
+    document.body.appendChild(overlay);
+}
+
+
+// Profile photo modal menu (Facebook-style "Change Profile
+// Picture" dialog). Own profile: upload / edit / view /
+// remove. Other users: view only.
+
+function socialhubOpenAvatarMenu(photo, anchor) {
+
+    const isOwnProfile =
+        socialhubPageId() !== "profile/user-profile.html";
+
+    const image =
+        photo.querySelector("img");
+
+    const modal =
+        document.createElement("div");
+
+    modal.className = "socialhub-avatar-modal";
+
+    const rows =
+        [];
+
+    const close =
+        () => modal.remove();
+
+    if (isOwnProfile) {
+
+        rows.push(
+            socialhubAvatarModalRow(
+                "image-plus",
+                "Upload New Photo",
+                "Choose a photo from your device",
+                () => {
+
+                    close();
+
+                    if (avatarFileInput) {
+                        avatarFileInput.click();
+                    }
+                }
+            )
+        );
+
+        if (image) {
+
+            rows.push(
+                socialhubAvatarModalRow(
+                    "pencil",
+                    "Edit Current Photo",
+                    "Crop / Zoom / Rotate",
+                    () => {
+
+                        close();
+
+                        socialhubEditCurrentAvatar(
+                            image.src
+                        );
+                    }
+                )
+            );
+
+            rows.push(
+                socialhubAvatarModalRow(
+                    "eye",
+                    "View Profile Photo",
+                    "Open the current profile picture",
+                    () => {
+
+                        close();
+
+                        socialhubViewFullImage(image.src);
+                    }
+                )
+            );
+
+            rows.push(
+                socialhubAvatarModalRow(
+                    "trash-2",
+                    "Remove Photo",
+                    "Remove your current profile picture",
+                    () => {
+
+                        close();
+
+                        handleAvatarRemove();
+                    }
+                )
+            );
+        }
+
+    } else if (image) {
+
+        rows.push(
+            socialhubAvatarModalRow(
+                "eye",
+                "View Profile Photo",
+                "Open the full profile picture",
+                () => {
+
+                    close();
+
+                    socialhubViewFullImage(image.src);
+                }
+            )
+        );
+    }
+
+    if (!rows.length) {
+        return;
+    }
+
+    const previewHTML =
+        image
+            ? `<img src="${socialhubEscape(image.src)}" alt="Profile picture">`
+            : '<span class="socialhub-avatar-modal-placeholder"><i data-lucide="circle-user"></i></span>';
+
+    modal.innerHTML =
+        `
+            <div class="socialhub-avatar-modal-box">
+
+                <div class="socialhub-avatar-modal-head">
+
+                    <strong>Change Profile Picture</strong>
+
+                    <button type="button" class="socialhub-avatar-modal-close" aria-label="Close">
+                        <i data-lucide="x"></i>
+                    </button>
+
+                </div>
+
+                <div class="socialhub-avatar-modal-body">
+
+                    <div class="socialhub-avatar-modal-preview">
+                        ${previewHTML}
+                    </div>
+
+                    <div class="socialhub-avatar-modal-rows">
+                        ${rows.join("")}
+                    </div>
+
+                </div>
+
+                <div class="socialhub-avatar-modal-foot">
+
+                    <button type="button" class="socialhub-avatar-modal-cancel">
+                        Cancel
+                    </button>
+
+                </div>
+
+            </div>
+        `;
+
+    modal
+        .querySelector(".socialhub-avatar-modal-close")
+        .addEventListener("click", close);
+
+    modal
+        .querySelector(".socialhub-avatar-modal-cancel")
+        .addEventListener("click", close);
+
+    modal.addEventListener("click", (event) => {
+
+        if (event.target === modal) {
+            close();
+        }
+    });
+
+    document.body.appendChild(modal);
+
+    document.body.style.overflow = "hidden";
+
+    if (
+        window.lucide &&
+        typeof window.lucide.createIcons === "function"
+    ) {
+        window.lucide.createIcons();
+    }
+}
+
+
+function socialhubAvatarModalRow(icon, label, subtext, action) {
+
+    return `
+        <button type="button" class="socialhub-avatar-modal-row">
+            <span class="socialhub-avatar-modal-row-icon">
+                <i data-lucide="${icon}"></i>
+            </span>
+            <span class="socialhub-avatar-modal-row-text">
+                <strong>${label}</strong>
+                ${subtext ? `<small>${subtext}</small>` : ""}
+            </span>
+        </button>
+    `;
+}
+
+
+// Edit the CURRENT profile picture (fetch -> editor)
+
+async function socialhubEditCurrentAvatar(src) {
+
+    if (!src) {
+        return;
+    }
+
+    try {
+
+        const response =
+            await fetch(src);
+
+        if (!response.ok) {
+            throw new Error("Could not load the photo.");
+        }
+
+        const blob =
+            await response.blob();
+
+        const file =
+            new File([blob], "avatar.jpg", {
+                type: blob.type || "image/jpeg"
+            });
+
+        openAvatarCropModal(file);
+
+    } catch (error) {
+
+        console.error(
+            "❌ Edit avatar error:",
+            error
+        );
+
+        alert(
+            "Could not load the photo for editing.\n\n" +
+            error.message
+        );
+    }
+}
+
+
+function setupProfilePhotoUpload() {
+
+    const photo =
+        document.querySelector(
+            ".fb-avatar-wrap .profile-photo"
+        ) ||
+        document.querySelector(
+            ".profile-photo"
+        );
+
+    if (!photo) {
+        return;
+    }
+
+    photo.style.position = "relative";
+
+    photo
+        .querySelectorAll(
+            ".socialhub-avatar-overlay, .socialhub-photo-menu"
+        )
+        .forEach(el => el.remove());
+
+    const isOwnProfile =
+        socialhubPageId() !== "profile/user-profile.html";
+
+    // Camera button (Facebook style: bottom-right circle).
+    // Only on your own profile — other users just get the
+    // "View picture" menu on click.
+    if (isOwnProfile) {
+
+        const button =
+            document.createElement("button");
+
+        button.type = "button";
+
+        button.className =
+            "socialhub-avatar-overlay socialhub-photo-trigger";
+
+        button.innerHTML =
+            '<i data-lucide="camera"></i>';
+
+        button.setAttribute(
+            "aria-label",
+            "Update profile picture"
+        );
+
+        button.addEventListener("click", (event) => {
+
+            event.stopPropagation();
+
+            socialhubOpenAvatarMenu(photo, button);
+        });
+
+        photo.appendChild(button);
+
+        if (
+            window.lucide &&
+            typeof window.lucide.createIcons === "function"
+        ) {
+            window.lucide.createIcons();
+        }
+    }
+
+    photo.addEventListener("click", () => {
+
+        socialhubOpenAvatarMenu(photo);
+    });
+
+    // Hidden file input (created only once)
+    if (!avatarFileInput) {
+
+        avatarFileInput =
+            document.createElement("input");
+
+        avatarFileInput.type = "file";
+        avatarFileInput.accept = "image/*";
+        avatarFileInput.style.display = "none";
+
+        document.body.appendChild(
+            avatarFileInput
+        );
+
+        avatarFileInput.addEventListener(
+            "change",
+            handleAvatarUpload
+        );
+    }
+}
+
+
+async function handleAvatarUpload() {
+
+    let file =
+        avatarFileInput.files[0];
+
+    if (!file) {
+        return;
+    }
+
+    if (!socialhubValidateImage(file)) {
+        return;
+    }
+
+    // Convert iPhone HEIC photos so they display everywhere
+    const converted =
+        await socialhubHeicToJpeg(file);
+
+    if (!converted) {
+        return;
+    }
+
+    file = converted;
+
+    // Facebook style: crop / reposition first
+    openAvatarCropModal(file);
+}
+
+
+// ======================================================
+// 2b. FB-STYLE AVATAR CROP MODAL
+// ======================================================
+
+let pendingAvatarFile = null;
+
+let avatarCropImage = null;
+
+let avatarCropState = { dx: 0, dy: 0, zoom: 1 };
+
+
+function openAvatarCropModal(file) {
+
+    pendingAvatarFile = file;
+
+    avatarCropState = { dx: 0, dy: 0, zoom: 1, rot: 0 };
+
+    const overlay =
+        document.createElement("div");
+
+    overlay.className = "socialhub-crop-overlay";
+
+    overlay.innerHTML = `
+        <div class="socialhub-crop-dialog">
+            <div class="socialhub-crop-head">
+                <strong>Update profile picture</strong>
+                <button type="button" class="socialhub-crop-close" aria-label="Close"><i data-lucide="x"></i></button>
+            </div>
+            <div class="socialhub-crop-body">
+                <div class="socialhub-crop-preview">
+                    <img alt="Preview" draggable="false">
+                </div>
+                <div class="socialhub-crop-side">
+                    <label>Zoom</label>
+                    <input type="range" min="1" max="4" step="0.01" value="1">
+                    <div class="socialhub-crop-rotates">
+                        <button type="button" class="socialhub-crop-rotate-left" title="Rotate left">
+                            <i data-lucide="rotate-ccw"></i>
+                        </button>
+                        <button type="button" class="socialhub-crop-rotate-right" title="Rotate right">
+                            <i data-lucide="rotate-cw"></i>
+                        </button>
+                    </div>
+                    <p>Drag the photo to position it</p>
+                </div>
+            </div>
+            <div class="socialhub-crop-foot">
+                <button type="button" class="socialhub-crop-cancel">Cancel</button>
+                <button type="button" class="socialhub-crop-save">Use this photo</button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    document.body.style.overflow = "hidden";
+
+    const img =
+        overlay.querySelector("img");
+
+    img.src = URL.createObjectURL(file);
+
+    const preview =
+        overlay.querySelector(
+            ".socialhub-crop-preview"
+        );
+
+    const slider =
+        overlay.querySelector(
+            "input[type=range]"
+        );
+
+    avatarCropImage = img;
+
+    let previewSize = 320;
+
+    img.onload = () => {
+
+        previewSize = preview.clientWidth || 320;
+
+        socialhubApplyAvatarCrop();
+    };
+
+    slider.addEventListener("input", () => {
+
+        avatarCropState.zoom =
+            parseFloat(slider.value);
+
+        socialhubApplyAvatarCrop();
+    });
+
+    const rotateBtn =
+        (selector, delta) => {
+
+            const btn =
+                overlay.querySelector(selector);
+
+            if (!btn) {
+                return;
+            }
+
+            btn.addEventListener("click", () => {
+
+                avatarCropState.rot =
+                    (avatarCropState.rot + delta) % 360;
+
+                socialhubApplyAvatarCrop();
+            });
+        };
+
+    rotateBtn(
+        ".socialhub-crop-rotate-left",
+        -90
+    );
+
+    rotateBtn(
+        ".socialhub-crop-rotate-right",
+        90
+    );
+
+    if (
+        window.lucide &&
+        typeof window.lucide.createIcons === "function"
+    ) {
+        window.lucide.createIcons();
+    }
+
+    let dragging = false;
+
+    let startX = 0;
+
+    let startY = 0;
+
+    preview.addEventListener("pointerdown", (event) => {
+
+        dragging = true;
+
+        startX =
+            event.clientX - avatarCropState.dx;
+
+        startY =
+            event.clientY - avatarCropState.dy;
+
+        preview.setPointerCapture(
+            event.pointerId
+        );
+
+        preview.style.cursor = "grabbing";
+    });
+
+    preview.addEventListener("pointermove", (event) => {
+
+        if (!dragging) {
+            return;
+        }
+
+        avatarCropState.dx =
+            event.clientX - startX;
+
+        avatarCropState.dy =
+            event.clientY - startY;
+
+        socialhubApplyAvatarCrop();
+    });
+
+    preview.addEventListener("pointerup", () => {
+
+        dragging = false;
+
+        preview.style.cursor = "grab";
+    });
+
+    preview.addEventListener("pointercancel", () => {
+
+        dragging = false;
+
+        preview.style.cursor = "grab";
+    });
+
+    overlay
+        .querySelector(".socialhub-crop-close")
+        .addEventListener("click", () => {
+
+            closeAvatarCropModal(overlay);
+        });
+
+    overlay
+        .querySelector(".socialhub-crop-cancel")
+        .addEventListener("click", () => {
+
+            closeAvatarCropModal(overlay);
+        });
+
+    overlay
+        .querySelector(".socialhub-crop-save")
+        .addEventListener("click", async () => {
+
+            const button =
+                overlay.querySelector(
+                    ".socialhub-crop-save"
+                );
+
+            button.disabled = true;
+
+            button.textContent = "Uploading…";
+
+            try {
+
+                const blob =
+                    await socialhubCropAvatarToBlob(
+                        previewSize
+                    );
+
+                await socialhubUploadAvatarBlob(blob);
+
+                closeAvatarCropModal(overlay);
+
+            } catch (error) {
+
+                console.error(
+                    "❌ Avatar crop error:",
+                    error
+                );
+
+                alert(
+                    "Could not upload photo.\n\n" +
+                    error.message
+                );
+
+                button.disabled = false;
+
+                button.textContent = "Use this photo";
+            }
+        });
+
+    overlay.addEventListener("click", (event) => {
+
+        if (event.target === overlay) {
+
+            closeAvatarCropModal(overlay);
+        }
+    });
+}
+
+
+function socialhubApplyAvatarCrop() {
+
+    const img =
+        avatarCropImage;
+
+    const preview =
+        img?.parentElement;
+
+    if (!img || !img.naturalWidth) {
+        return;
+    }
+
+    const size =
+        preview.clientWidth || 320;
+
+    const nw = img.naturalWidth;
+    const nh = img.naturalHeight;
+
+    const z =
+        avatarCropState.zoom;
+
+    const scale =
+        (size / Math.min(nw, nh)) * z;
+
+    const w = nw * scale;
+    const h = nh * scale;
+
+    const maxX =
+        Math.max(0, (w - size) / 2);
+
+    const maxY =
+        Math.max(0, (h - size) / 2);
+
+    avatarCropState.dx =
+        Math.max(
+            -maxX,
+            Math.min(maxX, avatarCropState.dx)
+        );
+
+    avatarCropState.dy =
+        Math.max(
+            -maxY,
+            Math.min(maxY, avatarCropState.dy)
+        );
+
+    img.style.width = `${w}px`;
+
+    img.style.height = `${h}px`;
+
+    img.style.marginLeft = `${-w / 2}px`;
+
+    img.style.marginTop = `${-h / 2}px`;
+
+    img.style.transform =
+        `translate(${avatarCropState.dx}px, ${avatarCropState.dy}px) ` +
+        `rotate(${avatarCropState.rot}deg)`;
+}
+
+
+function socialhubCropAvatarToBlob(previewSize) {
+
+    const img =
+        avatarCropImage;
+
+    const nw = img.naturalWidth;
+    const nh = img.naturalHeight;
+
+    const size = previewSize || 320;
+
+    const z =
+        avatarCropState.zoom;
+
+    const scale =
+        (size / Math.min(nw, nh)) * z;
+
+    const visW = size / scale;
+    const visH = size / scale;
+
+    const sx =
+        nw / 2 + avatarCropState.dx / scale - visW / 2;
+
+    const sy =
+        nh / 2 + avatarCropState.dy / scale - visH / 2;
+
+    const canvas =
+        document.createElement("canvas");
+
+    canvas.width = 600;
+
+    canvas.height = 600;
+
+    const ctx =
+        canvas.getContext("2d");
+
+    const rot =
+        avatarCropState.rot || 0;
+
+    if (rot) {
+
+        ctx.translate(300, 300);
+
+        ctx.rotate((rot * Math.PI) / 180);
+
+        ctx.translate(-300, -300);
+    }
+
+    ctx.drawImage(
+        img,
+        sx, sy, visW, visH,
+        0, 0, 600, 600
+    );
+
+    return new Promise(resolve => {
+
+        canvas.toBlob(
+            blob => resolve(blob),
+            "image/jpeg",
+            0.92
+        );
+    });
+}
+
+
+function closeAvatarCropModal(overlay) {
+
+    overlay.remove();
+
+    document.body.style.overflow = "";
+
+    if (
+        avatarCropImage &&
+        avatarCropImage.src.startsWith("blob:")
+    ) {
+
+        URL.revokeObjectURL(
+            avatarCropImage.src
+        );
+    }
+
+    avatarCropImage = null;
+
+    pendingAvatarFile = null;
+
+    if (avatarFileInput) {
+        avatarFileInput.value = "";
+    }
+}
+
+
+async function socialhubUploadAvatarBlob(blob) {
+
+    const me =
+        await socialhubGetMe();
+
+    if (!me) {
+
+        alert("Please login first.");
+
+        return;
+    }
+
+    try {
+
+        const file =
+            pendingAvatarFile;
+
+        const ext =
+            file
+                ? socialhubFileExtension(file)
+                : "jpg";
+
+        const path =
+            `${me.id}-${Date.now()}.${ext}`;
+
+        const {
+            error: uploadError
+        } = await db
+            .storage
+            .from("avatars")
+            .upload(path, blob, {
+                upsert: true,
+                contentType: "image/jpeg"
+            });
+
+        if (uploadError) {
+            throw uploadError;
+        }
+
+        const {
+            data: urlData
+        } = db
+            .storage
+            .from("avatars")
+            .getPublicUrl(path);
+
+        const {
+            error: updateError
+        } = await db
+            .from("profiles")
+            .update({
+                avatar_url: urlData.publicUrl
+            })
+            .eq("id", me.id);
+
+        if (updateError) {
+            throw updateError;
+        }
+
+        if (
+            typeof socialhubToast === "function"
+        ) {
+
+            socialhubToast(
+                "Profile picture updated",
+                "success"
+            );
+
+        } else {
+
+            alert("Profile photo updated! 🎉");
+        }
+
+        if (
+            typeof showCurrentUserData ===
+            "function"
+        ) {
+
+            await showCurrentUserData();
+        }
+
+        setupProfilePhotoUpload();
+
+    } catch (error) {
+
+        throw error;
+    }
+}
+
+
+async function handleAvatarRemove() {
+
+    const me =
+        await socialhubGetMe();
+
+    if (!me) {
+
+        alert("Please login first.");
+
+        return;
+    }
+
+    try {
+
+        const {
+            error
+        } = await db
+            .from("profiles")
+            .update({
+                avatar_url: null
+            })
+            .eq("id", me.id);
+
+        if (error) {
+            throw error;
+        }
+
+        if (
+            typeof showCurrentUserData ===
+            "function"
+        ) {
+
+            await showCurrentUserData();
+        }
+
+        setupProfilePhotoUpload();
+
+    } catch (error) {
+
+        console.error(
+            "❌ Avatar remove error:",
+            error
+        );
+
+        alert(
+            "Could not remove photo.\n\n" +
+            error.message
+        );
+    }
+}
+
+
+// ======================================================
+// 3. POST IMAGE UPLOAD (HOME PAGE)
+// ======================================================
+
+let postFileInput = null;
+
+let pendingPostImage = null;
+
+let videoFileInput = null;
+
+let pendingPostVideo = null;
+
+
+function setupPostImageUpload() {
+
+    const photoButton =
+        document.querySelector(
+            ".create-post-actions button:first-child"
+        );
+
+    const composer =
+        document.querySelector(".create-post");
+
+    if (!photoButton || !composer) {
+        return;
+    }
+
+    if (photoButton.dataset.socialhubReady) {
+        return;
+    }
+
+    photoButton.dataset.socialhubReady = "1";
+
+    // Hidden file input
+    postFileInput =
+        document.createElement("input");
+
+    postFileInput.type = "file";
+    postFileInput.accept = "image/*";
+    postFileInput.style.display = "none";
+
+    document.body.appendChild(
+        postFileInput
+    );
+
+    // Photo button opens the file picker
+    photoButton.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            postFileInput.click();
+        }
+    );
+
+    // On file selected -> show preview
+    postFileInput.addEventListener(
+        "change",
+        async () => {
+
+            let file =
+                postFileInput.files[0];
+
+            if (!file) {
+                return;
+            }
+
+            if (!socialhubValidateImage(file)) {
+                return;
+            }
+
+            // Convert iPhone HEIC photos so they display everywhere
+            const converted =
+                await socialhubHeicToJpeg(file);
+
+            if (!converted) {
+                return;
+            }
+
+            file = converted;
+
+            // Remove pending video preview
+            document
+                .querySelectorAll(".socialhub-post-video-preview")
+                .forEach(element => element.remove());
+
+            if (videoFileInput) {
+                videoFileInput.value = "";
+            }
+
+            pendingPostVideo = null;
+
+            pendingPostImage = { file };
+
+            socialhubShowPostImagePreview(file);
+        }
+    );
+
+    // ---------- VIDEO BUTTON ----------
+
+    const videoButton =
+        document.querySelector(
+            ".create-post-actions button:nth-child(2)"
+        );
+
+    if (!videoButton) {
+        return;
+    }
+
+    videoButton.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            videoFileInput.click();
+        }
+    );
+
+    videoFileInput =
+        document.createElement("input");
+
+    videoFileInput.type = "file";
+    videoFileInput.accept = "video/*";
+    videoFileInput.style.display = "none";
+
+    document.body.appendChild(
+        videoFileInput
+    );
+
+    videoFileInput.addEventListener(
+        "change",
+        () => {
+
+            const file =
+                videoFileInput.files[0];
+
+            if (!file) {
+                return;
+            }
+
+            if (!socialhubValidateVideo(file)) {
+                return;
+            }
+
+            // Remove pending photo preview
+            document
+                .querySelectorAll(".socialhub-post-preview")
+                .forEach(element => element.remove());
+
+            if (postFileInput) {
+                postFileInput.value = "";
+            }
+
+            pendingPostImage = null;
+
+            pendingPostVideo = { file };
+
+            socialhubShowPostVideoPreview(file);
+        }
+    );
+}
+
+
+function socialhubValidateVideo(file) {
+
+    if (
+        !file.type.startsWith("video/")
+    ) {
+
+        alert("Please choose a video file.");
+
+        return false;
+    }
+
+    if (file.size > 100 * 1024 * 1024) {
+
+        alert(
+            "Video is too big. Maximum size is 100MB."
+        );
+
+        return false;
+    }
+
+    return true;
+}
+
+
+function socialhubShowPostVideoPreview(file) {
+
+    const composer =
+        document.querySelector(".create-post");
+
+    if (!composer) {
+        return;
+    }
+
+    document
+        .querySelectorAll(".socialhub-post-video-preview")
+        .forEach(element => element.remove());
+
+    const wrap =
+        document.createElement("div");
+
+    wrap.className = "socialhub-post-video-preview";
+
+    wrap.style.cssText = `
+        display:flex;
+        align-items:center;
+        gap:10px;
+        margin:12px 0;
+        padding:8px;
+        border-radius:12px;
+        background:rgba(128,128,128,0.08);
+    `;
+
+    const video =
+        document.createElement("video");
+
+    video.src =
+        URL.createObjectURL(file);
+
+    video.muted = true;
+
+    video.controls = true;
+
+    video.style.cssText = `
+        width:120px;
+        height:72px;
+        object-fit:cover;
+        border-radius:10px;
+        background:#000;
+    `;
+
+    const removeButton =
+        document.createElement("button");
+
+    removeButton.type = "button";
+
+    removeButton.textContent = "×";
+
+    removeButton.title = "Remove video";
+
+    removeButton.style.cssText = `
+        width:30px;
+        height:30px;
+        border:none;
+        border-radius:50%;
+        background:#ff4d4f;
+        color:#fff;
+        font-size:16px;
+        cursor:pointer;
+        margin-left:auto;
+        flex-shrink:0;
+    `;
+
+    removeButton.addEventListener(
+        "click",
+        () => {
+
+            pendingPostVideo = null;
+
+            wrap.remove();
+
+            if (videoFileInput) {
+
+                videoFileInput.value = "";
+            }
+        }
+    );
+
+    wrap.appendChild(video);
+    wrap.appendChild(removeButton);
+
+    const top =
+        composer.querySelector(".create-post-top");
+
+    if (top) {
+
+        top.insertAdjacentElement(
+            "afterend",
+            wrap
+        );
+    }
+}
+
+
+function socialhubShowPostImagePreview(file) {
+
+    const composer =
+        document.querySelector(".create-post");
+
+    if (!composer) {
+        return;
+    }
+
+    // Remove old preview
+    document
+        .querySelectorAll(".socialhub-post-preview")
+        .forEach(element => element.remove());
+
+    const wrap =
+        document.createElement("div");
+
+    wrap.className = "socialhub-post-preview";
+
+    wrap.style.cssText = `
+        display:flex;
+        align-items:center;
+        gap:10px;
+        margin:12px 0;
+        padding:8px;
+        border-radius:12px;
+        background:rgba(128,128,128,0.08);
+    `;
+
+    const image =
+        document.createElement("img");
+
+    image.src =
+        URL.createObjectURL(file);
+
+    image.alt = "Post photo preview";
+
+    image.style.cssText = `
+        width:72px;
+        height:72px;
+        object-fit:cover;
+        border-radius:10px;
+    `;
+
+    const removeButton =
+        document.createElement("button");
+
+    removeButton.type = "button";
+
+    removeButton.textContent = "×";
+
+    removeButton.title = "Remove photo";
+
+    removeButton.style.cssText = `
+        width:30px;
+        height:30px;
+        border:none;
+        border-radius:50%;
+        background:#ff4d4f;
+        color:#fff;
+        font-size:16px;
+        cursor:pointer;
+        margin-left:auto;
+        flex-shrink:0;
+    `;
+
+    removeButton.addEventListener(
+        "click",
+        () => {
+
+            pendingPostImage = null;
+
+            wrap.remove();
+
+            if (postFileInput) {
+
+                postFileInput.value = "";
+            }
+        }
+    );
+
+    wrap.appendChild(image);
+    wrap.appendChild(removeButton);
+
+    const top =
+        composer.querySelector(".create-post-top");
+
+    if (top) {
+
+        top.insertAdjacentElement(
+            "afterend",
+            wrap
+        );
+    }
+}
+
+
+// ======================================================
+// 4. POST WITH VIDEO (HOME PAGE)
+// ======================================================
+
+async function socialhubHandleVideoPost(event) {
+
+    const input =
+        document.getElementById("postInput");
+
+    const me =
+        await socialhubGetMe();
+
+    if (!me) {
+
+        alert("Please login first.");
+
+        return;
+    }
+
+    const file =
+        pendingPostVideo.file;
+
+    const ext =
+        socialhubFileExtension(file);
+
+    const path =
+        `${me.id}-${Date.now()}.${ext}`;
+
+    try {
+
+        // Upload the video
+        const {
+            error: uploadError
+        } = await db
+            .storage
+            .from("videos")
+            .upload(path, file, {
+                upsert: true,
+                contentType: file.type
+            });
+
+        if (uploadError) {
+            throw uploadError;
+        }
+
+        const {
+            data: urlData
+        } = db
+            .storage
+            .from("videos")
+            .getPublicUrl(path);
+
+        const content =
+            input ? input.value.trim() : "";
+
+        // Save the post with the video
+        const background =
+            input &&
+            input.dataset.background &&
+            input.dataset.background !== "none"
+                ? input.dataset.background
+                : null;
+
+        const {
+            data,
+            error
+        } = await db
+            .from("posts")
+            .insert({
+                user_id: me.id,
+                content: content,
+                background: background,
+                video_url: urlData.publicUrl,
+                audience:
+                    window.socialhubAudience ||
+                    "public"
+            })
+            .select()
+            .single();
+
+        if (error) {
+            throw error;
+        }
+
+        console.log(
+            "✅ Post with video saved:",
+            data
+        );
+
+        // Reset composer
+        pendingPostVideo = null;
+
+        document
+            .querySelectorAll(".socialhub-post-video-preview")
+            .forEach(element => element.remove());
+
+        if (videoFileInput) {
+
+            videoFileInput.value = "";
+        }
+
+        if (input) {
+
+            input.value = "";
+
+            input.style.background = "";
+            input.style.color = "";
+
+            input.dataset.background = "none";
+        }
+
+        alert("Post created with video! 🎉");
+
+        if (
+            typeof loadPostsWithUserNames ===
+            "function"
+        ) {
+
+            await loadPostsWithUserNames();
+        }
+
+    } catch (error) {
+
+        console.error(
+            "❌ Post video error:",
+            error
+        );
+
+        alert(
+            "Could not create post.\n\n" +
+            error.message
+        );
+    }
+}
+
+
+// ======================================================
+// 5. OVERRIDE POST BUTTON (WITH IMAGE SUPPORT)
+// ======================================================
+
+function overridePostButton() {
+
+    const postButton =
+        document.querySelector(
+            ".create-post .post-btn"
+        );
+
+    if (!postButton) {
+        return;
+    }
+
+    if (postButton.dataset.socialhubOverride) {
+        return;
+    }
+
+    postButton.dataset.socialhubOverride = "1";
+
+    // Clone the button to remove ALL old listeners
+    const cleanButton =
+        postButton.cloneNode(true);
+
+    cleanButton.removeAttribute("onclick");
+
+    postButton.parentNode.replaceChild(
+        cleanButton,
+        postButton
+    );
+
+    cleanButton.addEventListener(
+        "click",
+        socialhubHandlePost
+    );
+}
+
+
+async function socialhubHandlePost(event) {
+
+    event.preventDefault();
+
+    // Video selected -> video flow
+    if (pendingPostVideo) {
+
+        await socialhubHandleVideoPost(event);
+
+        return;
+    }
+
+    // No image selected -> use the old behavior
+    if (!pendingPostImage) {
+
+        if (
+            typeof createPremiumPostInSupabase ===
+            "function"
+        ) {
+
+            await createPremiumPostInSupabase(event);
+        }
+
+        return;
+    }
+
+    const input =
+        document.getElementById("postInput");
+
+    if (!input) {
+        return;
+    }
+
+    const content =
+        input.value.trim();
+
+    if (content === "") {
+
+        alert("Please write something first!");
+
+        return;
+    }
+
+    const me =
+        await socialhubGetMe();
+
+    if (!me) {
+
+        alert("Please login first.");
+
+        return;
+    }
+
+    try {
+
+        const file =
+            pendingPostImage.file;
+
+        const ext =
+            socialhubFileExtension(file);
+
+        const path =
+            `${me.id}-${Date.now()}.${ext}`;
+
+        // Upload the image
+        const {
+            error: uploadError
+        } = await db
+            .storage
+            .from("post-images")
+            .upload(path, file, {
+                upsert: true,
+                contentType: file.type
+            });
+
+        if (uploadError) {
+            throw uploadError;
+        }
+
+        const {
+            data: urlData
+        } = db
+            .storage
+            .from("post-images")
+            .getPublicUrl(path);
+
+        // Save the post with the image
+        const background =
+            input.dataset.background &&
+            input.dataset.background !== "none"
+                ? input.dataset.background
+                : null;
+
+        const {
+            data,
+            error
+        } = await db
+            .from("posts")
+            .insert({
+                user_id: me.id,
+                content: content,
+                background: background,
+                image_url: urlData.publicUrl,
+                audience:
+                    window.socialhubAudience ||
+                    "public"
+            })
+            .select()
+            .single();
+
+        if (error) {
+            throw error;
+        }
+
+        console.log(
+            "✅ Post with image saved:",
+            data
+        );
+
+        // Reset composer
+        pendingPostImage = null;
+
+        document
+            .querySelectorAll(".socialhub-post-preview")
+            .forEach(element => element.remove());
+
+        if (postFileInput) {
+
+            postFileInput.value = "";
+        }
+
+        input.value = "";
+
+        input.style.background = "";
+        input.style.color = "";
+
+        input.dataset.background = "none";
+
+        const picker =
+            document.querySelector(
+                ".post-background-picker"
+            );
+
+        if (picker) {
+
+            picker.classList.remove("active");
+
+            picker
+                .querySelectorAll(".post-bg-option")
+                .forEach(option => {
+
+                    option.classList.remove("selected");
+                });
+
+            const firstOption =
+                picker.querySelector(".post-bg-option");
+
+            if (firstOption) {
+
+                firstOption.classList.add("selected");
+            }
+        }
+
+        alert("Post created with photo! 🎉");
+
+        // Reload the feed (the image is added
+        // automatically by the observer)
+        if (
+            typeof loadPostsWithUserNames ===
+            "function"
+        ) {
+
+            await loadPostsWithUserNames();
+        }
+
+    } catch (error) {
+
+        console.error(
+            "❌ Post image error:",
+            error
+        );
+
+        alert(
+            "Could not create post.\n\n" +
+            error.message
+        );
+    }
+}
+
+
+// ======================================================
+// 5. SHOW POST IMAGES IN THE FEED
+// ======================================================
+
+let socialhubImageSyncRunning = false;
+
+let socialhubImageSyncQueued = false;
+
+
+async function socialhubRenderPostImages() {
+
+    if (socialhubImageSyncRunning) {
+
+        socialhubImageSyncQueued = true;
+
+        return;
+    }
+
+    socialhubImageSyncRunning = true;
+
+    try {
+
+        await socialhubRenderPostImagesCore();
+
+    } finally {
+
+        socialhubImageSyncRunning = false;
+
+        if (socialhubImageSyncQueued) {
+
+            socialhubImageSyncQueued = false;
+
+            setTimeout(
+                socialhubRenderPostImages,
+                80
+            );
+        }
+    }
+}
+
+
+async function socialhubRenderPostImagesCore() {
+
+    const container =
+        document.getElementById("posts");
+
+    if (!container) {
+        return;
+    }
+
+    const articles =
+        container.querySelectorAll(".post");
+
+    if (articles.length === 0) {
+        return;
+    }
+
+    const {
+        data: posts,
+        error
+    } = await db
+        .from("posts")
+        .select("id, image_url, video_url")
+        .order("created_at", {
+            ascending: false
+        })
+        .limit(500);
+
+    if (error || !posts) {
+        return;
+    }
+
+    const postsById =
+        new Map();
+
+    posts.forEach(post => {
+
+        postsById.set(post.id, post);
+    });
+
+    articles.forEach(article => {
+
+        const postId =
+            article.dataset.postId;
+
+        if (!postId) {
+            return;
+        }
+
+        const post =
+            postsById.get(postId);
+
+        if (!post) {
+            return;
+        }
+
+        if (post.image_url) {
+
+            socialhubInjectPostImage(
+                article,
+                post.image_url
+            );
+        }
+
+        if (post.video_url) {
+
+            socialhubInjectPostVideo(
+                article,
+                post.video_url
+            );
+        }
+    });
+}
+
+
+function socialhubInjectPostImage(article, imageUrl) {
+
+    // Already rendered?
+    if (
+        article.querySelector(
+            ".socialhub-post-image"
+        )
+    ) {
+        return;
+    }
+
+    const stats =
+        article.querySelector(".post-stats");
+
+    if (!stats) {
+        return;
+    }
+
+    const wrap =
+        document.createElement("div");
+
+    wrap.className = "socialhub-post-image";
+
+    wrap.style.cssText = `
+        margin-bottom:14px;
+        border-radius:12px;
+        overflow:hidden;
+    `;
+
+    wrap.innerHTML = `
+
+        <img
+            src="${socialhubEscape(imageUrl)}"
+            alt="Post photo"
+            loading="lazy"
+            style="
+                width:100%;
+                max-height:480px;
+                object-fit:cover;
+                display:block;
+            "
+        >
+    `;
+
+    stats.parentNode.insertBefore(
+        wrap,
+        stats
+    );
+}
+
+
+function socialhubInjectPostVideo(article, videoUrl) {
+
+    // Already rendered?
+    if (
+        article.querySelector(
+            ".socialhub-post-video"
+        )
+    ) {
+        return;
+    }
+
+    const stats =
+        article.querySelector(".post-stats");
+
+    if (!stats) {
+        return;
+    }
+
+    const wrap =
+        document.createElement("div");
+
+    wrap.className = "socialhub-post-video";
+
+    wrap.style.cssText = `
+        margin-bottom:14px;
+        border-radius:12px;
+        overflow:hidden;
+    `;
+
+    wrap.innerHTML = `
+
+        <video
+            src="${socialhubEscape(videoUrl)}"
+            controls
+            playsinline
+            preload="metadata"
+            style="
+                width:100%;
+                max-height:480px;
+                display:block;
+                background:#000;
+            "
+        ></video>
+    `;
+
+    stats.parentNode.insertBefore(
+        wrap,
+        stats
+    );
+}
+
+
+// ======================================================
+// 5b. COVER PHOTO UPLOAD (PROFILE PAGE)
+// ======================================================
+
+let coverFileInput = null;
+
+
+function setupProfileCoverUpload() {
+
+    const cover =
+        document.querySelector(
+            ".fb-header .cover-photo"
+        ) ||
+        document.querySelector(
+            ".cover-photo"
+        );
+
+    if (!cover) {
+        return;
+    }
+
+    cover.style.position = "relative";
+
+    cover
+        .querySelectorAll(
+            ".socialhub-cover-overlay, .socialhub-photo-menu"
+        )
+        .forEach(el => el.remove());
+
+    // Edit cover photo button (Facebook style: top-right)
+    const button =
+        document.createElement("button");
+
+    button.type = "button";
+
+    button.className =
+        "socialhub-cover-overlay socialhub-photo-trigger";
+
+    button.textContent = "📷 Edit Cover";
+
+    button.addEventListener("click", (event) => {
+
+        event.stopPropagation();
+
+        socialhubClosePhotoMenus();
+
+        const menu =
+            document.createElement("div");
+
+        menu.className =
+            "socialhub-photo-menu socialhub-cover-menu";
+
+        const currentCover =
+            socialhubCurrentCoverUrl(cover);
+
+        if (currentCover) {
+
+            menu.appendChild(
+                socialhubPhotoMenuItem(
+                    "🖼️",
+                    "View cover photo",
+                    "Open the full cover image",
+                    () => socialhubViewFullImage(currentCover)
+                )
+            );
+        }
+
+        menu.appendChild(
+            socialhubPhotoMenuItem(
+                "📷",
+                "Upload photo",
+                "Choose a photo from your device",
+                () => {
+
+                    if (!coverFileInput) {
+                        return;
+                    }
+
+                    coverFileInput.click();
+                }
+            )
+        );
+
+        menu.appendChild(
+            socialhubPhotoMenuItem(
+                "🖼️",
+                "Select from photos",
+                "Pick one of your posted photos",
+                () => socialhubOpenCoverPicker()
+            )
+        );
+
+        if (currentCover) {
+
+            menu.appendChild(
+                socialhubPhotoMenuItem(
+                    "🎯",
+                    "Reposition",
+                    "Adjust how the cover is cropped",
+                    () => socialhubOpenCoverReposition(currentCover)
+                )
+            );
+
+            menu.appendChild(
+                socialhubPhotoMenuItem(
+                    "🗑️",
+                    "Remove photo",
+                    "Remove your cover photo",
+                    handleCoverRemove
+                )
+            );
+        }
+
+        button.after(menu);
+    });
+
+    cover.appendChild(button);
+
+    // Hidden file input (created only once)
+    if (!coverFileInput) {
+
+        coverFileInput =
+            document.createElement("input");
+
+        coverFileInput.type = "file";
+        coverFileInput.accept = "image/*";
+        coverFileInput.style.display = "none";
+
+        document.body.appendChild(
+            coverFileInput
+        );
+
+        coverFileInput.addEventListener(
+            "change",
+            handleCoverUpload
+        );
+    }
+}
+
+
+// Current cover URL parsed from the element's background style
+
+function socialhubCurrentCoverUrl(cover) {
+
+    const bg =
+        cover?.style?.backgroundImage || "";
+
+    const match =
+        bg.match(/url\(["']?(.*?)["']?\)/);
+
+    return match ? match[1] : "";
+}
+
+
+// Cover picker: choose from photos you already posted
+
+async function socialhubOpenCoverPicker() {
+
+    const me =
+        await socialhubGetMe();
+
+    if (!me) {
+        return;
+    }
+
+    const {
+        data: posts
+    } = await db
+        .from("posts")
+        .select("image_url")
+        .eq("user_id", me.id)
+        .not("image_url", "is", null)
+        .order("created_at", {
+            ascending: false
+        })
+        .limit(24);
+
+    const overlay =
+        document.createElement("div");
+
+    overlay.className = "socialhub-cover-picker";
+
+    overlay.innerHTML =
+        '<div class="socialhub-cover-picker-box">' +
+            '<div class="socialhub-cover-picker-head">' +
+                '<h3>Select from photos</h3>' +
+                '<button type="button" class="socialhub-cover-picker-close">✕</button>' +
+            '</div>' +
+            '<div class="socialhub-cover-picker-grid"></div>' +
+        '</div>';
+
+    const grid =
+        overlay.querySelector(".socialhub-cover-picker-grid");
+
+    if (!posts || !posts.length) {
+
+        grid.innerHTML =
+            '<p class="empty-message">' +
+            'No photos yet. Post a photo first!' +
+            '</p>';
+
+    } else {
+
+        posts.forEach(post => {
+
+            const tile =
+                document.createElement("img");
+
+            tile.src = post.image_url;
+
+            tile.alt = "Cover option";
+
+            tile.loading = "lazy";
+
+            tile.addEventListener("click", () => {
+
+                overlay.remove();
+
+                socialhubSetCoverFromUrl(post.image_url);
+            });
+
+            grid.appendChild(tile);
+        });
+    }
+
+    overlay
+        .querySelector(".socialhub-cover-picker-close")
+        .addEventListener("click", () => overlay.remove());
+
+    overlay.addEventListener("click", event => {
+
+        if (event.target === overlay) {
+
+            overlay.remove();
+        }
+    });
+
+    document.body.appendChild(overlay);
+}
+
+
+// Set a cover directly from an existing photo URL
+
+async function socialhubSetCoverFromUrl(url) {
+
+    const me =
+        await socialhubGetMe();
+
+    if (!me) {
+        return;
+    }
+
+    const {
+        error
+    } = await db
+        .from("profiles")
+        .update({
+            cover_url: url
+        })
+        .eq("id", me.id);
+
+    if (error) {
+
+        console.error(
+            "❌ Cover set error:",
+            error
+        );
+
+        alert(
+            "Could not set cover photo: " +
+            error.message
+        );
+
+        return;
+    }
+
+    if (
+        typeof showCurrentUserData ===
+        "function"
+    ) {
+
+        await showCurrentUserData();
+    }
+
+    setupProfileCoverUpload();
+
+    alert("Cover photo updated! 🎉");
+}
+
+
+// Avatar picker: choose from photos you already posted
+
+async function socialhubOpenAvatarPicker() {
+
+    const me =
+        await socialhubGetMe();
+
+    if (!me) {
+        return;
+    }
+
+    const {
+        data: posts
+    } = await db
+        .from("posts")
+        .select("image_url")
+        .eq("user_id", me.id)
+        .not("image_url", "is", null)
+        .order("created_at", {
+            ascending: false
+        })
+        .limit(24);
+
+    const overlay =
+        document.createElement("div");
+
+    overlay.className = "socialhub-cover-picker";
+
+    overlay.innerHTML =
+        '<div class="socialhub-cover-picker-box">' +
+            '<div class="socialhub-cover-picker-head">' +
+                '<h3>Select profile picture</h3>' +
+                '<button type="button" class="socialhub-cover-picker-close">✕</button>' +
+            '</div>' +
+            '<div class="socialhub-cover-picker-grid"></div>' +
+        '</div>';
+
+    const grid =
+        overlay.querySelector(".socialhub-cover-picker-grid");
+
+    if (!posts || !posts.length) {
+
+        grid.innerHTML =
+            '<p class="empty-message">' +
+            'No photos yet. Post a photo first!' +
+            '</p>';
+
+    } else {
+
+        posts.forEach(post => {
+
+            const tile =
+                document.createElement("img");
+
+            tile.src = post.image_url;
+
+            tile.alt = "Profile picture option";
+
+            tile.loading = "lazy";
+
+            tile.addEventListener("click", () => {
+
+                overlay.remove();
+
+                socialhubSetAvatarFromUrl(post.image_url);
+            });
+
+            grid.appendChild(tile);
+        });
+    }
+
+    overlay
+        .querySelector(".socialhub-cover-picker-close")
+        .addEventListener("click", () => overlay.remove());
+
+    overlay.addEventListener("click", event => {
+
+        if (event.target === overlay) {
+
+            overlay.remove();
+        }
+    });
+
+    document.body.appendChild(overlay);
+}
+
+
+// Set an avatar directly from an existing photo URL
+
+async function socialhubSetAvatarFromUrl(url) {
+
+    const me =
+        await socialhubGetMe();
+
+    if (!me) {
+        return;
+    }
+
+    const {
+        error
+    } = await db
+        .from("profiles")
+        .update({
+            avatar_url: url
+        })
+        .eq("id", me.id);
+
+    if (error) {
+
+        console.error(
+            "❌ Avatar set error:",
+            error
+        );
+
+        alert(
+            "Could not set profile picture: " +
+            error.message
+        );
+
+        return;
+    }
+
+    if (
+        typeof showCurrentUserData ===
+        "function"
+    ) {
+
+        await showCurrentUserData();
+    }
+
+    setupProfilePhotoUpload();
+
+    alert("Profile picture updated! 🎉");
+}
+
+
+// Cover reposition: drag the cover inside the crop viewport
+
+function socialhubOpenCoverReposition(coverUrl) {
+
+    const existing =
+        document.querySelector(".socialhub-reposition-modal");
+
+    if (existing) {
+        existing.remove();
+    }
+
+    const overlay =
+        document.createElement("div");
+
+    overlay.className = "socialhub-reposition-modal";
+
+    overlay.innerHTML = `
+
+        <div class="socialhub-reposition-box">
+
+            <div class="socialhub-reposition-head">
+
+                <h3>Reposition Cover Photo</h3>
+
+                <button
+                    type="button"
+                    class="socialhub-reposition-close"
+                >
+                    ✕
+                </button>
+
+            </div>
+
+            <p class="socialhub-reposition-hint">
+                Drag the photo to adjust the crop, then save.
+            </p>
+
+            <div class="socialhub-reposition-stage">
+                <div class="socialhub-reposition-preview"></div>
+            </div>
+
+            <div class="socialhub-reposition-sliders">
+
+                <label>
+                    Horizontal
+                    <input type="range" min="0" max="100" value="50" data-axis="x">
+                </label>
+
+                <label>
+                    Vertical
+                    <input type="range" min="0" max="100" value="50" data-axis="y">
+                </label>
+
+            </div>
+
+            <div class="socialhub-reposition-actions">
+
+                <button
+                    type="button"
+                    class="socialhub-reposition-cancel"
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="button"
+                    class="socialhub-reposition-save"
+                >
+                    Save
+                </button>
+
+            </div>
+
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    const preview =
+        overlay.querySelector(".socialhub-reposition-preview");
+
+    preview.style.backgroundImage =
+        `url(${coverUrl})`;
+
+    let posX = 50;
+    let posY = 50;
+
+    const applyPosition = () => {
+
+        preview.style.backgroundPosition =
+            `${posX}% ${posY}%`;
+    };
+
+    const sliderX =
+        overlay.querySelector('[data-axis="x"]');
+
+    const sliderY =
+        overlay.querySelector('[data-axis="y"]');
+
+    sliderX.addEventListener("input", () => {
+
+        posX = Number(sliderX.value);
+
+        applyPosition();
+    });
+
+    sliderY.addEventListener("input", () => {
+
+        posY = Number(sliderY.value);
+
+        applyPosition();
+    });
+
+    // Drag on the preview
+    let dragging = false;
+    let startX = 0;
+    let startY = 0;
+    let startPosX = 50;
+    let startPosY = 50;
+
+    preview.addEventListener("pointerdown", event => {
+
+        dragging = true;
+
+        startX = event.clientX;
+        startY = event.clientY;
+
+        startPosX = posX;
+        startPosY = posY;
+
+        preview.setPointerCapture(event.pointerId);
+    });
+
+    preview.addEventListener("pointermove", event => {
+
+        if (!dragging) {
+            return;
+        }
+
+        const rect =
+            preview.getBoundingClientRect();
+
+        const deltaX =
+            ((event.clientX - startX) / rect.width) * 100;
+
+        const deltaY =
+            ((event.clientY - startY) / rect.height) * 100;
+
+        posX = Math.min(100, Math.max(0, startPosX + deltaX));
+        posY = Math.min(100, Math.max(0, startPosY + deltaY));
+
+        sliderX.value = posX;
+        sliderY.value = posY;
+
+        applyPosition();
+    });
+
+    preview.addEventListener("pointerup", () => {
+
+        dragging = false;
+    });
+
+    overlay
+        .querySelector(".socialhub-reposition-close")
+        .addEventListener("click", () => overlay.remove());
+
+    overlay
+        .querySelector(".socialhub-reposition-cancel")
+        .addEventListener("click", () => overlay.remove());
+
+    overlay.addEventListener("click", event => {
+
+        if (event.target === overlay) {
+
+            overlay.remove();
+        }
+    });
+
+    overlay
+        .querySelector(".socialhub-reposition-save")
+        .addEventListener("click", async () => {
+
+            const me =
+                await socialhubGetMe();
+
+            if (!me) {
+                return;
+            }
+
+            const {
+                data: current
+            } = await db
+                .from("profiles")
+                .select("extra")
+                .eq("id", me.id)
+                .single();
+
+            const extra =
+                { ...(current?.extra || {}) };
+
+            extra.cover_position = {
+                x: posX,
+                y: posY
+            };
+
+            const {
+                error
+            } = await db
+                .from("profiles")
+                .update({ extra })
+                .eq("id", me.id);
+
+            if (error) {
+
+                console.error(
+                    "❌ Reposition error:",
+                    error
+                );
+
+                alert(
+                    "Could not save position: " +
+                    error.message
+                );
+
+                return;
+            }
+
+            overlay.remove();
+
+            if (
+                typeof showCurrentUserData ===
+                "function"
+            ) {
+
+                await showCurrentUserData();
+            }
+
+            alert("Cover position saved! 🎯");
+        });
+}
+
+
+async function handleCoverUpload() {
+
+    const file =
+        coverFileInput.files[0];
+
+    if (!file) {
+        return;
+    }
+
+    if (!socialhubValidateImage(file)) {
+        return;
+    }
+
+    const me =
+        await socialhubGetMe();
+
+    if (!me) {
+
+        alert("Please login first.");
+
+        return;
+    }
+
+    try {
+
+        const ext =
+            socialhubFileExtension(file);
+
+        const path =
+            `cover-${me.id}-${Date.now()}.${ext}`;
+
+        // Upload to avatars bucket
+        const {
+            error: uploadError
+        } = await db
+            .storage
+            .from("avatars")
+            .upload(path, file, {
+                upsert: true,
+                contentType: file.type
+            });
+
+        if (uploadError) {
+            throw uploadError;
+        }
+
+        const {
+            data: urlData
+        } = db
+            .storage
+            .from("avatars")
+            .getPublicUrl(path);
+
+        // Save URL in the profile
+        const {
+            error: updateError
+        } = await db
+            .from("profiles")
+            .update({
+                cover_url: urlData.publicUrl
+            })
+            .eq("id", me.id);
+
+        if (updateError) {
+            throw updateError;
+        }
+
+        alert("Cover photo updated! 🎉");
+
+        // Refresh the cover display
+        if (
+            typeof showCurrentUserData ===
+            "function"
+        ) {
+
+            await showCurrentUserData();
+        }
+
+        // Re-add the camera overlay
+        setupProfileCoverUpload();
+
+    } catch (error) {
+
+        console.error(
+            "❌ Cover upload error:",
+            error
+        );
+
+        alert(
+            "Could not upload cover photo.\n\n" +
+            error.message
+        );
+    }
+}
+
+
+async function handleCoverRemove() {
+
+    const me =
+        await socialhubGetMe();
+
+    if (!me) {
+
+        alert("Please login first.");
+
+        return;
+    }
+
+    try {
+
+        const {
+            error
+        } = await db
+            .from("profiles")
+            .update({
+                cover_url: null
+            })
+            .eq("id", me.id);
+
+        if (error) {
+            throw error;
+        }
+
+        if (
+            typeof showCurrentUserData ===
+            "function"
+        ) {
+
+            await showCurrentUserData();
+        }
+
+        setupProfileCoverUpload();
+
+    } catch (error) {
+
+        console.error(
+            "❌ Cover remove error:",
+            error
+        );
+
+        alert(
+            "Could not remove cover photo.\n\n" +
+            error.message
+        );
+    }
+}
+
+
+// ======================================================
+// 6. AUTO-SYNC
+// ======================================================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    // Profile page: avatar upload
+    if (
+        document.querySelector(".profile-photo")
+    ) {
+
+        setupProfilePhotoUpload();
+    }
+
+    // Profile page: cover upload
+    if (
+        document.querySelector(".cover-photo")
+    ) {
+
+        setupProfileCoverUpload();
+    }
+
+    // Home page: post image upload + post button
+    if (
+        document.querySelector(".create-post")
+    ) {
+
+        setupPostImageUpload();
+
+        overridePostButton();
+    }
+
+    // Watch the feed for new posts
+    const container =
+        document.getElementById("posts");
+
+    if (container) {
+
+        const observer =
+            new MutationObserver(() => {
+
+                socialhubRenderPostImages();
+            });
+
+        observer.observe(container, {
+            childList: true,
+            subtree: false
+        });
+
+        setTimeout(
+            socialhubRenderPostImages,
+            2600
+        );
+    }
+
+    console.log(
+        "✅ Image Upload activated!"
+    );
+});

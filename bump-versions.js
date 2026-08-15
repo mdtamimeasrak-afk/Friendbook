@@ -10,14 +10,24 @@ const path = require("path");
 
 const dir = __dirname;
 const token = process.argv[2] || String(Date.now());
-const htmls = fs.readdirSync(dir).filter(f => f.endsWith(".html"));
+
+function findHtml(dirPath, acc) {
+  for (const f of fs.readdirSync(dirPath)) {
+    if (f === ".git" || f === "node_modules") continue;
+    const p = path.join(dirPath, f);
+    if (fs.statSync(p).isDirectory()) findHtml(p, acc);
+    else if (f.endsWith(".html")) acc.push(p);
+  }
+  return acc;
+}
+
+const htmls = findHtml(dir, []);
 
 const PRECONNECT = `    <link rel="preconnect" href="https://cdn.jsdelivr.net">\n    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>\n    <link rel="preconnect" href="https://vtazrwksizpeyezwctko.supabase.co">\n`;
 
 let changed = 0;
 
-for (const f of htmls) {
-  const p = path.join(dir, f);
+for (const p of htmls) {
   let c = fs.readFileSync(p, "utf8");
   let before = c;
 

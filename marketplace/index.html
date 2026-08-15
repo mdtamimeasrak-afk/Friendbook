@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Friendbook - Marketplace</title>
+
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%231877f2'/%3E%3Ctext x='20' y='27' font-family='Arial' font-size='21' font-weight='800' fill='white' text-anchor='middle'%3ETR%3C/text%3E%3C/svg%3E">
+
+
+    <link rel="stylesheet" href="../core/style.css?v=1787000000033">
+
+    <link rel="stylesheet" href="../core/dashboard.css?v=1787000000033">
+
+    <link rel="stylesheet" href="../core/premium.css?v=1787000000033">
+
+    <link rel="stylesheet" href="../core/glass-theme.css?v=1787000000033">
+
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://vtazrwksizpeyezwctko.supabase.co">
+</head>
+
+
+<body>
+
+
+    <!-- ========================= -->
+    <!-- TOP NAVIGATION -->
+    <!-- ========================= -->
+
+    <header class="topbar">
+
+
+        <div
+            class="logo"
+            onclick="location.href='index.html'"
+            title="Friendbook"
+        ></div>
+
+
+
+        <div class="search-box">
+
+            <span>
+                🔍
+            </span>
+
+            <input
+                type="text"
+                placeholder="Search Friendbook"
+            >
+
+        </div>
+
+
+
+        <nav class="fb-center-nav">
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='index.html'"
+                title="Home"
+            >
+                <i class="fa-solid fa-house"></i>
+            </button>
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='watch.html'"
+                title="Watch"
+            >
+                <i class="fa-solid fa-tv"></i>
+            </button>
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='reels.html'"
+                title="Reels"
+            >
+                <i class="fa-solid fa-clapperboard"></i>
+            </button>
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='marketplace.html'"
+                title="Marketplace"
+            >
+                <i class="fa-solid fa-store"></i>
+            </button>
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='groups.html'"
+                title="Groups"
+            >
+                <i class="fa-solid fa-users"></i>
+            </button>
+
+        </nav>
+
+
+
+        <div class="top-icons">
+
+            <button
+                onclick="location.href='messages.html'"
+                title="Messages"
+            >
+                💬
+            </button>
+
+            <button
+                onclick="location.href='index.html'"
+                title="Notifications"
+            >
+                🔔
+            </button>
+
+        </div>
+
+
+    </header>
+
+
+
+    <!-- ========================= -->
+    <!-- MAIN CONTENT -->
+    <!-- ========================= -->
+
+    <main class="market-main">
+
+        <div class="market-head">
+
+            <div class="market-head-icon">
+                <i class="fa-solid fa-store"></i>
+            </div>
+
+            <h1>Marketplace</h1>
+
+        </div>
+
+        <p class="market-sub">Buy and sell with your friends and the Friendbook community.</p>
+
+
+        <div class="market-top-row">
+
+            <div class="market-search">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    id="marketSearch"
+                    placeholder="Search listings..."
+                    oninput="socialhubMarketFilter()"
+                >
+
+            </div>
+
+            <button
+                class="socialhub-create-btn"
+                onclick="socialhubMarketOpenCreate()"
+            >
+                <i class="fa-solid fa-plus"></i>
+                Sell Something
+            </button>
+
+        </div>
+
+
+        <div
+            class="market-cats"
+            id="marketCats"
+        ></div>
+
+
+        <div
+            class="market-grid"
+            id="marketGrid"
+        >
+
+            <p class="empty-message" style="grid-column:1/-1;">
+                Loading marketplace...
+            </p>
+
+        </div>
+
+    </main>
+
+
+
+    <!-- ========================= -->
+    <!-- SCRIPTS -->
+    <!-- ========================= -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="../core/supabase.js?v=1787000000033"></script>
+
+    <script src="../core/premium-ui.js?v=1787000000033"></script>
+
+    <script src="../core/script.js?v=1787000000033"></script>
+
+    <script src="marketplace.js?v=1787000000033"></script>
+
+</body>
+
+</html>

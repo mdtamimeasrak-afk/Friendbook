@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Friendbook - Settings</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%231877f2'/%3E%3Ctext x='20' y='27' font-family='Arial' font-size='21' font-weight='800' fill='white' text-anchor='middle'%3ETR%3C/text%3E%3C/svg%3E">
+
+
+    <link rel="stylesheet" href="../core/style.css?v=1787000000033">
+
+    <link rel="stylesheet" href="../core/dashboard.css?v=1787000000033">
+
+    <link rel="stylesheet" href="../core/premium.css?v=1787000000033">
+
+    <link rel="stylesheet" href="settings.css?v=1787000000033">
+
+    <link rel="stylesheet" href="../core/glass-theme.css?v=1787000000033">
+
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://vtazrwksizpeyezwctko.supabase.co">
+</head>
+
+
+<body>
+
+
+    <!-- ========================= -->
+    <!-- TOP NAVIGATION (home page style) -->
+    <!-- ========================= -->
+
+    <header class="topbar">
+
+
+        <!-- LOGO (Facebook-style "f") -->
+
+        <div
+            class="logo"
+            onclick="location.href='index.html'"
+            title="Friendbook"
+        ></div>
+
+
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+            <span>
+                🔍
+            </span>
+
+            <input
+                type="text"
+                placeholder="Search Friendbook"
+            >
+
+        </div>
+
+
+
+        <!-- CENTER NAV (Facebook tabs) -->
+
+        <nav class="fb-center-nav">
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='index.html'"
+                title="Home"
+            >
+                <i class="fa-solid fa-house"></i>
+            </button>
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='reels.html'"
+                title="Reels"
+            >
+                <i class="fa-solid fa-clapperboard"></i>
+            </button>
+
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='index.html'"
+                title="Friends"
+            >
+                <i class="fa-solid fa-user-group"></i>
+            </button>
+
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='messages.html'"
+                title="Messages"
+            >
+                <i class="fa-solid fa-comment-dots"></i>
+            </button>
+
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='index.html'"
+                title="Notifications"
+            >
+                <i class="fa-solid fa-bell"></i>
+            </button>
+
+        </nav>
+
+
+
+        <!-- TOP ICONS (Facebook gray circles) -->
+
+        <div class="top-icons">
+
+
+            <button
+                onclick="location.href='messages.html'"
+                title="Messages"
+            >
+                💬
+            </button>
+
+
+            <button
+                onclick="location.href='index.html'"
+                title="Notifications"
+            >
+                🔔
+            </button>
+
+
+            <button
+                onclick="toggleDarkMode()"
+                title="Dark Mode"
+            >
+                🌙
+            </button>
+
+
+            <button
+                onclick="location.href='settings.html'"
+                title="Settings"
+            >
+                ⚙️
+            </button>
+
+
+            <button
+                onclick="location.href='profile.html'"
+                class="profile-mini side-avatar"
+                title="Profile"
+            >
+                👤
+            </button>
+
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ========================= -->
+    <!-- SETTINGS (Facebook style) -->
+    <!-- ========================= -->
+
+    <main class="settings-layout">
+
+
+        <!-- LEFT: SETTINGS MENU -->
+
+        <aside class="settings-sidebar">
+
+            <h1 class="settings-title">
+                ⚙️ Settings
+            </h1>
+
+
+            <nav class="settings-menu">
+
+
+                <button
+                    type="button"
+                    class="settings-item active"
+                    data-settings-tab="general"
+                >
+                    <span class="settings-item-icon">
+                        👤
+                    </span>
+                    <span>
+                        General
+                    </span>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="settings-item"
+                    data-settings-tab="privacy"
+                >
+                    <span class="settings-item-icon">
+                        🔒
+                    </span>
+                    <span>
+                        Privacy
+                    </span>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="settings-item"
+                    data-settings-tab="security"
+                >
+                    <span class="settings-item-icon">
+                        🛡️
+                    </span>
+                    <span>
+                        Security & Login
+                    </span>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="settings-item"
+                    data-settings-tab="notifications"
+                >
+                    <span class="settings-item-icon">
+                        🔔
+                    </span>
+                    <span>
+                        Notifications
+                    </span>
+                </button>
+
+
+                <button
+                    type="button"
+                    class="settings-item"
+                    data-settings-tab="appearance"
+                >
+                    <span class="settings-item-icon">
+                        🎨
+                    </span>
+                    <span>
+                        Appearance
+                    </span>
+                </button>
+
+
+                <div class="settings-menu-divider"></div>
+
+
+                <button
+                    type="button"
+                    class="settings-item settings-logout"
+                    onclick="logoutUser()"
+                >
+                    <span class="settings-item-icon">
+                        🚪
+                    </span>
+                    <span>
+                        Log Out
+                    </span>
+                </button>
+
+
+            </nav>
+
+        </aside>
+
+
+
+        <!-- RIGHT: CONTENT PANEL -->
+
+        <section class="settings-panel">
+
+
+            <!-- ========================= -->
+            <!-- GENERAL -->
+            <!-- ========================= -->
+
+            <div class="settings-pane active" data-settings-pane="general">
+
+                <h2 class="settings-section-title">
+                    General Account Settings
+                </h2>
+
+                <p class="settings-section-desc">
+                    Edit your basic profile information shown across Friendbook.
+                </p>
+
+
+                <div class="settings-form">
+
+
+                    <div class="settings-field">
+                        <label>Full name</label>
+                        <input type="text" data-field="full_name" placeholder="Your full name">
+                    </div>
+
+                    <div class="settings-field">
+                        <label>Username</label>
+                        <input type="text" data-field="username" placeholder="username">
+                    </div>
+
+                    <div class="settings-field">
+                        <label>Bio</label>
+                        <textarea data-field="bio" placeholder="Tell people about yourself..."></textarea>
+                    </div>
+
+                    <div class="settings-field">
+                        <label>Location</label>
+                        <input type="text" data-field="location" placeholder="City, Country">
+                    </div>
+
+                    <div class="settings-field">
+                        <label>Work</label>
+                        <input type="text" data-field="work" placeholder="What do you do?">
+                    </div>
+
+                    <div class="settings-field">
+                        <label>Education</label>
+                        <input type="text" data-field="education" placeholder="Where did you study?">
+                    </div>
+
+                    <div class="settings-field">
+                        <label>Website</label>
+                        <input type="text" data-field="website" placeholder="https://...">
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="settings-btn-primary"
+                        data-action="save-general"
+                    >
+                        💾 Save Changes
+                    </button>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ========================= -->
+            <!-- PRIVACY -->
+            <!-- ========================= -->
+
+            <div class="settings-pane" data-settings-pane="privacy">
+
+                <h2 class="settings-section-title">
+                    Privacy
+                </h2>
+
+                <p class="settings-section-desc">
+                    Control who can see your profile and activity.
+                </p>
+
+
+                <div class="settings-row">
+
+                    <div>
+                        <p class="settings-row-title">Private Profile</p>
+                        <p class="settings-row-desc">Only friends can see your posts and details.</p>
+                    </div>
+
+                    <label class="settings-toggle">
+                        <input type="checkbox" data-privacy="private">
+                        <span class="settings-toggle-slider"></span>
+                    </label>
+
+                </div>
+
+
+                <div class="settings-row">
+
+                    <div>
+                        <p class="settings-row-title">Show Online Status</p>
+                        <p class="settings-row-desc">Let others see when you are online.</p>
+                    </div>
+
+                    <label class="settings-toggle">
+                        <input type="checkbox" data-privacy="online">
+                        <span class="settings-toggle-slider"></span>
+                    </label>
+
+                </div>
+
+
+                <div class="settings-row">
+
+                    <div>
+                        <p class="settings-row-title">Message Requests</p>
+                        <p class="settings-row-desc">Allow messages from people you don't know.</p>
+                    </div>
+
+                    <label class="settings-toggle">
+                        <input type="checkbox" data-privacy="requests">
+                        <span class="settings-toggle-slider"></span>
+                    </label>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ========================= -->
+            <!-- SECURITY -->
+            <!-- ========================= -->
+
+            <div class="settings-pane" data-settings-pane="security">
+
+                <h2 class="settings-section-title">
+                    Security & Login
+                </h2>
+
+                <p class="settings-section-desc">
+                    Manage your account email and password.
+                </p>
+
+
+                <div class="settings-row">
+
+                    <div>
+                        <p class="settings-row-title">Email Address</p>
+                        <p class="settings-row-desc">
+                            <span class="user-email">
+                                your@email.com
+                            </span>
+                        </p>
+                    </div>
+
+                    <span class="settings-email-badge">
+                        Verified ✓
+                    </span>
+
+                </div>
+
+
+                <div class="settings-form">
+
+
+                    <div class="settings-field">
+                        <label>New password</label>
+                        <input type="password" data-field="new_password" placeholder="At least 6 characters">
+                    </div>
+
+                    <div class="settings-field">
+                        <label>Confirm new password</label>
+                        <input type="password" data-field="confirm_password" placeholder="Repeat your new password">
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="settings-btn-primary"
+                        data-action="change-password"
+                    >
+                        🔑 Change Password
+                    </button>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ========================= -->
+            <!-- NOTIFICATIONS -->
+            <!-- ========================= -->
+
+            <div class="settings-pane" data-settings-pane="notifications">
+
+                <h2 class="settings-section-title">
+                    Notifications
+                </h2>
+
+                <p class="settings-section-desc">
+                    Choose what notification alerts you receive.
+                </p>
+
+
+                <div class="settings-row">
+
+                    <div>
+                        <p class="settings-row-title">Mute Notifications</p>
+                        <p class="settings-row-desc">Stop live badge updates and alerts.</p>
+                    </div>
+
+                    <label class="settings-toggle">
+                        <input type="checkbox" data-notif="mute">
+                        <span class="settings-toggle-slider"></span>
+                    </label>
+
+                </div>
+
+
+                <div class="settings-row">
+
+                    <div>
+                        <p class="settings-row-title">Mark all as read</p>
+                        <p class="settings-row-desc">Clear every unread notification.</p>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="settings-btn-primary"
+                        data-action="mark-all-read"
+                    >
+                        Mark All Read
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ========================= -->
+            <!-- APPEARANCE -->
+            <!-- ========================= -->
+
+            <div class="settings-pane" data-settings-pane="appearance">
+
+                <h2 class="settings-section-title">
+                    Appearance
+                </h2>
+
+                <p class="settings-section-desc">
+                    Customize how Friendbook looks for you.
+                </p>
+
+
+                <div class="settings-row">
+
+                    <div>
+                        <p class="settings-row-title">Dark Mode</p>
+                        <p class="settings-row-desc">Use a darker look across the app.</p>
+                    </div>
+
+                    <label class="settings-toggle">
+                        <input type="checkbox" data-appear="dark">
+                        <span class="settings-toggle-slider"></span>
+                    </label>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+    <!-- ========================= -->
+    <!-- SCRIPTS -->
+    <!-- ========================= -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="../core/supabase.js?v=1787000000033"></script>
+
+    <script src="../core/premium-ui.js?v=1787000000033"></script>
+
+    <script src="../core/script.js?v=1787000000033"></script>
+
+    <script src="settings-page.js?v=1787000000033"></script>
+
+</body>
+
+</html>

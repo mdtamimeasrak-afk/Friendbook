@@ -1,0 +1,1694 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Friendbook - Home</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%231877f2'/%3E%3Ctext x='20' y='27' font-family='Arial' font-size='21' font-weight='800' fill='white' text-anchor='middle'%3ETR%3C/text%3E%3C/svg%3E">
+
+
+    <link rel="stylesheet" href="../core/style.css?v=1787000000033">
+
+    <link rel="stylesheet" href="../core/premium.css?v=1787000000033">
+
+    <link rel="stylesheet" href="../core/dashboard.css?v=1787000000033">
+
+    <link rel="stylesheet" href="../core/glass-theme.css?v=1787000000033">
+
+    <link rel="stylesheet" href="home-theme.css?v=1787000000033">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://vtazrwksizpeyezwctko.supabase.co">
+</head>
+
+
+<body>
+
+    <div class="dash-app">
+
+
+    <!-- ========================= -->
+    <!-- TOP NAVIGATION -->
+    <!-- ========================= -->
+
+    <header class="topbar">
+
+        <div class="topbar-left">
+
+            <a class="logo" href="index.html" title="Friendbook">
+                <span class="logo-mark"><i data-lucide="hexagon"></i></span>
+                <span class="logo-text">Friendbook</span>
+            </a>
+
+            <button type="button" class="home-search-btn" onclick="socialhubHomeSearchOpen()" title="Search Friendbook">
+                <i data-lucide="search"></i>
+                <span>Search Friendbook</span>
+            </button>
+
+        </div>
+
+        <!-- CENTER NAV -->
+
+        <nav class="fb-center-nav">
+
+            <button type="button" class="fb-nav-btn active" data-home-nav="home" onclick="location.href='index.html'" title="Home">
+                <i data-lucide="house"></i>
+            </button>
+
+            <button type="button" class="fb-nav-btn" data-home-nav="reels" onclick="location.href='reels.html'" title="Reels">
+                <i data-lucide="clapperboard"></i>
+            </button>
+
+            <button type="button" class="fb-nav-btn" data-home-nav="friends" onclick="socialhubOpenFriendsModal()" title="Friends">
+                <i data-lucide="users"></i>
+            </button>
+
+            <button type="button" class="fb-nav-btn" data-home-nav="groups" onclick="location.href='groups.html'" title="Groups">
+                <i data-lucide="users-round"></i>
+            </button>
+
+            <button type="button" class="fb-nav-btn" data-home-nav="marketplace" onclick="location.href='marketplace.html'" title="Marketplace">
+                <i data-lucide="store"></i>
+            </button>
+
+        </nav>
+
+        <!-- TOP ICONS -->
+
+        <div class="top-icons">
+
+            <button type="button" class="top-icon-btn" title="Messages">
+                <i data-lucide="message-circle"></i>
+            </button>
+
+            <button type="button" class="top-icon-btn" title="Notifications">
+                <i data-lucide="bell"></i>
+            </button>
+
+            <button type="button" class="top-icon-btn" title="Menu" onclick="socialhubHomeMenuToggle(event)">
+                <i data-lucide="grid-3x3"></i>
+            </button>
+
+            <button type="button" class="top-icon-btn profile-mini side-avatar" title="Profile" onclick="location.href='profile.html'">
+                <i data-lucide="circle-user"></i>
+            </button>
+
+            <div class="home-menu-dropdown" id="homeMenuDropdown" style="display:none">
+
+                <button type="button" onclick="location.href='watch.html'">
+                    <i data-lucide="tv"></i>
+                    Watch
+                </button>
+
+                <button type="button" onclick="location.href='events.html'">
+                    <i data-lucide="calendar-days"></i>
+                    Events
+                </button>
+
+                <button type="button" onclick="location.href='saved.html'">
+                    <i data-lucide="bookmark"></i>
+                    Saved
+                </button>
+
+                <button type="button" onclick="location.href='live.html'">
+                    <i data-lucide="radio"></i>
+                    Live
+                </button>
+
+                <button type="button" onclick="location.href='campus.html'">
+                    <i data-lucide="graduation-cap"></i>
+                    Campus Community
+                </button>
+
+                <button type="button" onclick="location.href='birthdays.html'">
+                    <i data-lucide="cake"></i>
+                    Birthdays
+                </button>
+
+                <button type="button" onclick="location.href='friend-requests.html'">
+                    <i data-lucide="user-plus"></i>
+                    Friend Requests
+                </button>
+
+                <button type="button" onclick="location.href='settings.html'">
+                    <i data-lucide="settings"></i>
+                    Settings
+                </button>
+
+                <div class="home-menu-divider"></div>
+
+                <button type="button" class="home-menu-dark" onclick="toggleDarkMode(); socialhubHomeMenuRefreshDark()">
+                    <span class="home-menu-dark-label">
+                        <i data-lucide="moon"></i>
+                        Dark mode
+                    </span>
+                    <span class="home-dark-switch" id="homeDarkSwitch"></span>
+                </button>
+
+                <button type="button" onclick="socialhubHomeHelpOpen()">
+                    <i data-lucide="circle-help"></i>
+                    Help
+                </button>
+
+                <button type="button" class="home-menu-logout" onclick="logoutUser()">
+                    <i data-lucide="log-out"></i>
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ========================= -->
+    <!-- MAIN LAYOUT -->
+    <!-- ========================= -->
+
+    <main class="main-container">
+
+
+        <!-- ========================= -->
+        <!-- LEFT SIDEBAR -->
+        <!-- ========================= -->
+
+        <aside class="sidebar left-sidebar">
+
+            <a class="sidebar-profile" href="../profile/index.html">
+
+                <div class="sidebar-avatar">
+                    <i data-lucide="circle-user"></i>
+                </div>
+
+                <div>
+
+                    <strong class="user-name">
+                        User
+                    </strong>
+
+                    <small class="profile-username">
+                        @username
+                    </small>
+
+                </div>
+
+            </a>
+
+            <nav class="sidebar-menu">
+
+                <button type="button" onclick="location.href='index.html'">
+                    <i data-lucide="house"></i>
+                    <span>Home</span>
+                </button>
+
+                <button type="button">
+                    <i data-lucide="users"></i>
+                    <span>Friends</span>
+                </button>
+
+                <button type="button" onclick="location.href='memories.html'">
+                    <i data-lucide="clock-3"></i>
+                    <span>Memories</span>
+                </button>
+
+                <button type="button" onclick="location.href='saved.html'">
+                    <i data-lucide="bookmark"></i>
+                    <span>Saved</span>
+                </button>
+
+                <button type="button" onclick="location.href='groups.html'">
+                    <i data-lucide="users-round"></i>
+                    <span>Groups</span>
+                </button>
+
+                <button type="button" onclick="location.href='reels.html'">
+                    <i data-lucide="clapperboard"></i>
+                    <span>Reels</span>
+                </button>
+
+                <button type="button" onclick="location.href='marketplace.html'">
+                    <i data-lucide="store"></i>
+                    <span>Marketplace</span>
+                </button>
+
+                <button type="button" onclick="location.href='events.html'">
+                    <i data-lucide="calendar-days"></i>
+                    <span>Events</span>
+                </button>
+
+                <button type="button" class="sidebar-see-more" onclick="socialhubHomeSidebarMore()">
+                    <i data-lucide="ellipsis"></i>
+                    <span>See more</span>
+                </button>
+
+                <div class="sidebar-extra" style="display:none">
+
+                    <button type="button" onclick="location.href='watch.html'">
+                        <i data-lucide="tv"></i>
+                        <span>Watch</span>
+                    </button>
+
+                    <button type="button" onclick="location.href='pages.html'">
+                        <i data-lucide="panels-top-left"></i>
+                        <span>Pages</span>
+                    </button>
+
+                    <button type="button" onclick="location.href='live.html'">
+                        <i data-lucide="radio"></i>
+                        <span>Live</span>
+                    </button>
+
+                    <button type="button" onclick="location.href='campus.html'">
+                        <i data-lucide="graduation-cap"></i>
+                        <span>Campus Community</span>
+                    </button>
+
+                    <button type="button" onclick="location.href='birthdays.html'">
+                        <i data-lucide="cake"></i>
+                        <span>Birthdays</span>
+                    </button>
+
+                    <button type="button" onclick="location.href='friend-requests.html'">
+                        <i data-lucide="user-plus"></i>
+                        <span>Friend Requests</span>
+                    </button>
+
+                    <button type="button">
+                        <i data-lucide="message-circle"></i>
+                        <span>Messages</span>
+                    </button>
+
+                    <button type="button">
+                        <i data-lucide="bell"></i>
+                        <span>Notifications</span>
+                    </button>
+
+                </div>
+
+            </nav>
+
+            <div class="sidebar-footer">
+
+                <button type="button" onclick="location.href='settings.html'">
+                    <i data-lucide="settings"></i>
+                    <span>Settings</span>
+                </button>
+
+                <button type="button" onclick="socialhubHomeHelpOpen()">
+                    <i data-lucide="circle-help"></i>
+                    <span>Help</span>
+                </button>
+
+                <button type="button" class="sidebar-logout" onclick="logoutUser()">
+                    <i data-lucide="log-out"></i>
+                    <span>Logout</span>
+                </button>
+
+            </div>
+
+        </aside>
+
+
+
+        <!-- ========================= -->
+        <!-- CENTER FEED -->
+        <!-- ========================= -->
+
+        <section class="feed">
+
+
+            <div class="feed-main">
+
+
+                <!-- ========================= -->
+                <!-- NEW POST COMPOSER -->
+                <!-- ========================= -->
+
+                <div class="dash-label">
+                    New Post
+                </div>
+
+                <section class="create-post">
+
+                    <div class="create-post-top">
+
+                        <div class="avatar">
+                            <i data-lucide="circle-user"></i>
+                        </div>
+
+                        <button type="button" class="post-composer-trigger" onclick="socialhubHomeComposerOpen()">
+                            What's happening, <span class="composer-name">friend</span>?
+                        </button>
+
+                        <input type="text" id="postInput" placeholder="What's on your mind?" style="display:none" />
+
+                    </div>
+
+                    <div class="create-post-audience">
+
+                        <button
+                            type="button"
+                            id="audienceBtn"
+                            class="audience-btn"
+                            onclick="socialhubToggleAudienceMenu(event)"
+                        >
+                            <span id="audienceLabel">🌎 Public</span>
+                            <span class="audience-arrow">▾</span>
+                        </button>
+
+                        <div
+                            id="audienceMenu"
+                            class="audience-menu"
+                            style="display: none;"
+                        >
+                            <button
+                                type="button"
+                                class="audience-option selected"
+                                data-audience="public"
+                                onclick="socialhubSetAudience('public')"
+                            >
+                                🌎 Public
+                            </button>
+                            <button
+                                type="button"
+                                class="audience-option"
+                                data-audience="friends"
+                                onclick="socialhubSetAudience('friends')"
+                            >
+                                👥 Friends
+                            </button>
+                            <button
+                                type="button"
+                                class="audience-option"
+                                data-audience="friends_of_friends"
+                                onclick="socialhubSetAudience('friends_of_friends')"
+                            >
+                                🤝 Friends of Friends
+                            </button>
+                            <button
+                                type="button"
+                                class="audience-option"
+                                data-audience="only_me"
+                                onclick="socialhubSetAudience('only_me')"
+                            >
+                                🔒 Only Me
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <div class="create-post-actions">
+
+                        <button type="button" title="Photo/video">
+                            <i data-lucide="image"></i>
+                            <span>Photo/video</span>
+                        </button>
+
+                        <button type="button" title="Video">
+                            <i data-lucide="video"></i>
+                            <span>Video</span>
+                        </button>
+
+                        <button type="button" onclick="socialhubHomeFeelingOpen(event)">
+                            <i data-lucide="smile"></i>
+                            <span>Feeling</span>
+                        </button>
+
+                        <button type="button" onclick="socialhubHomeLocationOpen(event)">
+                            <i data-lucide="map-pin"></i>
+                            <span>Location</span>
+                        </button>
+
+                        <button
+                            type="button"
+                            onclick="createPost()"
+                            class="post-btn"
+                        >
+                            <i data-lucide="send"></i>
+                            <span>Post</span>
+                        </button>
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+
+
+            <!-- ========================= -->
+            <!-- MEMORIES WIDGET -->
+            <!-- ========================= -->
+
+            <div id="memoriesWidget"></div>
+
+
+            <!-- ========================= -->
+            <!-- POSTS -->
+            <!-- ========================= -->
+
+            <section id="posts">
+
+
+                <!-- ========================= -->
+                <!-- DEMO POST -->
+                <!-- ========================= -->
+
+                <article class="post">
+
+
+                    <!-- POST HEADER -->
+
+                    <div class="post-header">
+
+
+                        <div class="avatar">
+                            👤
+                        </div>
+
+
+                        <div>
+
+                            <h3 class="user-name">
+                                User
+                            </h3>
+
+
+                            <small>
+                                Just now · 🌎
+                            </small>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- POST TEXT -->
+
+                    <p class="post-text">
+
+                        Welcome to Friendbook! 🎉
+
+                        <br><br>
+
+                        This is your new social
+                        media space.
+
+                    </p>
+
+
+
+                    <!-- POST STATS -->
+
+                    <div class="post-stats">
+
+
+                        <span>
+                            ❤️ 0 Likes
+                        </span>
+
+
+                        <span>
+                            💬 0 Comments
+                        </span>
+
+
+                    </div>
+
+
+
+                    <!-- POST ACTIONS -->
+
+                    <div class="post-actions">
+
+
+                        <button
+                            onclick="likePost(this)"
+                        >
+                            ❤️ Like
+                        </button>
+
+
+                        <button
+                            onclick="this.closest('.post').querySelector('.comment-input').focus()"
+                        >
+                            💬 Comment
+                        </button>
+
+
+                        <button>
+                            <i class="fa-solid fa-share"></i>
+                            Share
+                        </button>
+
+
+                    </div>
+
+
+
+                    <!-- COMMENT BOX -->
+
+                    <div class="comment-box">
+
+
+                        <input
+                            type="text"
+                            placeholder="Write a comment..."
+                            class="comment-input"
+                        >
+
+
+                        <button
+                            onclick="addComment(this)"
+                        >
+                            Send
+                        </button>
+
+
+                    </div>
+
+
+
+                    <!-- COMMENTS -->
+
+                    <div class="comments"></div>
+
+                </article>
+
+
+            </section>
+
+
+
+        </section>
+
+
+
+        <!-- ========================= -->
+        <!-- FAR RIGHT: CONTACTS + BOT -->
+        <!-- ========================= -->
+
+        <aside class="sidebar right-sidebar">
+
+            <!-- BIRTHDAYS -->
+
+            <div class="home-widget" id="homeBirthdaysWidget">
+
+                <div class="home-widget-head">
+                    <i data-lucide="cake"></i>
+                    <span>Birthdays</span>
+                </div>
+
+                <div class="home-birthdays-list" id="homeBirthdaysList">
+                    <p class="home-widget-empty">No birthdays today.</p>
+                </div>
+
+            </div>
+
+            <!-- CONTACTS -->
+
+            <div class="home-widget socialhub-contacts">
+
+                <div class="home-widget-head">
+                    <i data-lucide="users"></i>
+                    <span>Contacts</span>
+                </div>
+
+                <div class="socialhub-friends-widget">
+
+                    <p class="empty-message">
+                        Loading...
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- LAST CHATS -->
+
+            <div class="home-widget socialhub-chats-widget">
+
+                <div class="home-widget-head">
+                    <i data-lucide="message-circle"></i>
+                    <span>Last Chats</span>
+                </div>
+
+                <div class="socialhub-chat-list">
+
+                    <p class="empty-message">
+                        Loading...
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- PEOPLE YOU MAY KNOW -->
+
+            <div class="side-card home-widget">
+
+                <div class="side-card-title">
+                    <h3>People You May Know</h3>
+                </div>
+
+            </div>
+
+        </aside>
+
+
+    </main>
+
+
+    </div>
+
+
+
+    <!-- ========================= -->
+    <!-- SEARCH OVERLAY -->
+    <!-- ========================= -->
+
+    <div class="home-search-overlay" id="homeSearchOverlay" style="display:none">
+
+        <div class="home-search-box">
+
+            <div class="home-search-head">
+
+                <button type="button" class="home-search-back" onclick="socialhubHomeSearchClose()" title="Back">
+                    <i data-lucide="arrow-left"></i>
+                </button>
+
+                <input type="text" id="homeSearchInput" placeholder="Search Friendbook" autocomplete="off" />
+
+                <button type="button" class="home-search-clear" id="homeSearchClear" onclick="socialhubHomeSearchClear()" title="Clear">
+                    <i data-lucide="x"></i>
+                </button>
+
+            </div>
+
+            <div class="home-search-body">
+
+                <div id="homeSearchRecents"></div>
+
+                <div id="homeSearchResults" style="display:none"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- CREATE POST MODAL -->
+    <!-- ========================= -->
+
+    <div class="home-modal-backdrop" id="homePostModal" style="display:none">
+
+        <div class="home-modal home-post-modal">
+
+            <div class="home-modal-head">
+
+                <h3>Create post</h3>
+
+                <button type="button" class="home-modal-x" onclick="socialhubHomeComposerClose()" title="Close">
+                    <i data-lucide="x"></i>
+                </button>
+
+            </div>
+
+            <div class="home-post-user">
+
+                <div class="avatar side-avatar">
+                    <i data-lucide="circle-user"></i>
+                </div>
+
+                <div class="home-post-user-info">
+
+                    <strong class="home-post-user-name">User</strong>
+
+                    <button type="button" class="audience-btn" id="homePostAudienceBtn" onclick="socialhubHomeAudienceToggle(event)">
+                        <span id="homePostAudienceLabel">🌎 Public</span>
+                        <span class="audience-arrow">▾</span>
+                    </button>
+
+                </div>
+
+                <div id="homePostAudienceMenu" class="audience-menu" style="display:none">
+                    <button type="button" class="audience-option" data-home-audience="public" onclick="socialhubHomeAudienceSet('public')">🌎 Public</button>
+                    <button type="button" class="audience-option" data-home-audience="friends" onclick="socialhubHomeAudienceSet('friends')">👥 Friends</button>
+                    <button type="button" class="audience-option" data-home-audience="friends_of_friends" onclick="socialhubHomeAudienceSet('friends_of_friends')">🤝 Friends of Friends</button>
+                    <button type="button" class="audience-option" data-home-audience="only_me" onclick="socialhubHomeAudienceSet('only_me')">🔒 Only me</button>
+                </div>
+
+            </div>
+
+            <textarea id="homePostText" placeholder="What's on your mind?" maxlength="2000"></textarea>
+
+            <div class="home-post-bg-picker" id="homePostBgPicker"></div>
+
+            <div class="home-post-feelings" id="homePostFeelings" style="display:none"></div>
+
+            <div class="home-post-emoji" id="homePostEmoji"></div>
+
+            <div class="home-post-tools">
+
+                <button type="button" onclick="socialhubHomeModalPhoto()">
+                    <i data-lucide="image"></i>
+                    <span>Photo</span>
+                </button>
+
+                <button type="button" onclick="socialhubHomeModalVideo()">
+                    <i data-lucide="video"></i>
+                    <span>Video</span>
+                </button>
+
+                <button type="button" onclick="socialhubHomeModalFeeling()">
+                    <i data-lucide="smile"></i>
+                    <span>Feeling</span>
+                </button>
+
+                <button type="button" onclick="socialhubHomeModalLocation()">
+                    <i data-lucide="map-pin"></i>
+                    <span>Location</span>
+                </button>
+
+            </div>
+
+            <div class="home-post-modal-foot">
+
+                <button type="button" class="home-btn-ghost" onclick="socialhubHomeComposerClose()">Cancel</button>
+
+                <button type="button" class="home-btn-primary" id="homePostSubmit" onclick="socialhubHomeComposerSubmit()">Post</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- HELP MODAL -->
+    <!-- ========================= -->
+
+    <div class="home-modal-backdrop" id="homeHelpModal" style="display:none">
+
+        <div class="home-modal home-help-modal">
+
+            <div class="home-modal-head">
+
+                <h3>Help & support</h3>
+
+                <button type="button" class="home-modal-x" onclick="socialhubHomeHelpClose()" title="Close">
+                    <i data-lucide="x"></i>
+                </button>
+
+            </div>
+
+            <div class="home-help-body">
+
+                <p>Everything you need to get the most out of Friendbook.</p>
+
+                <button type="button" class="home-help-row" onclick="socialhubToast('Help center is coming soon.', 'info')">
+                    <i data-lucide="book-open"></i>
+                    Help Center
+                </button>
+
+                <button type="button" class="home-help-row" onclick="socialhubToast('Report sent to our team.', 'success')">
+                    <i data-lucide="flag"></i>
+                    Report a problem
+                </button>
+
+                <button type="button" class="home-help-row" onclick="socialhubToast('Friendbook v1.0 — Supabase powered.', 'info')">
+                    <i data-lucide="info"></i>
+                    About Friendbook
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ========================= -->
+    <!-- MOBILE BOTTOM NAV -->
+    <!-- ========================= -->
+
+    <nav class="home-bottom-nav" id="homeBottomNav">
+
+        <button type="button" class="active" onclick="location.href='index.html'" title="Home">
+            <i data-lucide="house"></i>
+            <span>Home</span>
+        </button>
+
+        <button type="button" onclick="location.href='reels.html'" title="Reels">
+            <i data-lucide="clapperboard"></i>
+            <span>Reels</span>
+        </button>
+
+        <button type="button" onclick="socialhubOpenFriendsModal()" title="Friends">
+            <i data-lucide="users"></i>
+            <span>Friends</span>
+        </button>
+
+        <button type="button" onclick="socialhubOpenChatPopup()" title="Messages">
+            <i data-lucide="message-circle"></i>
+            <span>Messages</span>
+        </button>
+
+        <button type="button" onclick="location.href='profile.html'" title="Profile">
+            <i data-lucide="circle-user"></i>
+            <span>Profile</span>
+        </button>
+
+    </nav>
+
+    <!-- ========================= -->
+    <!-- SCRIPTS -->
+    <!-- ========================= -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="../core/supabase.js?v=1787000000033"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
+
+    <script src="../core/premium-ui.js?v=1787000000033"></script>
+
+    <script src="../core/script.js?v=1787000000033"></script>
+
+    <script src="../core/memories.js?v=1787000000033"></script>
+
+    <script src="../core/likes-comments.js?v=1787000000033"></script>
+
+    <script src="../core/shares.js?v=1787000000033"></script>
+
+    <script src="../core/image-upload.js?v=1787000000033"></script>
+
+    <script src="../core/post-manage.js?v=1787000000033"></script>
+
+    <script src="../core/friends.js?v=1787000000033"></script>
+
+    <script src="../core/user-search.js?v=1787000000033"></script>
+
+    <script src="../core/notifications.js?v=1787000000033"></script>
+
+    <script src="../core/activity.js?v=1787000000033"></script>
+
+    <script src="../core/settings.js?v=1787000000033"></script>
+
+    <script src="../core/messages.js?v=1787000000033"></script>
+
+    <script src="../core/stories.js?v=1787000000033"></script>
+
+    <script src="../core/realtime.js?v=1787000000033"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <script src="home-theme.js?v=1787000000033"></script>
+
+<!-- ==========================================
+     Friendbook - Step 10.28
+     Premium Composer Enhancement
+     ========================================== -->
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const composer =
+        document.querySelector(".create-post");
+
+    if (!composer) return;
+
+    const input =
+        document.getElementById("postInput");
+
+    if (!input) return;
+
+
+    /* ------------------------------------------
+       Premium composer classes
+       ------------------------------------------ */
+
+    composer.classList.add("post-composer");
+
+
+    /* ------------------------------------------
+       Create premium tools
+       ------------------------------------------ */
+
+    const actions =
+        composer.querySelector(
+            ".create-post-actions"
+        );
+
+    if (!actions) return;
+
+
+    // Prevent duplicate enhancement
+    if (
+        composer.querySelector(
+            ".post-background-toggle"
+        )
+    ) {
+        return;
+    }
+
+
+    /* ------------------------------------------
+       Background button
+       ------------------------------------------ */
+
+    const backgroundButton =
+        document.createElement("button");
+
+    backgroundButton.type = "button";
+
+    backgroundButton.className =
+        "post-tool post-background-toggle";
+
+    backgroundButton.innerHTML =
+        "🎨 Background";
+
+
+    /* ------------------------------------------
+       Emoji button
+       ------------------------------------------ */
+
+    const emojiButton =
+        document.createElement("button");
+
+    emojiButton.type = "button";
+
+    emojiButton.className =
+        "post-tool";
+
+    emojiButton.innerHTML =
+        "😊 Emoji";
+
+
+    /* ------------------------------------------
+       Photo button styling
+       ------------------------------------------ */
+
+    const photoButton =
+        actions.querySelector(
+            'button:first-child'
+        );
+
+    if (photoButton) {
+
+        photoButton.classList.add(
+            "post-tool"
+        );
+
+    }
+
+
+    /* ------------------------------------------
+       Video button styling
+       ------------------------------------------ */
+
+    const videoButton =
+        actions.querySelector(
+            'button:nth-child(2)'
+        );
+
+    if (videoButton) {
+
+        videoButton.classList.add(
+            "post-tool"
+        );
+
+    }
+
+
+    /* ------------------------------------------
+       Add new tools
+       ------------------------------------------ */
+
+    const postButton =
+        actions.querySelector(
+            ".post-btn"
+        );
+
+
+    actions.insertBefore(
+        backgroundButton,
+        postButton
+    );
+
+
+    actions.insertBefore(
+        emojiButton,
+        postButton
+    );
+
+
+    /* ------------------------------------------
+       Background picker
+       ------------------------------------------ */
+
+    const picker =
+        document.createElement("div");
+
+    picker.className =
+        "post-background-picker";
+
+
+    /* Background options */
+
+    const backgrounds = [
+
+        {
+            name: "Classic",
+            value: "none"
+        },
+
+        {
+            name: "Blue",
+            value:
+                "linear-gradient(135deg,#2563eb,#60a5fa)"
+        },
+
+        {
+            name: "Purple",
+            value:
+                "linear-gradient(135deg,#7c3aed,#c084fc)"
+        },
+
+        {
+            name: "Sunset",
+            value:
+                "linear-gradient(135deg,#f97316,#ec4899)"
+        },
+
+        {
+            name: "Ocean",
+            value:
+                "linear-gradient(135deg,#0891b2,#2563eb)"
+        },
+
+        {
+            name: "Emerald",
+            value:
+                "linear-gradient(135deg,#059669,#34d399)"
+        },
+
+        {
+            name: "Rose",
+            value:
+                "linear-gradient(135deg,#e11d48,#fb7185)"
+        },
+
+        {
+            name: "Dark",
+            value:
+                "linear-gradient(135deg,#111827,#374151)"
+        }
+
+    ];
+
+
+    backgrounds.forEach(
+        (background, index) => {
+
+            const option =
+                document.createElement(
+                    "button"
+                );
+
+            option.type = "button";
+
+            option.className =
+                "post-bg-option";
+
+            option.title =
+                background.name;
+
+            option.style.background =
+                background.value === "none"
+                    ? "var(--card-bg, #ffffff)"
+                    : background.value;
+
+
+            option.addEventListener(
+                "click",
+                () => {
+
+                    picker
+                        .querySelectorAll(
+                            ".post-bg-option"
+                        )
+                        .forEach(
+                            item =>
+                                item.classList
+                                    .remove(
+                                        "selected"
+                                    )
+                        );
+
+
+                    option.classList.add(
+                        "selected"
+                    );
+
+
+                    if (
+                        background.value ===
+                        "none"
+                    ) {
+
+                        input.style.background =
+                            "";
+
+                        input.style.color =
+                            "";
+
+                        input.dataset.background =
+                            "none";
+
+                    } else {
+
+                        input.style.background =
+                            background.value;
+
+                        input.style.color =
+                            "#ffffff";
+
+                        input.dataset.background =
+                            background.value;
+
+                    }
+
+                }
+            );
+
+
+            if (index === 0) {
+
+                option.classList.add(
+                    "selected"
+                );
+
+            }
+
+
+            picker.appendChild(option);
+
+        }
+    );
+
+
+    composer.appendChild(picker);
+
+
+    /* ------------------------------------------
+       Background toggle
+       ------------------------------------------ */
+
+    backgroundButton.addEventListener(
+        "click",
+        () => {
+
+            picker.classList.toggle(
+                "active"
+            );
+
+        }
+    );
+
+
+    /* ------------------------------------------
+   Premium Emoji Picker
+   ------------------------------------------ */
+
+const emojiPicker =
+    document.createElement("div");
+
+emojiPicker.className =
+    "premium-emoji-picker";
+
+emojiPicker.innerHTML = `
+
+    <div class="emoji-picker-header">
+
+        <strong>
+            Choose an emoji
+        </strong>
+
+        <button
+            type="button"
+            class="emoji-picker-close"
+        >
+            ×
+        </button>
+
+    </div>
+
+    <div class="emoji-search-wrap">
+
+        <input
+            type="text"
+            class="emoji-search"
+            placeholder="Search emoji..."
+        >
+
+    </div>
+
+    <div class="emoji-categories">
+
+        <button type="button" data-category="smileys">
+            😊
+        </button>
+
+        <button type="button" data-category="hearts">
+            ❤️
+        </button>
+
+        <button type="button" data-category="gestures">
+            👍
+        </button>
+
+        <button type="button" data-category="animals">
+            🐱
+        </button>
+
+        <button type="button" data-category="food">
+            🍕
+        </button>
+
+        <button type="button" data-category="objects">
+            🎮
+        </button>
+
+    </div>
+
+    <div class="emoji-grid"></div>
+
+`;
+
+
+composer.appendChild(emojiPicker);
+
+
+const emojiGrid =
+    emojiPicker.querySelector(
+        ".emoji-grid"
+    );
+
+
+const emojiSearch =
+    emojiPicker.querySelector(
+        ".emoji-search"
+    );
+
+
+const emojiClose =
+    emojiPicker.querySelector(
+        ".emoji-picker-close"
+    );
+
+
+/* ------------------------------------------
+   Emoji Database
+   ------------------------------------------ */
+
+const emojiData = {
+
+    smileys: [
+        "😀","😃","😄","😁","😆","😅",
+        "😂","🤣","😊","😇","🙂","🙃",
+        "😉","😌","😍","🥰","😘","😗",
+        "😙","😚","😋","😛","😝","😜",
+        "🤪","🤨","🧐","🤓","😎","🤩",
+        "🥳","😏","😒","😞","😔","😟",
+        "😕","🙁","☹️","😣","😖","😫",
+        "😩","🥺","😢","😭","😤","😠",
+        "😡","🤬","🤯","😳","🥵","🥶",
+        "😱","😨","😰","😥","😓","🤗",
+        "🤔","🤭","🤫","🤥","😶","😐",
+        "😑","😬","🙄","😯","😦","😧",
+        "😮","😲","🥱","😴","🤤","😪"
+    ],
+
+    hearts: [
+        "❤️","🧡","💛","💚","💙","💜",
+        "🖤","🤍","🤎","💔","❣️","💕",
+        "💞","💓","💗","💖","💘","💝",
+        "💟","💌","💋","😍","🥰","😘",
+        "❤️‍🔥","❤️‍🩹"
+    ],
+
+    gestures: [
+        "👍","👎","👌","✌️","🤞","🤟",
+        "🤘","🤙","👈","👉","👆","👇",
+        "☝️","✋","🤚","🖐️","🖖","👋",
+        "🤏","💪","👏","🙌","👐","🤲",
+        "🙏","🤝","👊","✊","🤌"
+    ],
+
+    animals: [
+        "🐶","🐱","🐭","🐹","🐰","🦊",
+        "🐻","🐼","🐨","🐯","🦁","🐮",
+        "🐷","🐸","🐵","🙈","🙉","🙊",
+        "🐔","🐧","🐦","🐤","🦄","🐝",
+        "🦋","🐌","🐞","🐢","🐍","🦎",
+        "🐙","🦀","🐠","🐟","🐬","🐳"
+    ],
+
+    food: [
+        "🍎","🍊","🍋","🍉","🍇","🍓",
+        "🫐","🍒","🍑","🥭","🍍","🥝",
+        "🍅","🥑","🌽","🥕","🥔","🍕",
+        "🍔","🍟","🌭","🌮","🌯","🍿",
+        "🍩","🍪","🎂","🍰","🍫","🍭",
+        "☕","🧋","🥤"
+    ],
+
+    objects: [
+        "⚽","🏀","🏈","⚾","🎾","🎮",
+        "🎯","🎸","🎧","📱","💻","⌚",
+        "📷","🎥","📺","💡","🔥","⭐",
+        "🌟","✨","💫","🎉","🎊","🎁",
+        "🚀","💎","🏆","🥇","🎵","🎶"
+    ]
+
+};
+
+
+/* ------------------------------------------
+   Render Emoji
+   ------------------------------------------ */
+
+function renderEmojis(
+    category = "smileys",
+    search = ""
+) {
+
+    emojiGrid.innerHTML = "";
+
+    let emojis = [];
+
+    if (search.trim() !== "") {
+
+        Object.values(emojiData)
+            .forEach(list => {
+
+                emojis.push(
+                    ...list
+                );
+
+            });
+
+    } else {
+
+        emojis =
+            emojiData[category] ||
+            emojiData.smileys;
+
+    }
+
+
+    /* Remove duplicates */
+
+    emojis =
+        [...new Set(emojis)];
+
+
+    emojis.forEach(
+        emoji => {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+            button.type =
+                "button";
+
+            button.className =
+                "emoji-item";
+
+            button.textContent =
+                emoji;
+
+            button.title =
+                emoji;
+
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    insertEmoji(
+                        emoji
+                    );
+
+                }
+            );
+
+
+            emojiGrid.appendChild(
+                button
+            );
+
+        }
+    );
+
+}
+
+
+/* ------------------------------------------
+   Insert Emoji at Cursor
+   ------------------------------------------ */
+
+function insertEmoji(emoji) {
+
+    const start =
+        input.selectionStart ??
+        input.value.length;
+
+    const end =
+        input.selectionEnd ??
+        input.value.length;
+
+    const before =
+        input.value.substring(
+            0,
+            start
+        );
+
+    const after =
+        input.value.substring(
+            end
+        );
+
+    input.value =
+        before +
+        emoji +
+        after;
+
+    const newPosition =
+        start +
+        emoji.length;
+
+    input.focus();
+
+    input.setSelectionRange(
+        newPosition,
+        newPosition
+    );
+
+}
+
+
+/* ------------------------------------------
+   Category Buttons
+   ------------------------------------------ */
+
+emojiPicker
+    .querySelectorAll(
+        ".emoji-categories button"
+    )
+    .forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    emojiPicker
+                        .querySelectorAll(
+                            ".emoji-categories button"
+                        )
+                        .forEach(
+                            item =>
+                                item.classList
+                                    .remove(
+                                        "active"
+                                    )
+                        );
+
+                    button.classList.add(
+                        "active"
+                    );
+
+                    emojiSearch.value =
+                        "";
+
+                    renderEmojis(
+                        button.dataset.category
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+/* ------------------------------------------
+   Search
+   ------------------------------------------ */
+
+emojiSearch.addEventListener(
+    "input",
+    () => {
+
+        renderEmojis(
+            "smileys",
+            emojiSearch.value
+        );
+
+    }
+);
+
+
+/* ------------------------------------------
+   Open Picker
+   ------------------------------------------ */
+
+emojiButton.addEventListener(
+    "click",
+    event => {
+
+        event.stopPropagation();
+
+        emojiPicker.classList.toggle(
+            "active"
+        );
+
+        if (
+            emojiPicker.classList
+                .contains("active")
+        ) {
+
+            emojiSearch.focus();
+
+        }
+
+    }
+);
+
+
+/* ------------------------------------------
+   Close Picker
+   ------------------------------------------ */
+
+emojiClose.addEventListener(
+    "click",
+    () => {
+
+        emojiPicker.classList.remove(
+            "active"
+        );
+
+    }
+);
+
+
+/* ------------------------------------------
+   Click Outside
+   ------------------------------------------ */
+
+document.addEventListener(
+    "click",
+    event => {
+
+        if (
+            !emojiPicker.contains(
+                event.target
+            ) &&
+            event.target !== emojiButton
+        ) {
+
+            emojiPicker.classList.remove(
+                "active"
+            );
+
+        }
+
+    }
+);
+
+
+/* ------------------------------------------
+   Initial Emoji List
+   ------------------------------------------ */
+
+const firstCategory =
+    emojiPicker.querySelector(
+        '.emoji-categories button[data-category="smileys"]'
+    );
+
+if (firstCategory) {
+
+    firstCategory.classList.add(
+        "active"
+    );
+
+}
+
+renderEmojis(
+    "smileys"
+);
+
+
+    /* ------------------------------------------
+       Input styling
+       ------------------------------------------ */
+
+    input.style.transition =
+        "all .25s ease";
+
+    input.style.padding =
+        "14px 16px";
+
+    input.style.borderRadius =
+        "14px";
+
+
+    console.log(
+        "✨ Premium Friendbook composer activated!"
+    );
+
+});
+
+</script>
+</body>
+
+</html>

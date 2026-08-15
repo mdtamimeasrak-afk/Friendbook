@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Friendbook Profile</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%231877f2'/%3E%3Ctext x='20' y='27' font-family='Arial' font-size='21' font-weight='800' fill='white' text-anchor='middle'%3ETR%3C/text%3E%3C/svg%3E">
+
+
+    <link rel="stylesheet" href="../core/style.css?v=1787000000033">
+
+    <link rel="stylesheet" href="../core/dashboard.css?v=1787000000033">
+
+    <link rel="stylesheet" href="../core/premium.css?v=1787000000033">
+
+    <link rel="stylesheet" href="profile.css?v=1787000000033">
+
+    <link rel="stylesheet" href="../core/glass-theme.css?v=1787000000033">
+
+    <link rel="stylesheet" href="fb-profile.css?v=1787000000033">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://vtazrwksizpeyezwctko.supabase.co">
+</head>
+
+
+<body class="dark-mode">
+    <script>
+        if (localStorage.getItem("darkMode") !== "true") {
+            document.body.classList.remove("dark-mode");
+        }
+    </script>
+
+
+    <!-- ========================= -->
+    <!-- TOP NAVIGATION (home page style) -->
+    <!-- ========================= -->
+
+    <header class="topbar">
+
+
+        <!-- LOGO (Facebook-style "f") -->
+
+        <div
+            class="logo"
+            onclick="location.href='index.html'"
+            title="Friendbook"
+        ></div>
+
+
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+            <span>
+                🔍
+            </span>
+
+            <input
+                type="text"
+                placeholder="Search Facebook"
+            >
+
+        </div>
+
+
+
+        <!-- CENTER NAV (Facebook tabs) -->
+
+        <nav class="fb-center-nav">
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='index.html'"
+                title="Home"
+            >
+                <i class="fa-solid fa-house"></i>
+            </button>
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='reels.html'"
+                title="Reels"
+            >
+                <i class="fa-solid fa-clapperboard"></i>
+            </button>
+
+
+            <button
+                class="fb-nav-btn"
+                onclick="socialhubOpenFriendsModal()"
+                title="Friends"
+            >
+                <i class="fa-solid fa-user-group"></i>
+            </button>
+
+
+            <button
+                class="fb-nav-btn"
+                onclick="location.href='messages.html'"
+                title="Messages"
+            >
+                <i class="fa-solid fa-comment-dots"></i>
+            </button>
+
+
+            <button
+                class="fb-nav-btn"
+                onclick="document.querySelector('.top-icons button[title=&quot;Notifications&quot;]')?.click()"
+                title="Notifications"
+            >
+                <i class="fa-solid fa-bell"></i>
+            </button>
+
+        </nav>
+
+
+
+        <!-- TOP ICONS (Facebook gray circles) -->
+
+        <div class="top-icons">
+
+
+            <button
+                title="Messages"
+            >
+                💬
+            </button>
+
+
+            <button
+                title="Notifications"
+            >
+                🔔
+            </button>
+
+
+            <button
+                onclick="toggleDarkMode()"
+                title="Dark Mode"
+            >
+                🌙
+            </button>
+
+
+            <button
+                onclick="location.href='settings.html'"
+                title="Settings"
+            >
+                ⚙️
+            </button>
+
+
+            <button
+                onclick="location.href='profile.html'"
+                class="profile-mini side-avatar"
+                title="Profile"
+            >
+                👤
+            </button>
+
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ========================= -->
+    <!-- PROFILE CONTAINER -->
+    <!-- ========================= -->
+
+    <main class="profile-container">
+
+
+        <!-- ========================= -->
+        <!-- ========================= -->
+
+        <section class="fb-header">
+
+
+            <!-- COVER PHOTO -->
+
+            <div class="cover-photo" id="upCover">
+
+                <div class="fb-skeleton fb-cover-skeleton" id="upCoverSkeleton"></div>
+
+            </div>
+
+
+
+            <!-- HEADER ROW (avatar + info + actions) -->
+
+            <div class="fb-header-row">
+
+
+                <!-- AVATAR (overlaps the cover) -->
+
+                <div class="fb-avatar-wrap">
+
+                    <div
+                        class="fb-skeleton fb-avatar-skeleton"
+                        id="upAvatarSkeleton"
+                    ></div>
+
+                    <div
+                        class="profile-photo"
+                        id="upPhoto"
+                    >
+                        👤
+                    </div>
+
+                </div>
+
+
+
+                <!-- NAME + FRIENDS + BIO + DETAILS -->
+
+                <div class="fb-header-info">
+
+                    <div
+                        class="fb-skeleton fb-name-skeleton"
+                        id="upNameSkeleton"
+                    ></div>
+
+                    <h1
+                        class="fb-header-name"
+                        id="upName"
+                    >
+                        User
+                    </h1>
+
+
+                    <p
+                        class="fb-friends-line"
+                        id="upFriendsLine"
+                    >
+                        <span id="upFriendsCount">0 friends</span>
+                    </p>
+
+
+                    <p
+                        class="fb-header-bio"
+                        id="upBio"
+                    >
+                        No bio added yet.
+                    </p>
+
+
+                    <div class="fb-info-row">
+
+                        <span class="fb-info-item">
+                            📍
+                            <span id="upLocation"></span>
+                        </span>
+
+                        <span class="fb-info-item">
+                            💼
+                            <span id="upWork"></span>
+                        </span>
+
+                        <span class="fb-info-item">
+                            🎓
+                            <span id="upEducation"></span>
+                        </span>
+
+                        <span class="fb-info-item">
+                            🌐
+                            <span id="upWebsite"></span>
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ACTION BUTTONS (friend state + Message + More) -->
+
+                <div class="fb-header-actions">
+
+                    <div id="upFriendButton"></div>
+
+                    <div
+                        class="fb-more-wrap"
+                        id="upMoreWrap"
+                        style="display:none"
+                    >
+
+                        <button
+                            type="button"
+                            class="fb-square-btn"
+                            title="More"
+                            onclick="socialhubUpToggleMore(event)"
+                        >
+                            ▾
+                        </button>
+
+                        <div
+                            class="fb-more-menu"
+                            id="upMoreMenu"
+                            style="display:none"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DIVIDER -->
+
+            <div class="fb-header-divider"></div>
+
+        </section>
+
+
+
+        <!-- ========================= -->
+        <!-- PROFILE TABS -->
+        <!-- ========================= -->
+
+        <nav class="fb-tabs-bar up-tabs-bar">
+
+            <button class="active" data-fb-tab="posts">
+                <i class="fa-regular fa-file-lines"></i>
+                Posts
+            </button>
+
+            <button data-fb-tab="about">
+                <i class="fa-regular fa-circle-info"></i>
+                About
+            </button>
+
+            <button data-fb-tab="friends">
+                <i class="fa-regular fa-user-group"></i>
+                Friends
+            </button>
+
+            <button data-fb-tab="photos">
+                <i class="fa-regular fa-images"></i>
+                Photos
+            </button>
+
+            <button data-fb-tab="videos">
+                <i class="fa-solid fa-clapperboard"></i>
+                Reels
+            </button>
+
+            <button data-fb-tab="more">
+                <i class="fa-solid fa-ellipsis"></i>
+                More
+            </button>
+
+        </nav>
+
+
+
+        <!-- ========================= -->
+        <!-- PROFILE CONTENT -->
+        <!-- ========================= -->
+
+        <div class="fb-body fb-stack-body">
+
+
+
+            <!-- ========================= -->
+            <!-- POSTS PANE (master layout) -->
+            <!-- ========================= -->
+
+            <div class="fb-pane active" id="upPostsPane">
+
+                <div class="fb-posts-layout">
+
+                    <aside class="fb-left">
+
+                        <!-- INTRO (view only) -->
+
+                        <section class="profile-card fb-left-card" id="upLeftIntro">
+
+                            <div class="fb-left-card-head">
+                                <h2>Intro</h2>
+                            </div>
+
+                            <p class="fb-left-bio" id="upLeftBio">
+                                No bio added yet.
+                            </p>
+
+                            <div class="fb-left-divider"></div>
+
+                            <div class="about-row">
+                                <i class="fa-solid fa-briefcase"></i>
+                                <span class="about-label">Work</span>
+                                <span id="upLeftWork">Not added</span>
+                            </div>
+
+                            <div class="about-row">
+                                <i class="fa-solid fa-graduation-cap"></i>
+                                <span class="about-label">Education</span>
+                                <span id="upLeftEducation">Not added</span>
+                            </div>
+
+                            <div class="about-row">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span class="about-label">Location</span>
+                                <span id="upLeftLocation">Not added</span>
+                            </div>
+
+                            <div class="about-row">
+                                <i class="fa-solid fa-globe"></i>
+                                <span class="about-label">Website</span>
+                                <span id="upLeftWebsite">Not added</span>
+                            </div>
+
+                        </section>
+
+
+
+                        <!-- PHOTOS -->
+
+                        <section class="profile-card fb-left-card" id="upLeftPhotos">
+
+                            <div class="fb-left-card-head">
+                                <h2>Photos</h2>
+                                <button
+                                    type="button"
+                                    class="fb-left-seeall"
+                                    onclick="socialhubSwitchUpPane('photos')"
+                                >
+                                    See all
+                                </button>
+                            </div>
+
+                            <div
+                                class="fb-left-photo-grid"
+                                id="upLeftPhotoGrid"
+                            ></div>
+
+                        </section>
+
+
+
+                        <!-- FRIENDS -->
+
+                        <section class="profile-card fb-left-card" id="upLeftFriends">
+
+                            <div class="fb-left-card-head">
+                                <h2>Friends</h2>
+                                <button
+                                    type="button"
+                                    class="fb-left-seeall"
+                                    onclick="socialhubSwitchUpPane('friends')"
+                                >
+                                    See all
+                                </button>
+                            </div>
+
+                            <p
+                                class="fb-left-friends-count"
+                                id="upLeftFriendsCount"
+                            >
+                                0 friends
+                            </p>
+
+                            <div
+                                class="fb-left-friends-grid"
+                                id="upLeftFriendsGrid"
+                            ></div>
+
+                        </section>
+
+                    </aside>
+
+
+
+                    <div class="fb-main">
+
+                        <div class="fb-area">
+
+
+
+                            <!-- ========================= -->
+                            <!-- POSTS (Instagram grid) -->
+                            <!-- ========================= -->
+
+                            <section class="profile-card" id="profilePostsSection">
+
+                                <div class="up-posts-tabs">
+
+                                    <button
+                                        class="up-posts-tab active"
+                                        data-up-tab="all"
+                                        onclick="socialhubSwitchUpTab('all')"
+                                    >
+                                        🗂️ All Posts
+                                    </button>
+
+                                    <button
+                                        class="up-posts-tab"
+                                        data-up-tab="videos"
+                                        onclick="socialhubSwitchUpTab('videos')"
+                                    >
+                                        🎥 Videos
+                                    </button>
+
+                                </div>
+
+
+                                <div
+                                    id="upPosts"
+                                    class="profile-posts-grid"
+                                >
+
+                                    <p class="empty-message">
+                                        Loading posts...
+                                    </p>
+
+                                </div>
+
+
+                            </section>
+
+
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- ========================= -->
+            <!-- ABOUT PANE -->
+            <!-- ========================= -->
+
+            <div class="fb-pane" id="upAboutPane">
+
+                <section class="profile-card fb-about-card" id="upAboutSection">
+
+                    <div class="fb-about-layout">
+
+                        <nav class="fb-about-side">
+
+                            <h2 class="fb-about-title">About</h2>
+
+                            <button class="active" data-about-block="0">
+                                Intro
+                            </button>
+
+                            <button data-about-block="1">
+                                Work
+                            </button>
+
+                            <button data-about-block="2">
+                                Education
+                            </button>
+
+                            <button data-about-block="3">
+                                Contact info
+                            </button>
+
+                        </nav>
+
+                        <div class="fb-about-content">
+
+                            <div class="fb-about-block active" data-about-index="0">
+
+                                <div class="fb-about-section-head">
+                                    <h3>Intro</h3>
+                                </div>
+
+                                <p class="fb-about-bio" id="upAboutBio">
+                                    No bio added yet.
+                                </p>
+
+                                <div class="fb-about-divider"></div>
+
+                                <div class="about-row">
+                                    <i class="fa-solid fa-briefcase"></i>
+                                    <span class="about-label">Work</span>
+                                    <span id="upAboutWork">Not added</span>
+                                </div>
+
+                                <div class="about-row">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                    <span class="about-label">Education</span>
+                                    <span id="upAboutEducation">Not added</span>
+                                </div>
+
+                                <div class="about-row">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                    <span class="about-label">Location</span>
+                                    <span id="upAboutLocation">Not added</span>
+                                </div>
+
+                                <div class="about-row">
+                                    <i class="fa-solid fa-globe"></i>
+                                    <span class="about-label">Website</span>
+                                    <span id="upAboutWebsite">Not added</span>
+                                </div>
+
+                            </div>
+
+                            <div class="fb-about-block" data-about-index="1">
+
+                                <div class="fb-about-section-head">
+                                    <h3>Work</h3>
+                                </div>
+
+                                <div class="about-row">
+                                    <i class="fa-solid fa-briefcase"></i>
+                                    <span id="upAboutWork2">Not added</span>
+                                </div>
+
+                            </div>
+
+                            <div class="fb-about-block" data-about-index="2">
+
+                                <div class="fb-about-section-head">
+                                    <h3>Education</h3>
+                                </div>
+
+                                <div class="about-row">
+                                    <i class="fa-solid fa-graduation-cap"></i>
+                                    <span id="upAboutEducation2">Not added</span>
+                                </div>
+
+                            </div>
+
+                            <div class="fb-about-block" data-about-index="3">
+
+                                <div class="fb-about-section-head">
+                                    <h3>Contact info</h3>
+                                </div>
+
+                                <div class="about-row">
+                                    <i class="fa-solid fa-globe"></i>
+                                    <span class="about-label">Website</span>
+                                    <span id="upAboutWebsite2">Not added</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+
+            <!-- ========================= -->
+            <!-- FRIENDS PANE -->
+            <!-- ========================= -->
+
+            <div class="fb-pane" id="upFriendsPane">
+
+                <section class="profile-card fb-stack-card">
+
+                    <div class="fb-stack-head">
+
+                        <div class="fb-stack-title">
+                            <h2>Friends</h2>
+                            <p id="upPaneFriendsCount">0 friends</p>
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="friends-grid"
+                        id="upFriendsGrid"
+                    >
+                        <p class="empty-message">
+                            Loading friends...
+                        </p>
+                    </div>
+
+                </section>
+
+            </div>
+
+
+
+            <!-- ========================= -->
+            <!-- PHOTOS PANE -->
+            <!-- ========================= -->
+
+            <div class="fb-pane" id="upPhotosPane">
+
+                <section class="profile-card fb-stack-card">
+
+                    <div class="fb-stack-head">
+
+                        <div class="fb-stack-title">
+                            <h2>Photos</h2>
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="photo-grid"
+                        id="upPhotosGrid"
+                    >
+                        <p class="empty-message">
+                            Loading photos...
+                        </p>
+                    </div>
+
+                </section>
+
+            </div>
+
+
+
+            <!-- ========================= -->
+            <!-- REELS PANE -->
+            <!-- ========================= -->
+
+            <div class="fb-pane" id="upReelsPane">
+
+                <section class="profile-card fb-stack-card">
+
+                    <div class="fb-stack-head">
+
+                        <div class="fb-stack-title">
+                            <h2>Reels</h2>
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="photo-grid"
+                        id="upReelsGrid"
+                    >
+                        <p class="empty-message">
+                            Loading videos...
+                        </p>
+                    </div>
+
+                </section>
+
+            </div>
+
+
+
+            <!-- ========================= -->
+            <!-- MORE PANE -->
+            <!-- ========================= -->
+
+            <div class="fb-pane" id="upMorePane">
+
+                <section class="profile-card fb-stack-card">
+
+                    <div class="fb-stack-head">
+
+                        <div class="fb-stack-title">
+                            <h2>Events</h2>
+                        </div>
+
+                    </div>
+
+                    <p class="empty-message fb-stack-empty">
+                        No events to show yet.
+                    </p>
+
+                </section>
+
+                <section class="profile-card fb-stack-card">
+
+                    <div class="fb-stack-head">
+
+                        <div class="fb-stack-title">
+                            <h2>Likes</h2>
+                        </div>
+
+                    </div>
+
+                    <div
+                        class="photo-grid"
+                        id="upLikesGrid"
+                    >
+                        <p class="empty-message">
+                            Loading likes...
+                        </p>
+                    </div>
+
+                </section>
+
+            </div>
+
+        </div>
+
+
+    </main>
+
+
+
+    <!-- ================================= -->
+    <!-- POST LIGHTBOX (Instagram-style viewer) -->
+    <!-- ================================= -->
+
+    <div
+        id="upPostLightbox"
+        class="post-lightbox"
+        onclick="socialhubCloseUpPostLightbox(event)"
+    >
+
+
+        <div class="post-lightbox-box" id="upPostLightboxBox">
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ========================= -->
+    <!-- SCRIPTS -->
+    <!-- ========================= -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <script src="../core/supabase.js?v=1787000000033"></script>
+
+    <script src="../core/premium-ui.js?v=1787000000033"></script>
+
+    <script src="../core/script.js?v=1787000000033"></script>
+
+    <script src="../core/settings.js?v=1787000000033"></script>
+
+    <script src="../core/friends.js?v=1787000000033"></script>
+
+    <script src="../core/likes-comments.js?v=1787000000033"></script>
+
+    <script src="../core/user-search.js?v=1787000000033"></script>
+
+    <script src="../core/post-manage.js?v=1787000000033"></script>
+
+    <script src="../core/notifications.js?v=1787000000033"></script>
+
+    <script src="../core/messages.js?v=1787000000033"></script>
+
+    <script src="../core/shares.js?v=1787000000033"></script>
+
+    <script src="../watch/watch.js?v=1787000000033"></script>
+
+    <script src="profile-icons.js?v=1787000000033"></script>
+
+
+</body>
+
+</html>
