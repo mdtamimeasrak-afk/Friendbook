@@ -66,6 +66,8 @@
         "fa-flag": "flag",
         "fa-link": "link",
         "fa-lock": "lock",
+        "fa-badge-check": "badge-check",
+        "fa-chart-line": "chart-line",
         "fa-plus": "plus",
         "fa-check": "check",
         "fa-ellipsis": "ellipsis",

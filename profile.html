@@ -14,19 +14,19 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%231877f2'/%3E%3Ctext x='20' y='27' font-family='Arial' font-size='21' font-weight='800' fill='white' text-anchor='middle'%3ETR%3C/text%3E%3C/svg%3E">
 
 
-    <link rel="stylesheet" href="style.css?v=1787000000022">
+    <link rel="stylesheet" href="style.css?v=1787000000023">
 
-    <link rel="stylesheet" href="dashboard.css?v=1787000000022">
+    <link rel="stylesheet" href="dashboard.css?v=1787000000023">
 
-    <link rel="stylesheet" href="premium.css?v=1787000000022">
+    <link rel="stylesheet" href="premium.css?v=1787000000023">
 
-    <link rel="stylesheet" href="profile.css?v=1787000000022">
+    <link rel="stylesheet" href="profile.css?v=1787000000023">
 
-    <link rel="stylesheet" href="highlights.css?v=1787000000022">
+    <link rel="stylesheet" href="highlights.css?v=1787000000023">
 
-    <link rel="stylesheet" href="glass-theme.css?v=1787000000022">
+    <link rel="stylesheet" href="glass-theme.css?v=1787000000023">
 
-    <link rel="stylesheet" href="fb-profile.css?v=1787000000022">
+    <link rel="stylesheet" href="fb-profile.css?v=1787000000023">
 
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
@@ -182,6 +182,7 @@
                 <h1 class="fb-header-name" id="coverName">
                     User
                     <span class="fb-name-nick" id="headerNickname" style="display:none"></span>
+                    <i class="fa-solid fa-badge-check fb-name-badge" id="fbNameBadge" style="display:none" title="Verified"></i>
                 </h1>
 
                 <p class="fb-friends-line" id="fbFriendSummary">
@@ -289,6 +290,25 @@
                         <button type="button" onclick="socialhubProfileTaggingSettings()">
                             <i class="fa-solid fa-gear"></i>
                             Profile and tagging settings
+                        </button>
+
+                        <button type="button" id="fbMenuLock" onclick="socialhubProfileLockOpen()">
+                            <i class="fa-solid fa-lock"></i>
+                            Lock profile
+                        </button>
+
+                        <button type="button" id="fbMenuPro" onclick="socialhubProfileProOpen()">
+                            <i class="fa-solid fa-user"></i>
+                            Turn on pro mode
+                        </button>
+
+                        <button type="button" onclick="socialhubProfileBadgeOpen()">
+                            <i class="fa-solid fa-badge-check"></i>
+                            Reactivate your verified badge
+                        </button>
+
+                        <button type="button" class="fb-more-cancel" onclick="socialhubProfileMoreClose()">
+                            Cancel
                         </button>
 
                     </div>
@@ -1667,6 +1687,56 @@
 
     </div>
 
+    <!-- STEP 3 FEATURE MODALS: LOCK PROFILE / PRO MODE / VERIFIED BADGE -->
+
+    <div class="fb-profile-modal" id="fbLockModal" style="display:none">
+
+        <div class="fb-profile-modal-box fb-feature-box">
+
+            <div class="fb-feature-body" id="fbLockModalBody">
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="fb-profile-modal" id="fbProModal" style="display:none">
+
+        <div class="fb-profile-modal-box fb-feature-box">
+
+            <div class="fb-feature-body" id="fbProModalBody">
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="fb-profile-modal" id="fbBadgeModal" style="display:none">
+
+        <div class="fb-profile-modal-box fb-feature-box">
+
+            <div class="fb-feature-body" id="fbBadgeModalBody">
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="fb-profile-modal" id="fbProDashboardModal" style="display:none">
+
+        <div class="fb-profile-modal-box fb-feature-box fb-dash-box">
+
+            <div class="fb-feature-body" id="fbProDashboardBody">
+
+            </div>
+
+        </div>
+
+    </div>
+
     <!-- PERSONAL DETAILS EDIT MODAL -->
 
     <div class="pd-modal-backdrop" id="pdEditModal" style="display:none">
@@ -2512,45 +2582,45 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="supabase.js?v=1787000000022"></script>
+    <script src="supabase.js?v=1787000000023"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
 
-    <script src="premium-ui.js?v=1787000000022"></script>
+    <script src="premium-ui.js?v=1787000000023"></script>
 
-    <script src="script.js?v=1787000000022"></script>
+    <script src="script.js?v=1787000000023"></script>
 
-    <script src="image-upload.js?v=1787000000022"></script>
+    <script src="image-upload.js?v=1787000000023"></script>
 
-    <script src="post-manage.js?v=1787000000022"></script>
+    <script src="post-manage.js?v=1787000000023"></script>
 
-    <script src="friends.js?v=1787000000022"></script>
+    <script src="friends.js?v=1787000000023"></script>
 
-    <script src="likes-comments.js?v=1787000000022"></script>
+    <script src="likes-comments.js?v=1787000000023"></script>
 
-    <script src="shares.js?v=1787000000022"></script>
+    <script src="shares.js?v=1787000000023"></script>
 
-    <script src="profile-page.js?v=1787000000022"></script>
+    <script src="profile-page.js?v=1787000000023"></script>
 
-    <script src="user-search.js?v=1787000000022"></script>
+    <script src="user-search.js?v=1787000000023"></script>
 
-    <script src="notifications.js?v=1787000000022"></script>
+    <script src="notifications.js?v=1787000000023"></script>
 
-    <script src="settings.js?v=1787000000022"></script>
+    <script src="settings.js?v=1787000000023"></script>
 
-    <script src="messages.js?v=1787000000022"></script>
+    <script src="messages.js?v=1787000000023"></script>
 
-    <script src="stories.js?v=1787000000022"></script>
+    <script src="stories.js?v=1787000000023"></script>
 
-    <script src="watch.js?v=1787000000022"></script>
+    <script src="watch.js?v=1787000000023"></script>
 
-    <script src="highlights.js?v=1787000000022"></script>
+    <script src="highlights.js?v=1787000000023"></script>
 
-    <script src="profile-icons.js?v=1787000000022"></script>
+    <script src="profile-icons.js?v=1787000000023"></script>
 
-    <script src="profile-more.js?v=1787000000022"></script>
+    <script src="profile-more.js?v=1787000000023"></script>
 
-    <script src="profile-edit.js?v=1787000000022"></script>
+    <script src="profile-edit.js?v=1787000000023"></script>
 
 </body>
 

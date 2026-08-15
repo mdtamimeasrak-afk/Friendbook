@@ -753,6 +753,14 @@ function socialhubProfileToggleMore(event) {
         menu.style.display === "none"
             ? "block"
             : "none";
+
+    if (
+        menu.style.display === "block" &&
+        typeof window.socialhubProfileMoreRefreshLabels === "function"
+    ) {
+
+        window.socialhubProfileMoreRefreshLabels();
+    }
 }
 
 

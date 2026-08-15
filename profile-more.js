@@ -1490,6 +1490,714 @@
     }
 
     // ------------------------------------------
+    // STEP 3: LOCK PROFILE / PRO MODE / BADGE
+    // ------------------------------------------
+
+    var socialhubProfileFlags =
+        {
+            loaded: false,
+            locked: false,
+            pro: false,
+            verified: false
+        };
+
+    var socialhubProfileProInsightData =
+        [];
+
+    async function socialhubProfileLoadFlags() {
+
+        var me =
+            await socialhubGetMe();
+
+        if (!me) {
+
+            return;
+        }
+
+        var {
+            data
+        } = await db
+            .from("profiles")
+            .select("extra")
+            .eq("id", me.id)
+            .maybeSingle();
+
+        var extra =
+            (data && data.extra) || {};
+
+        socialhubProfileFlags.loaded = true;
+        socialhubProfileFlags.locked = !!extra.profile_locked;
+        socialhubProfileFlags.pro = !!extra.pro_mode;
+        socialhubProfileFlags.verified = !!extra.verified_badge;
+
+        socialhubProfileMoreRefreshLabels();
+    }
+
+    function socialhubProfileMoreRefreshLabels() {
+
+        var lockBtn =
+            document.getElementById("fbMenuLock");
+
+        var proBtn =
+            document.getElementById("fbMenuPro");
+
+        var badge =
+            document.getElementById("fbNameBadge");
+
+        if (lockBtn) {
+
+            lockBtn.innerHTML =
+                '<i class="fa-solid fa-lock"></i> ' +
+                (socialhubProfileFlags.locked
+                    ? "Unlock profile"
+                    : "Lock profile");
+        }
+
+        if (proBtn) {
+
+            proBtn.innerHTML =
+                '<i class="fa-solid fa-user"></i> ' +
+                (socialhubProfileFlags.pro
+                    ? "Professional mode"
+                    : "Turn on pro mode");
+        }
+
+        if (badge) {
+
+            badge.style.display =
+                socialhubProfileFlags.verified
+                    ? "inline-block"
+                    : "none";
+        }
+    }
+
+    function socialhubFeatureConfirmHtml(config) {
+
+        var itemsHtml = "";
+
+        (config.items || []).forEach(function (item) {
+
+            itemsHtml +=
+                '<li class="fb-feature-item">' +
+                '<i class="fa-solid fa-check"></i>' +
+                "<span>" + socialhubEscape(item) + "</span>" +
+                "</li>";
+        });
+
+        return (
+            '<div class="fb-feature-icon">' +
+            '<i class="fa-solid ' + config.icon + '"></i>' +
+            "</div>" +
+            '<h3 class="fb-feature-title">' + socialhubEscape(config.title) + "</h3>" +
+            '<p class="fb-feature-text">' + socialhubEscape(config.text) + "</p>" +
+            (itemsHtml ? '<ul class="fb-feature-items">' + itemsHtml + "</ul>" : "") +
+            '<div class="fb-feature-actions">' +
+            '<button type="button" class="fb-feature-btn fb-feature-ghost" onclick="' + config.cancelFn + '()">' +
+            socialhubEscape(config.cancelText || "Cancel") +
+            "</button>" +
+            '<button type="button" class="fb-feature-btn fb-feature-primary" onclick="' + config.actionFn + '()">' +
+            socialhubEscape(config.actionText) +
+            "</button>" +
+            "</div>"
+        );
+    }
+
+    function socialhubFeatureSuccessHtml(config) {
+
+        return (
+            '<div class="fb-feature-icon">' +
+            '<i class="fa-solid ' + config.icon + '"></i>' +
+            "</div>" +
+            '<h3 class="fb-feature-title">' + socialhubEscape(config.title) + "</h3>" +
+            '<p class="fb-feature-text">' + socialhubEscape(config.text) + "</p>" +
+            '<div class="fb-feature-actions">' +
+            '<button type="button" class="fb-feature-btn fb-feature-primary" onclick="' + config.doneFn + '()">' +
+            socialhubEscape(config.doneText || "OK") +
+            "</button>" +
+            "</div>"
+        );
+    }
+
+    function socialhubFeatureShowSuccess(modalId, bodyId, config) {
+
+        document
+            .getElementById(bodyId)
+            .innerHTML =
+            socialhubFeatureSuccessHtml(config);
+    }
+
+    function socialhubProfileFeatureClose() {
+
+        document
+            .getElementById("fbLockModal")
+            .style.display =
+            "none";
+
+        document
+            .getElementById("fbProModal")
+            .style.display =
+            "none";
+
+        document
+            .getElementById("fbBadgeModal")
+            .style.display =
+            "none";
+
+        document
+            .getElementById("fbProDashboardModal")
+            .style.display =
+            "none";
+    }
+
+    async function socialhubProfileSaveFlags(patch) {
+
+        var me =
+            await socialhubGetMe();
+
+        if (!me) {
+
+            return false;
+        }
+
+        var {
+            data
+        } = await db
+            .from("profiles")
+            .select("extra")
+            .eq("id", me.id)
+            .maybeSingle();
+
+        var extra =
+            Object.assign({}, (data && data.extra) || {}, patch);
+
+        var {
+            error
+        } = await db
+            .from("profiles")
+            .update({ extra: extra })
+            .eq("id", me.id);
+
+        if (error) {
+
+            socialhubToast("Could not save.", "error");
+
+            return false;
+        }
+
+        return true;
+    }
+
+    // ----- LOCK PROFILE -----
+
+    async function socialhubProfileLockOpen() {
+
+        if (!socialhubProfileFlags.loaded) {
+
+            await socialhubProfileLoadFlags();
+        }
+
+        var locked =
+            socialhubProfileFlags.locked;
+
+        document
+            .getElementById("fbLockModalBody")
+            .innerHTML =
+            socialhubFeatureConfirmHtml({
+
+                icon: "fa-lock",
+                title: locked ? "Unlock your profile?" : "Lock your profile?",
+                text: locked
+                    ? "Your profile will become visible to everyone again. Friends and non-friends will see your content as usual."
+                    : "When your profile is locked:",
+                items: locked
+                    ? null
+                    : [
+                        "Only friends can see most profile content",
+                        "Profile photos have increased privacy",
+                        "Non-friends have limited access"
+                    ],
+                actionText: locked ? "Unlock profile" : "Lock profile",
+                actionFn: locked
+                    ? "socialhubProfileUnlockConfirm"
+                    : "socialhubProfileLockConfirm"
+            });
+
+        document
+            .getElementById("fbLockModal")
+            .style.display =
+            "flex";
+    }
+
+    async function socialhubProfileLockConfirm() {
+
+        if (!(await socialhubProfileSaveFlags({ profile_locked: true }))) {
+
+            return;
+        }
+
+        socialhubProfileFlags.locked = true;
+
+        socialhubProfileMoreRefreshLabels();
+
+        socialhubFeatureShowSuccess(
+            "fbLockModal",
+            "fbLockModalBody",
+            {
+                icon: "fa-lock",
+                title: "Profile locked",
+                text: "Your profile privacy has been updated.",
+                doneText: "OK",
+                doneFn: "socialhubProfileFeatureClose"
+            }
+        );
+
+        socialhubToast("Profile locked.", "success");
+    }
+
+    async function socialhubProfileUnlockConfirm() {
+
+        if (!(await socialhubProfileSaveFlags({ profile_locked: false }))) {
+
+            return;
+        }
+
+        socialhubProfileFlags.locked = false;
+
+        socialhubProfileMoreRefreshLabels();
+
+        socialhubFeatureShowSuccess(
+            "fbLockModal",
+            "fbLockModalBody",
+            {
+                icon: "fa-lock",
+                title: "Profile unlocked",
+                text: "Your profile is now visible to everyone.",
+                doneText: "OK",
+                doneFn: "socialhubProfileFeatureClose"
+            }
+        );
+
+        socialhubToast("Profile unlocked.", "success");
+    }
+
+    // ----- PRO MODE -----
+
+    async function socialhubProfileProOpen() {
+
+        if (!socialhubProfileFlags.loaded) {
+
+            await socialhubProfileLoadFlags();
+        }
+
+        if (socialhubProfileFlags.pro) {
+
+            socialhubProfileProDashboardOpen();
+
+            return;
+        }
+
+        document
+            .getElementById("fbProModalBody")
+            .innerHTML =
+            socialhubFeatureConfirmHtml({
+
+                icon: "fa-badge-check",
+                title: "Turn on professional mode",
+                text: "Professional mode gives you tools to build a public presence and understand your audience.",
+                items: [
+                    "Professional dashboard",
+                    "Audience insights",
+                    "Content performance",
+                    "Public followers",
+                    "Professional tools"
+                ],
+                actionText: "Turn on",
+                actionFn: "socialhubProfileProConfirm"
+            });
+
+        document
+            .getElementById("fbProModal")
+            .style.display =
+            "flex";
+    }
+
+    async function socialhubProfileProConfirm() {
+
+        if (!(await socialhubProfileSaveFlags({ pro_mode: true }))) {
+
+            return;
+        }
+
+        socialhubProfileFlags.pro = true;
+
+        socialhubProfileMoreRefreshLabels();
+
+        socialhubFeatureShowSuccess(
+            "fbProModal",
+            "fbProModalBody",
+            {
+                icon: "fa-badge-check",
+                title: "Professional mode is on",
+                text: "Your professional tools are now available.",
+                doneText: "Done",
+                doneFn: "socialhubProfileProSuccessDone"
+            }
+        );
+
+        socialhubToast("Professional mode is on.", "success");
+    }
+
+    function socialhubProfileProSuccessDone() {
+
+        socialhubProfileFeatureClose();
+
+        socialhubProfileProDashboardOpen();
+    }
+
+    function socialhubProfileProDashboardOpen() {
+
+        var body =
+            document.getElementById("fbProDashboardBody");
+
+        body.innerHTML =
+            '<div class="fb-dash-head">' +
+            "<div>" +
+            "<h3>Professional dashboard</h3>" +
+            '<p>Overview of your professional presence.</p>' +
+            "</div>" +
+            '<button type="button" class="fb-modal-x" onclick="socialhubProfileFeatureClose()" title="Close">' +
+            '<i class="fa-solid fa-x"></i>' +
+            "</button>" +
+            "</div>" +
+            '<div class="fb-dash-loading">Loading insights...</div>';
+
+        document
+            .getElementById("fbProDashboardModal")
+            .style.display =
+            "flex";
+
+        socialhubProfileProLoadStats();
+    }
+
+    async function socialhubProfileFriendIds(meId) {
+
+        var {
+            data
+        } = await db
+            .from("friendships")
+            .select("requester_id, addressee_id")
+            .or(
+                "and(requester_id.eq." + meId + ",addressee_id.eq." + meId + "),"
+            )
+            .eq("status", "accepted");
+
+        var ids = [];
+
+        (data || []).forEach(function (f) {
+
+            var other =
+                f.requester_id === meId
+                    ? f.addressee_id
+                    : f.requester_id;
+
+            if (ids.indexOf(other) === -1) {
+
+                ids.push(other);
+            }
+        });
+
+        return ids;
+    }
+
+    async function socialhubProfileProLoadStats() {
+
+        var me =
+            await socialhubGetMe();
+
+        if (!me) {
+
+            return;
+        }
+
+        var friendIds =
+            await socialhubProfileFriendIds(me.id);
+
+        var {
+            data: myPosts
+        } = await db
+            .from("posts")
+            .select("id, content, image_url, video_url, created_at")
+            .eq("user_id", me.id)
+            .order("created_at", { ascending: false })
+            .limit(10);
+
+        var postIds =
+            (myPosts || []).map(function (p) { return p.id; });
+
+        var reach = 0;
+        var likes = 0;
+        var comments = 0;
+
+        socialhubProfileProInsightData =
+            [];
+
+        if (postIds.length) {
+
+            var [
+                viewsRes,
+                likesRes,
+                commentsRes
+            ] = await Promise.all([
+
+                db
+                    .from("post_views")
+                    .select("post_id", { count: "exact" })
+                    .in("post_id", postIds),
+                db
+                    .from("likes")
+                    .select("post_id", { count: "exact" })
+                    .in("post_id", postIds),
+                db
+                    .from("comments")
+                    .select("post_id", { count: "exact" })
+                    .in("post_id", postIds)
+            ]);
+
+            var likeMap = {};
+            var commentMap = {};
+            var viewMap = {};
+
+            (viewsRes.data || []).forEach(function (v) {
+
+                viewMap[v.post_id] = (viewMap[v.post_id] || 0) + 1;
+            });
+
+            (likesRes.data || []).forEach(function (l) {
+
+                likeMap[l.post_id] = (likeMap[l.post_id] || 0) + 1;
+            });
+
+            (commentsRes.data || []).forEach(function (c) {
+
+                commentMap[c.post_id] = (commentMap[c.post_id] || 0) + 1;
+            });
+
+            postIds.forEach(function (id) {
+
+                reach += viewMap[id] || 0;
+                likes += likeMap[id] || 0;
+                comments += commentMap[id] || 0;
+            });
+
+            socialhubProfileProInsightData =
+                (myPosts || []).map(function (p) {
+
+                    return {
+                        id: p.id,
+                        content: p.content,
+                        image_url: p.image_url,
+                        video_url: p.video_url,
+                        created_at: p.created_at,
+                        likes: likeMap[p.id] || 0,
+                        comments: commentMap[p.id] || 0,
+                        views: viewMap[p.id] || 0
+                    };
+                });
+        }
+
+        socialhubProfileProRenderStats(
+            reach,
+            likes + comments,
+            friendIds.length
+        );
+    }
+
+    function socialhubFormatCompact(n) {
+
+        n = n || 0;
+
+        if (n >= 1000) {
+
+            return (n / 1000).toFixed(n >= 10000 ? 0 : 1) + "K";
+        }
+
+        return String(n);
+    }
+
+    function socialhubProfileProRenderStats(reach, engagement, followers) {
+
+        var body =
+            document.getElementById("fbProDashboardBody");
+
+        var insightBtn =
+            socialhubProfileProInsightData.length
+                ? '<button type="button" class="fb-feature-btn fb-feature-primary fb-dash-insight-btn" onclick="socialhubProfileProInsights()">' +
+                  "View insights" +
+                  "</button>"
+                : '<p class="fb-dash-empty">No posts yet. Your performance will appear here once you publish.</p>';
+
+        body.innerHTML =
+            '<div class="fb-dash-head">' +
+            "<div>" +
+            "<h3>Professional dashboard</h3>" +
+            '<p>Overview of your professional presence.</p>' +
+            "</div>" +
+            '<button type="button" class="fb-modal-x" onclick="socialhubProfileFeatureClose()" title="Close">' +
+            '<i class="fa-solid fa-x"></i>' +
+            "</button>" +
+            "</div>" +
+            '<p class="fb-dash-section-title">Overview</p>' +
+            '<div class="fb-dash-stats">' +
+            '<div class="fb-dash-stat"><strong>' + socialhubFormatCompact(reach) + "</strong><span>Reach</span></div>" +
+            '<div class="fb-dash-stat"><strong>' + socialhubFormatCompact(engagement) + "</strong><span>Engagement</span></div>" +
+            '<div class="fb-dash-stat"><strong>' + socialhubFormatCompact(followers) + "</strong><span>Followers</span></div>" +
+            "</div>" +
+            '<p class="fb-dash-section-title">Content performance</p>' +
+            insightBtn;
+    }
+
+    function socialhubProfileProInsights() {
+
+        var body =
+            document.getElementById("fbProDashboardBody");
+
+        var rows = "";
+
+        socialhubProfileProInsightData.forEach(function (p) {
+
+            var thumb =
+                p.image_url || p.video_url;
+
+            rows +=
+                '<div class="fb-dash-insight-row">' +
+                (thumb
+                    ? '<img src="' + socialhubEscape(thumb) + '" alt="" />'
+                    : '<div class="fb-dash-insight-ph"><i class="fa-regular fa-file-lines"></i></div>') +
+                '<div class="fb-dash-insight-meta">' +
+                "<strong>" + socialhubEscape(p.content || "Photo / Video post") + "</strong>" +
+                "<span>" +
+                socialhubFormatCompact(p.views) + " views · " +
+                socialhubFormatCompact(p.likes) + " likes · " +
+                socialhubFormatCompact(p.comments) + " comments" +
+                "</span>" +
+                "</div>" +
+                '<button type="button" class="fb-dash-open" onclick="socialhubProfileProOpenPost(\'' + p.id + '\')" title="Open post">' +
+                '<i class="fa-solid fa-arrow-right"></i>' +
+                "</button>" +
+                "</div>";
+        });
+
+        body.innerHTML =
+            '<div class="fb-dash-head">' +
+            "<div>" +
+            "<h3>Content performance</h3>" +
+            '<p>How your recent posts are performing.</p>' +
+            "</div>" +
+            '<button type="button" class="fb-modal-x" onclick="socialhubProfileFeatureClose()" title="Close">' +
+            '<i class="fa-solid fa-x"></i>' +
+            "</button>" +
+            "</div>" +
+            '<div class="fb-dash-insights">' +
+            (rows || '<p class="fb-dash-empty">No post activity yet.</p>') +
+            "</div>" +
+            '<div class="fb-feature-actions">' +
+            '<button type="button" class="fb-feature-btn fb-feature-ghost" onclick="socialhubProfileProDashboardOpen()">' +
+            "Back" +
+            "</button>" +
+            "</div>";
+    }
+
+    function socialhubProfileProOpenPost(postId) {
+
+        socialhubProfileFeatureClose();
+
+        var cache =
+            window.socialhubMyPostsCache;
+
+        if (cache && cache.some(function (p) { return p.id === postId; })) {
+
+            socialhubOpenPostLightbox(postId);
+
+            return;
+        }
+
+        socialhubSwitchFbTab("posts");
+    }
+
+    // ----- VERIFIED BADGE -----
+
+    async function socialhubProfileBadgeOpen() {
+
+        if (!socialhubProfileFlags.loaded) {
+
+            await socialhubProfileLoadFlags();
+        }
+
+        var body =
+            document.getElementById("fbBadgeModalBody");
+
+        if (socialhubProfileFlags.verified) {
+
+            body.innerHTML =
+                '<div class="fb-feature-icon">' +
+                '<i class="fa-solid fa-badge-check"></i>' +
+                "</div>" +
+                '<h3 class="fb-feature-title">Your verified badge</h3>' +
+                '<p class="fb-feature-text">Your verified badge is currently active on your profile.</p>' +
+                '<p class="fb-feature-status fb-feature-status-active">Status: Active</p>' +
+                '<div class="fb-feature-actions">' +
+                '<button type="button" class="fb-feature-btn fb-feature-primary" onclick="socialhubProfileFeatureClose()">Done</button>' +
+                "</div>";
+        } else {
+
+            body.innerHTML =
+                socialhubFeatureConfirmHtml({
+
+                    icon: "fa-badge-check",
+                    title: "Your verified badge",
+                    text: "Reactivate your verified badge to show the verification indicator on your profile.",
+                    items: null,
+                    cancelText: "Cancel",
+                    cancelFn: "socialhubProfileFeatureClose",
+                    actionText: "Reactivate",
+                    actionFn: "socialhubProfileBadgeConfirm"
+                }) +
+                '<p class="fb-feature-status">Status: Available</p>';
+        }
+
+        document
+            .getElementById("fbBadgeModal")
+            .style.display =
+            "flex";
+    }
+
+    async function socialhubProfileBadgeConfirm() {
+
+        if (!(await socialhubProfileSaveFlags({ verified_badge: true }))) {
+
+            return;
+        }
+
+        socialhubProfileFlags.verified = true;
+
+        socialhubProfileMoreRefreshLabels();
+
+        socialhubFeatureShowSuccess(
+            "fbBadgeModal",
+            "fbBadgeModalBody",
+            {
+                icon: "fa-badge-check",
+                title: "Verified badge reactivated",
+                text: "Your badge is now active on your profile.",
+                doneText: "Done",
+                doneFn: "socialhubProfileFeatureClose"
+            }
+        );
+
+        socialhubToast("Verified badge reactivated.", "success");
+    }
+
+    // ------------------------------------------
     // WIRE
     // ------------------------------------------
 
@@ -1646,6 +2354,24 @@
 
                 socialhubProfileTaggingClose();
             }
+
+            if (
+                document
+                    .getElementById("fbLockModal")
+                    .style.display !== "none" ||
+                document
+                    .getElementById("fbProModal")
+                    .style.display !== "none" ||
+                document
+                    .getElementById("fbBadgeModal")
+                    .style.display !== "none" ||
+                document
+                    .getElementById("fbProDashboardModal")
+                    .style.display !== "none"
+            ) {
+
+                socialhubProfileFeatureClose();
+            }
         });
 
         document
@@ -1662,6 +2388,68 @@
 
                 control.addEventListener("change", socialhubProfileTaggingSave);
             });
+
+        [
+            "fbLockModal",
+            "fbProModal",
+            "fbBadgeModal",
+            "fbProDashboardModal"
+        ]
+            .forEach(function (id) {
+
+                var modal =
+                    document
+                        .getElementById(id);
+
+                if (!modal) {
+
+                    return;
+                }
+
+                modal.addEventListener("click", function (event) {
+
+                    if (event.target === modal) {
+
+                        socialhubProfileFeatureClose();
+                    }
+                });
+            });
+
+        socialhubProfileLoadFlags();
     });
+
+    // ------------------------------------------
+    // EXPOSE (inline onclick handlers)
+    // ------------------------------------------
+
+    window.socialhubProfileMoreClose = socialhubProfileMoreClose;
+    window.socialhubProfileViewAs = socialhubProfileViewAs;
+    window.socialhubProfileExitViewAs = socialhubProfileExitViewAs;
+    window.socialhubProfileSearchOpen = socialhubProfileSearchOpen;
+    window.socialhubProfileSearchClose = socialhubProfileSearchClose;
+    window.socialhubProfileHighlightsEdit = socialhubProfileHighlightsEdit;
+    window.socialhubProfileHighlightsClose = socialhubProfileHighlightsClose;
+    window.socialhubProfileHighlightsNew = socialhubProfileHighlightsNew;
+    window.socialhubProfileStatusOpen = socialhubProfileStatusOpen;
+    window.socialhubProfileStatusClose = socialhubProfileStatusClose;
+    window.socialhubProfileStatusReview = socialhubProfileStatusReview;
+    window.socialhubProfileActivityLog = socialhubProfileActivityLog;
+    window.socialhubProfileActivityClose = socialhubProfileActivityClose;
+    window.socialhubProfileActivityRender = socialhubProfileActivityRender;
+    window.socialhubProfileTaggingSettings = socialhubProfileTaggingSettings;
+    window.socialhubProfileTaggingClose = socialhubProfileTaggingClose;
+    window.socialhubProfileLockOpen = socialhubProfileLockOpen;
+    window.socialhubProfileLockConfirm = socialhubProfileLockConfirm;
+    window.socialhubProfileUnlockConfirm = socialhubProfileUnlockConfirm;
+    window.socialhubProfileFeatureClose = socialhubProfileFeatureClose;
+    window.socialhubProfileProOpen = socialhubProfileProOpen;
+    window.socialhubProfileProConfirm = socialhubProfileProConfirm;
+    window.socialhubProfileProSuccessDone = socialhubProfileProSuccessDone;
+    window.socialhubProfileProDashboardOpen = socialhubProfileProDashboardOpen;
+    window.socialhubProfileProInsights = socialhubProfileProInsights;
+    window.socialhubProfileProOpenPost = socialhubProfileProOpenPost;
+    window.socialhubProfileBadgeOpen = socialhubProfileBadgeOpen;
+    window.socialhubProfileBadgeConfirm = socialhubProfileBadgeConfirm;
+    window.socialhubProfileMoreRefreshLabels = socialhubProfileMoreRefreshLabels;
 
 })();

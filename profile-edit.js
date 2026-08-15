@@ -1640,4 +1640,14 @@
         socialhubPdRender();
     });
 
+    // ------------------------------------------
+    // EXPOSE (safe cross-file access)
+    // ------------------------------------------
+
+    window.socialhubPdOpen = socialhubPdOpen;
+    window.socialhubPdClose = socialhubPdClose;
+    window.socialhubPdRowVisMenu = socialhubPdRowVisMenu;
+    window.socialhubPdVisControl = socialhubPdVisControl;
+    window.socialhubPdAskRemove = socialhubPdAskRemove;
+
 })();
