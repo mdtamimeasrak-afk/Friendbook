@@ -1240,7 +1240,7 @@ async function socialhubEventLoad() {
         return;
     }
 
-    document.title = event.title + " - Friendbook";
+    document.title = event.title + " - Friendio";
 
     const isCreator =
         event.created_by === me.id;

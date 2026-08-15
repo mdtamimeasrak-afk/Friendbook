@@ -236,7 +236,7 @@
                 <div class="adm-denied">
                     <i class="fa-solid fa-ban"></i>
                     <p>You don't have permission to view this page.<br>
-                    Only Friendbook admins can access the dashboard.</p>
+                    Only Friendio admins can access the dashboard.</p>
                 </div>
             `;
 

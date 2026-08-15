@@ -955,7 +955,7 @@ async function loadSearchResultsPage() {
 
         title.innerText =
             query === ""
-                ? "Search Friendbook"
+                ? "Search Friendio"
                 : `Results for "${query}"`;
     }
 

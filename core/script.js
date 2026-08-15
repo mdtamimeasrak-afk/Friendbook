@@ -2104,7 +2104,7 @@ async function testDB() {
 testDB();
 
 // ==========================================
-// Friendbook - Step 10.18
+// Friendio - Step 10.18
 // Sync Profile Name with Auth Metadata
 // ==========================================
 
@@ -2195,7 +2195,7 @@ document.addEventListener(
 );
 
 // ==========================================
-// Friendbook - Step 10.19
+// Friendio - Step 10.19
 // Sync Edited Name with Auth Metadata
 // ==========================================
 
@@ -2263,7 +2263,7 @@ async function syncEditedNameWithAuth() {
     }
 }
 // ==========================================
-// Friendbook - Step 10.20
+// Friendio - Step 10.20
 // Run Auth Sync After Profile Save
 // ==========================================
 
@@ -2294,11 +2294,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 // ==========================================
-// Friendbook - Step 10.21
+// Friendio - Step 10.21
 // Profile Session Refresh
 // ==========================================
 
-async function refreshFriendbookProfile() {
+async function refreshFriendioProfile() {
 
     try {
 
@@ -2329,7 +2329,7 @@ async function refreshFriendbookProfile() {
         await showCurrentUserData();
 
         console.log(
-            "✅ Friendbook profile refreshed!"
+            "✅ Friendio profile refreshed!"
         );
 
     } catch (error) {
@@ -2353,7 +2353,7 @@ document.addEventListener(
         ) {
 
             setTimeout(
-                refreshFriendbookProfile,
+                refreshFriendioProfile,
                 500
             );
 
@@ -2471,7 +2471,7 @@ document.addEventListener(
     }
 );
 // ==========================================
-// Friendbook - Step 10.24
+// Friendio - Step 10.24
 // Create Post -> Supabase
 // ==========================================
 
@@ -2562,7 +2562,7 @@ async function createPostInSupabase(event) {
     }
 }
 // ==========================================
-// Friendbook - Step 10.25
+// Friendio - Step 10.25
 // Connect Create Post to Supabase
 // ==========================================
 
@@ -2594,7 +2594,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 });
 // ==========================================
-// Friendbook - Step 10.26
+// Friendio - Step 10.26
 // Load Posts From Supabase
 // ==========================================
 
@@ -2757,7 +2757,7 @@ async function loadPostsFromSupabase() {
 // (legacy auto-load removed: the Step 10.31
 //  loader renders the feed with real names)
 // ==========================================
-// Friendbook - Step 10.30
+// Friendio - Step 10.30
 // Save Background Post to Supabase
 // ==========================================
 
@@ -2950,7 +2950,7 @@ document.addEventListener(
     }
 );
 // ==========================================
-// Friendbook - Step 10.30 FIX
+// Friendio - Step 10.30 FIX
 // Prevent duplicate post creation
 // ==========================================
 
@@ -2987,7 +2987,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 // ==========================================
-// Friendbook - Step 10.31
+// Friendio - Step 10.31
 // Final Post Loader
 // ==========================================
 
@@ -3008,7 +3008,7 @@ document.addEventListener(
     }
 );
 // ======================================================
-// Friendbook - Step 10.31 FINAL
+// Friendio - Step 10.31 FINAL
 // Real User Name + Clean Text + Background
 // ======================================================
 
@@ -3288,7 +3288,7 @@ function socialhubBuildPostArticle(post, profileMap) {
 
             const userName =
                 profile?.full_name ||
-                "Friendbook User";
+                "Friendio User";
 
             const username =
                 profile?.username ||
@@ -3724,7 +3724,7 @@ document.addEventListener(
     }
 );
 // ======================================================
-// Friendbook - Step 10.31.1
+// Friendio - Step 10.31.1
 // Premium Feed Loading
 // ======================================================
 
@@ -3775,7 +3775,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // ======================================================
-// Friendbook - POST AUDIENCE
+// Friendio - POST AUDIENCE
 // Public / Friends / Friends of Friends / Only Me
 // ======================================================
 
@@ -4134,7 +4134,7 @@ async function socialhubFilterVisiblePosts(posts) {
 }
 
 // ======================================================
-// Friendbook - HEIC / HEIF → JPEG CONVERSION
+// Friendio - HEIC / HEIF → JPEG CONVERSION
 // (iPhone photos don't display in most browsers)
 // ======================================================
 

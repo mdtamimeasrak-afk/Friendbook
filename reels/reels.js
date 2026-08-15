@@ -288,7 +288,7 @@ function socialhubReelBuild(reel, profile, me) {
                 <div>
 
                     <p class="reel-owner-name">
-                        ${socialhubReelEscape(profile?.full_name || "Friendbook User")}
+                        ${socialhubReelEscape(profile?.full_name || "Friendio User")}
                     </p>
 
                     <p class="reel-caption">

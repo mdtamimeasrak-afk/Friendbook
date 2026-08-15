@@ -812,7 +812,7 @@ async function socialhubLiveRoomLoad() {
     const isHost =
         session.host_id === me.id;
 
-    document.title = session.title + " - Friendbook Live";
+    document.title = session.title + " - Friendio Live";
 
     const hostMap =
         await socialhubLiveProfileMap([session.host_id]);
@@ -855,7 +855,7 @@ async function socialhubLiveRoomLoad() {
 
                 <div>
                     <b>${socialhubLiveEscape(socialhubLiveRoomState.host.full_name || "Someone")}</b>
-                    <small>Started ${socialhubLiveElapsed(session.started_at)} ago · Live on Friendbook</small>
+                    <small>Started ${socialhubLiveElapsed(session.started_at)} ago · Live on Friendio</small>
                 </div>
 
             </div>

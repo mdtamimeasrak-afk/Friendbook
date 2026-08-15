@@ -693,7 +693,7 @@ async function socialhubAlbumLoad() {
 
     socialhubAlbumState.album = album;
 
-    document.title = album.name + " - Friendbook";
+    document.title = album.name + " - Friendio";
 
     const isMine =
         album.user_id === me.id;

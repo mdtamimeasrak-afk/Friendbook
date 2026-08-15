@@ -1250,7 +1250,7 @@ async function socialhubGroupLoad() {
 
     socialhubGroupCache = group;
 
-    document.title = group.name + " - Friendbook";
+    document.title = group.name + " - Friendio";
 
     const isCreator =
         group.created_by === me.id;

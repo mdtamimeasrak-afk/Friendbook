@@ -31,7 +31,7 @@ var db = window.db || supabaseClient;
 // CUSTOM LOGO CONFIG
 // ======================================================
 // Ekhane nijer logo image URL ta diye din.
-// URL khali thakle default Friendbook "SH" mark use hobe.
+// URL khali thakle default Friendio "SH" mark use hobe.
 // Logo use hobe: story viewer head, "Your story" ring
 // ar story media r watermark hishebe.
 // ======================================================
@@ -55,7 +55,7 @@ function socialhubStoryLogoHTML(size = "") {
             >
                 <img
                     src="${socialhubEscape(SOCIALHUB_STORY_LOGO_URL)}"
-                    alt="Friendbook"
+                    alt="Friendio"
                 >
             </div>
         `;

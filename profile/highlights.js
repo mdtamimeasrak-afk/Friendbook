@@ -1,5 +1,5 @@
 // ======================================================
-// Friendbook - HIGHLIGHTS (Instagram-style)
+// Friendio - HIGHLIGHTS (Instagram-style)
 // ======================================================
 // Create / edit / view profile highlights. Stories-like
 // full-screen viewer with auto-advance + progress bars.
