@@ -50,6 +50,7 @@
         "fa-face-smile": "smile",
         "fa-thumbs-up": "thumbs-up",
         "fa-comment": "message-circle",
+        "fa-comment-dots": "message-circle",
         "fa-share-nodes": "share-2",
         "fa-bookmark": "bookmark",
         "fa-magnifying-glass": "search",

@@ -7604,3 +7604,11 @@ body:not(.dark-mode) .fb-cover-skeleton {
     background: #d8dade;
 }
 
+body:not(.dark-mode) .fb-left-photo-tile {
+    background: rgba(0, 0, 0, 0.06);
+}
+
+body:not(.dark-mode) .fb-left-friend:hover {
+    background: rgba(0, 0, 0, 0.06);
+}
+
