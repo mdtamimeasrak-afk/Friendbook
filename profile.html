@@ -14,19 +14,19 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%231877f2'/%3E%3Ctext x='20' y='27' font-family='Arial' font-size='21' font-weight='800' fill='white' text-anchor='middle'%3ETR%3C/text%3E%3C/svg%3E">
 
 
-    <link rel="stylesheet" href="style.css?v=1787000000027">
+    <link rel="stylesheet" href="style.css?v=1787000000028">
 
-    <link rel="stylesheet" href="dashboard.css?v=1787000000027">
+    <link rel="stylesheet" href="dashboard.css?v=1787000000028">
 
-    <link rel="stylesheet" href="premium.css?v=1787000000027">
+    <link rel="stylesheet" href="premium.css?v=1787000000028">
 
-    <link rel="stylesheet" href="profile.css?v=1787000000027">
+    <link rel="stylesheet" href="profile.css?v=1787000000028">
 
-    <link rel="stylesheet" href="highlights.css?v=1787000000027">
+    <link rel="stylesheet" href="highlights.css?v=1787000000028">
 
-    <link rel="stylesheet" href="glass-theme.css?v=1787000000027">
+    <link rel="stylesheet" href="glass-theme.css?v=1787000000028">
 
-    <link rel="stylesheet" href="fb-profile.css?v=1787000000027">
+    <link rel="stylesheet" href="fb-profile.css?v=1787000000028">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
@@ -255,6 +255,10 @@
 
                 <button type="button" class="fb-primary-btn" onclick="socialhubOpenStoryCreator()">
                     ➕ Add to story
+                </button>
+
+                <button type="button" class="fb-ghost-btn" onclick="socialhubProfileAvatarUpdate()">
+                    📷 Update photo
                 </button>
 
                 <button type="button" class="fb-ghost-btn" onclick="openEditProfile()">
@@ -1452,34 +1456,39 @@
 
         <section class="fb-posts-stack" id="fbPostsStack">
 
-            <section class="profile-card fb-profile-composer" id="profileComposerBox">
+<section class="profile-card fb-profile-composer" id="profileComposerBox">
 
                 <div class="fb-composer-top-row">
 
                     <div class="avatar">👤</div>
 
-                    <button type="button" class="fb-composer-open" onclick="socialhubProfileOpenComposer()">
+                    <button type="button" class="fb-composer-open" onclick="socialhubProfileComposerExpand()">
                         What's on your mind?
                     </button>
 
                 </div>
 
-                <div class="fb-composer-actions">
+                <div class="fb-composer-inline" id="fbComposerInline" style="display:none">
 
-                    <button type="button" onclick="socialhubToast('Live video coming soon!', 'info')">
-                        <i class="fa-solid fa-video" style="color:#f02849"></i>
-                        Live video
-                    </button>
+                    <textarea
+                        id="profileInlineInput"
+                        rows="3"
+                        maxlength="5000"
+                        placeholder="What's on your mind?"
+                    ></textarea>
 
-                    <button type="button" onclick="socialhubProfilePickPhoto()">
-                        <i class="fa-solid fa-images" style="color:#45bd62"></i>
-                        Photo/video
-                    </button>
+                    <div class="fb-composer-actions">
 
-                    <button type="button" onclick="socialhubToast('Feeling/activity coming soon!', 'info')">
-                        <i class="fa-solid fa-face-smile" style="color:#f7b928"></i>
-                        Feeling/activity
-                    </button>
+                        <button type="button" onclick="socialhubProfilePickPhoto()">
+                            <i class="fa-solid fa-images" style="color:#45bd62"></i>
+                            Photo/video
+                        </button>
+
+                        <button type="button" class="fb-composer-post" id="profileInlinePostBtn" onclick="socialhubProfileInlinePost()">
+                            Post
+                        </button>
+
+                    </div>
 
                 </div>
 
@@ -2818,45 +2827,45 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="supabase.js?v=1787000000027"></script>
+    <script src="supabase.js?v=1787000000028"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
 
-    <script src="premium-ui.js?v=1787000000027"></script>
+    <script src="premium-ui.js?v=1787000000028"></script>
 
-    <script src="script.js?v=1787000000027"></script>
+    <script src="script.js?v=1787000000028"></script>
 
-    <script src="image-upload.js?v=1787000000027"></script>
+    <script src="image-upload.js?v=1787000000028"></script>
 
-    <script src="post-manage.js?v=1787000000027"></script>
+    <script src="post-manage.js?v=1787000000028"></script>
 
-    <script src="friends.js?v=1787000000027"></script>
+    <script src="friends.js?v=1787000000028"></script>
 
-    <script src="likes-comments.js?v=1787000000027"></script>
+    <script src="likes-comments.js?v=1787000000028"></script>
 
-    <script src="shares.js?v=1787000000027"></script>
+    <script src="shares.js?v=1787000000028"></script>
 
-    <script src="profile-page.js?v=1787000000027"></script>
+    <script src="profile-page.js?v=1787000000028"></script>
 
-    <script src="user-search.js?v=1787000000027"></script>
+    <script src="user-search.js?v=1787000000028"></script>
 
-    <script src="notifications.js?v=1787000000027"></script>
+    <script src="notifications.js?v=1787000000028"></script>
 
-    <script src="settings.js?v=1787000000027"></script>
+    <script src="settings.js?v=1787000000028"></script>
 
-    <script src="messages.js?v=1787000000027"></script>
+    <script src="messages.js?v=1787000000028"></script>
 
-    <script src="stories.js?v=1787000000027"></script>
+    <script src="stories.js?v=1787000000028"></script>
 
-    <script src="watch.js?v=1787000000027"></script>
+    <script src="watch.js?v=1787000000028"></script>
 
-    <script src="highlights.js?v=1787000000027"></script>
+    <script src="highlights.js?v=1787000000028"></script>
 
-    <script src="profile-icons.js?v=1787000000027"></script>
+    <script src="profile-icons.js?v=1787000000028"></script>
 
-    <script src="profile-more.js?v=1787000000027"></script>
+    <script src="profile-more.js?v=1787000000028"></script>
 
-    <script src="profile-edit.js?v=1787000000027"></script>
+    <script src="profile-edit.js?v=1787000000028"></script>
 
 </body>
 

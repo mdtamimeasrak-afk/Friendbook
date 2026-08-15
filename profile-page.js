@@ -535,6 +535,103 @@ function socialhubProfileOpenComposer() {
 }
 
 
+function socialhubProfileComposerExpand() {
+
+    const inline =
+        document.getElementById("fbComposerInline");
+
+    if (!inline) {
+        socialhubProfileOpenComposer();
+        return;
+    }
+
+    const shown =
+        inline.style.display === "flex";
+
+    inline.style.display = shown ? "none" : "flex";
+
+    if (!shown) {
+
+        setTimeout(() => {
+
+            document
+                .getElementById("profileInlineInput")
+                ?.focus();
+        }, 60);
+    }
+}
+
+
+async function socialhubProfileInlinePost() {
+
+    const input =
+        document.getElementById("profileInlineInput");
+
+    const content =
+        (input?.value || "").trim();
+
+    if (!content) {
+
+        socialhubToast(
+            "Write something first.",
+            "info"
+        );
+
+        return;
+    }
+
+    const button =
+        document.getElementById("profileInlinePostBtn");
+
+    const ok =
+        await socialhubProfilePublish(
+            content,
+            null,
+            button
+        );
+
+    if (ok && input) {
+
+        input.value = "";
+
+        const inline =
+            document.getElementById("fbComposerInline");
+
+        if (inline) {
+
+            inline.style.display = "none";
+        }
+    }
+}
+
+
+function socialhubProfileAvatarUpdate() {
+
+    const photo =
+        document.querySelector(
+            ".fb-avatar-wrap .profile-photo"
+        );
+
+    if (!photo) {
+        return;
+    }
+
+    const overlay =
+        photo.querySelector(
+            ".socialhub-avatar-overlay"
+        );
+
+    if (overlay) {
+
+        overlay.click();
+
+    } else {
+
+        photo.click();
+    }
+}
+
+
 function socialhubProfileCloseComposer() {
 
     document.getElementById("profileComposerModal").style.display =
@@ -637,6 +734,35 @@ async function socialhubProfileSubmitPost() {
         return;
     }
 
+    const button =
+        document.getElementById("profileComposerPostBtn");
+
+    const ok =
+        await socialhubProfilePublish(
+            content,
+            image,
+            button
+        );
+
+    if (ok) {
+
+        socialhubProfileCloseComposer();
+
+        if (input) {
+            input.value = "";
+        }
+
+        socialhubProfileComposerRemovePhoto();
+
+        await socialhubLoadMyPosts();
+
+        socialhubLoadMyStats();
+    }
+}
+
+
+async function socialhubProfilePublish(content, image, button) {
+
     const me =
         await socialhubGetMe();
 
@@ -644,15 +770,15 @@ async function socialhubProfileSubmitPost() {
 
         alert("Please login first.");
 
-        return;
+        return false;
     }
 
-    const button =
-        document.getElementById("profileComposerPostBtn");
+    if (button) {
 
-    button.disabled = true;
+        button.disabled = true;
 
-    button.innerText = "Posting...";
+        button.innerText = "Posting...";
+    }
 
     let imageUrl = null;
 
@@ -714,38 +840,34 @@ async function socialhubProfileSubmitPost() {
             err
         );
 
-        button.disabled = false;
+        if (button) {
 
-        button.innerText = "Post";
+            button.disabled = false;
+
+            button.innerText = "Post";
+        }
 
         alert(
             "Could not create the post.\n\n" +
             err.message
         );
 
-        return;
+        return false;
     }
 
-    socialhubProfileCloseComposer();
+    if (button) {
 
-    if (input) {
-        input.value = "";
+        button.disabled = false;
+
+        button.innerText = "Post";
     }
-
-    socialhubProfileComposerRemovePhoto();
-
-    button.disabled = false;
-
-    button.innerText = "Post";
 
     socialhubToast(
         "Posted! 🎉",
         "success"
     );
 
-    await socialhubLoadMyPosts();
-
-    socialhubLoadMyStats();
+    return true;
 }
 
 

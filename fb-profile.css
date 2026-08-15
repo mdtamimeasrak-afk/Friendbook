@@ -7612,3 +7612,250 @@ body:not(.dark-mode) .fb-left-friend:hover {
     background: rgba(0, 0, 0, 0.06);
 }
 
+/* ======================================================
+   INLINE PROFILE COMPOSER (home-feed style quick post)
+   ====================================================== */
+
+.fb-composer-inline {
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-top: 12px;
+
+    border-top: 1px solid #e4e6eb;
+
+    padding-top: 12px;
+}
+
+.fb-composer-inline textarea {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    min-height: 84px;
+
+    padding: 12px 14px;
+
+    border: 1px solid #ccd0d5;
+
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #1c1e21;
+
+    font-size: 15px;
+
+    font-family: inherit;
+
+    line-height: 1.5;
+
+    resize: vertical;
+
+    outline: none;
+}
+
+.fb-composer-inline textarea:focus {
+    border-color: #1877f2;
+
+    box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.15);
+}
+
+.fb-composer-inline textarea::placeholder {
+    color: #65676b;
+}
+
+.fb-composer-inline .fb-composer-actions {
+    margin-top: 0;
+
+    border-top: none;
+
+    padding-top: 0;
+}
+
+.fb-composer-inline .fb-composer-post {
+    flex: 0 0 auto;
+
+    min-width: 96px;
+
+    height: 38px;
+
+    padding: 0 20px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #1877f2;
+
+    color: #ffffff;
+
+    font-size: 14px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: background 0.15s;
+}
+
+.fb-composer-inline .fb-composer-post:hover {
+    background: #166fe5;
+}
+
+.fb-composer-inline .fb-composer-post:disabled {
+    opacity: 0.6;
+
+    cursor: default;
+}
+
+body.dark-mode .fb-composer-inline {
+    border-top-color: rgba(255, 255, 255, 0.12);
+}
+
+body.dark-mode .fb-composer-inline textarea {
+    background: #3a3b3c;
+
+    border-color: #4e4f52;
+
+    color: #e4e6eb;
+}
+
+body.dark-mode .fb-composer-inline textarea::placeholder {
+    color: #b0b3b8;
+}
+
+body.dark-mode .fb-composer-inline .fb-composer-post {
+    background: #1877f2;
+
+    color: #ffffff;
+}
+
+/* ======================================================
+   FORCED TEXT COLORS — Intro card (both modes)
+   ====================================================== */
+
+.fb-left-card .fb-left-bio,
+.fb-left-card .about-row {
+    color: #050505;
+}
+
+.fb-left-card .about-row i {
+    color: #65676b;
+}
+
+body.dark-mode .fb-left-card .fb-left-bio,
+body.dark-mode .fb-left-card .about-row {
+    color: #e4e6eb;
+}
+
+body.dark-mode .fb-left-card .about-row i {
+    color: #b0b3b8;
+}
+
+body.dark-mode .fb-left-friend-name {
+    color: #e4e6eb;
+}
+
+body:not(.dark-mode) .fb-left-friend-name {
+    color: #050505;
+}
+
+body.dark-mode .fb-left-empty {
+    color: #b0b3b8;
+}
+
+/* ======================================================
+   FORCED TEXT COLORS — Edit profile modal (both modes)
+   ====================================================== */
+
+.edit-profile-header h2,
+.edit-profile-panel label {
+    color: #050505;
+}
+
+body.dark-mode .edit-profile-header h2,
+body.dark-mode .edit-profile-panel label {
+    color: #e4e6eb;
+}
+
+.edit-profile-field input,
+.edit-profile-field textarea,
+.edit-profile-field select {
+    background: #ffffff;
+
+    color: #1c1e21;
+}
+
+body.dark-mode .edit-profile-field input,
+body.dark-mode .edit-profile-field textarea,
+body.dark-mode .edit-profile-field select {
+    background: #3a3b3c;
+
+    border-color: #4e4f52;
+
+    color: #e4e6eb;
+}
+
+.edit-profile-actions button {
+    background: #e4e6eb;
+
+    color: #050505;
+}
+
+body.dark-mode .edit-profile-actions button {
+    background: #3a3b3c;
+
+    color: #e4e6eb;
+}
+
+/* ======================================================
+   FORCED TEXT COLORS — Photos / Reels areas (both modes)
+   ====================================================== */
+
+body.dark-mode .fb-stack-card .photo-grid .empty-message,
+body.dark-mode .fb-stack-card .fb-mini-photos .empty-message {
+    color: #b0b3b8;
+}
+
+body:not(.dark-mode) .fb-stack-card .photo-grid .empty-message,
+body:not(.dark-mode) .fb-stack-card .fb-mini-photos .empty-message {
+    color: #65676b;
+}
+
+body.dark-mode .fb-stack-card .photo-grid .profile-photo-item {
+    background: #3a3b3c;
+}
+
+body:not(.dark-mode) .fb-stack-card .photo-grid .profile-photo-item {
+    background: #f0f2f5;
+}
+
+body.dark-mode .profile-photo-video-caption {
+    color: #ffffff;
+
+    background: linear-gradient(
+        transparent,
+        rgba(0, 0, 0, 0.75)
+    );
+}
+
+body:not(.dark-mode) .profile-photo-video-caption {
+    color: #ffffff;
+
+    background: linear-gradient(
+        transparent,
+        rgba(0, 0, 0, 0.75)
+    );
+}
+
+body.dark-mode .fb-stack-title h2,
+body.dark-mode .fb-stack-head .fb-stack-link {
+    color: #e4e6eb;
+}
+
+body:not(.dark-mode) .fb-stack-title h2 {
+    color: #050505;
+}
+
