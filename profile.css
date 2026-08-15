@@ -3726,41 +3726,35 @@ body.dark-mode .fb-friend-summary {
 }
 
 
-@media (prefers-color-scheme: dark) {
+/* Site dark mode (not OS preference) */
 
-    .socialhub-avatar-overlay {
-        background: #3a3b3c;
+body.dark-mode .socialhub-avatar-overlay {
+    background: #3a3b3c;
 
-        color: #fff;
-    }
-
-    .socialhub-photo-menu {
-        background: #242526;
-
-        box-shadow: 0 8px 28px rgba(0, 0, 0, 0.6);
-    }
-
-    .socialhub-menu-item:hover {
-        background: #3a3b3c;
-    }
-
-    .socialhub-menu-icon {
-        background: #3a3b3c;
-    }
-
-    .socialhub-menu-text strong {
-        color: #e4e6eb;
-    }
-
-    .socialhub-menu-text small {
-        color: #b0b3b8;
-    }
+    color: #fff;
 }
 
+body.dark-mode .socialhub-photo-menu {
+    background: #242526;
 
-/* ========================================
-   FB-STYLE AVATAR CROP MODAL (v17)
-======================================== */
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.6);
+}
+
+body.dark-mode .socialhub-menu-item:hover {
+    background: #3a3b3c;
+}
+
+body.dark-mode .socialhub-menu-icon {
+    background: #3a3b3c;
+}
+
+body.dark-mode .socialhub-menu-text strong {
+    color: #e4e6eb;
+}
+
+body.dark-mode .socialhub-menu-text small {
+    color: #b0b3b8;
+}
 
 .socialhub-crop-overlay {
     position: fixed;
@@ -3988,47 +3982,46 @@ body.dark-mode .fb-friend-summary {
 }
 
 
-@media (prefers-color-scheme: dark) {
+/* Site dark mode (not OS preference) */
 
-    .socialhub-crop-dialog {
-        background: #242526;
-    }
+body.dark-mode .socialhub-crop-dialog {
+    background: #242526;
+}
 
-    .socialhub-crop-head {
-        border-bottom-color: #3a3b3c;
-    }
+body.dark-mode .socialhub-crop-head {
+    border-bottom-color: #3a3b3c;
+}
 
-    .socialhub-crop-head strong {
-        color: #e4e6eb;
-    }
+body.dark-mode .socialhub-crop-head strong {
+    color: #e4e6eb;
+}
 
-    .socialhub-crop-close {
-        background: #3a3b3c;
+body.dark-mode .socialhub-crop-close {
+    background: #3a3b3c;
 
-        color: #e4e6eb;
-    }
+    color: #e4e6eb;
+}
 
-    .socialhub-crop-preview {
-        background: #3a3b3c;
-    }
+body.dark-mode .socialhub-crop-preview {
+    background: #3a3b3c;
+}
 
-    .socialhub-crop-side label {
-        color: #e4e6eb;
-    }
+body.dark-mode .socialhub-crop-side label {
+    color: #e4e6eb;
+}
 
-    .socialhub-crop-side p {
-        color: #b0b3b8;
-    }
+body.dark-mode .socialhub-crop-side p {
+    color: #b0b3b8;
+}
 
-    .socialhub-crop-foot {
-        border-top-color: #3a3b3c;
-    }
+body.dark-mode .socialhub-crop-foot {
+    border-top-color: #3a3b3c;
+}
 
-    .socialhub-crop-cancel {
-        background: #3a3b3c;
+body.dark-mode .socialhub-crop-cancel {
+    background: #3a3b3c;
 
-        color: #e4e6eb;
-    }
+    color: #e4e6eb;
 }
 /* ======================================================
    FACEBOOK-STYLE PROFILE UPGRADE

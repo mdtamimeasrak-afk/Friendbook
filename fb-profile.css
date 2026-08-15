@@ -8325,3 +8325,54 @@ body.dark-mode .socialhub-crop-rotates button:hover {
     background: #4e4f52;
 }
 
+/* ======================================================
+   LIGHT MODE FIXES — unstyled dark parts that stayed
+   dark even in light mode (header, cover, avatar, etc.)
+   ====================================================== */
+
+body:not(.dark-mode) #fbProfileHeader {
+    background: #ffffff;
+
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+body:not(.dark-mode) #fbProfileHeader .cover-photo {
+    background-color: #e4e6eb;
+}
+
+body:not(.dark-mode) .fb-header .cover-photo {
+    background-color: #e4e6eb;
+}
+
+body:not(.dark-mode) #fbProfileHeader .fb-avatar-wrap .profile-photo {
+    background: #e4e6eb;
+}
+
+body:not(.dark-mode) #fbProfileHeader .fb-header-divider {
+    background: #e4e6eb;
+}
+
+body:not(.dark-mode) .fb-avatar-wrap .socialhub-avatar-overlay {
+    background: #e4e6eb;
+
+    color: #050505;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+body:not(.dark-mode) .fb-avatar-wrap .socialhub-avatar-overlay:hover {
+    background: #d8dadf;
+}
+
+body:not(.dark-mode) .socialhub-photo-viewer-close {
+    background: #e4e6eb;
+
+    color: #050505;
+}
+
+body:not(.dark-mode) .socialhub-photo-viewer-close:hover {
+    background: #d8dadf;
+
+    color: #050505;
+}
+
