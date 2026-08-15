@@ -35,6 +35,11 @@ Supabase-backed social media app. Vanilla HTML/CSS/JS (no framework, no build st
 - ALL pages are at depth 1, so JS navigation strings use uniform `"../<folder>/…"` paths. Never hardcode `location.origin + "/…"` paths (breaks the repo sub-path).
 - Page detection in JS: use `socialhubPageId()` (defined in core/script.js AND duplicated at the top of page-feature JS files; returns e.g. `"profile/index.html"`, `"profile/user-profile.html"`). NEVER `window.location.pathname.split("/").pop()` comparisons — they break with folders.
 
+## Deploy targets
+
+- **GitHub Pages (primary, auto)**: push to `main` → https://mdtamimeasrak-afk.github.io/Friendbook/
+- **Cloudflare Pages (secondary, manual)**: https://friendbook-78z.pages.dev/ — deploy AFTER GitHub push using `npx.cmd wrangler pages deploy <temp-copy-without-.git> --project-name friendbook --branch main`. Use `npx.cmd`, NOT `npx` (PowerShell execution policy blocks the .ps1 shim). Cloudflare auto-redirects `x.html` → `x` (308) — browsers follow it, so HTML refs keep working.
+
 ## Key flows
 
 - Avatar change: `image-upload.js` → `handleAvatarUpload` → uploads to `avatars` bucket → updates `profiles.avatar_url` → calls `showCurrentUserData()`. Sidebar avatars (`.sidebar-avatar`, `.side-avatar`) are updated inside `showCurrentUserData` too.
