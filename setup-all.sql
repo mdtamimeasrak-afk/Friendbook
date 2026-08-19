@@ -887,6 +887,10 @@ create policy "reports_select" on public.reports
 alter table public.messages
   add column if not exists read_at timestamptz;
 
+-- Reply-to reference (quoted message in chat)
+alter table public.messages
+  add column if not exists reply_to uuid references public.messages (id) on delete set null;
+
 alter table public.profiles
   add column if not exists last_seen timestamptz;
 
@@ -1312,3 +1316,77 @@ drop policy if exists campus_post_shares_insert on public.campus_post_shares;
 create policy campus_post_shares_insert on public.campus_post_shares for insert to authenticated with check (auth.uid() = user_id);
 drop policy if exists campus_post_shares_delete on public.campus_post_shares;
 create policy campus_post_shares_delete on public.campus_post_shares for delete to authenticated using (auth.uid() = user_id);
+
+
+-- ======================================================
+-- 12. PUSH NOTIFICATIONS (Step 7 - mobile)
+--     device_tokens: one row per (user, device push token).
+--     Tokens are NEVER readable by other users and push
+--     sending happens only from the server-side Edge
+--     Function (supabase/functions/notify) using the
+--     service role - never from a client.
+-- ======================================================
+
+create table if not exists public.device_tokens (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references public.profiles (id) on delete cascade,
+  device_token text not null,
+  platform text not null default 'android',
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (user_id, device_token)
+);
+
+alter table public.device_tokens enable row level security;
+
+-- Owner-only access: each user can see/insert/delete their own rows.
+-- The server-side push function uses the service role (bypasses RLS).
+drop policy if exists "device_tokens_select_own" on public.device_tokens;
+create policy "device_tokens_select_own" on public.device_tokens
+  for select using (auth.uid() = user_id);
+
+drop policy if exists "device_tokens_insert_own" on public.device_tokens;
+create policy "device_tokens_insert_own" on public.device_tokens
+  for insert with check (auth.uid() = user_id);
+
+drop policy if exists "device_tokens_delete_own" on public.device_tokens;
+create policy "device_tokens_delete_own" on public.device_tokens
+  for delete using (auth.uid() = user_id);
+
+-- No public UPDATE policy: token re-registration is handled by the
+-- client as delete(own stale) + insert(own new), never as an update.
+
+
+-- ======================================================
+-- 13. QUERY INDEXES (Step 7 - mobile + website)
+--     Only indexes justified by real query patterns:
+--     chat lists, unread counts, notification feeds,
+--     engagement batch reads, friendship lookups.
+-- ======================================================
+
+create index if not exists idx_messages_pair_time
+  on public.messages (sender_id, receiver_id, created_at desc);
+create index if not exists idx_messages_receiver_read
+  on public.messages (receiver_id, read);
+create index if not exists idx_notifications_user_time
+  on public.notifications (user_id, created_at desc);
+create index if not exists idx_notifications_user_read
+  on public.notifications (user_id, read);
+create index if not exists idx_likes_post
+  on public.likes (post_id);
+create index if not exists idx_likes_post_user
+  on public.likes (post_id, user_id);
+create index if not exists idx_comments_post_time
+  on public.comments (post_id, created_at);
+create index if not exists idx_friendships_requester
+  on public.friendships (requester_id);
+create index if not exists idx_friendships_addressee
+  on public.friendships (addressee_id);
+create index if not exists idx_stories_user_expires
+  on public.stories (user_id, expires_at);
+create index if not exists idx_posts_user_time
+  on public.posts (user_id, created_at desc);
+create index if not exists idx_post_shares_post
+  on public.post_shares (post_id);
+create index if not exists idx_saved_posts_user
+  on public.saved_posts (user_id);

@@ -2035,7 +2035,8 @@ function socialhubHideEmptyAboutRows() {
     const rows =
         document.querySelectorAll(
             ".fb-about-card .about-row, " +
-            ".fb-intro-details .about-row"
+            ".fb-intro-details .about-row, " +
+            ".fb-left-card .about-row"
         );
 
     rows.forEach(row => {

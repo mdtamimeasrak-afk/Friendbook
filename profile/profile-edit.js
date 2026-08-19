@@ -193,7 +193,8 @@
         originalVis: "public",
         vis: "public",
         family: [],
-        friends: []
+        friends: [],
+        extraAvailable: true
 
     };
 
@@ -216,6 +217,9 @@
             return null;
         }
 
+        state.extraAvailable =
+            true;
+
         var {
             data,
             error
@@ -227,7 +231,27 @@
 
         if (error || !data) {
 
-            return null;
+            // Older databases lack the "extra" column —
+            // fall back to the base columns only.
+
+            var {
+                data: fallback,
+                error: fallbackError
+            } = await db
+                .from("profiles")
+                .select("id, location, birthday")
+                .eq("id", me.id)
+                .single();
+
+            if (fallbackError || !fallback) {
+
+                return null;
+            }
+
+            state.extraAvailable =
+                false;
+
+            return fallback;
         }
 
         return data;
@@ -417,6 +441,21 @@
 
         var cfg =
             PD_FIELDS[field];
+
+        // No backing column in this database —
+        // hide extra-only rows instead of showing
+        // dead "Not added" placeholders.
+
+        if (!state.extraAvailable && cfg.extraKey) {
+
+            row.style.display =
+                "none";
+
+            return;
+        }
+
+        row.style.display =
+            "";
 
         var value =
             socialhubPdGetValue(profile, field);
@@ -1328,30 +1367,38 @@
             return;
         }
 
-        var extra =
-            Object.assign({}, profile.extra || {});
-
-        var map =
-            Object.assign({}, socialhubPdVisMap(profile));
-
-        map[field] =
-            state.vis;
-
-        extra._visibility =
-            map;
-
-        var update =
-            {
-                extra: extra
-            };
-
         var cfg =
             PD_FIELDS[field];
 
+        if (cfg.extraKey && !state.extraAvailable) {
+
+            socialhubToast("This field isn't available yet.", "error");
+
+            return;
+        }
+
+        var update =
+            {};
+
         if (cfg.extraKey) {
+
+            var extra =
+                Object.assign({}, profile.extra || {});
+
+            var map =
+                Object.assign({}, socialhubPdVisMap(profile));
+
+            map[field] =
+                state.vis;
+
+            extra._visibility =
+                map;
 
             extra[cfg.extraKey] =
                 value;
+
+            update.extra =
+                extra;
 
         } else if (field === "location") {
 
@@ -1467,22 +1514,29 @@
             return;
         }
 
-        var extra =
-            Object.assign({}, profile.extra || {});
-
         var cfg =
             PD_FIELDS[field];
 
-        if (cfg.extraKey) {
+        if (cfg.extraKey && !state.extraAvailable) {
 
-            delete extra[cfg.extraKey];
+            socialhubToast("This field isn't available yet.", "error");
 
+            return;
         }
 
         var update =
-            {
-                extra: extra
-            };
+            {};
+
+        if (cfg.extraKey) {
+
+            var extra =
+                Object.assign({}, profile.extra || {});
+
+            delete extra[cfg.extraKey];
+
+            update.extra =
+                extra;
+        }
 
         if (field === "location") {
 

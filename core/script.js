@@ -1057,32 +1057,62 @@ async function saveProfile(event) {
     // UPDATE PROFILE
     // ------------------------------------------
 
+    const updatePayload = {
+
+        full_name: name,
+
+        username: username,
+
+        bio: bio || null,
+
+        location: location || null,
+
+        work: work || null,
+
+        education: education || null,
+
+        website: website || null,
+
+        birthday: birthday || null,
+
+        extra: extra
+
+    };
+
+    let updateResult =
+        await supabaseClient
+            .from("profiles")
+            .update(updatePayload)
+            .eq("id", userId);
+
+    // Databases without the "extra" column reject the whole
+    // update. Fall back to the base columns only so name,
+    // bio, location, work, education, website and birthday
+    // still save.
+
+    if (
+        updateResult.error &&
+        /extra|column/i.test(
+            String(
+                updateResult.error.message ||
+                updateResult.error.code ||
+                ""
+            )
+        )
+    ) {
+
+        delete updatePayload.extra;
+
+        updateResult =
+            await supabaseClient
+                .from("profiles")
+                .update(updatePayload)
+                .eq("id", userId);
+    }
+
     const {
         error
-    } = await supabaseClient
-        .from("profiles")
-        .update({
-
-            full_name: name,
-
-            username: username,
-
-            bio: bio || null,
-
-            location: location || null,
-
-            work: work || null,
-
-            education: education || null,
-
-            website: website || null,
-
-            birthday: birthday || null,
-
-            extra: extra
-
-        })
-        .eq("id", userId);
+    } = updateResult;
 
 
 
